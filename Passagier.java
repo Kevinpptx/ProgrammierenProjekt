@@ -1,5 +1,5 @@
 /**
- * Die Klasse Passangier speichert Informationen über einen Passagier.
+ * Die Klasse Passagier speichert Informationen über einen Passagier.
  */
 public class Passagier {
 
