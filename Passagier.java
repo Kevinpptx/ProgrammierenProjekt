@@ -1,3 +1,6 @@
+/**
+ * Die Klasse Passenger speichert Informationen über einen Passagier.
+ */
 public class Passagier {
 
     private String passagierId;
