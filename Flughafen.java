@@ -43,7 +43,7 @@ public class Flughafen {
      *
      * @return Name des Flughafens
      */
-    public String GetName() {
+    public String getName() {
         return this.name;
     }
 
@@ -52,7 +52,7 @@ public class Flughafen {
      *
      * @return IATA-Code des Flughafens
      */
-    public String GetIataCode() {
+    public String getIataCode() {
         return this.iataCode;
     }
 
@@ -61,7 +61,7 @@ public class Flughafen {
      *
      * @return Stadt des Flughafens
      */
-    public String GetStadt() {
+    public String getStadt() {
         return this.stadt;
     }
 
@@ -70,7 +70,7 @@ public class Flughafen {
      *
      * @return Land des Flughafens
      */
-    public String GetLand() {
+    public String getLand() {
         return this.land;
     }
 
