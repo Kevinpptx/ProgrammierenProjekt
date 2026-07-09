@@ -3,7 +3,7 @@
  * Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
  * die Stadt sowie das Land beschrieben.
  *
- * Die Klasse dient als Grundlage für weitere Anwendungen,
+ * Die Klasse dient als Grundlage für weitere Klassen,
  * beispielsweise zur Modellierung von Flügen.
  *
  * @author Kevin Braun
@@ -72,42 +72,6 @@ public class Flughafen {
      */
     public String GetLand() {
         return this.land;
-    }
-
-    /**
-     * Setzt den Namen des Flughafens.
-     *
-     * @param name Neuer Name des Flughafens
-     */
-    public void SetName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Setzt den IATA-Code des Flughafens.
-     *
-     * @param iataCode Neuer IATA-Code des Flughafens
-     */
-    public void SetIataCode(String iataCode) {
-        this.iataCode = iataCode;
-    }
-
-    /**
-     * Setzt die Stadt des Flughafens.
-     *
-     * @param stadt Neue Stadt des Flughafens
-     */
-    public void SetStadt(String stadt) {
-        this.stadt = stadt;
-    }
-
-    /**
-     * Setzt das Land des Flughafens.
-     *
-     * @param land Neues Land des Flughafens
-     */
-    public void SetLand(String land) {
-        this.land = land;
     }
 
     /**
