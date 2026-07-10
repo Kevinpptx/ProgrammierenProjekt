@@ -31,11 +31,11 @@ public class Sitzplatz {
     /**
      * Gibt zurück, ob der Sitzplatz frei ist.
      *
-     * @return {@code true}, wenn der Sitzplatz belegt ist,
-     *         {@code false}, wenn er frei ist
+     * @return {@code true}, wenn der Sitzplatz frei ist,
+     *         {@code false}, wenn er belegt ist
      */
     public boolean getIstFrei() {
-        return this.belegt;
+        return !this.belegt;
     }
 
     /**
