@@ -17,6 +17,13 @@ public class Passagier {
      * @param name
      * @param email
      */
+public class Passagier {
+
+    private String passagierId;
+    private String name;
+    private String email; 
+
+    // Konstruktor
     public Passagier(String passagierId, String name, String email) {
         this.passagierId = passagierId;
         this.name = name;
@@ -38,6 +45,10 @@ public class Passagier {
     *
     * @return der Name des Passagiers
      */
+    // Getter 
+    public String getPassagierId() {
+        return passagierId;
+    }   
 
     public String getName() { 
         return name;
@@ -48,6 +59,7 @@ public class Passagier {
     *
     * @return die E-Mail-Adresse des Passagiers
      */
+
     public String getEmail() {
         return email;
     }
