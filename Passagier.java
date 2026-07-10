@@ -3,9 +3,11 @@
  */
 public class Passagier {
 
-   
+    /** Die ID des Passagiers. */
     private String passagierId;
+    /** Der Name des Passagiers. */
     private String name;
+    /** Die E-Mail-Adresse des Passagiers. */
     private String email; 
 
 
@@ -15,14 +17,12 @@ public class Passagier {
      * @param name
      * @param email
      */
-    // Konstruktor
     public Passagier(String passagierId, String name, String email) {
         this.passagierId = passagierId;
         this.name = name;
         this.email = email;
     }
 
-    // Getter 
 
     /**
     *Gibt die Passagier-ID zurück.
@@ -33,8 +33,6 @@ public class Passagier {
         return passagierId;
     } 
     
-    
-
      /**
     *Gibt den Namen des Passagiers zurück.
     *
