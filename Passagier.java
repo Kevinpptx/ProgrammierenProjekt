@@ -17,12 +17,6 @@ public class Passagier {
      * @param name
      * @param email
      */
-public class Passagier {
-
-    private String passagierId;
-    private String name;
-    private String email; 
-
     // Konstruktor
     public Passagier(String passagierId, String name, String email) {
         this.passagierId = passagierId;
