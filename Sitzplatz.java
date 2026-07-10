@@ -6,7 +6,7 @@
 public class Sitzplatz {
 
     /** Eindeutige Nummer des Sitzplatzes. */
-    private String sitzplatznummer;
+    private String sitzplatzNummer;
 
     /** Sitzklasse des Sitzplatzes. */
     private Sitzklasse sitzklasse;
@@ -22,8 +22,8 @@ public class Sitzplatz {
      * @param sitzplatznummer die Nummer des Sitzplatzes
      * @param sitzklasse die Sitzklasse des Sitzplatzes
      */
-    public Sitzplatz(String sitzplatznummer, Sitzklasse sitzklasse) {
-        this.sitzplatznummer = sitzplatznummer;
+    public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
+        this.sitzplatzNummer = sitzplatzNummer;
         this.sitzklasse = sitzklasse;
         freigeben();
     }
@@ -43,8 +43,8 @@ public class Sitzplatz {
      *
      * @return die Sitzplatznummer
      */
-    public String getSitzplatznummer() {
-        return this.sitzplatznummer;
+    public String getSitzplatzNummer() {
+        return this.sitzplatzNummer;
     }
 
     /**
@@ -79,7 +79,7 @@ public class Sitzplatz {
     @Override
     public String toString() {
 
-        String output = "Der Sitzplatz mit Nummer " + this.sitzplatznummer +
+        String output = "Der Sitzplatz mit Nummer " + this.sitzplatzNummer +
                 " in der Klasse " + this.sitzklasse + " ist ";
 
         // Output anpassen, je nachdem, ob Sitzplatz gerade belegt ist
