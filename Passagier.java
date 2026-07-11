@@ -33,17 +33,13 @@ public class Passagier {
     public String getPassagierId() {
         return passagierId;
     } 
-    
+
+
      /**
     *Gibt den Namen des Passagiers zurück.
     *
-    * @return der Name des Passagiers
+    * @return den Namen des Passagiers
      */
-    // Getter 
-    public String getPassagierId() {
-        return passagierId;
-    }   
-
     public String getName() { 
         return name;
     }
@@ -53,7 +49,6 @@ public class Passagier {
     *
     * @return die E-Mail-Adresse des Passagiers
      */
-
     public String getEmail() {
         return email;
     }
