@@ -1,0 +1,155 @@
+/**
+ * Repräsentiert ein Flugzeug mit einem Sitzplan.
+ * Das Flugzeug besitzt einen eindeutigen Code, ein Modell
+ * sowie eine Vorlage aller vorhandenen Sitzplätze.
+ */
+public class Flugzeug {
+
+    /** Eindeutiger Code des Flugzeugs. */
+    private String code;
+
+    /** Modellbezeichnung des Flugzeugs. */
+    private String modell;
+
+    /** Anzahl der Economy-Sitzplätze. */
+    private int anzahlEconomy;
+
+    /** Anzahl der Business-Sitzplätze. */
+    private int anzahlBusiness;
+
+    /**
+     * Vorlage aller Sitzplätze.
+     * Die erste Dimension beschreibt die Sitzreihen,
+     * die zweite Dimension die Sitzposition innerhalb
+     * einer Reihe.
+     */
+    private Sitzplatz[][] sitzplaetzeVorlage;
+
+    /**
+     * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.
+     *
+     * Die Sitzplätze werden automatisch nummeriert
+     * (z. B. 1A, 1B, 1C, ...).
+     * Die ersten {@code businessReihen} Reihen werden als
+     * Business-Class angelegt, alle übrigen Reihen als Economy.
+     *
+     * @param code eindeutiger Code des Flugzeugs
+     * @param modell Modellbezeichnung
+     * @param anzahlReihen Anzahl der Sitzreihen
+     * @param sitzeProReihe Anzahl der Sitzplätze pro Reihe
+     * @param businessReihen Anzahl der Business-Reihen
+     */
+    public Flugzeug(String code,
+                    String modell,
+                    int anzahlReihen,
+                    int sitzeProReihe,
+                    int businessReihen) {
+
+        this.code = code;
+        this.modell = modell;
+
+        this.sitzplaetzeVorlage = new Sitzplatz[anzahlReihen][sitzeProReihe];
+
+        char sitzbuchstabe;
+
+        for (int reihe = 0; reihe < anzahlReihen; reihe++) {
+
+            for (int platz = 0; platz < sitzeProReihe; platz++) {
+
+                sitzbuchstabe = (char) ('A' + platz);
+
+                Sitzklasse sitzklasse;
+
+                if (reihe < businessReihen) {
+                    sitzklasse = Sitzklasse.BUSINESS;
+                    this.anzahlBusiness++;
+                } else {
+                    sitzklasse = Sitzklasse.ECONOMY;
+                    this.anzahlEconomy++;
+                }
+
+                String sitzplatzNummer = (reihe + 1) + "" + sitzbuchstabe;
+
+                this.sitzplaetzeVorlage[reihe][platz] =
+                        new Sitzplatz(sitzplatzNummer, sitzklasse);
+            }
+        }
+    }
+
+    /**
+     * Gibt die Gesamtanzahl aller Sitzplätze zurück.
+     *
+     * @return Gesamtanzahl der Sitzplätze
+     */
+    public int getGesamtSitzanzahl() {
+        return this.anzahlBusiness + this.anzahlEconomy;
+    }
+
+    /**
+     * Gibt den Code des Flugzeugs zurück.
+     *
+     * @return Code des Flugzeugs
+     */
+    public String getCode() {
+        return this.code;
+    }
+
+    /**
+     * Gibt die Modellbezeichnung des Flugzeugs zurück.
+     *
+     * @return Modellbezeichnung
+     */
+    public String getModell() {
+        return this.modell;
+    }
+
+    /**
+     * Gibt die Sitzplatzvorlage des Flugzeugs zurück.
+     *
+     * @return zweidimensionales Array mit allen Sitzplätzen
+     */
+    public Sitzplatz[][] getSitzplaetzeVorlage() {
+        return this.sitzplaetzeVorlage;
+    }
+
+    /**
+     * Gibt eine Beschreibung des Flugzeugs zurück.
+     *
+     * @return Beschreibung mit Code, Modell und Sitzplatzanzahl
+     */
+/**
+ * Gibt eine Beschreibung des Flugzeugs einschließlich
+ * der Sitzplatz-Anordnung zurück.
+ *
+ * @return Beschreibung des Flugzeugs und des Sitzplans
+ */
+@Override
+public String toString() {
+
+    String output = "Flugzeug " + this.code +
+            " (" + this.modell + ")" +
+            " besitzt " + getGesamtSitzanzahl() +
+            " Sitzplätze (" +
+            this.anzahlBusiness + " Business, " +
+            this.anzahlEconomy + " Economy)." +
+            "\n\nSitzplan:\n";
+
+for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
+
+    for (int platz = 0; platz < this.sitzplaetzeVorlage[reihe].length; platz++) {
+
+        output += String.format("%-4s",
+                this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer());
+
+        // Nach der Hälfte der Sitze einen Gang darstellen
+        if (platz == this.sitzplaetzeVorlage[reihe].length / 2 - 1) {
+            output += " | ";
+        }
+    }
+
+    output += "\n";
+}
+
+    return output;
+}
+}
