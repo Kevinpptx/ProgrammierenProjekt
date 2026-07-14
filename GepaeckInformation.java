@@ -2,7 +2,6 @@
  * Repräsentiert Informationen über Gepäck in einem Flugzeug.
  * Gepäck besteht aus einer Anzahl von Koffern, die ein Passagier mit sich führt.
  */
-
 public class GepaeckInformation {
 
     /** Die Anzahl der Koffer, die ein Passagier mit sich führt. */
