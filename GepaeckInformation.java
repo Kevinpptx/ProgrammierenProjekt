@@ -7,6 +7,9 @@ public class GepaeckInformation {
     /** Die Anzahl der Koffer, die ein Passagier mit sich führt. */
     private int anzahlKoffer;
 
+    /** Die Der Preis eines Koffers. Wert 40 ist ein fiktiver Standardwert. */
+    double gebuehrProKoffer = 40.0;
+
     /**
      * Konstruktor für die Klasse GepäckInformation.
      *
@@ -32,7 +35,6 @@ public class GepaeckInformation {
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
         this.anzahlKoffer = anzahlKoffer;
-
     }
 
     /**
@@ -41,9 +43,7 @@ public class GepaeckInformation {
      * @return die berechnete Gepäckgebühr
      */
     public double berechneGepaeckgebuehr() {
-        double gebuehrProKoffer = 40.00; // Beispielgebühr pro Koffer
             return anzahlKoffer * gebuehrProKoffer;
-
     }   
 
     /**
@@ -54,8 +54,7 @@ public class GepaeckInformation {
     @Override
     public String toString() {
         return "GepäckInformation: " +
-                "anzahlKoffer= " + anzahlKoffer
-                ;
+                "anzahlKoffer= " + anzahlKoffer;
     }
 
 }
