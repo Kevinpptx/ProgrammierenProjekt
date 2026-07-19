@@ -248,7 +248,8 @@ public class Flug {
             }
         }
 
-        return (double) anzahlBelegt / anzahlGesamt * 100.0;
+        // Rückgabe rundet auf 2 Nachkommastellen und gibt Wert in Prozent aus
+        return Math.round(((double) anzahlBelegt / anzahlGesamt * 100.0) * 100.0) / 100.0;
     }
 
     /**
