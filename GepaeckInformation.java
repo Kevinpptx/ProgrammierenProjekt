@@ -53,8 +53,9 @@ public class GepaeckInformation {
      */
     @Override
     public String toString() {
-        return "GepäckInformation: " +
-                "anzahlKoffer= " + anzahlKoffer;
+        return "Die gebuchte Kofferanzahl beträgt " + this.anzahlKoffer +
+                " und es wurde eine Gebühr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
+                "€ entrichtet.";
     }
 
 }

@@ -35,10 +35,10 @@ public class Fluggesellschaft {
         if(!this.flotte.isEmpty()){
             if(!this.flotte.contains(f)) {
                 this.flotte.add(f);
-            } else {
-                this.flotte.add(f);
             }
-        }   
+        } else {
+            this.flotte.add(f);
+        }
     }
         
     /**
