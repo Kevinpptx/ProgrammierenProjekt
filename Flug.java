@@ -337,6 +337,14 @@ public class Flug {
         return basispreis;
     }
 
+    public Flughafen getStartFlughafen() {
+        return startFlughafen;
+    }
+
+    public Flughafen getZielflughafen() {
+        return zielFlughafen;
+    }
+
     /**
      * Gibt eine textuelle Beschreibung des Fluges zurück.
      *
