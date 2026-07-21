@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class Buchungssystem {
     public static void main(String[] args) {
         
+        Buchungssystem b1 = new Buchungssystem();
+        
         Fluggesellschaft Huftlansa = new Fluggesellschaft("Huftlansa", "HL");
         Fluggesellschaft AirBnB = new Fluggesellschaft("AirBnB", "AB");
         Fluggesellschaft AirHintertupfingen = new Fluggesellschaft("AirHintertupfingen", "AB");
@@ -20,10 +22,10 @@ public class Buchungssystem {
         Flughafen LHR = new Flughafen("Flughafen London Heathrow", "FRA", "London", "Vereinigtes Königreich");
         Flughafen SJO = new Flughafen("Flughafen San Jose Santa Maria", "SJO", "San Jose", "Costa Rica");
 
-        Flugzeug fluggi = new Flugzeug("Fluggi", "AirbusA320neo", 30, 9, 5);
+        Flugzeug fluggi = new Flugzeug("Fluggi", "AirbusA320neo", 30, 6, 5);
 
         Flug LH420 = new Flug("LH420", AirHintertupfingen, fluggi, LHR, SJO, LocalDateTime.of(2026, 7, 14, 10, 10), LocalDateTime.of(2026, 7, 14, 17, 40), 140.0);
-        fuegeFlugHinzu(LH420);
+        b1.fuegeFlugHinzu(LH420);
 
         System.out.println(Huftlansa.toString());
         System.out.println(AirBnB.toString());
@@ -40,57 +42,37 @@ public class Buchungssystem {
 
 
     /** Liste der Fluggesellschaften, die das Programm kennt */
-    public static ArrayList<Fluggesellschaft> fluggesellschaften;
+    public ArrayList<Fluggesellschaft> fluggesellschaften = new ArrayList<>();
 
     /**Liste der Flüge, die das Programm kennt */
-    public static ArrayList<Flug> fluege;
+    public ArrayList<Flug> fluege = new ArrayList<>();;
 
     /**Liste der Buchungen, die schon vorgenommen wurden */
-    public static ArrayList<Buchung> buchungen;
+    public ArrayList<Buchung> buchungen = new ArrayList<>();;
 
-    /**Liste der eingetragenen Flughaefen */
-    public static ArrayList<Flughafen> flughaefen;
-
-    /**Liste der eingetragenen Flugzeuge */
-    public static ArrayList<Flugzeug> flugzeuge;
 
     /**Fügt eine Fluggesellschaft in die Liste "fluggesellschaften" hinzu, wenn sie dort noch nicht existieren
      * @param fluggesellschaft
      */
-    public static void fuegeFluggesellschaftHinzu (Fluggesellschaft fluggesellschaft) {
-        if (fluggesellschaften.contains(fluggesellschaft) == false) {
-            Buchungssystem.fluggesellschaften.add(fluggesellschaft);
+    public void fuegeFluggesellschaftHinzu (Fluggesellschaft fluggesellschaft) {
+        
+        if (this.fluggesellschaften.contains(fluggesellschaft) == false) {
+            this.fluggesellschaften.add(fluggesellschaft);
         }
+    
+       
     }
 
     /**Fügt einen Flug der Liste "fluege" hinzu, wenn sie dort noch nicht existieren
      * @param flug
      */
-    public static void fuegeFlugHinzu (Flug flug) {
+    public void fuegeFlugHinzu (Flug flug) {
         if (fluege.contains(flug) == false) {
-            Buchungssystem.fluege.add(flug);
+            this.fluege.add(flug);
         }
     }
 
-    /**
-     * Fügt einen Flughafen der Liste "flughaefen", wenn sie dort noch nicht existieren
-     * @param flughafen
-     */
-    public static void fuegeFlughafenHinzu (Flughafen flughafen) {
-        if(flughaefen.contains(flughafen) == false) {
-            Buchungssystem.flughaefen.add(flughafen);
-        }    
-    }
-
-   /**
-    * Fügt ein Flugzeug der Liste "flugzeuge", wenn sie dort noch nicht existieren
-    * @param flugzeug
-    */ 
-    public static void fuegeFlugzeugHinzu (Flugzeug flugzeug) {
-        if(flugzeuge.contains(flugzeug) == false) {
-            Buchungssystem.flugzeuge.add(flugzeug);
-        }    
-    }
+  
 
     /**
      * Sucht Fluege, basierend auf dem @param ziel
