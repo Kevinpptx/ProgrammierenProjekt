@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -14,28 +15,61 @@ public class Buchungssystem {
         
         Buchungssystem b1 = new Buchungssystem();
         
-        Fluggesellschaft Huftlansa = new Fluggesellschaft("Huftlansa", "HL");
-        Fluggesellschaft AirBnB = new Fluggesellschaft("AirBnB", "AB");
-        Fluggesellschaft AirHintertupfingen = new Fluggesellschaft("AirHintertupfingen", "AB");
+        Fluggesellschaft air1 = new Fluggesellschaft("Air1", "AA");
+        Fluggesellschaft air2 = new Fluggesellschaft("Air2", "AB");
+        Fluggesellschaft air3 = new Fluggesellschaft("Air3", "AC");
 
         Flughafen FRA = new Flughafen("Flughafen Frankfurt am Main", "FRA", "Frankfurt am Main", "Deutschland");
         Flughafen LHR = new Flughafen("Flughafen London Heathrow", "FRA", "London", "Vereinigtes Königreich");
         Flughafen SJO = new Flughafen("Flughafen San Jose Santa Maria", "SJO", "San Jose", "Costa Rica");
 
-        Flugzeug fluggi = new Flugzeug("Fluggi", "AirbusA320neo", 30, 6, 5);
+        Flugzeug flugzeug1 = new Flugzeug("flugzeug1", "AirbusA320neo", 30, 6, 5);
+        Flugzeug flugzeug2 = new Flugzeug("flugzeug2", "AirbusA330neo", 50, 8, 8);
+        Flugzeug flugzeug3 = new Flugzeug("flugzeug3", "AirbusA350", 50, 8, 8);
+        air1.fuegeFlugzeugHinzu(flugzeug1);
+        air1.fuegeFlugzeugHinzu(flugzeug2);
+        air1.fuegeFlugzeugHinzu(flugzeug3);
 
-        Flug LH420 = new Flug("LH420", AirHintertupfingen, fluggi, LHR, SJO, LocalDateTime.of(2026, 7, 14, 10, 10), LocalDateTime.of(2026, 7, 14, 17, 40), 140.0);
-        b1.fuegeFlugHinzu(LH420);
+        
+ Flug flug1 = new Flug(
+            "AA420",
+            air1,
+            flugzeug1,
+            FRA,
+            LHR,
+            LocalDateTime.of(2026, 7, 14, 10, 10),
+            LocalDateTime.of(2026, 7, 14, 17, 40),
+            140.0);
 
-        System.out.println(Huftlansa.toString());
-        System.out.println(AirBnB.toString());
-        System.out.println(AirHintertupfingen.toString());
-        System.out.println(FRA.toString());
-        System.out.println(LHR.toString());
-        System.out.println(SJO.toString());
-        System.out.println(fluggi.toString());
-        System.out.println(LH420.toString());
+    Flug flug2 = new Flug(
+            "AA421",
+            air1,
+            flugzeug2,
+            FRA,
+            LHR,
+            LocalDateTime.of(2026, 7, 15, 10, 10),
+            LocalDateTime.of(2026, 7, 15, 17, 40),
+            150.0);
 
+    Flug flug3 = new Flug(
+            "AA422",
+            air2,
+            flugzeug3,
+            FRA,
+            LHR,
+            LocalDateTime.of(2026, 7, 16, 10, 10),
+            LocalDateTime.of(2026, 7, 16, 12, 40),
+            100.0);
+
+    b1.fuegeFlugHinzu(flug1);
+    b1.fuegeFlugHinzu(flug2);
+    b1.fuegeFlugHinzu(flug3);
+
+
+        ArrayList<Flug> Suchliste1 = b1.sucheFluegeNachZiel(LHR);
+        System.out.println(Suchliste1.toString());
+        ArrayList<Flug> Suchliste2 = b1.sucheFluegeNachZiel(SJO);
+        System.out.println(Suchliste2.toString());
 
     }
 
@@ -56,7 +90,7 @@ public class Buchungssystem {
      */
     public void fuegeFluggesellschaftHinzu (Fluggesellschaft fluggesellschaft) {
         
-        if (this.fluggesellschaften.contains(fluggesellschaft) == false) {
+        if (!this.fluggesellschaften.contains(fluggesellschaft)) {
             this.fluggesellschaften.add(fluggesellschaft);
         }
     
@@ -67,7 +101,7 @@ public class Buchungssystem {
      * @param flug
      */
     public void fuegeFlugHinzu (Flug flug) {
-        if (fluege.contains(flug) == false) {
+        if (!fluege.contains(flug)) {
             this.fluege.add(flug);
         }
     }
@@ -77,6 +111,7 @@ public class Buchungssystem {
     /**
      * Sucht Fluege, basierend auf dem @param ziel
      * @return Liste, der insgesamt hinzugefügten Flüge
+     * @throws NoSuchElementException wenn der gesuchte Flug nicht existiert
      */
     public ArrayList<Flug> sucheFluegeNachZiel (Flughafen ziel) {
         //neue Liste wird erstellt
@@ -87,14 +122,21 @@ public class Buchungssystem {
                 newList.add(fluege.get(i));
             } 
         }
-        return newList;
+        if (!newList.isEmpty()) {
+            return newList;
+        } else {
+            System.out.println("Einen Flug nach " + ziel.getStadt() + " gibt es leider nicht.");
+            throw new NoSuchElementException();
+        }
+        
     }
 
     /**
      * Sucht einen Flug nach einer Route
      * @param start
      * @param ziel
-     * @return
+     * @return Liste der gefundenen Fluege
+     * @throws NoSuchElementException wenn der gesuchte Flug nicht existiert
      */
     public List<Flug> sucheFluegeNachRoute (Flughafen start, Flughafen ziel) {
         ArrayList<Flug> newList = new ArrayList<Flug>();
@@ -103,11 +145,16 @@ public class Buchungssystem {
             if (fluege.get(i).getZielflughafen() == ziel && fluege.get(i).getStartFlughafen() == start) {
                 newList.add(fluege.get(i));
             } 
-            else{
-                System.out.println("Sorry, diese Route gibt es leider nicht");
-            }
+            
         }
-        return newList;
+        if (!newList.isEmpty()) {
+            return newList;
+        }
+        else {
+            System.out.println("Einen Flug von " + start.getStadt() + " nach " + ziel.getStadt() + " gibt es leider nicht.");
+            throw new NoSuchElementException();
+        }
+        
         
     }
 
