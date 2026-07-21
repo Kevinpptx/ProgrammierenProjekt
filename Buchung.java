@@ -27,15 +27,14 @@ public class Buchung {
      * Der Preis der Buchung wird automatisch berechnet und der Status
      * auf {@code AKTIV} gesetzt.
      *
-     * @param buchungsnummer die eindeutige Buchungsnummer
+     * Die Buchungsnummer wird in der Klasse Buchungssystem generiert
      * @param passagier der zugehörige Passagier
      * @param flug der gebuchte Flug
      * @param sitzplatz der gebuchte Sitzplatz
      * @param gepaeckInformation die Gepäckinformationen zur Buchung
      */
-    public Buchung(String buchungsnummer, Passagier passagier, Flug flug, Sitzplatz sitzplatz,
+    public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
-        this.buchungsnummer = buchungsnummer;
         this.passagier = passagier;
         this.flug = flug;
         this.sitzplatz = sitzplatz;
@@ -187,6 +186,12 @@ public class Buchung {
      */
     public Buchungsstatus getBuchungsstatus() {
         return this.buchungsstatus;
+    }
+
+    public void setBuchungsnummer(String s) {
+        if (s.startsWith("bu")) {
+            this.buchungsnummer = s;
+        }
     }
 
     /**

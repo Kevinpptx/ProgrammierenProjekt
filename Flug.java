@@ -345,6 +345,10 @@ public class Flug {
         return zielFlughafen;
     }
 
+    public Sitzplatz[][] getSitzplan() {
+        return sitzplan;
+    }
+
     /**
      * Gibt eine textuelle Beschreibung des Fluges zurück.
      *
