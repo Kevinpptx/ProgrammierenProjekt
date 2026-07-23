@@ -9,12 +9,16 @@ import java.util.Scanner;
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten Buchungsprozess.
  * Sie dient dazu, die Klassen zu koordinieren und dafür zu sorgen, dass sie miteinander interagieren können.
- * Sollten wir keine GUI implementieren wird hier auch die Nutzerinteraktion integriert.
+ * 
+ * 
+ * @version 1.1
+ * @author Marcel Marxkors
  */
 
 public class Buchungssystem {
     public static void main(String[] args) {
         
+        //Beispiele zum ersten Testen
         Buchungssystem b1 = new Buchungssystem();
         
         Fluggesellschaft air1 = new Fluggesellschaft("Air1", "AA");
@@ -33,54 +37,54 @@ public class Buchungssystem {
         air1.fuegeFlugzeugHinzu(flugzeug3);
 
         
- Flug flug1 = new Flug(
-            "AA420",
-            air1,
-            flugzeug1,
-            FRA,
-            LHR,
-            LocalDateTime.of(2026, 7, 14, 10, 10),
-            LocalDateTime.of(2026, 7, 14, 17, 40),
-            140.0);
+        Flug flug1 = new Flug(
+                    "AA420",
+                    air1,
+                    flugzeug1,
+                    FRA,
+                    LHR,
+                    LocalDateTime.of(2026, 7, 14, 10, 10),
+                    LocalDateTime.of(2026, 7, 14, 17, 40),
+                    140.0);
 
-    Flug flug2 = new Flug(
-            "AA421",
-            air1,
-            flugzeug2,
-            FRA,
-            LHR,
-            LocalDateTime.of(2026, 7, 15, 10, 10),
-            LocalDateTime.of(2026, 7, 15, 17, 40),
-            150.0);
+            Flug flug2 = new Flug(
+                    "AA421",
+                    air1,
+                    flugzeug2,
+                    FRA,
+                    LHR,
+                    LocalDateTime.of(2026, 7, 15, 10, 10),
+                    LocalDateTime.of(2026, 7, 15, 17, 40),
+                    150.0);
 
-    Flug flug3 = new Flug(
-            "AA422",
-            air2,
-            flugzeug3,
-            FRA,
-            LHR,
-            LocalDateTime.of(2026, 7, 16, 10, 10),
-            LocalDateTime.of(2026, 7, 16, 12, 40),
-            100.0);
+            Flug flug3 = new Flug(
+                    "AA422",
+                    air2,
+                    flugzeug3,
+                    FRA,
+                    LHR,
+                    LocalDateTime.of(2026, 7, 16, 10, 10),
+                    LocalDateTime.of(2026, 7, 16, 12, 40),
+                    100.0);
 
-    b1.fuegeFlugHinzu(flug1);
-    b1.fuegeFlugHinzu(flug2);
-    b1.fuegeFlugHinzu(flug3);
+            b1.fuegeFlugHinzu(flug1);
+            b1.fuegeFlugHinzu(flug2);
+            b1.fuegeFlugHinzu(flug3);
 
-    Passagier p1 = Buchungssystem.initialisierePassagier("Manfred Mann", "manfredmann@gmail.com");
-    Passagier p2 = Buchungssystem.initialisierePassagier("Frauke Mann", "fraukemann@gmail.com");
+            Passagier p1 = Buchungssystem.initialisierePassagier("Manfred Mann", "manfredmann@gmail.com");
+            Passagier p2 = Buchungssystem.initialisierePassagier("Frauke Mann", "fraukemann@gmail.com");
 
-    
-    
-
-
-    //ArrayList<Flug> Suchliste1 = b1.sucheFluegeNachZiel(LHR);
-    //System.out.println(Suchliste1.toString());
-
-
-    
-    
         
+        
+
+
+            //ArrayList<Flug> Suchliste1 = b1.sucheFluegeNachZiel(LHR);
+            //System.out.println(Suchliste1.toString());
+
+
+        
+        
+            
 
     }
 
@@ -95,12 +99,15 @@ public class Buchungssystem {
     /**Liste der Buchungen, die schon vorgenommen wurden */
     public ArrayList<Buchung> buchungen = new ArrayList<>();;
 
+    /** Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen Grundlage für die Buchungsnummer */
     private static int anzahlBuchungen = 0;
 
+    /**Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen Grundlage für die Passagiernummer */
     private static int anzahlPassagiere = 0;
 
 
-    /**Fügt eine Fluggesellschaft in die Liste "fluggesellschaften" hinzu, wenn sie dort noch nicht existieren
+    /**Fügt eine Fluggesellschaft in die Liste "fluggesellschaften" hinzu, wenn sie dort noch nicht existieren.
+     * Temporär, weil die später wahrscheinlich eh in einer separeten Datei gespeichert werden
      * @param fluggesellschaft
      */
     public void fuegeFluggesellschaftHinzu (Fluggesellschaft fluggesellschaft) {
@@ -116,16 +123,29 @@ public class Buchungssystem {
      * @param flug
      */
     public void fuegeFlugHinzu (Flug flug) {
-        if (!fluege.contains(flug)) {
+        if (!fluege.contains(flug) && flug != null) {
             this.fluege.add(flug);
         }
     }
 
+    /**
+     * Erstellt ein Objekt vom Typ Passagier und prüft, ob die übergebenenn Parameter gültig sind
+     * @param name
+     * @param email
+     * @return
+     */
     public static Passagier initialisierePassagier(String name, String email) {
-        String vorlaeufigePassagierId = "p" + Integer.toString(anzahlPassagiere);
-        anzahlPassagiere++;
-        Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
-        return p; 
+        if(name != null && email != null) {
+            String vorlaeufigePassagierId = "p" + Integer.toString(anzahlPassagiere);
+            anzahlPassagiere++;
+            Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
+            return p;
+        } else if (name == null) {
+            throw new IllegalArgumentException("Du hast keinen Namen angegeben");
+        } else {
+            throw new IllegalArgumentException("Du hast keine Mail-Adresse eingegeben");
+        }
+         
     }
 
   
@@ -258,15 +278,12 @@ public class Buchungssystem {
      * @param neuerFlug
      * @param neueSitzplatznummer
      * @return den Betrag, den nach dem Aufrufen der Methode "umbuchenMitGebühr" der Klasse "Buchung"
+     * TODO: muss noch gemacht werden
      */
     public double umbuchen(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer) {
         double betrag = 0.0;
-        if(buchung != null && neuerFlug != null && buchung.getFlug() != neuerFlug) {
         
-        }
-        
-        
-        return 0.0;
+        return betrag;
     }
 
     /**
@@ -365,7 +382,7 @@ public class Buchungssystem {
     }
 
     /**zeigt alle Fluege, mit ihrer jeweiligen Auslastung
-     * 
+     * TODO
      */
     public void zeigeAlleFluegeMitAuslastung () {
         
@@ -374,17 +391,25 @@ public class Buchungssystem {
     /**
      * gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht hat
      * @param flug
+     * TODO
      */
     public void zeigeGepaekÜbersicht (Flug flug) {
 
     }
 
     
-
+    /**
+     * 
+     * @return Anzahl an der getätigten Buchungen
+     */
     public int getAnzahlBuchungen() {
         return anzahlBuchungen;
     }    
 
+    /**
+     * 
+     * @return Anzahl der registrierten Buchungen
+     */
     public int getAnzahlPassagiere(){
         return anzahlPassagiere;
     }
