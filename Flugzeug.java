@@ -112,11 +112,6 @@ public class Flugzeug {
         return this.sitzplaetzeVorlage;
     }
 
-    /**
-     * Gibt eine Beschreibung des Flugzeugs zurück.
-     *
-     * @return Beschreibung mit Code, Modell und Sitzplatzanzahl
-     */
 /**
  * Gibt eine Beschreibung des Flugzeugs einschließlich
  * der Sitzplatz-Anordnung zurück.
