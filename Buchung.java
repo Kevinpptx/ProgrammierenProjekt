@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * Die Klasse {@code Buchung} repräsentiert eine Flugbuchung eines Passagiers.
  * Eine Buchung enthält Informationen über den gebuchten Flug, den Sitzplatz,
@@ -6,7 +8,7 @@
  * @author Kevin Braun
  * @version 1.0
  */
-public class Buchung {
+public class Buchung implements Serializable {
 
     private String buchungsnummer;
     private Passagier passagier;

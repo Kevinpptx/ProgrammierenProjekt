@@ -1,8 +1,10 @@
+import java.io.Serializable;
+
 /**
  * Repräsentiert Informationen über Gepäck in einem Flugzeug.
  * Gepäck besteht aus einer Anzahl von Koffern, die ein Passagier mit sich führt.
  */
-public class GepaeckInformation {
+public class GepaeckInformation implements Serializable{
 
     /** Die Anzahl der Koffer, die ein Passagier mit sich führt. */
     private int anzahlKoffer;
