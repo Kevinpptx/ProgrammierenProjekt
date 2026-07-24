@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * @author Cedric Beckmann
  * @version 1.0
  */
-public class Flug {
+public class Flug implements Serializable {
     /** Die eindeutige Flugnummer des Fluges */
     private String flugnummer;
 

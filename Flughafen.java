@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * Die Klasse {@code Flughafen} repräsentiert einen Flughafen.
  * Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
@@ -9,7 +11,7 @@
  * @author Kevin Braun
  * @version 1.0
  */
-public class Flughafen {
+public class Flughafen implements Serializable{
 
     /** Name des Flughafens. */
     private String name;

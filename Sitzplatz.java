@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * Repräsentiert einen Sitzplatz in einem Flugzeug.
  * Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse
  * sowie einen Belegungsstatus.
  */
-public class Sitzplatz {
+public class Sitzplatz implements Serializable{
 
     /** Eindeutige Nummer des Sitzplatzes. */
     private String sitzplatzNummer;
