@@ -11,6 +11,8 @@ public class Sitzplatz {
     /** Sitzklasse des Sitzplatzes. */
     private Sitzklasse sitzklasse;
 
+    private int anzahlKoffer;
+
     /** Gibt an, ob der Sitzplatz belegt ist. */
     private boolean belegt;
 
@@ -25,6 +27,7 @@ public class Sitzplatz {
     public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
         this.sitzplatzNummer = sitzplatzNummer;
         this.sitzklasse = sitzklasse;
+        this.anzahlKoffer = 0;
         freigeben();
     }
 
@@ -68,6 +71,14 @@ public class Sitzplatz {
      */
     public void freigeben() {
         this.belegt = false;
+    }
+
+    public int getAnzahlKoffer() {
+        return anzahlKoffer;
+    }
+
+    public void setAnzahlKoffer(int anzahlKoffer) {
+        this.anzahlKoffer = anzahlKoffer;
     }
 
     /**

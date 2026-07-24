@@ -1,9 +1,8 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 
 /**
@@ -15,7 +14,7 @@ import java.util.Scanner;
  * @author Marcel Marxkors
  */
 
-public class Buchungssystem {
+public class Buchungssystem implements Serializable {
     public static void main(String[] args) {
         
         //Beispiele zum ersten Testen
@@ -23,11 +22,9 @@ public class Buchungssystem {
         
         Fluggesellschaft air1 = new Fluggesellschaft("Air1", "AA");
         Fluggesellschaft air2 = new Fluggesellschaft("Air2", "AB");
-        Fluggesellschaft air3 = new Fluggesellschaft("Air3", "AC");
 
         Flughafen FRA = new Flughafen("Flughafen Frankfurt am Main", "FRA", "Frankfurt am Main", "Deutschland");
         Flughafen LHR = new Flughafen("Flughafen London Heathrow", "FRA", "London", "Vereinigtes Königreich");
-        Flughafen SJO = new Flughafen("Flughafen San Jose Santa Maria", "SJO", "San Jose", "Costa Rica");
 
         Flugzeug flugzeug1 = new Flugzeug("flugzeug1", "AirbusA320neo", 30, 6, 5);
         Flugzeug flugzeug2 = new Flugzeug("flugzeug2", "AirbusA330neo", 50, 8, 8);
@@ -74,12 +71,19 @@ public class Buchungssystem {
             Passagier p1 = Buchungssystem.initialisierePassagier("Manfred Mann", "manfredmann@gmail.com");
             Passagier p2 = Buchungssystem.initialisierePassagier("Frauke Mann", "fraukemann@gmail.com");
 
-        
-        
+            Buchung bu0 = b1.buchungVornehmen(p1, flug1, "1A", 2, Sitzklasse.BUSINESS);
+            Buchung bu1 = b1.buchungVornehmen(p2, flug2, "1A", 3, Sitzklasse.BUSINESS);
+
+            b1.umbuchen(bu0, flug2, "1A", Sitzklasse.BUSINESS);
+            b1.stornieren(bu1);
+
+            System.out.println(b1.buchungen.toString());
+
+            //System.out.println(b1.zeigeGepaekÜbersicht(flug1).toString());
 
 
-            //ArrayList<Flug> Suchliste1 = b1.sucheFluegeNachZiel(LHR);
-            //System.out.println(Suchliste1.toString());
+            
+            //System.out.println(b1.sucheFluegeNachZiel(LHR).toString());
 
 
         
@@ -91,39 +95,58 @@ public class Buchungssystem {
 
 
     /** Liste der Fluggesellschaften, die das Programm kennt */
-    public ArrayList<Fluggesellschaft> fluggesellschaften = new ArrayList<>();
+    public ArrayList<Fluggesellschaft> fluggesellschaften;
 
     /**Liste der Flüge, die das Programm kennt */
-    public ArrayList<Flug> fluege = new ArrayList<>();;
+    public ArrayList<Flug> fluege;
 
     /**Liste der Buchungen, die schon vorgenommen wurden */
-    public ArrayList<Buchung> buchungen = new ArrayList<>();;
+    public ArrayList<Buchung> buchungen;
+
+    /**Liste der schon registrierten Passagiere */
+    public ArrayList<Passagier> passagiere;
 
     /** Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen Grundlage für die Buchungsnummer */
-    private static int anzahlBuchungen = 0;
+    private static int anzahlBuchungen;
 
     /**Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen Grundlage für die Passagiernummer */
-    private static int anzahlPassagiere = 0;
+    private static int anzahlPassagiere;
+
+    /**Konstruktor der Klasse, der die temporäre Lösung der Datenspeicherung initialisiert */
+    public Buchungssystem() {
+        fluggesellschaften = new ArrayList<>();
+        fluege = new ArrayList<>();
+        buchungen = new ArrayList<>();
+        passagiere = new ArrayList<>();
+        anzahlBuchungen = 0;
+        anzahlPassagiere = 0;
+    }
 
 
     /**Fügt eine Fluggesellschaft in die Liste "fluggesellschaften" hinzu, wenn sie dort noch nicht existieren.
-     * Temporär, weil die später wahrscheinlich eh in einer separeten Datei gespeichert werden
      * @param fluggesellschaft
      */
     public void fuegeFluggesellschaftHinzu (Fluggesellschaft fluggesellschaft) {
-        
-        if (!this.fluggesellschaften.contains(fluggesellschaft)) {
+        if (fluggesellschaft == null) {
+            throw new IllegalArgumentException("Das übergebene Fluggesellschaft-Objekt hat eine Nullreferenz");
+        }
+        else if (this.fluggesellschaften.contains(fluggesellschaft)) {
+           throw new IllegalArgumentException("Das übergebene Fluggesellschaften-Objekt ist schon in der Liste enthalten"); 
+        } else {
             this.fluggesellschaften.add(fluggesellschaft);
         }
-    
-       
     }
 
     /**Fügt einen Flug der Liste "fluege" hinzu, wenn sie dort noch nicht existieren
      * @param flug
      */
     public void fuegeFlugHinzu (Flug flug) {
-        if (!fluege.contains(flug) && flug != null) {
+        if (flug == null) {
+            throw new IllegalArgumentException("Das übergebene Flug-Objekt hat eine Nullreferenz");
+        }
+        else if (this.fluege.contains(flug)) {
+           throw new IllegalArgumentException("Das übergebene Flug-Objekt ist schon in der Liste enthalten"); 
+        } else {
             this.fluege.add(flug);
         }
     }
@@ -148,8 +171,6 @@ public class Buchungssystem {
          
     }
 
-  
-
     /**
      * Sucht Fluege, basierend auf dem @param ziel
      * @return Liste, der insgesamt hinzugefügten Flüge
@@ -167,8 +188,7 @@ public class Buchungssystem {
         if (!newList.isEmpty()) {
             return newList;
         } else {
-            System.out.println("Einen Flug nach " + ziel.getStadt() + " gibt es leider nicht.");
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Einen Flug nach " + ziel.getStadt() + " gibt es leider nicht.");
         }
         
     }
@@ -203,27 +223,16 @@ public class Buchungssystem {
      * Sucht einen Flug nach einer Flugnummer, die Teil der vorhandenen Flüge sein sollte.
      * @param Flugnummer
      * @return den gesuchten Flug
-     * @throws IllegalArgumentException wenn die Flugnummer nicht oder mehrmals vorhanden ist, letzteres sollte eigentlich nicht vorkommen
-     * Dafür wird eine Liste mit Flügen dieser Flugnummer erstellt und am Ende geprüft, ob diese Liste die Länge 1 hat.
+     * @throws IllegalArgumentException wenn die Flugnummer nicht vorhanden ist
      */
     public Flug sucheFlugNachNummer(String Flugnummer) {
-        ArrayList<Flug> validationList = new ArrayList<>();
         for (int i = 0; i < fluege.size(); i++) {
             Flug f = fluege.get(i);
             if (f.getFlugnummer() == Flugnummer) {
-                validationList.add(f);
+                return f;
             }
         }
-
-        if(validationList.size() == 0 ) {
-            throw new IllegalArgumentException("Es gibt diese Flugnummer nicht");
-        }
-        else if(validationList.size() > 1) {
-            throw new IllegalArgumentException("Es gibt diese Flugnummer mehrfach");
-        }
-        else {
-            return validationList.get(0);
-        }
+        throw new NoSuchElementException("Es gibt diese Flugnummer nicht");
     }
 
    /**
@@ -240,6 +249,7 @@ public class Buchungssystem {
         Buchung b = new Buchung (passagier, flug, sitzplatz, g);
         b.setBuchungsnummer("bu" + anzahlBuchungen);
         anzahlBuchungen++;
+        sitzplatz.setAnzahlKoffer(anzahlKoffer);
         buchungen.add(b);
         return b;
     }
@@ -248,42 +258,45 @@ public class Buchungssystem {
      * Sucht die bisherigen Buchungen nach einer Buchungsnummer ab
      * @param Buchungsnummer
      * @return die Buchung mit der Buchungsnummer
-     * @throws IllegalArgumentException wenn die Buchung nicht oder mehrmals vorhanden ist, letzeres sollte eigentlich nicht passieren
+     * @throws IllegalArgumentException wenn die Buchung nicht oder vorhanden ist
      */
     public Buchung sucheBuchungNachNummer(String buchungsnummer) {
-         ArrayList<Buchung> validationList = new ArrayList<>();
         for (int i = 0; i < buchungen.size(); i++) {
             Buchung b = buchungen.get(i);
             if (b.getBuchungsnummer() == buchungsnummer) {
-                validationList.add(b);
+                return b;
             }
         }
-
-        if(validationList.size() == 0 ) {
-            throw new IllegalArgumentException("Es gibt diese Buchungsnummer nicht");
-        }
-        else if(validationList.size() > 1) {
-            throw new IllegalArgumentException("Es gibt diese Buchungsnummer mehrfach");
-        }
-        else {
-            return validationList.get(0);
-        }
-
+        throw new IllegalArgumentException("Es gibt diese Buchungsnummer nicht");
     }
 
 
     /**
-     * Bucht einen bereits bestehenden Flug um
+     * Bucht einen Passagier um.
+     * Die entgegengenommenen Parameter können neu sein oder nicht, das erfolgt in der Methode {@link validiereUmbuchung}
      * @param buchung
-     * @param neuerFlug
-     * @param neueSitzplatznummer
-     * @return den Betrag, den nach dem Aufrufen der Methode "umbuchenMitGebühr" der Klasse "Buchung"
-     * TODO: muss noch gemacht werden
+     * @param sitzplatznummer
+     * @return den Buchungsbetrag
      */
-    public double umbuchen(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer) {
-        double betrag = 0.0;
+    public double umbuchen(Buchung buchung,Flug flug, String sitzplatznummer, Sitzklasse sitzklasse) {
+        boolean umbuchungMoeglich = false;
+        double gebuehr = 0.0;
+        try {
+            umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        if (umbuchungMoeglich) {
+            Sitzplatz platz = new Sitzplatz(sitzplatznummer, sitzklasse);
+            gebuehr = berechneUmbuchungsgebuehr(buchung, flug, platz);
+            buchung.setSitzplatz(platz);
+            buchung.setFlug(flug);
+            buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
+        }
         
-        return betrag;
+        return gebuehr;
+        
     }
 
     /**
@@ -291,62 +304,83 @@ public class Buchungssystem {
      * Geht dafür bei Buchung auf einen neuen Flug alle Sitzplätze des neuen Fluges durch und schaut, ob die Sitzplatznummer im neuen Flug existiert.
      * Bei Buchung auf neue Sitzplatznummer wird nur geprüft, ob der neue Sitzplatz noch frei ist
      * Schaut vorher, ob die Objekte nicht null sind 
+     * Prüft, ob eine Umbuchung schon vorgenommen wurde
      * @param buchung
      * @param neuerFlug
      * @param neueSitzplatznummer
      * @return
      */
-    public boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer) {
+    public boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer, Sitzklasse sitzklasse) {
         //wenn die Buchung nicht vorhanden ist
         if(buchung == null) { 
             throw new NoSuchElementException("Es ist keine Buchung angegeben, von der Umgebucht werden soll");
         }
+
         //wenn beide Buchungsparameter leer sind
         else if (neuerFlug == null && neueSitzplatznummer == null) {
             throw new NoSuchElementException("Beide Buchungsparameter sind leer");
         }
-        //wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
-        else if(neuerFlug == buchung.getFlug() && neueSitzplatznummer != null) {
-            return validiereBuchungimSelbenFlug(buchung, neuerFlug, neueSitzplatznummer);
+
+        //wenn schon einmal umgebucht wurde
+        else if (buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
+            throw new IllegalStateException("Du hast schon eine Umbuchung vorgenommen");
         }
+
+        //wenn keine Sitzklasse angegeben wurde
+        else if(sitzklasse == null) {
+            throw new NoSuchElementException("Du hast keine Sitzklasse eingegeben");
+        }
+
+        //wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
+        else if(neuerFlug == buchung.getFlug()) {
+            return validiereUmbuchungimSelbenFlug(buchung, neuerFlug, neueSitzplatznummer, sitzklasse);
+        }
+
         //wenn im neuen Flug ein Sitzplatz gebucht werden muss(Prüft, ob die Sitzplatznummer im neuen Flug vorhanden ist und ob der Sitzplatz belegt ist)
         else {
-            return validiereBuchungimNeuenFlug(neuerFlug, neueSitzplatznummer);
+            return validiereUmbuchungimNeuenFlug(neuerFlug, neueSitzplatznummer, sitzklasse);
         }
         
         
 
     }
 
-    public boolean validiereBuchungimSelbenFlug (Buchung buchung, Flug neuerFlug, String neueSitzplatznummer) {
+    public boolean validiereUmbuchungimSelbenFlug (Buchung buchung, Flug flug, String neueSitzplatznummer, Sitzklasse sitzklasse) {
         Sitzplatz sitz = findeSitzplatz(neueSitzplatznummer, buchung.getFlug());
-        
-        if (sitz == null) {
-            throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
-        }
+        List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
 
-        if (!sitz.getIstFrei()) {
-            throw new IllegalArgumentException("Sitzplatz bereits belegt.");
+        try {
+            validiereSitzplatz(sitz, sitzklasse, klassenliste);
+        } catch (Exception e) {
+            throw e;
         }
-
         return true;
 
         
     }
 
-    public boolean validiereBuchungimNeuenFlug(Flug neuerFlug, String neueSitzplatznummer){
-        Sitzplatz sitz =findeSitzplatz(neueSitzplatznummer, neuerFlug);
-        
+    public boolean validiereUmbuchungimNeuenFlug(Flug flug, String neueSitzplatznummer, Sitzklasse sitzklasse){
+        Sitzplatz sitz =findeSitzplatz(neueSitzplatznummer, flug);
+        List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
+        try {
+                    validiereSitzplatz(sitz, sitzklasse, klassenliste);
+                } catch (Exception e) {
+                    throw e;
+                }
+                return true;
+    }
+
+    public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
         if (sitz == null) {
             throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
         }
 
-        if (!sitz.getIstFrei()) {
+        else if (!sitz.getIstFrei()) {
             throw new IllegalArgumentException("Sitzplatz bereits belegt.");
         }
-
-        return true;
-
+        else if (sitz.getSitzklasse() != sitzklasse && !klassenliste.contains(sitz)) {
+            throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
+        } 
     }
 
 
@@ -368,6 +402,24 @@ public class Buchungssystem {
     return null;
 }
 
+    public double berechneUmbuchungsgebuehr (Buchung buchung, Flug flug, Sitzplatz sitzplatz) {
+        // Wenn positiv, also der neue Flug mehr kostet, dann auf Gebühr aufschlagen
+        double ticketDifferenz = buchung.getFlug().getBasispreis() - flug.getBasispreis();
+        double finaleGebühr = 0.0;
+
+        if (ticketDifferenz > 0) {
+            // Business Class ggf. aufschlagen
+            if (sitzplatz.getSitzklasse() == Sitzklasse.ECONOMY) {
+                finaleGebühr = buchung.getUmbuchungsgebuehr() + ticketDifferenz;
+            } else if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
+                finaleGebühr = buchung.getUmbuchungsgebuehr() + ticketDifferenz * buchung.getBusinesspreisfaktor();
+            }
+        } else
+            finaleGebühr = buchung.getUmbuchungsgebuehr();
+
+        return finaleGebühr;
+    }
+
     /**
      * storniert eine vorhandene Buchung
      * @param buchung
@@ -382,19 +434,32 @@ public class Buchungssystem {
     }
 
     /**zeigt alle Fluege, mit ihrer jeweiligen Auslastung
-     * TODO
+     * 
      */
-    public void zeigeAlleFluegeMitAuslastung () {
-        
+    public List<String> zeigeAlleFluegeMitAuslastung () {
+        ArrayList<String> neueListe = new ArrayList<String>();
+        for (int i = 0; i < fluege.size(); i++) {
+            neueListe.add("\nFlug: " + fluege.get(i).getFlugnummer() + "| Auslastung: " + fluege.get(i).berechneAuslastung());
+        }
+        return neueListe;
     }
 
     /**
      * gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht hat
-     * @param flug
-     * TODO
+     * 
+     * 
      */
-    public void zeigeGepaekÜbersicht (Flug flug) {
+    public ArrayList<String> zeigeGepaekÜbersicht (Flug flug) {
+       ArrayList<String> neueListe = new ArrayList<>();
+        for (int i = 0; i < flug.getSitzplan().length; i++) {
+            for (int j = 0; j < flug.getSitzplan()[i].length; j++) {
+                    neueListe.add("\n Sitzplatz: " + flug.getSitzplan()[i][j].getSitzplatzNummer() + " | Anzahl Koffer: " + flug.getSitzplan()[i][j].getAnzahlKoffer());
+                }
 
+
+        }
+        
+        return neueListe;
     }
 
     

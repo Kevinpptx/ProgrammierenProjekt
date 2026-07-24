@@ -71,38 +71,6 @@ public class Buchung {
         return stornierungsGebühr;
     }
 
-    /**
-     * Bucht die Buchung auf einen anderen Flug und einen anderen
-     * Sitzplatz um. Die Umbuchungsgebühr wird unter Berücksichtigung
-     * möglicher Preisunterschiede berechnet.
-     *
-     * @param neuerFlug der neue Flug
-     * @param neuerSitzplatz der neue Sitzplatz
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Flug neuerFlug, Sitzplatz neuerSitzplatz) {
-        // Wenn positiv, also der neue Flug mehr kostet, dann auf Gebühr aufschlagen
-        double ticketDifferenz = this.flug.getBasispreis() - neuerFlug.getBasispreis();
-        double finaleGebühr = 0.0;
-
-        if (ticketDifferenz > 0) {
-            // Business Class ggf. aufschlagen
-            if (neuerSitzplatz.getSitzklasse() == Sitzklasse.ECONOMY) {
-                finaleGebühr = umbuchungsGebühr + ticketDifferenz;
-            } else if (neuerSitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
-                finaleGebühr = umbuchungsGebühr + ticketDifferenz * businessPreisFaktor;
-            }
-        } else
-            finaleGebühr = umbuchungsGebühr;
-
-        this.flug = neuerFlug;
-        // nimmt an, dass der Sitzplatz nicht belegt ist. Die Klasse, die die
-        // Umbuchung auslöst, muss validieren!!
-        this.sitzplatz = neuerSitzplatz;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return finaleGebühr;
-    }
 
     /**
      * Bucht die Buchung auf einen anderen Flug um.
@@ -179,6 +147,10 @@ public class Buchung {
         return this.sitzplatz;
     }
 
+    public void setSitzplatz(Sitzplatz s) {
+        this.sitzplatz = s;
+    }
+
     /**
      * Gibt den aktuellen Buchungsstatus zurück.
      *
@@ -194,6 +166,27 @@ public class Buchung {
         }
     }
 
+    public double getUmbuchungsgebuehr() {
+        return umbuchungsGebühr;
+    }
+
+    public double getStornierungsgebuehr() {
+        return stornierungsGebühr;
+    }
+
+    public double getBusinesspreisfaktor() {
+        return businessPreisFaktor;
+    }
+
+    public void setFlug(Flug f) {
+        this.flug = f;
+    }
+
+    public void setBuchungsstatus(Buchungsstatus bs) {
+        this.buchungsstatus = bs;
+    }
+
+
     /**
      * Gibt eine textuelle Beschreibung der Buchung zurück.
      * Die Beschreibung enthält die Buchungsnummer, den Passagier,
@@ -204,7 +197,7 @@ public class Buchung {
      */
     @Override
     public String toString() {
-        return "Die Buchung mit der Nummer " + this.buchungsnummer +
+        return "\n \nDie Buchung mit der Nummer " + this.buchungsnummer +
                 " von Passagier " + this.passagier.getName() +
                 " betreffend Flug " + this.flug.getFlugnummer() +
                 " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
