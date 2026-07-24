@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Cedric Beckmann
  * @version 1.0
  */
-public class Fluggesellschaft {
+public class Fluggesellschaft implements Serializable {
 
     private String name;
     private String airlineCode; 

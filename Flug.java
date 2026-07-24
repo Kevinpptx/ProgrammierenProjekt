@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * @author Cedric Beckmann
  * @version 1.0
  */
-public class Flug {
+public class Flug implements Serializable {
     /** Die eindeutige Flugnummer des Fluges */
     private String flugnummer;
 
@@ -145,6 +146,8 @@ public class Flug {
      *
      * @param reihe die Nummer der gewünschten Sitzreihe
      * @param nummer die Position des gewünschten Sitzplatzes innerhalb der Reihe
+     * @throws IllegalArgumentException wenn der Sitzplatz nicht existiert
+     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
      */
     public void belegeSitzplatz(int reihe, int nummer) {
 
@@ -154,15 +157,21 @@ public class Flug {
 
             Sitzplatz sitzplatz = this.sitzplan[reihe-1][nummer-1];
 
+            
             // Ein Sitzplatz kann nur belegt werden, wenn er noch frei ist
             if(sitzplatz.getIstFrei()) {
                 sitzplatz.belegen();
             } else {
-                System.out.println("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
+                throw new IllegalStateException(
+                    "Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt."
+                );
             }
 
         } else {
-            System.out.println("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
+            throw new IllegalArgumentException(
+                "Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. " +
+                "Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + 
+                " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
         }
     }
 
