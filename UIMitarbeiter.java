@@ -107,8 +107,8 @@ public class UIMitarbeiter {
 
 
 
-        Flugzeug test = new Flugzeug("3223", "A337", 16, "2", "5");
-        Fluggeselschaften.get(1).fuegeFlugzeugHinzu(test);
+    //    Flugzeug test = new Flugzeug("3223", "A337", 16, "2", "5");
+        // Fluggeselschaften.get(1).fuegeFlugzeugHinzu(test);
     }
 
 
