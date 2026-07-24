@@ -10,6 +10,9 @@ import java.nio.file.Path;
  * Verwaltet das Speichern und Laden des Buchungssystems.
  * Das Buchungssystem wird mithilfe der Java-Serialisierung
  * im Ordner {@code data} gespeichert.
+ * 
+ * @author Cedric Beckmann
+ * @version 1.0
  */
 public class DatenHandler {
 
