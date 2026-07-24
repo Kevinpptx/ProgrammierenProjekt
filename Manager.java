@@ -19,18 +19,22 @@ public class Manager {
 
         int auswahl = intscanner();
 
-        if (auswahl == 1) {
+while (auswahl > 0 || auswahl > 3) {
+    switch (auswahl) {
+        case 1:
             System.out.print("Admin: ");
             UIMitarbeiter.loggin();
-        } else if (auswahl == 2) {
+            break;
+        case 2:
             System.out.print("Kunden: ");
-        } else if (auswahl == 3) {
-            System.exit(0);
-        } else {
+            break;
+            case 3:
+                System.exit(0);
+        default:
             System.out.print("Falsche eingabe ");
             start();
-        }
-        start();
+    }
+}
     }
 
     // Scanner um nach den richtigen werten zu filtern
