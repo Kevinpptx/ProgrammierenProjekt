@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code
@@ -13,7 +12,7 @@ public class Fluggesellschaft implements Serializable {
 
     private String name;
     private String airlineCode; 
-    private List<Flugzeug> flotte = new ArrayList<>(); 
+    private ArrayList<Flugzeug> flotte = new ArrayList<>(); 
 
      /**
      * Erzeugt eine neue Fluggesellschaft mit einem Namen und einem Airline-Code.
@@ -62,7 +61,7 @@ public class Fluggesellschaft implements Serializable {
      *
      * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
-    public List<Flugzeug> getFlotte() {
+    public ArrayList<Flugzeug> getFlotte() {
         return this.flotte;
     }
 
@@ -84,6 +83,10 @@ public class Fluggesellschaft implements Serializable {
         return this.airlineCode;
     }
 
+    public boolean besitztFlugzeug(Flugzeug flugzeug) {
+        return flotte.contains(flugzeug);
+    }
+
     /**
      * Gibt eine textuelle Beschreibung der Fluggesellschaft zurück.
      * Die Beschreibung enthält den Namen, den Airline-Code und die Flugzeuge
@@ -96,5 +99,19 @@ public class Fluggesellschaft implements Serializable {
         String s; 
         s = "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: " + this.flotte.toString();
         return s;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Fluggesellschaft f = (Fluggesellschaft) o;
+        return this.airlineCode.equalsIgnoreCase(f.getAirlineCode());
     }
 }
