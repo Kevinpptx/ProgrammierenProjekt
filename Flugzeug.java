@@ -152,4 +152,18 @@ for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
 
     return output;
 }
+
+@Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Flugzeug f = (Flugzeug) o;
+        return this.getCode().equalsIgnoreCase(f.getCode());
+    }
 }
