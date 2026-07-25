@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 /**
  * Die Klasse Passagier speichert Informationen über einen Passagier.
  */
-public class Passagier {
+public class Passagier implements Serializable{
 
     /** Die ID des Passagiers. */
     private String passagierId;
