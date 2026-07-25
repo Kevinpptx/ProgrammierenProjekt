@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
@@ -18,7 +20,7 @@ import java.util.List;
  * @author Cedric Beckmann
  * @version 1.0
  */
-public class Flug {
+public class Flug implements Serializable {
     /** Die eindeutige Flugnummer des Fluges */
     private String flugnummer;
 
@@ -159,6 +161,8 @@ public class Flug {
      *
      * @param reihe die Nummer der gewünschten Sitzreihe
      * @param nummer die Position des gewünschten Sitzplatzes innerhalb der Reihe
+     * @throws IllegalArgumentException wenn der Sitzplatz nicht existiert
+     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
      */
     public void belegeSitzplatz(int reihe, int nummer) {
 
@@ -168,15 +172,16 @@ public class Flug {
 
             Sitzplatz sitzplatz = this.sitzplan[reihe-1][nummer-1];
 
+            
             // Ein Sitzplatz kann nur belegt werden, wenn er noch frei ist
             if(sitzplatz.getIstFrei()) {
                 sitzplatz.belegen();
             } else {
-                System.out.println("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
+                throw new IllegalArgumentException("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
             }
 
         } else {
-            System.out.println("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
+            throw new IllegalArgumentException("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
         }
     }
 
@@ -225,6 +230,24 @@ public class Flug {
         }
         return freieSitzplaetze; 
     }
+
+    /**
+     * Ermittelt Reihe und Nummer basierend auf der Sitzplatznummer
+     * @param sitzplatznummer
+     * @return
+     */
+    public int[] ermittleReiheUndNummer(String sitzplatznummer) {
+        //Erster Teil der Sitzplatznummer, der Buchstabe    
+        char buchstabe = sitzplatznummer.charAt(0);   
+        
+        //Wandelt den char-Wert auf Basis des ASCII-Wertes von A (65) in einen Integer-Wert um
+        int reihe = buchstabe - 'A' + 1;    
+        
+        //Zweiter Teil der Sitzplatznummer, die Zahl im String
+        int nummer = Integer.parseInt(sitzplatznummer.substring(1));   
+        
+        return new int[] {reihe, nummer};
+        }
 
     /**
      * Prüft, ob der Flug vollständig ausgebucht ist.
@@ -331,6 +354,68 @@ public class Flug {
             System.out.println();
             System.out.println();
         }
+    }
+
+    /**
+     * Findet einen Sitzplatz in einem Flug und gibt ihn zurück
+     * War ursprünglich in der Methode "Buchungssystem", ist aber hier sinnvoller
+     * @param sitzplatznummer
+     * @return
+     */
+    public Sitzplatz findeSitzplatz(String sitzplatznummer) {
+
+        for (int i = 0; i < sitzplan.length; i++) {
+            for (int j = 0; j < sitzplan[i].length; j++) {
+
+                if (sitzplan[i][j].getSitzplatzNummer()
+                        .equals(sitzplatznummer)) {
+
+                    return sitzplan[i][j];
+                }
+            }
+        }
+
+        return null;
+    }
+
+        /**
+     * Prüft, ob ein Sitzplatz vorhanden oder belegt ist oder nicht in der gegebenen Sitzklasse existiert
+     * @param sitz : zu überprüfender Sitzplatz
+     * @param sitzklasse : Sitzklasse, die zu dem Sitzplatz gehören soll
+     * @param klassenliste : Liste mit Sitzplätzen, die die angegebene Sitzklasse haben
+     */
+    public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
+        //man muss auf null prüfen, weil die Methode "findeSitzplatz" null zurückgeben kann.
+        if (sitz == null) {
+            throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
+        }
+
+        else if (!sitz.getIstFrei()) {
+            throw new IllegalArgumentException("Sitzplatz bereits belegt.");
+        }
+        else if (sitz.getSitzklasse() != sitzklasse && !klassenliste.contains(sitz)) {
+            throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
+        } 
+    }
+
+    /**
+     * Gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht
+     * hat
+     * 
+     * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen
+     *         Buchung als Strings
+     */
+    public ArrayList<String> zeigeGepaekÜbersicht() {
+        ArrayList<String> neueListe = new ArrayList<>();
+        for (int i = 0; i < sitzplan.length; i++) {
+            for (int j = 0; j < sitzplan[i].length; j++) {
+                neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
+                        + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
+            }
+
+        }
+
+        return neueListe;
     }
 
     /**

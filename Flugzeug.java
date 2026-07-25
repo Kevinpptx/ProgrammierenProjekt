@@ -1,10 +1,11 @@
+import java.io.Serializable;
 
 /**
  * Repräsentiert ein Flugzeug mit einem Sitzplan.
  * Das Flugzeug besitzt einen eindeutigen Code, ein Modell
  * sowie eine Vorlage aller vorhandenen Sitzplätze.
  */
-public class Flugzeug {
+public class Flugzeug implements Serializable{
 
     /**
      * Eindeutiger Code des Flugzeugs.
@@ -118,11 +119,6 @@ public class Flugzeug {
         return this.sitzplaetzeVorlage;
     }
 
-    /**
-     * Gibt eine Beschreibung des Flugzeugs zurück.
-     *
-     * @return Beschreibung mit Code, Modell und Sitzplatzanzahl
-     */
     /**
      * Gibt eine Beschreibung des Flugzeugs einschließlich der
      * Sitzplatz-Anordnung zurück.
