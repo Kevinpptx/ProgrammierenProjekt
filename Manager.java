@@ -31,6 +31,7 @@ public class Manager {
             break;
         case 2:
             System.out.print("Kunden: ");
+            UIKunde.kunde();
             break;
             case 3:
                 System.exit(0);
@@ -63,7 +64,7 @@ public class Manager {
             return zeichen;
         } catch (InputMismatchException e) {
             System.out.println("kein gültiger wert");
-            return "";
+            return null;
         }
     }
 

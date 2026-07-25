@@ -91,6 +91,7 @@ public class Buchungssystem implements Serializable {
      * @return Buchung, die soeben erstellt wurde
      * @throws RuntimeException basierend darauf, was dazu geführt hat, dass die Buchung ungueltig ist
      */
+    /*
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
             Sitzklasse sitzklasse) {
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
@@ -128,11 +129,11 @@ public class Buchungssystem implements Serializable {
         }
 
     }
-
+*/
     /**
      * Sucht die bisherigen Buchungen nach einer Buchungsnummer ab
      * 
-     * @param Buchungsnummer
+     * @param buchungsnummer
      * @return die Buchung mit der Buchungsnummer
      * @throws IllegalArgumentException wenn die Buchung nicht oder vorhanden ist
      */
@@ -343,6 +344,10 @@ public class Buchungssystem implements Serializable {
      */
     public ArrayList<Buchung> getBuchungen() {
         return buchungen;
+    }
+
+    public ArrayList<Passagier> getPassagiere() {
+        return passagiere;
     }
 
 }
