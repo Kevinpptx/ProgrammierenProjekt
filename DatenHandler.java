@@ -27,7 +27,6 @@ public class DatenHandler {
     public DatenHandler() {
 
     }
-
     /**
      * Serialisiert das übergebene Buchungssystem und speichert es
      * in der dafür vorgesehenen Datei.
