@@ -403,4 +403,19 @@ public class Flug {
             + " ist zu " + this.berechneAuslastung() 
             + "% ausgelastet.";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Flug f = (Flug) o;
+        return this.flugnummer.equalsIgnoreCase(f.getFlugnummer()) 
+                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate());
+    }
 }
