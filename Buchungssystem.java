@@ -20,10 +20,10 @@ public class Buchungssystem implements Serializable {
 
 
     /** Liste der Buchungen, die schon vorgenommen wurden */
-    public ArrayList<Buchung> buchungen;
+    private ArrayList<Buchung> buchungen;
 
     /** Liste der schon registrierten Passagiere */
-    public ArrayList<Passagier> passagiere;
+    private ArrayList<Passagier> passagiere;
 
     /**
      * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen

@@ -72,7 +72,10 @@ public class Buchung {
         else
             throw new UnsupportedOperationException("Klasse nicht implementiert.");
     }
-
+    public double stornierenMitGebühr() {
+        this.buchungsstatus = Buchungsstatus.STORNIERT;
+        return stornierungsGebühr;
+    }
 
     /**
      * Gibt die Buchungsnummer zurück.
