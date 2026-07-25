@@ -43,6 +43,19 @@ public class Buchung {
         this.buchungsstatus = Buchungsstatus.AKTIV;
     }
 
+    public Buchung(String buchungsnummer, Passagier passagier, Flug flug, Sitzplatz sitzplatz,
+            GepaeckInformation gepaeckInformation) {
+        
+        this.buchungsnummer = buchungsnummer;
+        this.passagier = passagier;
+        this.flug = flug;
+        this.sitzplatz = sitzplatz;
+        this.gepaeckInformation = gepaeckInformation;
+        this.gezahlterPreis = berechneGezahltenPreis();
+        this.buchungsstatus = Buchungsstatus.AKTIV;
+    }
+
+
     /**
      * Berechnet den für die Buchung zu zahlenden Preis.
      * Die Berechnung berücksichtigt die Sitzklasse und die
@@ -182,8 +195,12 @@ public class Buchung {
         this.flug = f;
     }
 
-    public void setBuchungsstatus(Buchungsstatus bs) {
-        this.buchungsstatus = bs;
+    public void setBuchungsstatus(Buchungsstatus status) {
+        this.buchungsstatus = status;
+    }
+
+    public GepaeckInformation getGepaeckinformation() {
+        return gepaeckInformation;
     }
 
 
