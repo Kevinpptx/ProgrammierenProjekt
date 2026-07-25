@@ -7,6 +7,10 @@ public class Manager {
 
 // Start Methode um den nutzer festzulegen
     public static void start() {
+
+        int i = 0;
+        while ( i < 1) {
+
         Scanner sc = new Scanner(System.in);
         System.out.print("\n --------------------------------------------");
         System.out.println("\n Herzlich Wilkommen zum Avigator");
@@ -17,9 +21,9 @@ public class Manager {
         System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
         System.out.println("--------------------------------------------");
 
-        int auswahl = intscanner();
 
-while (auswahl > 0 || auswahl > 3) {
+
+    int auswahl = intscanner();
     switch (auswahl) {
         case 1:
             System.out.print("Admin: ");
@@ -62,5 +66,18 @@ while (auswahl > 0 || auswahl > 3) {
             return "";
         }
     }
+
+    public static double doublescanner() {
+
+        try {
+            Scanner sc = new Scanner(System.in);
+            double zahl = sc.nextDouble();
+            return zahl;
+        } catch (InputMismatchException e) {
+            System.out.println("kein gültiger wert");
+            return -1.1;
+        }
+    }
+
 
 }
