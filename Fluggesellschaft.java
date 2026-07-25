@@ -99,4 +99,18 @@ public class Fluggesellschaft {
         s = "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: " + this.flotte.toString();
         return s;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Fluggesellschaft f = (Fluggesellschaft) o;
+        return this.airlineCode.equalsIgnoreCase(f.getAirlineCode());
+    }
 }
