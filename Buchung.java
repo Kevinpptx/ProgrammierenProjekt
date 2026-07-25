@@ -29,14 +29,25 @@ public class Buchung implements Serializable {
      * Der Preis der Buchung wird automatisch berechnet und der Status
      * auf {@code AKTIV} gesetzt.
      *
-     * @param buchungsnummer die eindeutige Buchungsnummer
+     * Die Buchungsnummer wird in der Klasse Buchungssystem generiert
      * @param passagier der zugehörige Passagier
      * @param flug der gebuchte Flug
      * @param sitzplatz der gebuchte Sitzplatz
      * @param gepaeckInformation die Gepäckinformationen zur Buchung
      */
+    public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
+            GepaeckInformation gepaeckInformation) {
+        this.passagier = passagier;
+        this.flug = flug;
+        this.sitzplatz = sitzplatz;
+        this.gepaeckInformation = gepaeckInformation;
+        this.gezahlterPreis = berechneGezahltenPreis();
+        this.buchungsstatus = Buchungsstatus.AKTIV;
+    }
+
     public Buchung(String buchungsnummer, Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
+        
         this.buchungsnummer = buchungsnummer;
         this.passagier = passagier;
         this.flug = flug;
@@ -45,6 +56,7 @@ public class Buchung implements Serializable {
         this.gezahlterPreis = berechneGezahltenPreis();
         this.buchungsstatus = Buchungsstatus.AKTIV;
     }
+
 
     /**
      * Berechnet den für die Buchung zu zahlenden Preis.
@@ -62,88 +74,9 @@ public class Buchung implements Serializable {
         else
             throw new UnsupportedOperationException("Klasse nicht implementiert.");
     }
-
-    /**
-     * Storniert die Buchung und setzt den Buchungsstatus auf
-     * {@code STORNIERT}.
-     *
-     * @return die anfallende Stornierungsgebühr
-     */
     public double stornierenMitGebühr() {
         this.buchungsstatus = Buchungsstatus.STORNIERT;
         return stornierungsGebühr;
-    }
-
-    /**
-     * Bucht die Buchung auf einen anderen Flug und einen anderen
-     * Sitzplatz um. Die Umbuchungsgebühr wird unter Berücksichtigung
-     * möglicher Preisunterschiede berechnet.
-     *
-     * @param neuerFlug der neue Flug
-     * @param neuerSitzplatz der neue Sitzplatz
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Flug neuerFlug, Sitzplatz neuerSitzplatz) {
-        // Wenn positiv, also der neue Flug mehr kostet, dann auf Gebühr aufschlagen
-        double ticketDifferenz = this.flug.getBasispreis() - neuerFlug.getBasispreis();
-        double finaleGebühr = 0.0;
-
-        if (ticketDifferenz > 0) {
-            // Business Class ggf. aufschlagen
-            if (neuerSitzplatz.getSitzklasse() == Sitzklasse.ECONOMY) {
-                finaleGebühr = umbuchungsGebühr + ticketDifferenz;
-            } else if (neuerSitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
-                finaleGebühr = umbuchungsGebühr + ticketDifferenz * businessPreisFaktor;
-            }
-        } else
-            finaleGebühr = umbuchungsGebühr;
-
-        this.flug = neuerFlug;
-        // nimmt an, dass der Sitzplatz nicht belegt ist. Die Klasse, die die
-        // Umbuchung auslöst, muss validieren!!
-        this.sitzplatz = neuerSitzplatz;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return finaleGebühr;
-    }
-
-    /**
-     * Bucht die Buchung auf einen anderen Flug um.
-     * Der Sitzplatz bleibt unverändert.
-     *
-     * @param neuerFlug der neue Flug
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Flug neuerFlug) {
-        this.flug = neuerFlug;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return umbuchungsGebühr;
-    }
-
-    /**
-     * Bucht die Buchung auf einen anderen Sitzplatz um.
-     * Der Flug bleibt unverändert.
-     *
-     * @param neuerSitzplatz der neue Sitzplatz
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Sitzplatz neuerSitzplatz) {
-        double finaleGebühr = 0.0;
-
-        // Klassen Upgrades abgleichen und ggf. Preis anpassen
-        if (this.sitzplatz.getSitzklasse() == Sitzklasse.ECONOMY
-                && neuerSitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
-            finaleGebühr = this.flug.getBasispreis() * businessPreisFaktor + umbuchungsGebühr;
-        } else
-            finaleGebühr = umbuchungsGebühr;
-
-        // nimmt an, dass der Sitzplatz nicht belegt ist. Die Klasse, die die
-        // Umbuchung auslöst, muss validieren!!
-        this.sitzplatz = neuerSitzplatz;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return finaleGebühr;
     }
 
     /**
@@ -182,6 +115,10 @@ public class Buchung implements Serializable {
         return this.sitzplatz;
     }
 
+    public void setSitzplatz(Sitzplatz s) {
+        this.sitzplatz = s;
+    }
+
     /**
      * Gibt den aktuellen Buchungsstatus zurück.
      *
@@ -190,6 +127,37 @@ public class Buchung implements Serializable {
     public Buchungsstatus getBuchungsstatus() {
         return this.buchungsstatus;
     }
+
+    public void setBuchungsnummer(String s) {
+        if (s.startsWith("bu")) {
+            this.buchungsnummer = s;
+        }
+    }
+
+    public double getUmbuchungsgebuehr() {
+        return umbuchungsGebühr;
+    }
+
+    public double getStornierungsgebuehr() {
+        return stornierungsGebühr;
+    }
+
+    public double getBusinesspreisfaktor() {
+        return businessPreisFaktor;
+    }
+
+    public void setFlug(Flug f) {
+        this.flug = f;
+    }
+
+    public void setBuchungsstatus(Buchungsstatus status) {
+        this.buchungsstatus = status;
+    }
+
+    public GepaeckInformation getGepaeckinformation() {
+        return gepaeckInformation;
+    }
+
 
     /**
      * Gibt eine textuelle Beschreibung der Buchung zurück.
@@ -201,7 +169,7 @@ public class Buchung implements Serializable {
      */
     @Override
     public String toString() {
-        return "Die Buchung mit der Nummer " + this.buchungsnummer +
+        return "\n \nDie Buchung mit der Nummer " + this.buchungsnummer +
                 " von Passagier " + this.passagier.getName() +
                 " betreffend Flug " + this.flug.getFlugnummer() +
                 " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +

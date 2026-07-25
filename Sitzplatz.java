@@ -13,6 +13,8 @@ public class Sitzplatz implements Serializable{
     /** Sitzklasse des Sitzplatzes. */
     private Sitzklasse sitzklasse;
 
+    private Buchung buchung;
+
     /** Gibt an, ob der Sitzplatz belegt ist. */
     private boolean belegt;
 
@@ -27,6 +29,7 @@ public class Sitzplatz implements Serializable{
     public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
         this.sitzplatzNummer = sitzplatzNummer;
         this.sitzklasse = sitzklasse;
+        this.buchung = null;
         freigeben();
     }
 
@@ -70,6 +73,14 @@ public class Sitzplatz implements Serializable{
      */
     public void freigeben() {
         this.belegt = false;
+    }
+
+    public Buchung getBuchung() {
+        return buchung;
+    }
+
+    public void setBuchung(Buchung buchung) {
+        this.buchung = buchung;
     }
 
     /**

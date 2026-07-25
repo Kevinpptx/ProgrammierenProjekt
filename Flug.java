@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
@@ -162,16 +163,11 @@ public class Flug implements Serializable {
             if(sitzplatz.getIstFrei()) {
                 sitzplatz.belegen();
             } else {
-                throw new IllegalStateException(
-                    "Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt."
-                );
+                throw new IllegalArgumentException("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
             }
 
         } else {
-            throw new IllegalArgumentException(
-                "Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. " +
-                "Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + 
-                " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
+            throw new IllegalArgumentException("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
         }
     }
 
@@ -220,6 +216,24 @@ public class Flug implements Serializable {
         }
         return freieSitzplaetze; 
     }
+
+    /**
+     * Ermittelt Reihe und Nummer basierend auf der Sitzplatznummer
+     * @param sitzplatznummer
+     * @return
+     */
+    public int[] ermittleReiheUndNummer(String sitzplatznummer) {
+        //Erster Teil der Sitzplatznummer, der Buchstabe    
+        char buchstabe = sitzplatznummer.charAt(0);   
+        
+        //Wandelt den char-Wert auf Basis des ASCII-Wertes von A (65) in einen Integer-Wert um
+        int reihe = buchstabe - 'A' + 1;    
+        
+        //Zweiter Teil der Sitzplatznummer, die Zahl im String
+        int nummer = Integer.parseInt(sitzplatznummer.substring(1));   
+        
+        return new int[] {reihe, nummer};
+        }
 
     /**
      * Prüft, ob der Flug vollständig ausgebucht ist.
@@ -329,6 +343,68 @@ public class Flug implements Serializable {
     }
 
     /**
+     * Findet einen Sitzplatz in einem Flug und gibt ihn zurück
+     * War ursprünglich in der Methode "Buchungssystem", ist aber hier sinnvoller
+     * @param sitzplatznummer
+     * @return
+     */
+    public Sitzplatz findeSitzplatz(String sitzplatznummer) {
+
+        for (int i = 0; i < sitzplan.length; i++) {
+            for (int j = 0; j < sitzplan[i].length; j++) {
+
+                if (sitzplan[i][j].getSitzplatzNummer()
+                        .equals(sitzplatznummer)) {
+
+                    return sitzplan[i][j];
+                }
+            }
+        }
+
+        return null;
+    }
+
+        /**
+     * Prüft, ob ein Sitzplatz vorhanden oder belegt ist oder nicht in der gegebenen Sitzklasse existiert
+     * @param sitz : zu überprüfender Sitzplatz
+     * @param sitzklasse : Sitzklasse, die zu dem Sitzplatz gehören soll
+     * @param klassenliste : Liste mit Sitzplätzen, die die angegebene Sitzklasse haben
+     */
+    public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
+        //man muss auf null prüfen, weil die Methode "findeSitzplatz" null zurückgeben kann.
+        if (sitz == null) {
+            throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
+        }
+
+        else if (!sitz.getIstFrei()) {
+            throw new IllegalArgumentException("Sitzplatz bereits belegt.");
+        }
+        else if (sitz.getSitzklasse() != sitzklasse && !klassenliste.contains(sitz)) {
+            throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
+        } 
+    }
+
+    /**
+     * Gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht
+     * hat
+     * 
+     * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen
+     *         Buchung als Strings
+     */
+    public ArrayList<String> zeigeGepaekÜbersicht() {
+        ArrayList<String> neueListe = new ArrayList<>();
+        for (int i = 0; i < sitzplan.length; i++) {
+            for (int j = 0; j < sitzplan[i].length; j++) {
+                neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
+                        + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
+            }
+
+        }
+
+        return neueListe;
+    }
+
+    /**
      * Gibt die Flugnummer des Fluges zurück.
      *
      * @return die Flugnummer
@@ -344,6 +420,18 @@ public class Flug implements Serializable {
      */
     public double getBasispreis() {
         return basispreis;
+    }
+
+    public Flughafen getStartFlughafen() {
+        return startFlughafen;
+    }
+
+    public Flughafen getZielflughafen() {
+        return zielFlughafen;
+    }
+
+    public Sitzplatz[][] getSitzplan() {
+        return sitzplan;
     }
 
     /**
