@@ -73,56 +73,6 @@ public class Buchung {
             throw new UnsupportedOperationException("Klasse nicht implementiert.");
     }
 
-    /**
-     * Storniert die Buchung und setzt den Buchungsstatus auf
-     * {@code STORNIERT}.
-     *
-     * @return die anfallende Stornierungsgebühr
-     */
-    public double stornierenMitGebühr() {
-        this.buchungsstatus = Buchungsstatus.STORNIERT;
-        return stornierungsGebühr;
-    }
-
-
-    /**
-     * Bucht die Buchung auf einen anderen Flug um.
-     * Der Sitzplatz bleibt unverändert.
-     *
-     * @param neuerFlug der neue Flug
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Flug neuerFlug) {
-        this.flug = neuerFlug;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return umbuchungsGebühr;
-    }
-
-    /**
-     * Bucht die Buchung auf einen anderen Sitzplatz um.
-     * Der Flug bleibt unverändert.
-     *
-     * @param neuerSitzplatz der neue Sitzplatz
-     * @return die anfallende Umbuchungsgebühr
-     */
-    public double umbuchenMitGebühr(Sitzplatz neuerSitzplatz) {
-        double finaleGebühr = 0.0;
-
-        // Klassen Upgrades abgleichen und ggf. Preis anpassen
-        if (this.sitzplatz.getSitzklasse() == Sitzklasse.ECONOMY
-                && neuerSitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
-            finaleGebühr = this.flug.getBasispreis() * businessPreisFaktor + umbuchungsGebühr;
-        } else
-            finaleGebühr = umbuchungsGebühr;
-
-        // nimmt an, dass der Sitzplatz nicht belegt ist. Die Klasse, die die
-        // Umbuchung auslöst, muss validieren!!
-        this.sitzplatz = neuerSitzplatz;
-        this.buchungsstatus = Buchungsstatus.UMGEBUCHT;
-
-        return finaleGebühr;
-    }
 
     /**
      * Gibt die Buchungsnummer zurück.
