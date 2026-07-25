@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code
@@ -12,7 +11,7 @@ public class Fluggesellschaft {
 
     private String name;
     private String airlineCode; 
-    private List<Flugzeug> flotte = new ArrayList<>(); 
+    private ArrayList<Flugzeug> flotte = new ArrayList<>(); 
 
      /**
      * Erzeugt eine neue Fluggesellschaft mit einem Namen und einem Airline-Code.
@@ -61,7 +60,7 @@ public class Fluggesellschaft {
      *
      * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
-    public List<Flugzeug> getFlotte() {
+    public ArrayList<Flugzeug> getFlotte() {
         return this.flotte;
     }
 
@@ -81,6 +80,10 @@ public class Fluggesellschaft {
      */
     public String getAirlineCode() {
         return this.airlineCode;
+    }
+
+    public boolean besitztFlugzeug(Flugzeug flugzeug) {
+        return flotte.contains(flugzeug);
     }
 
     /**
