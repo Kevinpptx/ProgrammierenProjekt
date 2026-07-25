@@ -7,33 +7,38 @@ import java.io.Serializable;
  */
 public class Flugzeug implements Serializable{
 
-    /** Eindeutiger Code des Flugzeugs. */
+    /**
+     * Eindeutiger Code des Flugzeugs.
+     */
     private String code;
 
-    /** Modellbezeichnung des Flugzeugs. */
+    /**
+     * Modellbezeichnung des Flugzeugs.
+     */
     private String modell;
 
-    /** Anzahl der Economy-Sitzplätze. */
+    /**
+     * Anzahl der Economy-Sitzplätze.
+     */
     private int anzahlEconomy;
 
-    /** Anzahl der Business-Sitzplätze. */
+    /**
+     * Anzahl der Business-Sitzplätze.
+     */
     private int anzahlBusiness;
 
     /**
-     * Vorlage aller Sitzplätze.
-     * Die erste Dimension beschreibt die Sitzreihen,
-     * die zweite Dimension die Sitzposition innerhalb
-     * einer Reihe.
+     * Vorlage aller Sitzplätze. Die erste Dimension beschreibt die Sitzreihen,
+     * die zweite Dimension die Sitzposition innerhalb einer Reihe.
      */
     private Sitzplatz[][] sitzplaetzeVorlage;
 
     /**
      * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.
      *
-     * Die Sitzplätze werden automatisch nummeriert
-     * (z. B. 1A, 1B, 1C, ...).
-     * Die ersten {@code businessReihen} Reihen werden als
-     * Business-Class angelegt, alle übrigen Reihen als Economy.
+     * Die Sitzplätze werden automatisch nummeriert (z. B. 1A, 1B, 1C, ...). Die
+     * ersten {@code businessReihen} Reihen werden als Business-Class angelegt,
+     * alle übrigen Reihen als Economy.
      *
      * @param code eindeutiger Code des Flugzeugs
      * @param modell Modellbezeichnung
@@ -42,10 +47,10 @@ public class Flugzeug implements Serializable{
      * @param businessReihen Anzahl der Business-Reihen
      */
     public Flugzeug(String code,
-                    String modell,
-                    int anzahlReihen,
-                    int sitzeProReihe,
-                    int businessReihen) {
+            String modell,
+            int anzahlReihen,
+            int sitzeProReihe,
+            int businessReihen) {
 
         this.code = code;
         this.modell = modell;
@@ -72,8 +77,8 @@ public class Flugzeug implements Serializable{
 
                 String sitzplatzNummer = (reihe + 1) + "" + sitzbuchstabe;
 
-                this.sitzplaetzeVorlage[reihe][platz] =
-                        new Sitzplatz(sitzplatzNummer, sitzklasse);
+                this.sitzplaetzeVorlage[reihe][platz]
+                        = new Sitzplatz(sitzplatzNummer, sitzklasse);
             }
         }
     }
@@ -114,39 +119,53 @@ public class Flugzeug implements Serializable{
         return this.sitzplaetzeVorlage;
     }
 
-/**
- * Gibt eine Beschreibung des Flugzeugs einschließlich
- * der Sitzplatz-Anordnung zurück.
- *
- * @return Beschreibung des Flugzeugs und des Sitzplans
- */
-@Override
-public String toString() {
+    /**
+     * Gibt eine Beschreibung des Flugzeugs einschließlich der
+     * Sitzplatz-Anordnung zurück.
+     *
+     * @return Beschreibung des Flugzeugs und des Sitzplans
+     */
+    @Override
+    public String toString() {
 
-    String output = "Flugzeug " + this.code +
-            " (" + this.modell + ")" +
-            " besitzt " + getGesamtSitzanzahl() +
-            " Sitzplätze (" +
-            this.anzahlBusiness + " Business, " +
-            this.anzahlEconomy + " Economy)." +
-            "\n\nSitzplan:\n";
+        String output = "Flugzeug " + this.code
+                + " (" + this.modell + ")"
+                + " besitzt " + getGesamtSitzanzahl()
+                + " Sitzplätze ("
+                + this.anzahlBusiness + " Business, "
+                + this.anzahlEconomy + " Economy)."
+                + "\n\nSitzplan:\n";
 
-for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
+        for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
 
-    for (int platz = 0; platz < this.sitzplaetzeVorlage[reihe].length; platz++) {
+            for (int platz = 0; platz < this.sitzplaetzeVorlage[reihe].length; platz++) {
 
-        output += String.format("%-4s",
-                this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer());
+                output += String.format("%-4s",
+                        this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer());
 
-        // Nach der Hälfte der Sitze einen Gang darstellen
-        if (platz == this.sitzplaetzeVorlage[reihe].length / 2 - 1) {
-            output += " | ";
+                // Nach der Hälfte der Sitze einen Gang darstellen
+                if (platz == this.sitzplaetzeVorlage[reihe].length / 2 - 1) {
+                    output += " | ";
+                }
+            }
+
+            output += "\n";
         }
+
+        return output;
     }
 
-    output += "\n";
-}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
 
-    return output;
-}
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Flugzeug f = (Flugzeug) o;
+        return this.getCode().equalsIgnoreCase(f.getCode());
+    }
 }

@@ -88,4 +88,18 @@ public class Flughafen implements Serializable{
                 + this.iataCode + " befindet sich in " + this.stadt
                 + ", " + this.land;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Flughafen f = (Flughafen) o;
+        return this.iataCode.equalsIgnoreCase(f.getIataCode());
+    }
 }

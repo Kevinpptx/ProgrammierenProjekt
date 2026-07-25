@@ -82,14 +82,28 @@ public class Flug implements Serializable {
                 LocalDateTime ankunftszeit, 
                 double basispreis) {
 
+        if (flugnummer == null || flugnummer.isBlank()) {
+            throw new IllegalArgumentException("Die Flugnummer darf nicht leer sein.");
+        }
+
         // Prüft, ob der angegebene Basispreis gültig ist
         if (basispreis < 0) {
             throw new IllegalArgumentException("Der Basispreis darf nicht negativ sein.");
         }
 
         // Verhindert, dass ein Flug vor seinem Abflug ankommt
-        if (ankunftszeit.isBefore(abflugzeit)) {
-            throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen");
+        if (!ankunftszeit.isAfter(abflugzeit)) {
+            throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
+        }
+
+        if (fluggesellschaft == null
+                || flugzeug == null
+                || startFlughafen == null
+                || zielFlughafen == null
+                || abflugzeit == null
+                || ankunftszeit == null) {
+
+            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
         }
 
 
@@ -434,6 +448,23 @@ public class Flug implements Serializable {
         return sitzplan;
     }
 
+    public LocalDateTime getAbflugszeit() {
+        return abflugzeit;
+    }
+
+    public LocalDateTime getAnkunftszeit() {
+        return ankunftszeit;
+    }
+
+    public Flugzeug getFlugzeug() {
+        return flugzeug;
+    }
+
+    public Fluggesellschaft getFluggesellschaft() {
+        return fluggesellschaft;
+    }
+
+
     /**
      * Gibt eine textuelle Beschreibung des Fluges zurück.
      *
@@ -456,5 +487,20 @@ public class Flug implements Serializable {
             + " (" + this.flugzeug.getCode() + ")"
             + " ist zu " + this.berechneAuslastung() 
             + "% ausgelastet.";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Flug f = (Flug) o;
+        return this.flugnummer.equalsIgnoreCase(f.getFlugnummer()) 
+                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate());
     }
 }
