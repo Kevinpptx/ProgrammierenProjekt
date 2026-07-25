@@ -79,6 +79,9 @@ public class Verwaltungssystem implements Serializable {
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Die übergebene Fluggesellschaft existiert nicht.");
         }
+        if (!fluggesellschaften.contains(fluggesellschaft)) {
+            throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
+    }
 
         Iterator<Flugzeug> iterator = this.flugzeuge.iterator();
 
@@ -133,6 +136,10 @@ public class Verwaltungssystem implements Serializable {
     }
 
     public void entferneFlughafen(Flughafen flughafen) {
+        if (flughafen == null) {
+            throw new IllegalArgumentException("Der Flughafen darf nicht null sein.");
+        }
+
         if (this.flughaefen.contains(flughafen)) {
 
             Iterator<Flug> iterator = fluege.iterator();
@@ -198,7 +205,7 @@ public class Verwaltungssystem implements Serializable {
 
         Iterator<Flughafen> iterator = this.flughaefen.iterator();
 
-        ArrayList<Flughafen> ret = new ArrayList();
+        ArrayList<Flughafen> ret = new ArrayList<>();
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
@@ -350,6 +357,10 @@ public class Verwaltungssystem implements Serializable {
      */
     public ArrayList<Flug> sucheFluegeNachZiel(Flughafen ziel) {
         //neue Liste wird erstellt
+        if (ziel == null) {
+            throw new IllegalArgumentException("Der Zielflughafen darf nicht null sein.");
+        }   
+
         ArrayList<Flug> newList = new ArrayList<>();
 
         for (int i = 0; i < fluege.size(); i++) {
@@ -373,6 +384,9 @@ public class Verwaltungssystem implements Serializable {
      * @throws NoSuchElementException wenn der gesuchte Flug nicht existiert
      */
     public List<Flug> sucheFluegeNachRoute(Flughafen start, Flughafen ziel) {
+        if (start == null || ziel == null) {
+            throw new IllegalArgumentException("Start- und Zielflughafen darf nicht null sein.");
+        } 
         ArrayList<Flug> newList = new ArrayList<Flug>();
 
         for (int i = 0; i < fluege.size(); i++) {
@@ -396,14 +410,17 @@ public class Verwaltungssystem implements Serializable {
      * @return den gesuchten Flug
      * @throws IllegalArgumentException wenn die Flugnummer nicht vorhanden ist
      */
-    public ArrayList<Flug> sucheFlugNachNummer(String flugnummer) {
+    public ArrayList<Flug> sucheFluegeNachNummer(String flugnummer) {
+        if (flugnummer == null) {
+            throw new IllegalArgumentException("Die Flugnummmer darf nicht null sein.");
+        }
 
         Iterator<Flug> iterator = fluege.iterator();
         ArrayList<Flug> ret = new ArrayList<>();
 
         while (iterator.hasNext()) {
             Flug f = iterator.next();
-            if (f.getFlugnummer().equals(flugnummer)) {
+            if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
                 ret.add(f);
             }
         }
@@ -415,20 +432,27 @@ public class Verwaltungssystem implements Serializable {
 
     public Flug sucheFlugNachNummer(String flugnummer, LocalDate datum) {
 
+        if (flugnummer == null || flugnummer.isBlank()) {
+            throw new IllegalArgumentException("Die Flugnummer darf nicht leer sein.");
+        }
+
+        if (datum == null) {
+            throw new IllegalArgumentException("Das Datum darf nicht null sein.");
+        }
+
         Iterator<Flug> iterator = fluege.iterator();
 
         while (iterator.hasNext()) {
             Flug f = iterator.next();
-            if (f.getFlugnummer().equals(flugnummer)) {
+            if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
                 if (f.getAbflugszeit().toLocalDate().equals(datum)) {
                     return f;
                 }
             }
         }
-        throw new NoSuchElementException("Es wurden keine Flüge mit der Flugnummer " + flugnummer + " gefunden");
+        throw new NoSuchElementException("Der Flug " + flugnummer + " am " + datum + " wurde nicht gefunden.");
     }
 
-    // muss static werden
     public List<Flug> getFluege() {
         return List.copyOf(fluege);
     }
