@@ -94,7 +94,6 @@ public class Verwaltungssystem implements Serializable {
             }
             this.fluggesellschaften.remove(fluggesellschaft);
         }
-
     }
 
     /**

@@ -5,8 +5,40 @@ import java.util.Scanner;
 
 public class Manager {
 
+    private final DatenHandler datenHandler;
+    private final Anwendungsdaten anwendungsdaten;
+    private final UIKunde uiKunde;
+    private final UIMitarbeiter uiMitarbeiter;
+
+    /**
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten
+     * und den DatenHandler.
+     *
+     * @param datenHandler Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     */
+    public Manager(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
+
+        if (datenHandler == null) {
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
+        }
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+        this.datenHandler = datenHandler;
+        this.anwendungsdaten = anwendungsdaten;
+        this.uiKunde = new UIKunde(datenHandler, anwendungsdaten);
+        this.uiMitarbeiter = new UIMitarbeiter(datenHandler, anwendungsdaten);
+    }
+
 // Start Methode um den nutzer festzulegen
-    public static void start() {
+    public void start() {
+
+        int i = 0;
+        while ( i < 1) {
+
         Scanner sc = new Scanner(System.in);
         System.out.print("\n --------------------------------------------");
         System.out.println("\n Herzlich Wilkommen zum Avigator");
@@ -17,20 +49,27 @@ public class Manager {
         System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
         System.out.println("--------------------------------------------");
 
-        int auswahl = intscanner();
 
-        if (auswahl == 1) {
+
+    int auswahl = intscanner();
+    switch (auswahl) {
+        case 1:
             System.out.print("Admin: ");
-            UIMitarbeiter.loggin();
-        } else if (auswahl == 2) {
+            uiMitarbeiter.loggin();
+            break;
+        case 2:
             System.out.print("Kunden: ");
-        } else if (auswahl == 3) {
-            System.exit(0);
-        } else {
+            
+            uiKunde.kunde();
+            break;
+            case 3:
+                datenHandler.speichere(anwendungsdaten);
+                System.exit(0);
+        default:
             System.out.print("Falsche eingabe ");
             start();
-        }
-        start();
+    }
+}
     }
 
     // Scanner um nach den richtigen werten zu filtern
@@ -55,8 +94,21 @@ public class Manager {
             return zeichen;
         } catch (InputMismatchException e) {
             System.out.println("kein gültiger wert");
-            return "";
+            return null;
         }
     }
+
+    public static double doublescanner() {
+
+        try {
+            Scanner sc = new Scanner(System.in);
+            double zahl = sc.nextDouble();
+            return zahl;
+        } catch (InputMismatchException e) {
+            System.out.println("kein gültiger wert");
+            return -1.1;
+        }
+    }
+
 
 }

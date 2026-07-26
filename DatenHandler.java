@@ -6,20 +6,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Die Klasse {@code DatenHandler}
- * Verwaltet das Speichern und Laden des Buchungssystems.
- * Das Buchungssystem wird mithilfe der Java-Serialisierung
+ * Verwaltet das Speichern und Laden der Anwendungsdaten.
+ * Die Anwendungsdaten werden mithilfe der Java-Serialisierung
  * im Ordner {@code data} gespeichert.
- * 
+ *
+ * <p>Falls beim Programmstart keine gültige Speicherdatei vorhanden ist,
+ * werden neue Anwendungsdaten erzeugt.</p>
+ *
  * @author Cedric Beckmann
  * @version 1.0
  */
 public class DatenHandler {
 
     /**
-     * Pfad zur Datei, in der das Buchungssystem gespeichert wird.
+     * Pfad zu der Datei, in der die serialisierten Anwendungsdaten
+     * gespeichert werden.
      */
-    private static final Path DATEI_PFAD = Path.of(System.getProperty("user.dir"), "data", "Buchungssystem.ser");
+    private static final Path DATEI_PFAD = Path.of(System.getProperty("user.dir"), "data", "Anwendungsdaten.ser");
 
     /**
      * Erzeugt einen neuen DatenHandler.
@@ -27,16 +30,23 @@ public class DatenHandler {
     public DatenHandler() {
 
     }
-
+    
     /**
-     * Serialisiert das übergebene Buchungssystem und speichert es
+     * Serialisiert die übergebenen Anwendungsdaten und speichert sie
      * in der dafür vorgesehenen Datei.
-     * Falls der Ordner {@code data} noch nicht existiert,
-     * wird dieser automatisch erzeugt.
      *
-     * @param buchungssystem das zu speichernde Buchungssystem
+     * <p>Falls der Ordner {@code data} noch nicht existiert,
+     * wird dieser automatisch erzeugt.</p>
+     *
+     * @param anwendungsdaten die zu speichernden Anwendungsdaten
+     * @throws IllegalArgumentException wenn die Anwendungsdaten
+     *         {@code null} sind
      */
-    public void speichere(Buchungssystem buchungssystem) {
+    public void speichere(Anwendungsdaten anwendungsdaten) {
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
 
         try {
             // Erstellt den Ordner "data", falls er noch nicht existiert
@@ -44,32 +54,32 @@ public class DatenHandler {
 
             try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(DATEI_PFAD))) {
   
-                oos.writeObject(buchungssystem);
+                oos.writeObject(anwendungsdaten);
 
-                System.out.println("Buchungssystem wurde gespeichert");
+                System.out.println("Die Anwendungsdaten wurde gespeichert.");
             }
 
         } catch (IOException e) {
-            System.err.println("Das Buchungssystem konnte nicht gespeichert werden");
+            System.err.println("Die Anwendungsdaten konnten nicht gespeichert werden.");
             e.printStackTrace();
         }
     }
 
     /**
-     * Initialisiert das Buchungssystem beim Programmstart.
-     * Falls eine Speicherdatei vorhanden ist, wird das darin
-     * gespeicherte Buchungssystem geladen.
-     * Wenn keine gültige Speicherdatei vorhanden ist,
-     * wird ein neues Buchungssystem erzeugt.
+     * Initialisiert die Anwendungsdaten beim Programmstart.
      *
-     * @return das geladene oder neu erzeugte Buchungssystem
+     * <p>Falls eine Speicherdatei vorhanden ist, werden die darin
+     * gespeicherten Anwendungsdaten geladen. Wenn keine gültige
+     * Speicherdatei vorhanden ist, werden neue Anwendungsdaten erzeugt.</p>
+     *
+     * @return die geladenen oder neu erzeugten Anwendungsdaten
      */
-    public Buchungssystem initialisiereBuchungssystem() {
+    public Anwendungsdaten initialisiereAnwendungsdaten() {
 
         if (Files.notExists(DATEI_PFAD)) {
 
-            System.out.println("Es konnte kein gespeichertes Buchungssystem gefunden werden. Ein neues Buchungssystem wird erzeugt.");
-            return new Buchungssystem();
+            System.out.println("Es konnten keine gespeicherten Anwendungsdaten gefunden werden. Neue Anwendungsdaten werden erzeugt");
+            return new Anwendungsdaten();
 
         } else {
             try {
@@ -78,36 +88,36 @@ public class DatenHandler {
 
             } catch (IOException | ClassNotFoundException | ClassCastException e) {
 
-                System.err.println("Gespeichertes Buchungssystem konnte nicht geladen werden. Ein neues Buchungssystem wird erzeugt.");
+                System.err.println("Gespeicherte Anwendungsdaten konnten nicht geladen werden. Neue Anwendungsdaten werden erzeugt.");
 
                 e.printStackTrace();
 
-                return new Buchungssystem();
+                return new Anwendungsdaten();
 
             }
         }
     }
 
     /**
-     * Liest ein serialisiertes Buchungssystem aus der Speicherdatei.
+     * Liest serialisierte Anwendungsdaten aus der Speicherdatei.
      *
-     * @return das aus der Datei gelesene Buchungssystem
+     * @return die aus der Datei gelesenen Anwendungsdaten
      * @throws IOException wenn beim Lesen der Datei ein Fehler auftritt
      * @throws ClassNotFoundException wenn die Klasse des gespeicherten
      *         Objekts nicht gefunden werden kann
      * @throws ClassCastException wenn die Datei kein Objekt der Klasse
-     *         {@link Buchungssystem} enthält
+     *         {@link Anwendungsdaten} enthält
      */
-    private Buchungssystem leseAusDatei() throws IOException, ClassNotFoundException {
+    private Anwendungsdaten leseAusDatei() throws IOException, ClassNotFoundException {
 
         try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(DATEI_PFAD))) {
 
             Object objekt = ois.readObject();
 
-            if ((objekt instanceof Buchungssystem)) {
-                return (Buchungssystem) objekt;
+            if ((objekt instanceof Anwendungsdaten)) {
+                return (Anwendungsdaten) objekt;
             } else { 
-                throw new ClassCastException("Die gespeicherte Datei enthält kein Buchungssystem");
+                throw new ClassCastException("Die gespeicherte Datei enthält keine Anwendungsdaten");
             }
         }
     }
