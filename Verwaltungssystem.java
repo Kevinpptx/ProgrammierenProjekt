@@ -171,6 +171,48 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
+     * Entfernt ein Flugzeug aus der Flotte.
+     *
+     * @param flugzeug das zu entfernende Flugzeug
+     * @throws IllegalArgumentException wenn das Flugzeug null ist
+     * @throws IllegalStateException wenn das Flugzeug nicht zur Flotte gehört
+     */
+    public void entferneFlugzeug(String code) {
+        if (code == null) {
+            throw new IllegalArgumentException("Der Flugzeug-Code darf nicht leer sein.");
+        }
+
+        Flugzeug flug = this.getFlugzeug(code);
+
+        if(flug == null) {
+            throw new IllegalArgumentException("Es existiert kein Flugzeug mit dem Code " + code + ".");
+        }
+
+        Iterator<Flug> iteratorFlug = this.fluege.iterator();
+
+        while(iteratorFlug.hasNext()) {
+            Flug tempFlug = iteratorFlug.next();
+
+            if(tempFlug.getFlugzeug().equals(flug)) {
+                throw new IllegalStateException("Das FLugzeug kann nicht entfernt werden, da noch Flüge damit geplant sind.");
+            }
+        }
+
+        Iterator<Fluggesellschaft> iteratorFlugGes = this.fluggesellschaften.iterator();
+
+        while (iteratorFlugGes.hasNext()) {
+            Fluggesellschaft flugGes = iteratorFlugGes.next();
+
+            if(flugGes.besitztFlugzeug(flug)) {
+                flugGes.entferneFlugzeug(flug);
+                return;
+            }
+        }
+
+        throw new IllegalStateException("Das Flugzeug konnte keiner Fluggesellschaft zugeordnet werden");
+    }
+
+    /**
      * Gibt alle registrierten Flugzeuge zurück.
      *
      * @return unveränderbare Kopie aller registrierten Flugzeuge
