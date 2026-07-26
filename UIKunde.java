@@ -122,6 +122,7 @@ public void kunde()
 
     public void flugsundb() {
         System.out.println("-------------------Willkommen bei Flüge Buchen und Suchen-------------------------");
+        System.out.println(vs.getFluege());
 
 
     }
