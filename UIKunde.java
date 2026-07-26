@@ -1,9 +1,33 @@
 public class UIKunde {
 
-    static Buchungssystem bs = new Buchungssystem();
+    //static Buchungssystem bs = new Buchungssystem();
+
+    private final DatenHandler datenHandler; 
+    private final Anwendungsdaten anwendungsdaten;
+    private final Buchungssystem bs; 
+    private final Verwaltungssystem vs;
 
 
-public static void kunde()
+    public UIKunde(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
+
+        if (datenHandler == null) {
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
+        }
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+
+        this.datenHandler = datenHandler; 
+        this.anwendungsdaten = anwendungsdaten;
+        this.bs = anwendungsdaten.getBuchungssystem();
+        this.vs = anwendungsdaten.getVerwaltungssystem();
+    }
+
+
+
+public void kunde()
 {
     System.out.println("-------------------Herzlich Wilkommen-------------------------");
     System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
@@ -54,7 +78,7 @@ public static void kunde()
 
 
 
-    public static void hauptmanagerk(Passagier passagier ) {
+    public void hauptmanagerk(Passagier passagier ) {
         // Flüge Buchen und Suchen
         // Sitzplatz auswählen, Gepäck anegeben --> im Buchungsmodus
         // Umbuchung auf andere Flüge vornehmen
@@ -96,7 +120,7 @@ public static void kunde()
 
 
 
-    public static void flugsundb() {
+    public void flugsundb() {
         System.out.println("-------------------Willkommen bei Flüge Buchen und Suchen-------------------------");
 
 

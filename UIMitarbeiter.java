@@ -1,17 +1,31 @@
-import java.util.ArrayList;
 import java.time.LocalDateTime;
-
-
+import java.util.ArrayList;
 
 public class UIMitarbeiter {
 
-    private Verwaltungssystem verwaltung = new Verwaltungssystem();
+
+    private final DatenHandler datenHandler; 
+    private final Anwendungsdaten anwendungsdaten;
+    private final Buchungssystem bs; 
+    private final Verwaltungssystem vs;
 
 
-    public UIMitarbeiter() {
+    public UIMitarbeiter(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
+        if (datenHandler == null) {
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
+        }
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+
+        this.datenHandler = datenHandler; 
+        this.anwendungsdaten = anwendungsdaten;
+        this.bs = anwendungsdaten.getBuchungssystem();
+        this.vs = anwendungsdaten.getVerwaltungssystem();
     }
-
 
     // Der Mitarbeiter meldet sich über ein Passwort als Admin an
     public void loggin() {
