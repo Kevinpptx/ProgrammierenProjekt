@@ -5,8 +5,14 @@ import java.util.Scanner;
 
 public class Manager {
 
+private UIMitarbeiter mitarbeiter = new UIMitarbeiter();
+
+public Manager() {
+
+}
+
 // Start Methode um den nutzer festzulegen
-    public static void start() {
+    public void start() {
 
         int i = 0;
         while ( i < 1) {
@@ -27,7 +33,7 @@ public class Manager {
     switch (auswahl) {
         case 1:
             System.out.print("Admin: ");
-            UIMitarbeiter.loggin();
+            mitarbeiter.loggin();
             break;
         case 2:
             System.out.print("Kunden: ");

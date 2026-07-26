@@ -1,8 +1,11 @@
 public class Main  {
 
-    public static void main(String[] args) {
-       Manager.start();
 
+private Manager manager = new Manager();
+
+    public static void main(String[] args) {
+
+        //UIMitarbeiter.fluggeselschaftanlegen();
        // UIMitarbeiter.Fluggeselschaftanlegen();
 
       //  UIMitarbeiter.hinzufügenFlughafen();

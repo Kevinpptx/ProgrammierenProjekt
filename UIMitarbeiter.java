@@ -1,30 +1,37 @@
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
+
+
 public class UIMitarbeiter {
 
+    private Verwaltungssystem verwaltung = new Verwaltungssystem();
+
+
+    public UIMitarbeiter() {
+
+    }
+
+
     // Der Mitarbeiter meldet sich über ein Passwort als Admin an
-    public static void loggin()
-    {
+    public void loggin() {
         int passwort = 1234;
         int i;
 
-        for ( i = 3; i >= 0; i--) {
+        for (i = 3; i >= 0; i--) {
 
             System.out.println("Geben Sie ein Passwort ein:");
 
 
             int eingabe = Manager.intscanner();
 
-            if (passwort == eingabe )
-            {
+            if (passwort == eingabe) {
                 System.out.println("Sie haben sich erflogreich Angemeldet: ");
                 hauptmanager();
             } else if (i == 0) {
                 System.out.println("Keine eingaben mehr übrig");
                 //  System.exit(0);
-            }
-            else {
+            } else {
                 System.out.println("Sie haben noch " + i + " Versuche");
             }
 
@@ -33,84 +40,81 @@ public class UIMitarbeiter {
 
 
     // Wenn der Mitarbeiter das Passwort eingegeben hat, kann er mehrere
-    public  static void hauptmanager()
-    {
+    public  void hauptmanager() {
 
-       System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
-       System.out.println("Wilkommen Admin was möchten sie tun: ");
-       System.out.println("Drücken Sie die 1: Um Fluggeselschaften hinzufügen oder zu entfernen ");
-       System.out.println("Drücken Sie die 2 Um Flugzeuge einer FlugeselschaftFlotte hinzuzufügen oder zu entfernen");
+        System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
+        System.out.println("Wilkommen Admin was möchten sie tun: ");
+        System.out.println("Drücken Sie die 1: Um Fluggeselschaften hinzufügen oder zu entfernen ");
+        System.out.println("Drücken Sie die 2 Um Flugzeuge einer FlugeselschaftFlotte hinzuzufügen oder zu entfernen");
         System.out.println("Drücken Sie die 3 Um Flughäfen hinzuzufügen oder zu entfernen");
         System.out.println("Drücken Sie die 4 Um einen Flug anzulegen ");
         // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
 
-       int auswhal = Manager.intscanner();
+        int auswhal = Manager.intscanner();
 
-       switch(auswhal) {
-           case 1:
-               fluggeselschaftenManager();
-               break;
-           case 2:
-               flugzeugderFlotteHinzufügen();
-               break;
+        switch (auswhal) {
+            case 1:
+                fluggeselschaftenManager();
+                break;
+            case 2:
+                flugzeugderFlotteHinzufügen();
+                break;
 
-               case 3:
-                   flughafenManager();
-                   break;
+            case 3:
+                flughafenManager();
+                break;
 
-                   case 4:
-                       fluganlegen();
-                       break;
-
-
-       }
+            case 4:
+                fluganlegen();
+                break;
+            default:
+                hauptmanager();
+        }
         hauptmanager();
     }
 
 
-public static void fluggeselschaftenManager()
-{
-    System.out.println("---------Willkommen im fluggesselschaftenManager---------");
-    System.out.println("Drücken Sie die 1 um Fluggesselschaften hinzuzufügen  ");
-    System.out.println("Drücken Sie die 2 um Fluggesselschaften zu entfernen");
-    System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
-    System.out.println("---------------------------------------------------------");
+    public  void fluggeselschaftenManager() {
+        System.out.println("---------Willkommen im fluggesselschaftenManager---------");
+        System.out.println("Drücken Sie die 1 um Fluggesselschaften hinzuzufügen  ");
+        System.out.println("Drücken Sie die 2 um Fluggesselschaften zu entfernen");
+        System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
+        System.out.println("---------------------------------------------------------");
 
-    int auswahl  = Manager.intscanner();
-    switch(auswahl) {
-        case 1:
-            fluggeselschaftanlegen();
-            break;
-        case 2:
-            //fluggeselschaftentfernen
-            break;
-        case 3 :
-            hauptmanager();
-            break;
-        default:
-            System.out.print("Falsche eingabe ");
-            flottenManager();
+        int auswahl = Manager.intscanner();
+        switch (auswahl) {
+            case 1:
+                fluggeselschaftanlegen();
+                break;
+            case 2:
+                fluggeselschaftentfernen();
+                break;
+            case 3:
+                hauptmanager();
+                break;
+            default:
+                System.out.print("Falsche eingabe ");
+                flottenManager();
+        }
+
     }
 
-}
 
-
-    public static void flottenManager()
-    {
+    public  void flottenManager() {
         System.out.println("--------------Willkommen im FlottenManager---------------");
         System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen ");
         System.out.println("Drücken Sie die 2 um Flugzeuge der Flotte zu entfernen");
         System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
         System.out.println("---------------------------------------------------------");
-        int auswahl  = Manager.intscanner();
-        switch(auswahl) {
+        int auswahl = Manager.intscanner();
+        switch (auswahl) {
             case 1:
                 flugzeugderFlotteHinzufügen();
                 break;
             case 2:
                 flugzeugederFlotteEntfernen();
                 break;
-            case 3 :
+            case 3:
                 hauptmanager();
                 break;
             default:
@@ -122,22 +126,21 @@ public static void fluggeselschaftenManager()
     }
 
 
-    public static void flughafenManager()
-    {
+    public  void flughafenManager() {
         System.out.println("--------------Willkommen im flughafenManager---------------");
         System.out.println("Drücken Sie die 1 um einen Flughafen hinzuzufügen ");
         System.out.println("Drücken Sie die 2 um einen Flughafen zu entfernen");
         System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
         System.out.println("---------------------------------------------------------");
-        int auswahl  = Manager.intscanner();
-        switch(auswahl) {
+        int auswahl = Manager.intscanner();
+        switch (auswahl) {
             case 1:
-                hinzufügenFlughafen();
+              hinzufügenFlughafen();
                 break;
             case 2:
                 entferneFlughafen();
                 break;
-            case 3 :
+            case 3:
                 hauptmanager();
                 break;
             default:
@@ -149,29 +152,26 @@ public static void fluggeselschaftenManager()
     }
 
 
-
-
-    // Flug geselschaften anlegen und die Flotte
-    public static ArrayList<Fluggesellschaft> Fluggeselschaften = new ArrayList<>();
-
     //Fluggeselschaftanlegen
-    public static void fluggeselschaftanlegen()
-    {
+    public void fluggeselschaftanlegen() {
         System.out.println("--------------Fluggeselschaft anlegen---------------------------");
         System.out.println("Flugeselschaft name: ");
         String name = Manager.Stringscanner();
         System.out.println("Flugeselschaft airlineCode : ");
         String airlinecode = Manager.Stringscanner();
 
-        Fluggesellschaft FluggeselschaftAnlegen  = new Fluggesellschaft(name, airlinecode);
+        Fluggesellschaft FluggeselschaftAnlegen = new Fluggesellschaft(name, airlinecode);
 
-        Fluggeselschaften.add(FluggeselschaftAnlegen);
+        try {
+            verwaltung.fuegeFluggesellschaftHinzu(FluggeselschaftAnlegen);
+        } catch (Exception e) {
+            System.out.println("Fehler: " + e.getMessage());
+            fluggeselschaftenManager();
+        }
+
         System.out.println("Alle bisherrigen Flugeselschaften: ");
 
-        for (int i = 0; i < Fluggeselschaften.size(); i++) {
-        System.out.println("Fluggeselschaft: " +"ID "+ i  + " " + Fluggeselschaften.get(i).toString());
-
-        }
+        System.out.println(verwaltung.getFluggesellschaften());
 
 
         // Möchten sie Flugzeuge der Flotte hinzufügen 1, entfernen 2, zurück 3,
@@ -183,14 +183,17 @@ public static void fluggeselschaftenManager()
         System.out.println("-------------------------------------------------------------------------");
         int antwort = Manager.intscanner();
 
-        switch(antwort) {
-            case 1: flottenManager();
+        switch (antwort) {
+            case 1:
+                flottenManager();
                 break;
-                case 2: fluggeselschaftenManager();
+            case 2:
+                fluggeselschaftenManager();
                 break;
-                case 3: hauptmanager();
+            case 3:
+                hauptmanager();
             default:
-            System.out.print("Falsche eingabe ");
+                System.out.print("Falsche eingabe ");
                 hauptmanager();
         }
 
@@ -199,107 +202,108 @@ public static void fluggeselschaftenManager()
     // Flugeselschaftentfernen
 
 
+    public  void fluggeselschaftentfernen() {
+        System.out.println("--------------Fluggeselschaft Entfernen---------------------------");
+        System.out.println(" welche Fluggeselschaften möchten Sie Entfernen: ");
+        System.out.println(verwaltung.getFluggesellschaften());
+
+        System.out.println(" Bitte geben sie den code der Fluggeselschaft ein, welche Sie entfernen möchten");
+        try {
+                String code = Manager.Stringscanner();
+
+            verwaltung.entferneFluggesellschaft(verwaltung.getFluggesellschaft(code));
+        }
+        catch (Exception e) {
+            System.out.println("Fehler: " + e.getMessage());
+            fluggeselschaftenManager();
+
+        }
+
+        fluggeselschaftenManager();
+    }
 
 
+    //FlugzeugderFlotteHinzufügen
 
-    //FlugzeugderFlotteHinzufügen --> Marcels Methode aufrufen
-
-    public static void flugzeugderFlotteHinzufügen()
-    {
+    public  void flugzeugderFlotteHinzufügen() {
         int laufvariable = -1;
         System.out.println("----------------------Flugzeuge der Flotte Hinzufügen------------------------------");
-        // Liste der Bestehenden Fluggeselschaften um diese zu einer Flotte hinzuzufügen
-        for (int i = 0; i < Fluggeselschaften.size(); i++) {
-            System.out.println("Fluggeselschaft: " +  "ID: " + i  + " " + Fluggeselschaften.get(i).toString());
-            laufvariable = i;
-        }
-        if (laufvariable == -1)
-        {
-            System.out.println("Es gibt keine Fluggeselschafften");
-            hauptmanager();
-        }
+        System.out.println("liste der Bestehenden Fluggeselschaften um zu deren Flotte ein Flugzeug hinzuzufügen");
+        System.out.println(verwaltung.getFluggesellschaften());
 
 
         // Auswahl der Fluggeselschafften
-        System.out.println("--------------------------------------------------------------------");
-        System.out.println("Bitte Wählen sie über die ID ihre Fluggeselschaft aus welcher sie Flugzeuge hinzufügen möchten ");
-        int antwort = Manager.intscanner();
-
-
-            if ( antwort >= 0 &&  antwort < Fluggeselschaften.size()) {
-                System.out.println("Ihre Auswahl: " +  Fluggeselschaften.get(antwort).toString());
-                System.out.println("--------------------------------------------------------------------");
-                System.out.println("Bitte geben Sie den Code des Flugzeuges an ");
-                String code = Manager.Stringscanner();
-                System.out.println("Bitte geben Sie das Modell des Flugzeuges an ");
-                String modell = Manager.Stringscanner();
-                System.out.println("Bitte geben Sie die Anzahl der Reihen des Flugzeuges an ");
-                int reihen = Manager.intscanner();
-                System.out.println("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges an ");
-                int sitze = Manager.intscanner();
-                System.out.println("Bitte geben Sie die Anzahl der Business Reihen des Flugzeuges an ");
-                int business = Manager.intscanner();
-
-                // Flugzeug erstellen
-                Flugzeug Flugzeug = new Flugzeug(code, modell, reihen, sitze, business); // Das dann cedricsa methode übergeben
-                Fluggeselschaften.get(antwort).fuegeFlugzeugHinzu(Flugzeug);
-
-
-                System.out.println("erflogreich ");
-                 flottenManager();
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("Bitte Wählen sie über den Code ihre Fluggeselschaft aus welcher sie Flugzeuge hinzufügen möchten ");
+            String auswahl = Manager.Stringscanner();
+            try {
+                    verwaltung.getFluggesellschaft(auswahl);
             }
-            // Bei Falscher auswahl
-            else
+            catch (Exception e)
             {
-                System.out.println("--------------------------------------------------------------------");
-                System.out.println("Auswahl nicht verfügbar zurück zum FlottenManager ");
+                System.out.println("Fehler: " + e.getMessage());
                 flottenManager();
             }
 
 
-    }
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("Bitte geben Sie den Code des Flugzeuges an ");
+            String code = Manager.Stringscanner();
+            System.out.println("Bitte geben Sie das Modell des Flugzeuges an ");
+            String modell = Manager.Stringscanner();
+            System.out.println("Bitte geben Sie die Anzahl der Reihen des Flugzeuges an ");
+            int reihen = Manager.intscanner();
+            System.out.println("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges an ");
+            int sitze = Manager.intscanner();
+            System.out.println("Bitte geben Sie die Anzahl der Business Reihen des Flugzeuges an ");
+            int business = Manager.intscanner();
 
-    public static void flugzeugederFlotteEntfernen()
-    {
-        int laufvariable = -1;
+
+            // Flugzeug erstellen
+        try {
+            verwaltung.erzeugeFlugzeug(verwaltung.getFluggesellschaft(auswahl), code, modell, reihen, sitze, business);
+        } catch (Exception e) {
+            System.out.println("Fehler: " + e.getMessage());
+            flottenManager();
+        }
+
+            System.out.println("Das Flugzeug wurde erfolgreich der Flotte Hinzugefügt ");
+            flottenManager();
+        }
+
+
+// Kommt noch
+    public  void flugzeugederFlotteEntfernen() {
         System.out.println("----------------------Flugzeuge der Flotte Entfernen------------------------------");
-        // Liste der Bestehenden Fluggeselschaften um diese zu einer Flotte hinzuzufügen
-        for (int i = 0; i < Fluggeselschaften.size(); i++) {
-            System.out.println("Fluggeselschaft: " +  "ID: " + i  + " " + Fluggeselschaften.get(i).toString());
-            laufvariable = i;
-        }
-        if (laufvariable == -1)
-        {
-            System.out.println("Es gibt keine Fluggeselschafften");
-            hauptmanager();
-        }
+        System.out.println("liste der Bestehenden Fluggeselschaften um zu deren Flotte ein Flugzeug zu enfernen");
+        System.out.println(verwaltung.getFluggesellschaften());
 
 
         // Auswahl der Fluggeselschafften
         System.out.println("--------------------------------------------------------------------");
-        System.out.println("Bitte Wählen sie über die ID ihre Fluggeselschaft aus welcher sie Flugzeuge enternen möchten ");
-        int antwort = Manager.intscanner();
-
-
-        if ( antwort >= 0 &&  antwort < Fluggeselschaften.size()) {
-
-            System.out.println("Ihre Auswahl: " +  Fluggeselschaften.get(antwort).toString());
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Bitte geben Sie den Code des Flugzeuges an, welches sie entfernen möchten ");
-            String code = Manager.Stringscanner();
-         // Cedrics entfern methode und den code übergeben
+        System.out.println("Bitte Wählen sie über den Code ihre Fluggeselschaft aus welcher sie Flugzeuge entfernen möchten ");
+        String auswahl = Manager.Stringscanner();
+        try {
+            verwaltung.getFluggesellschaft(auswahl);
         }
-        // Bei Falscher auswahl
-        else
+        catch (Exception e)
         {
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Auswahl nicht verfügbar zurück zum FlottenManager ");
+            System.out.println("Fehler: " + e.getMessage());
             flottenManager();
         }
 
+
+
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("Bitte geben Sie den Code des Flugzeuges an, welches sie entfernen möchten ");
+            String code = Manager.Stringscanner();
+
     }
 
-    public static void hinzufügenFlughafen()
+
+
+
+    public  void hinzufügenFlughafen()
     {
         System.out.println("----------------------Flughafen Hinzufügen------------------------------");
         System.out.println("Geben sie den Namen des Flugahfens ein");
@@ -312,13 +316,15 @@ public static void fluggeselschaftenManager()
         String land = Manager.Stringscanner();
 
         //Methode zum hinzufügen
+        verwaltung.erzeugeFlughafen(name, iatacode, stadt, land);
+
       //  System.out.println("flughafen: " + // Methode aufrufen  + " erfolgreich hinzugefügt");
         System.out.println("--------------------------------------------------------------------");
         System.out.println("Zurück zum Flughafen Manager ");
         flughafenManager();
     }
 
-    public static void entferneFlughafen()
+    public  void entferneFlughafen()
     {
         System.out.println("----------------------Flughafen Entfernen-------------------------------");
         System.out.println("Welchen Flughafen möchten Sie enternen (iataCode) ");
@@ -410,4 +416,5 @@ public static void fluggeselschaftenManager()
     }
 
 
-}
+    }
+

@@ -84,7 +84,7 @@ public static void kunde()
                 break;
 
             case 4:
-                Manager.start();
+               // Manager.start();
                 break;
 
 
