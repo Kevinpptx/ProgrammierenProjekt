@@ -55,6 +55,7 @@ public class Manager {
             break;
         case 2:
             System.out.print("Kunden: ");
+            
             UIKunde.kunde();
             break;
             case 3:
@@ -67,7 +68,7 @@ public class Manager {
     }
 
     // Scanner um nach den richtigen werten zu filtern
-    public int intscanner() {
+    public static int intscanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
@@ -80,7 +81,7 @@ public class Manager {
     }
 
     // Scanner um nach den richtigen werten zu filtern
-    public String Stringscanner() {
+    public static String Stringscanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
@@ -92,7 +93,7 @@ public class Manager {
         }
     }
 
-    public double doublescanner() {
+    public static double doublescanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
