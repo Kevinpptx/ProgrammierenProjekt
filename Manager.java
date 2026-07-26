@@ -7,6 +7,8 @@ public class Manager {
 
     private final DatenHandler datenHandler;
     private final Anwendungsdaten anwendungsdaten;
+    private final UIKunde uiKunde;
+    private final UIMitarbeiter uiMitarbeiter;
 
     /**
      * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten
@@ -27,6 +29,8 @@ public class Manager {
 
         this.datenHandler = datenHandler;
         this.anwendungsdaten = anwendungsdaten;
+        this.uiKunde = new UIKunde(datenHandler, anwendungsdaten);
+        this.uiMitarbeiter = new UIMitarbeiter(datenHandler, anwendungsdaten);
     }
 
 // Start Methode um den nutzer festzulegen
@@ -51,14 +55,15 @@ public class Manager {
     switch (auswahl) {
         case 1:
             System.out.print("Admin: ");
-            UIMitarbeiter.loggin();
+            uiMitarbeiter.loggin();
             break;
         case 2:
             System.out.print("Kunden: ");
             
-            UIKunde.kunde();
+            uiKunde.kunde();
             break;
             case 3:
+                datenHandler.speichere(anwendungsdaten);
                 System.exit(0);
         default:
             System.out.print("Falsche eingabe ");
