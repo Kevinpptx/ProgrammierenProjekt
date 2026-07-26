@@ -1,8 +1,10 @@
 
 import java.io.Serializable;
 import java.time.DateTimeException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -424,6 +426,92 @@ public class Verwaltungssystem implements Serializable {
      * @param abflugzeit Datum und Uhrzeit des Abflugs
      * @param ankunftszeit Datum und Uhrzeit der Ankunft
      * @param basispreis der Basispreis des Flugs
+     * @param rueckflug ob ein Rückflug angelegt werden soll
+     * @param anzahlTageWiederholungen Anzahl der Tage, an denen der Flug nacheinander stattfindet (bei einmaligen Flügen: 1)
+     * @return die neu erzeugten und registrierten Flüge in einer ArrayList<Flug>
+     * @throws IllegalArgumentException wenn eine übergebene Referenz
+     * {@code null} ist, benötigte Objekte nicht registriert sind, das Flugzeug
+     * nicht zur Fluggesellschaft gehört, der Flug bereits existiert oder sich
+     * die Einsatzzeiten des Flugzeugs überschneiden
+     */
+    public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
+            LocalDateTime ankunftszeit, double basispreis, boolean rueckflug, int anzahlTageWiederholungen) {
+        if (fluggesellschaft == null) {
+            throw new IllegalArgumentException("Die Fluggesellschaft darf nicht null sein.");
+        }
+
+        if (flugzeug == null) {
+            throw new IllegalArgumentException("Das Flugzeug darf nicht null sein.");
+        }
+
+        if (startFlughafen == null || zielFlughafen == null) {
+            throw new IllegalArgumentException("Start- und Zielflughafen dürfen nicht null sein.");
+        }
+
+        if (abflugzeit == null || ankunftszeit == null) {
+            throw new IllegalArgumentException("Abflug- und Ankunftszeit dürfen nicht null sein.");
+        }
+
+        if (!fluggesellschaften.contains(fluggesellschaft)) {
+            throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
+        }
+
+        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
+            throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
+        }
+
+        if (!fluggesellschaft.besitztFlugzeug(flugzeug)) {
+            throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
+        }
+
+        if (anzahlTageWiederholungen <1) {
+            throw new IllegalArgumentException("Der Flug muss mindestens an einem Tag stattfinden.");
+        }
+
+        ArrayList<Flug> erzeugteFluege = new ArrayList<>();
+
+        for (int i = 0; i < anzahlTageWiederholungen; i++) {
+            // Erstelle Flug und Rückflug
+            erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, abflugzeit, ankunftszeit, basispreis));
+
+            if(rueckflug){
+                Duration flugdauer = Duration.between(abflugzeit, ankunftszeit);
+                Duration turnAroundTime = Duration.ofHours(1);
+                LocalDateTime abflugszeitRueckflug = ankunftszeit.plus(turnAroundTime);
+
+                /*
+                    Fluggesellschaft und Flugzeug bleiben gleich
+                    zielFlughafen und startFlughafen werden getauscht 
+                    Die Ankfuntszeit des Hinflugs wird plus eine TurnAroundTime von 1 Std als neue Abflugzeit gesetzt
+                    Die Ankunftszeit des Rückfluges ist die aus dem Hinflug errechnete Flugdauer auf die neue Abflugszeit addiert
+                    Basispreis bleibt gleich wie beim Hinflug
+                    Rückflug wird auf false gesetzt, damit nicht noch ein Flug erzeugt wird. 
+                */
+                erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
+            }
+
+            abflugzeit.plusDays(1);
+            ankunftszeit.plusDays(1);
+        }
+        return erzeugteFluege;
+    }
+
+    /**
+     * Erzeugt einen neuen Flug und registriert ihn im Verwaltungssystem.
+     * <p>
+     * Die Flugnummer wird automatisch aus dem Airline-Code und einer
+     * fortlaufenden Nummer für den jeweiligen Abflugtag gebildet. Zusätzlich
+     * wird geprüft, ob das Flugzeug im angegebenen Zeitraum bereits für einen
+     * anderen Flug eingeplant ist.
+     * </p>
+     *
+     * @param fluggesellschaft die ausführende Fluggesellschaft
+     * @param flugzeug das für den Flug eingesetzte Flugzeug
+     * @param startFlughafen der Startflughafen
+     * @param zielFlughafen der Zielflughafen
+     * @param abflugzeit Datum und Uhrzeit des Abflugs
+     * @param ankunftszeit Datum und Uhrzeit der Ankunft
+     * @param basispreis der Basispreis des Flugs
      * @return der neu erzeugte und registrierte Flug
      * @throws IllegalArgumentException wenn eine übergebene Referenz
      * {@code null} ist, benötigte Objekte nicht registriert sind, das Flugzeug
@@ -496,7 +584,7 @@ public class Verwaltungssystem implements Serializable {
         if (this.fluege.contains(flug)) {
             throw new IllegalArgumentException("Das übergebene Flug-Objekt ist schon in der Liste enthalten");
         } else {
-            this.fluege.add(flug);
+            this.fluege.add(flug); 
             return flug;
         }
     }
@@ -563,7 +651,7 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
-        return airlineCode + String.format("%03d", hoechsteNummer + 1);
+        return airlineCode.toUpperCase() + String.format("%03d", hoechsteNummer + 1);
     }
 
     /**
