@@ -1,8 +1,7 @@
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.ArrayList;
 
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten
@@ -29,13 +28,13 @@ public class Buchungssystem implements Serializable {
      * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen
      * Grundlage für die Buchungsnummer
      */
-    private static int anzahlBuchungen;
+    private  int anzahlBuchungen;
 
     /**
      * Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen
      * Grundlage für die Passagiernummer
      */
-    private static int anzahlPassagiere;
+    private  int anzahlPassagiere;
 
     /**
      * Konstruktor der Klasse, der die temporäre Lösung der Datenspeicherung
