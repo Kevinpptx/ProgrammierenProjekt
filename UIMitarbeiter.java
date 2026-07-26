@@ -36,8 +36,10 @@ public class UIMitarbeiter {
         for (i = 3; i >= 0; i--) {
 
             System.out.println("Geben Sie ein Passwort ein:");
+            System.out.println("Geben Sie ein Passwort ein:");
 
 
+            int eingabe = Manager.intscanner();
             int eingabe = Manager.intscanner();
 
             if (passwort == eingabe) {
@@ -50,6 +52,7 @@ public class UIMitarbeiter {
                 System.out.println("Sie haben noch " + i + " Versuche");
             }
 
+        }
         }
     }
 
@@ -198,6 +201,11 @@ public class UIMitarbeiter {
 
         // Möchten sie Flugzeuge der Flotte hinzufügen 1, entfernen 2, zurück 3,
 
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen oder zu entfernen");
+        System.out.println("Drücken Sie die 2 um eine weitere Fluggeselschafft hinzuzufügen oder zu entfernen");
+        System.out.println("Drücken Sie die 3 um zurück zum Haupt Manager zu gelangen");
+        System.out.println("-------------------------------------------------------------------------");
         System.out.println("-------------------------------------------------------------------------");
         System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen oder zu entfernen");
         System.out.println("Drücken Sie die 2 um eine weitere Fluggeselschafft hinzuzufügen oder zu entfernen");
