@@ -1,10 +1,17 @@
-public class Main  {
+
+public class Main {
 
     public static void main(String[] args) {
-       Manager.start();
 
-       // UIMitarbeiter.Fluggeselschaftanlegen();
+        DatenHandler datenHandler = new DatenHandler();
 
-      //  UIMitarbeiter.hinzufügenFlughafen();
+        Anwendungsdaten anwendungsdaten = datenHandler.initialisiereAnwendungsdaten();
+
+        Manager manager = new Manager(datenHandler, anwendungsdaten);
+
+        manager.start();
+
+        // UIMitarbeiter.Fluggeselschaftanlegen();
+        //  UIMitarbeiter.hinzufügenFlughafen();
     }
 }

@@ -5,8 +5,32 @@ import java.util.Scanner;
 
 public class Manager {
 
+    private final DatenHandler datenHandler;
+    private final Anwendungsdaten anwendungsdaten;
+
+    /**
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten
+     * und den DatenHandler.
+     *
+     * @param datenHandler Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     */
+    public Manager(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
+
+        if (datenHandler == null) {
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
+        }
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+        this.datenHandler = datenHandler;
+        this.anwendungsdaten = anwendungsdaten;
+    }
+
 // Start Methode um den nutzer festzulegen
-    public static void start() {
+    public void start() {
 
         int i = 0;
         while ( i < 1) {
@@ -43,7 +67,7 @@ public class Manager {
     }
 
     // Scanner um nach den richtigen werten zu filtern
-    public static int intscanner() {
+    public int intscanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
@@ -56,7 +80,7 @@ public class Manager {
     }
 
     // Scanner um nach den richtigen werten zu filtern
-    public static String Stringscanner() {
+    public String Stringscanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
@@ -68,7 +92,7 @@ public class Manager {
         }
     }
 
-    public static double doublescanner() {
+    public double doublescanner() {
 
         try {
             Scanner sc = new Scanner(System.in);
