@@ -108,11 +108,7 @@ public void kunde()
                 break;
 
             case 4:
-<<<<<<< HEAD
                // Manager.start();
-=======
-                Manager.start();
->>>>>>> main
                 break;
 
 
@@ -126,10 +122,7 @@ public void kunde()
 
     public void flugsundb() {
         System.out.println("-------------------Willkommen bei Flüge Buchen und Suchen-------------------------");
-<<<<<<< HEAD
         System.out.println(vs.getFluege());
-=======
->>>>>>> main
 
 
     }
