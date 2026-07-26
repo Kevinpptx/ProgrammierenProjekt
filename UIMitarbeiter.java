@@ -40,7 +40,7 @@ public class UIMitarbeiter {
 
 
             int eingabe = Manager.intscanner();
-            int eingabe = Manager.intscanner();
+
 
             if (passwort == eingabe) {
                 System.out.println("Sie haben sich erflogreich Angemeldet: ");
@@ -54,11 +54,10 @@ public class UIMitarbeiter {
 
         }
         }
-    }
 
 
     // Wenn der Mitarbeiter das Passwort eingegeben hat, kann er mehrere
-    public  void hauptmanager() {
+    public void hauptmanager() {
 
         System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
         System.out.println("Wilkommen Admin was möchten sie tun: ");
@@ -316,7 +315,7 @@ public class UIMitarbeiter {
         System.out.println("Bitte Wählen sie über den Code ihre Fluggeselschaft aus welcher sie Flugzeuge entfernen möchten ");
         String auswahl = Manager.Stringscanner();
         try {
-            vs.getFluggesellschaft(auswahl); --> muss andere Methode sein
+            vs.getFluggesellschaft(auswahl); //--> muss andere Methode sein
         }
         catch (Exception e)
         {
@@ -506,5 +505,5 @@ try {
     }
 
 
-    }
+}
 
