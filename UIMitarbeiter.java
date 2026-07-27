@@ -438,12 +438,13 @@ public class UIMitarbeiter {
                 int wiederholung = Manager.intscanner();
 
                 vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
-
-
+                datenHandler.speichere(anwendungsdaten);
+                hauptmanager();
             }
             else {
                 vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
                 datenHandler.speichere(anwendungsdaten);
+                hauptmanager();
             }
 
 

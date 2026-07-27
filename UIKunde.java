@@ -138,8 +138,7 @@ public void kunde()
         System.out.print("Zielflughafen name (leer lassen, wenn egal): ");
         String ziel = Manager.Stringscanner();
 
-        System.out.print("Flugnummer (leer lassen, wenn unbekannt): ");
-        String flugnummer = Manager.Stringscanner();
+
 
 try {
     ArrayList<Flug> fluege = null;
@@ -153,10 +152,16 @@ try {
         if (!start.isBlank()) {
 
 
+
            fluege.addAll(vs.sucheFluegeNachRoute(vs.getFlughafenNachName(start), vs.getFlughafenNachName(ziel)));
+
+            System.out.print("Flugnummer (leer lassen, wenn unbekannt): ");
+            String flugnummer = Manager.Stringscanner();
 
         }
 
+        System.out.print("Flugnummer (leer lassen, wenn unbekannt): ");
+        String flugnummer = Manager.Stringscanner();
 
         if (!flugnummer.isBlank()) {
             fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
