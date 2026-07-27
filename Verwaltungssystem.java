@@ -470,14 +470,17 @@ public class Verwaltungssystem implements Serializable {
 
         ArrayList<Flug> erzeugteFluege = new ArrayList<>();
 
+        LocalDateTime lAbflug = abflugzeit;
+        LocalDateTime lAnkunft = ankunftszeit;
+
         for (int i = 0; i < anzahlTageWiederholungen; i++) {
             // Erstelle Flug und Rückflug
-            erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, abflugzeit, ankunftszeit, basispreis));
+            erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis));
 
             if(rueckflug){
-                Duration flugdauer = Duration.between(abflugzeit, ankunftszeit);
+                Duration flugdauer = Duration.between(lAbflug, lAnkunft);
                 Duration turnAroundTime = Duration.ofHours(1);
-                LocalDateTime abflugszeitRueckflug = ankunftszeit.plus(turnAroundTime);
+                LocalDateTime abflugszeitRueckflug = lAnkunft.plus(turnAroundTime);
 
                 /*
                     Fluggesellschaft und Flugzeug bleiben gleich
@@ -485,13 +488,12 @@ public class Verwaltungssystem implements Serializable {
                     Die Ankfuntszeit des Hinflugs wird plus eine TurnAroundTime von 1 Std als neue Abflugzeit gesetzt
                     Die Ankunftszeit des Rückfluges ist die aus dem Hinflug errechnete Flugdauer auf die neue Abflugszeit addiert
                     Basispreis bleibt gleich wie beim Hinflug
-                    Rückflug wird auf false gesetzt, damit nicht noch ein Flug erzeugt wird. 
                 */
                 erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
             }
 
-            abflugzeit.plusDays(1);
-            ankunftszeit.plusDays(1);
+            lAbflug.plusDays(1);
+            lAnkunft.plusDays(1);
         }
         return erzeugteFluege;
     }
