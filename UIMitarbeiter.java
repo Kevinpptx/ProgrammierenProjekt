@@ -422,9 +422,31 @@ public class UIMitarbeiter {
             abflug = anabflug("des Abfluges");
             System.out.println("---------------------------Bitte geben Sie die Ankuftszeiten an-----------------------------");
             ankunft =  anabflug("der Ankunft");
-            vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft),vs.getFlugzeug(flugzeug),vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis );
 
-            datenHandler.speichere(anwendungsdaten);
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println("Wollen sie noch einen Rückfluck hinzufügen drücken sie die 1");
+            System.out.println("Wollen sie keinen Rückflug hinzufügen drücken sie die 2");
+            int ruck = Manager.intscanner();
+
+            if (ruck == 1)
+            {
+                System.out.println("---------------------------Rückflug-----------------------------");
+
+                boolean rucke = true;
+
+                System.out.println("An wie vielen Tagen soll der Flugstatt finden: ");
+                int wiederholung = Manager.intscanner();
+
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
+
+
+            }
+            else {
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
+                datenHandler.speichere(anwendungsdaten);
+            }
+
+
 
         }
         catch ( IllegalArgumentException e )
@@ -488,11 +510,6 @@ try {
 }
     }
 
-    public  void ruckflug()
-    {
-
-
-    }
 
 
 }

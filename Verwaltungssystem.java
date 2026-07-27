@@ -710,7 +710,7 @@ public class Verwaltungssystem implements Serializable {
      *                                  {@code null} ist
      * @throws NoSuchElementException wenn auf der Route kein Flug gefunden wurde
      */
-    public List<Flug> sucheFluegeNachRoute(Flughafen start, Flughafen ziel) {
+    public ArrayList<Flug> sucheFluegeNachRoute(Flughafen start, Flughafen ziel) {
         if (start == null || ziel == null) {
             throw new IllegalArgumentException("Start- und Zielflughafen darf nicht null sein.");
         }
