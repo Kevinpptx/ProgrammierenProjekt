@@ -1,8 +1,7 @@
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.ArrayList;
 
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten
@@ -29,13 +28,13 @@ public class Buchungssystem implements Serializable {
      * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen
      * Grundlage für die Buchungsnummer
      */
-    private static int anzahlBuchungen;
+    private  int anzahlBuchungen;
 
     /**
      * Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen
      * Grundlage für die Passagiernummer
      */
-    private static int anzahlPassagiere;
+    private  int anzahlPassagiere;
 
     /**
      * Konstruktor der Klasse, der die temporäre Lösung der Datenspeicherung
@@ -46,6 +45,7 @@ public class Buchungssystem implements Serializable {
         passagiere = new ArrayList<>();
         anzahlBuchungen = 0;
         anzahlPassagiere = 0;
+
     }
 
 
@@ -91,7 +91,7 @@ public class Buchungssystem implements Serializable {
      * @return Buchung, die soeben erstellt wurde
      * @throws RuntimeException basierend darauf, was dazu geführt hat, dass die Buchung ungueltig ist
      */
-    /*
+
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
             Sitzklasse sitzklasse) {
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
@@ -109,15 +109,13 @@ public class Buchungssystem implements Serializable {
 
             // prueft ob der Flug vorhanden ist
             //getFluege ist Teil der Klasse "Verwaltungssystem, die @cedbe6 implementiert hat"
-            if (Verwaltungssystem.getFluege().contains(flug)) {
+
                 try {
                     flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
                 } catch (Exception e) {
                     throw e;
                 }
-            } else {
-                throw new IllegalArgumentException("Der Flug ist leider nicht vorhanden");
-            }
+
             Buchung b = new Buchung(passagier, flug, sitzplatz, gepaeckinfo);
             b.setBuchungsnummer("bu" + anzahlBuchungen);
             anzahlBuchungen++;
@@ -129,7 +127,7 @@ public class Buchungssystem implements Serializable {
         }
 
     }
-*/
+
     /**
      * Sucht die bisherigen Buchungen nach einer Buchungsnummer ab
      * 
