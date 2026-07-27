@@ -123,7 +123,7 @@ public class UIMitarbeiter {
     public  void flottenManager() {
         System.out.println("--------------Willkommen im FlottenManager---------------");
         System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen ");
-        System.out.println("Drücken Sie die 2 um Flugzeuge der Flotte zu entfernen");
+        System.out.println("Drücken Sie die 2 um Flugzeug zu entfernen");
         System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
         System.out.println("---------------------------------------------------------");
         int auswahl = Manager.intscanner();
@@ -132,7 +132,7 @@ public class UIMitarbeiter {
                 flugzeugderFlotteHinzufügen();
                 break;
             case 2:
-                flugzeugederFlotteEntfernen();
+                flugzeugeEntfernen();
                 break;
             case 3:
                 hauptmanager();
@@ -303,33 +303,23 @@ public class UIMitarbeiter {
         }
 
 
-// Kommt noch
-    public  void flugzeugederFlotteEntfernen() {
-        System.out.println("----------------------Flugzeuge der Flotte Entfernen------------------------------");
-        System.out.println("liste der Bestehenden Fluggeselschaften um zu deren Flotte ein Flugzeug zu enfernen");
-        System.out.println(vs.getFluggesellschaften());
+     public  void flugzeugeEntfernen() {
 
+         System.out.println("----------------------Flugzeuge Entfernen------------------------------");
 
-        // Auswahl der Fluggeselschafften
-        System.out.println("--------------------------------------------------------------------");
-        System.out.println("Bitte Wählen sie über den Code ihre Fluggeselschaft aus welcher sie Flugzeuge entfernen möchten ");
-        String auswahl = Manager.Stringscanner();
-        try {
-            vs.getFluggesellschaft(auswahl); //--> muss andere Methode sein
-        }
-        catch (Exception e)
-        {
-            System.out.println("Fehler: " + e.getMessage());
-            flottenManager();
-        }
+         try {
+             System.out.println(vs.getAlleFlugzeuge());
+             System.out.println("Bitte wählen sie den Flugzeug code zum löschen aus");
+             String code = Manager.Stringscanner();
+             vs.entferneFlugzeug(code);
+             System.out.println("Erfolgreich gelöscht");
+             datenHandler.speichere(anwendungsdaten);
 
-
-
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Bitte geben Sie den Code des Flugzeuges an, welches sie entfernen möchten ");
-            String code = Manager.Stringscanner();
-
-    }
+         } catch (Exception e) {
+             System.out.println("Fehler: " + e.getMessage());
+             flottenManager();
+         }
+     }
 
 
 
@@ -407,16 +397,16 @@ public class UIMitarbeiter {
         //Anzeige der gesamten Fluggeselschaften
         System.out.println("Auswahl der Fluggeselschaft welche den Flug durchführen soll");
         System.out.println(vs.getFluggesellschaften());
+        System.out.println("---------------------------------------------------------------------------------");
 
         try {
             geselschaft = Manager.Stringscanner();
-          System.out.println("---------------------------------------------------------------------------------");
             System.out.println("Nun wählen sie ein Flugzeug der Flotte über den Code aus: ");
             System.out.println(vs.getFluggesellschaft(geselschaft).getFlotte());
             System.out.println("------------------------------------------------------------------------");
             flugzeug  = Manager.Stringscanner();
             System.out.println("Ihr ausgewähltes Flugzeug ");
-            vs.getFlugzeug(flugzeug);
+            System.out.println(vs.getFlugzeug(flugzeug));
 
             System.out.println("------------------------------------------------------------------------");
             System.out.println("Wählen Sie den Start und Zielflughafen aus");
@@ -428,21 +418,22 @@ public class UIMitarbeiter {
             zielflughafen  = Manager.Stringscanner();
             System.out.println(vs.getFlughafenNachCode(zielflughafen));
 
-            System.out.println("--------------------------------------------------------");
+
             System.out.println("---------------------------Bitte geben Sie die Abflugszeiten an-----------------------------");
             abflug = anabflug("des Abfluges");
             System.out.println("---------------------------Bitte geben Sie die Ankuftszeiten an-----------------------------");
             ankunft =  anabflug("der Ankunft");
+            vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft),vs.getFlugzeug(flugzeug),vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis );
+
             datenHandler.speichere(anwendungsdaten);
+
         }
-        catch (Exception e)
+        catch ( IllegalArgumentException e )
         {
             System.out.println("Fehler: " + e.getMessage());
             hauptmanager();
         }
 
-        vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft),vs.getFlugzeug(flugzeug),vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis );
-        System.out.println("Flug Erstellt: " +   vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft),vs.getFlugzeug(flugzeug),vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis ).toString());
     }
 
 
@@ -486,8 +477,8 @@ try {
     int tag = Manager.intscanner();
     abflug =  LocalDate.of(jahr, monat, tag );
 
-    System.out.print(vs.sucheFluegeNachNummer(flugnummer) + " wurde gelöscht");
-    vs.sucheFlugNachNummer(flugnummer, abflug );
+    System.out.print(vs.sucheFlugNachNummer(flugnummer, abflug ) + " wurde gelöscht");
+    vs.entferneFlug(vs.sucheFlugNachNummer(flugnummer, abflug ));
     datenHandler.speichere(anwendungsdaten);
 
 

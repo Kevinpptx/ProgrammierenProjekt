@@ -207,6 +207,7 @@ public class Verwaltungssystem implements Serializable {
 
             if(flugGes.besitztFlugzeug(flug)) {
                 flugGes.entferneFlugzeug(flug);
+                this.flugzeuge.remove(flug);
                 return;
             }
         }
