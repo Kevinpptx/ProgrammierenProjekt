@@ -492,8 +492,8 @@ public class Verwaltungssystem implements Serializable {
                 erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
             }
 
-            lAbflug.plusDays(1);
-            lAnkunft.plusDays(1);
+            lAbflug = lAbflug.plusDays(1);
+            lAnkunft = lAnkunft.plusDays(1);
         }
         return erzeugteFluege;
     }
