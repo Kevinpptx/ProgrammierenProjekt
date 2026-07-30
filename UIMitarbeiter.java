@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class UIMitarbeiter {
 
@@ -38,7 +37,6 @@ public class UIMitarbeiter {
             System.out.println("Geben Sie ein Passwort ein:");
             System.out.println("Geben Sie ein Passwort ein:");
 
-
             int eingabe = Manager.intscanner();
 
 
@@ -66,7 +64,7 @@ public class UIMitarbeiter {
         System.out.println("Drücken Sie die 3 Um Flughäfen hinzuzufügen oder zu entfernen");
         System.out.println("Drücken Sie die 4 Um einen Flug anzulegen ");
         System.out.println("Drücken Sie die 5 Um einen Flug zu entfernen ");
-        // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
+        System.out.println("Drücken Sie die 6 Um die Flug auslasstung zu sehen ");
 
         int auswhal = Manager.intscanner();
 
@@ -87,6 +85,9 @@ public class UIMitarbeiter {
                 break;
                 case 5:
                     flugentfernen();
+                    break;
+                    case 6:
+                     System.out.println(bs.getBuchungen());
             default:
                 hauptmanager();
         }
@@ -119,6 +120,7 @@ public class UIMitarbeiter {
 
     }
 
+    }
 
     public  void flottenManager() {
         System.out.println("--------------Willkommen im FlottenManager---------------");
@@ -253,7 +255,6 @@ public class UIMitarbeiter {
 
 
     //FlugzeugderFlotteHinzufügen
-
     public  void flugzeugderFlotteHinzufügen() {
         int laufvariable = -1;
         System.out.println("----------------------Flugzeuge der Flotte Hinzufügen------------------------------");
@@ -423,9 +424,32 @@ public class UIMitarbeiter {
             abflug = anabflug("des Abfluges");
             System.out.println("---------------------------Bitte geben Sie die Ankuftszeiten an-----------------------------");
             ankunft =  anabflug("der Ankunft");
-            vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft),vs.getFlugzeug(flugzeug),vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis );
 
-            datenHandler.speichere(anwendungsdaten);
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println("Wollen sie noch einen Rückfluck hinzufügen drücken sie die 1");
+            System.out.println("Wollen sie keinen Rückflug hinzufügen drücken sie die 2");
+            int ruck = Manager.intscanner();
+
+            if (ruck == 1)
+            {
+                System.out.println("---------------------------Rückflug-----------------------------");
+
+                boolean rucke = true;
+
+                System.out.println("An wie vielen Tagen soll der Flugstatt finden: ");
+                int wiederholung = Manager.intscanner();
+
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
+                datenHandler.speichere(anwendungsdaten);
+                hauptmanager();
+            }
+            else {
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
+                datenHandler.speichere(anwendungsdaten);
+                hauptmanager();
+            }
+
+
 
         }
         catch ( IllegalArgumentException e )
@@ -489,11 +513,6 @@ try {
 }
     }
 
-    public  void ruckflug()
-    {
-
-
-    }
 
 
 }

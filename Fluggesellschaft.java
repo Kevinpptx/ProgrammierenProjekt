@@ -22,7 +22,7 @@ public class Fluggesellschaft implements Serializable {
      */
     public Fluggesellschaft(String name, String airlineCode) {
         this.name = name;
-        this.airlineCode = airlineCode;
+        this.airlineCode = airlineCode.toUpperCase();
     }
 
     /**
