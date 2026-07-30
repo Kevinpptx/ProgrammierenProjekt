@@ -181,8 +181,31 @@ public class Flug implements Serializable {
             }
 
         } else {
-            throw new IllegalArgumentException("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
+            throw new IllegalStateException("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
         }
+    }
+
+    /**
+     * Belegt einen Sitzplatz anhand seiner Reihe und seiner Position innerhalb
+     * dieser Reihe.
+     *
+     * Die Nummerierung beginnt für den Benutzer bei {@code 1}. Intern werden
+     * die Arrayindizes entsprechend um {@code 1} reduziert.
+     *
+     * Ist der gewünschte Sitzplatz bereits belegt oder existiert nicht,
+     * wird eine entsprechende Meldung auf der Konsole ausgegeben.
+     *
+     * @param sitzplatz der zu belegende Sitzplatz
+     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
+     */
+    public void belegeSitzplatz(Sitzplatz sitzplatz) {
+        // Ein Sitzplatz kann nur belegt werden, wenn er noch frei ist
+        if(sitzplatz.getIstFrei()) {
+            sitzplatz.belegen();
+        } else {
+            throw new IllegalStateException("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
+        }
+
     }
 
     /**

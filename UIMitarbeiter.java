@@ -35,6 +35,7 @@ public class UIMitarbeiter {
         for (i = 3; i >= 0; i--) {
 
             System.out.println("Geben Sie ein Passwort ein:");
+            System.out.println("Geben Sie ein Passwort ein:");
 
             int eingabe = Manager.intscanner();
 
@@ -119,6 +120,7 @@ public class UIMitarbeiter {
 
     }
 
+    }
 
     public  void flottenManager() {
         System.out.println("--------------Willkommen im FlottenManager---------------");
@@ -205,6 +207,11 @@ public class UIMitarbeiter {
         System.out.println("Drücken Sie die 2 um eine weitere Fluggeselschafft hinzuzufügen oder zu entfernen");
         System.out.println("Drücken Sie die 3 um zurück zum Haupt Manager zu gelangen");
         System.out.println("-------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen oder zu entfernen");
+        System.out.println("Drücken Sie die 2 um eine weitere Fluggeselschafft hinzuzufügen oder zu entfernen");
+        System.out.println("Drücken Sie die 3 um zurück zum Haupt Manager zu gelangen");
+        System.out.println("-------------------------------------------------------------------------");
         int antwort = Manager.intscanner();
 
         switch (antwort) {
@@ -248,7 +255,6 @@ public class UIMitarbeiter {
 
 
     //FlugzeugderFlotteHinzufügen
-
     public  void flugzeugderFlotteHinzufügen() {
         int laufvariable = -1;
         System.out.println("----------------------Flugzeuge der Flotte Hinzufügen------------------------------");
