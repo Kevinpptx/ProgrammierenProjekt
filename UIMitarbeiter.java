@@ -120,7 +120,6 @@ public class UIMitarbeiter {
 
     }
 
-    }
 
     public  void flottenManager() {
         System.out.println("--------------Willkommen im FlottenManager---------------");
