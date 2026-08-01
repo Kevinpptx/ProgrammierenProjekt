@@ -31,52 +31,83 @@ public class UIKunde {
 
 public void kunde()
 {
-    System.out.println("-------------------Herzlich Wilkommen-------------------------");
-    System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
-    System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
-    int auswahl = Manager.intscanner();
-    switch (auswahl)
-    {
-        case 1:
-            System.out.println("Bitte geben sie ihren Namen ein ");
-            String name = Manager.Stringscanner();
-            System.out.println("Bitte geben sie ihren E-Mail ein ");
-            String mail = Manager.Stringscanner();
 
-            Passagier p = bs.initialisierePassagier(name, mail);
+    while (true) {
 
-            System.out.println( p.toString());
-            datenHandler.speichere(anwendungsdaten);
+        System.out.println("-------------------Herzlich Wilkommen-------------------------");
+        System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
+        System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
+        System.out.println("Drücken Sie die 3: Wenn sie zurück wollen ");
+
+        int auswahl = Manager.intscanner();
+
+        switch (auswahl) {
+
+            case 1:
+                System.out.println("Bitte geben sie ihren Namen ein ");
+                String name = Manager.Stringscanner();
+
+                System.out.println("Bitte geben sie ihren E-Mail ein ");
+                String mail = Manager.Stringscanner();
+
+                try {
+                    Passagier passagier = bs.initialisierePassagier(name, mail);
+
+                    datenHandler.speichere(anwendungsdaten);
+
+                    System.out.println("Kunde erfolgreich angelegt:");
+                    System.out.println(passagier);
+
+                    hauptmanagerk(passagier);
+                    return;
+
+                } catch (Exception e) {
+                    System.out.println("Fehler: " + e.getMessage());
+                    break;
+                }
 
             case 2:
+
+                if (bs.getPassagiere().isEmpty()) {
+                    System.out.println("Es sind noch keine Kunden vorhanden.");
+                    break;
+                }
 
                 System.out.println("Passagierliste:");
 
                 for (int i = 0; i < bs.getPassagiere().size(); i++) {
-                    System.out.println(i + ": " + bs.getPassagiere().get(i));
+                    System.out.println("ID: " + i + ": " + bs.getPassagiere().get(i));
                 }
 
                 System.out.println("Bitte wählen Sie einen Passagier über die ID:");
                 int id = Manager.intscanner();
 
+
+                if (id < 0 || id >= bs.getPassagiere().size()) {
+                    System.out.println("Diese Passagier-ID existiert nicht.");
+                    break;
+                }
+
                 Passagier ausgewaehlterPassagier = bs.getPassagiere().get(id);
+
 
                 System.out.println("Sie haben ausgewählt:");
                 System.out.println(ausgewaehlterPassagier);
 
                 datenHandler.speichere(anwendungsdaten);
                 hauptmanagerk(ausgewaehlterPassagier);
-
-
                 break;
 
-        default:
-            System.out.println("Ungültige Eingabe.");
-            kunde();
-            break;
 
+            case 3:
+                return;
+
+            default:
+                System.out.println("Ungültige Eingabe.");
+                break;
+
+        }
     }
-
 
 
 }
@@ -89,19 +120,20 @@ public void kunde()
         // Umbuchung auf andere Flüge vornehmen
         // Buchung stornieren
 
+    while (true) {
 
-        System.out.println("-------------------Willkommen "+ passagier.getName() + " im Hauptmanager-------------------------");
+        System.out.println("-------------------Willkommen " + passagier.getName() + " im Hauptmanager-------------------------");
         System.out.println("Wilkommen was möchten sie tun: ");
         System.out.println("Drücken Sie die 1: Um Flüge zu suchen und zu Buchen ");
         System.out.println("Drücken Sie die 2: Umbuchungen auf andere Flüge vornehmen");
         System.out.println("Drücken Sie die 3: Buchung stornieren");
         System.out.println("Drücken Sie die 4: Um Buchungen anzuzeigen ");
-        System.out.println("Drücken Sie die 5: Um zum start zu gelangen ");
+        System.out.println("Drücken Sie die 5: Um sich abzumelden ");
         // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
 
         int auswhal = Manager.intscanner();
 
-        switch(auswhal) {
+        switch (auswhal) {
             case 1:
                 flugsundb(passagier);
                 break;
@@ -117,11 +149,15 @@ public void kunde()
                 buchunganzeigen(passagier);
                 break;
             case 5:
-                kunde();
+                return;
+
+            default:
+                System.out.println("Ungültige Eingabe.");
+                break;
 
         }
 
-
+    }
 
     }
 
@@ -171,9 +207,11 @@ try {
 
     if (fluege.isEmpty()) {
         System.out.println("Keine Flüge gefunden.");
+        return;
     } else {
         for (int i = 0; i < fluege.size(); i++) {
             System.out.println("Flug " + (i) + ": " + fluege.get(i));
+
         }
     }
 
@@ -209,8 +247,6 @@ try {
 
     bs.buchungVornehmen(passagier,fluege.get(index), sitzplatz, koffer, sitzklasse );
     datenHandler.speichere(anwendungsdaten);
-
-    hauptmanagerk(passagier);
 
 
 } catch (Exception e) {
@@ -274,6 +310,7 @@ try {
 
             if (fluege.isEmpty()) {
                 System.out.println("Keine Flüge gefunden.");
+                return;
             } else {
                 for (int i = 0; i < fluege.size(); i++) {
                     System.out.println("Flug " + (i) + ": " + fluege.get(i));
@@ -313,7 +350,6 @@ try {
 
             datenHandler.speichere(anwendungsdaten);
 
-            hauptmanagerk(passagier);
 
 
         } catch (Exception e) {
@@ -341,7 +377,7 @@ try {
 
         bs.stornieren(bs.sucheBuchungNachNummer(nummer));
         datenHandler.speichere(anwendungsdaten);
-        hauptmanagerk(passagier);
+
 
     }
 

@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -9,6 +8,8 @@ public class Manager {
     private final Anwendungsdaten anwendungsdaten;
     private final UIKunde uiKunde;
     private final UIMitarbeiter uiMitarbeiter;
+
+    private static final Scanner SCANNER = new Scanner(System.in);
 
     /**
      * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten
@@ -36,38 +37,37 @@ public class Manager {
 // Start Methode um den nutzer festzulegen
     public void start() {
 
-        int i = 0;
-        while ( i < 1) {
 
-        Scanner sc = new Scanner(System.in);
-        System.out.print("\n --------------------------------------------");
-        System.out.println("\n Herzlich Wilkommen zum Avigator");
-        System.out.print("--------------------------------------------");
-        System.out.print("\n Als welche Art von Benutzer möchten sie das System nutzen?");
-        System.out.print("\n Drücken sie die 1. Um sich als Admin anzumelden");
-        System.out.println("\n Drücken sie die 2. Um sich als Kunde anzumelden");
-        System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
-        System.out.println("--------------------------------------------");
+        while (true) {
 
 
 
-    int auswahl = intscanner();
-    switch (auswahl) {
-        case 1:
-            System.out.print("Admin: ");
-            uiMitarbeiter.loggin();
-            break;
-        case 2:
-            System.out.print("Kunden: ");
-            
-            uiKunde.kunde();
-            break;
-            case 3:
-                datenHandler.speichere(anwendungsdaten);
-                System.exit(0);
-        default:
-            System.out.print("Falsche eingabe ");
-            start();
+
+
+                System.out.print("\n --------------------------------------------");
+                System.out.println("\n Herzlich Wilkommen zum Avigator");
+                System.out.print("--------------------------------------------");
+                System.out.print("\n Als welche Art von Benutzer möchten sie das System nutzen?");
+                System.out.print("\n Drücken sie die 1. Um sich als Admin anzumelden");
+                System.out.println("\n Drücken sie die 2. Um sich als Kunde anzumelden");
+                System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
+                System.out.println("--------------------------------------------");
+
+                int auswahl = intscanner();
+                    switch (auswahl) {
+                    case 1:
+                        uiMitarbeiter.loggin();
+                        break;
+                    case 2:
+                        uiKunde.kunde();
+                         break;
+                    case 3:
+                     datenHandler.speichere(anwendungsdaten);
+                     return;
+
+                    default:
+                    System.out.print("Falsche eingabe ");
+                    break;
     }
 }
     }
@@ -76,10 +76,10 @@ public class Manager {
     public static int intscanner() {
 
         try {
-            Scanner sc = new Scanner(System.in);
-            int auswahl = sc.nextInt();
-            return auswahl;
-        } catch (InputMismatchException e) {
+
+            String auswahl = SCANNER.nextLine().trim();
+            return  Integer.parseInt(auswahl);
+        } catch (NumberFormatException  e) {
             System.out.println("kein gültiger wert");
             return -1;
         }
@@ -89,10 +89,11 @@ public class Manager {
     public static String Stringscanner() {
 
         try {
-            Scanner sc = new Scanner(System.in);
-            String zeichen = sc.nextLine();
+
+            String zeichen = SCANNER.nextLine().trim();
             return zeichen;
-        } catch (InputMismatchException e) {
+
+        } catch (NumberFormatException  e) {
             System.out.println("kein gültiger wert");
             return null;
         }
@@ -101,10 +102,12 @@ public class Manager {
     public static double doublescanner() {
 
         try {
-            Scanner sc = new Scanner(System.in);
-            double zahl = sc.nextDouble();
-            return zahl;
-        } catch (InputMismatchException e) {
+
+            String zahl = SCANNER.nextLine().trim().replace(",", ".");
+
+            return Double.parseDouble(zahl);
+
+        } catch (NumberFormatException  e) {
             System.out.println("kein gültiger wert");
             return -1.1;
         }
