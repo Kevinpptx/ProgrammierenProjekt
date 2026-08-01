@@ -101,7 +101,7 @@ public class Buchungssystem implements Serializable {
         try {
 
             // Objekte holen / erstellen
-            Sitzplatz sitzplatz = new Sitzplatz(sitzplatznummer, sitzklasse);
+            Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
             GepaeckInformation gepaeckinfo = new GepaeckInformation(anzahlKoffer);
             List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
 
