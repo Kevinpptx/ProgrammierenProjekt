@@ -41,6 +41,7 @@ public class Manager {
         while (true) {
 
 
+           ConsoleImagePrinter.printResource("/Aviagator.png", 50);
 
 
 
@@ -80,7 +81,7 @@ public class Manager {
             String auswahl = SCANNER.nextLine().trim();
             return  Integer.parseInt(auswahl);
         } catch (NumberFormatException  e) {
-            System.out.println("kein gültiger wert");
+
             return -1;
         }
     }
@@ -94,7 +95,7 @@ public class Manager {
             return zeichen;
 
         } catch (NumberFormatException  e) {
-            System.out.println("kein gültiger wert");
+
             return null;
         }
     }
@@ -108,7 +109,7 @@ public class Manager {
             return Double.parseDouble(zahl);
 
         } catch (NumberFormatException  e) {
-            System.out.println("kein gültiger wert");
+
             return -1.1;
         }
     }
