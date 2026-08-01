@@ -10,6 +10,11 @@ import java.util.ArrayList;
  */
 public class Fluggesellschaft implements Serializable {
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private String airlineCode; 
     private ArrayList<Flugzeug> flotte = new ArrayList<>(); 

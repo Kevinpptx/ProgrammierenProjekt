@@ -3,6 +3,11 @@ import java.io.Serializable;
 
 public class Anwendungsdaten implements Serializable{
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     private final Verwaltungssystem verwaltungssystem;
     private final Buchungssystem buchungssystem; 
 

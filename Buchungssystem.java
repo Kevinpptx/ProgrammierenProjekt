@@ -16,7 +16,10 @@ import java.util.NoSuchElementException;
 
 public class Buchungssystem implements Serializable {
 
-
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
 
     /** Liste der Buchungen, die schon vorgenommen wurden */
     private ArrayList<Buchung> buchungen;

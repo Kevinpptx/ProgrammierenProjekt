@@ -13,6 +13,11 @@ import java.io.Serializable;
  */
 public class Flughafen implements Serializable{
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Name des Flughafens. */
     private String name;
 
