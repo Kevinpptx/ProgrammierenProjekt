@@ -56,11 +56,11 @@ public class DatenHandler {
   
                 oos.writeObject(anwendungsdaten);
 
-                System.out.println("Die Anwendungsdaten wurde gespeichert.");
+                System.out.println("Die Anwendungsdaten wurden erfolgreich gespeichert.");
             }
 
         } catch (IOException e) {
-            System.err.println("Die Anwendungsdaten konnten nicht gespeichert werden.");
+            System.err.println("Fehler! Die Anwendungsdaten konnten nicht gespeichert werden.");
             e.printStackTrace();
         }
     }
@@ -78,7 +78,7 @@ public class DatenHandler {
 
         if (Files.notExists(DATEI_PFAD)) {
 
-            System.out.println("Es konnten keine gespeicherten Anwendungsdaten gefunden werden. Neue Anwendungsdaten werden erzeugt");
+            System.out.println("Es konnten keine gespeicherten Anwendungsdaten gefunden werden. Neue Anwendungsdaten werden erzeugt.");
             return new Anwendungsdaten();
 
         } else {
