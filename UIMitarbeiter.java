@@ -68,7 +68,7 @@ public class UIMitarbeiter {
             System.out.println("Drücken Sie die 4 Um einen Flug anzulegen ");
             System.out.println("Drücken Sie die 5 Um einen Flug zu entfernen ");
             System.out.println("Drücken Sie die 6 Um die Flug auslasstung zu sehen ");
-            System.out.println("Drücken Sie die 7, um sich abzumelden");
+            System.out.println("Drücken Sie die 7, zur Abmeldung");
 
             int auswhal = Manager.intscanner();
 

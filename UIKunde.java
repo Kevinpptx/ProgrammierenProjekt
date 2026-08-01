@@ -128,7 +128,7 @@ public void kunde()
         System.out.println("Drücken Sie die 2: Umbuchungen auf andere Flüge vornehmen");
         System.out.println("Drücken Sie die 3: Buchung stornieren");
         System.out.println("Drücken Sie die 4: Um Buchungen anzuzeigen ");
-        System.out.println("Drücken Sie die 5: Um sich abzumelden ");
+        System.out.println("Drücken Sie die 5, zur Abmeldung ");
         // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
 
         int auswhal = Manager.intscanner();
