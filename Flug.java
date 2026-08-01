@@ -255,24 +255,6 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Ermittelt Reihe und Nummer basierend auf der Sitzplatznummer
-     * @param sitzplatznummer
-     * @return
-     */
-    public int[] ermittleReiheUndNummer(String sitzplatznummer) {
-        //Erster Teil der Sitzplatznummer, der Buchstabe    
-        char buchstabe = sitzplatznummer.charAt(0);   
-        
-        //Wandelt den char-Wert auf Basis des ASCII-Wertes von A (65) in einen Integer-Wert um
-        int reihe = buchstabe - 'A' + 1;    
-        
-        //Zweiter Teil der Sitzplatznummer, die Zahl im String
-        int nummer = Integer.parseInt(sitzplatznummer.substring(1));   
-        
-        return new int[] {reihe, nummer};
-        }
-
-    /**
      * Prüft, ob der Flug vollständig ausgebucht ist.
      *
      * Ein Flug gilt als ausgebucht, wenn keine freien Sitzplätze mehr
