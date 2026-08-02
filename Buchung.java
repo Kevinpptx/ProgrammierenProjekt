@@ -10,6 +10,11 @@ import java.io.Serializable;
  */
 public class Buchung implements Serializable {
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     private String buchungsnummer;
     private Passagier passagier;
     private Flug flug;

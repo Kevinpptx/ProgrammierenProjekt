@@ -21,6 +21,12 @@ import java.util.NoSuchElementException;
  * @version 1.0
  */
 public class Flug implements Serializable {
+
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Die eindeutige Flugnummer des Fluges */
     private String flugnummer;
 
@@ -255,24 +261,6 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Ermittelt Reihe und Nummer basierend auf der Sitzplatznummer
-     * @param sitzplatznummer
-     * @return
-     */
-    public int[] ermittleReiheUndNummer(String sitzplatznummer) {
-        //Erster Teil der Sitzplatznummer, der Buchstabe    
-        char buchstabe = sitzplatznummer.charAt(0);   
-        
-        //Wandelt den char-Wert auf Basis des ASCII-Wertes von A (65) in einen Integer-Wert um
-        int reihe = buchstabe - 'A' + 1;    
-        
-        //Zweiter Teil der Sitzplatznummer, die Zahl im String
-        int nummer = Integer.parseInt(sitzplatznummer.substring(1));   
-        
-        return new int[] {reihe, nummer};
-        }
-
-    /**
      * Prüft, ob der Flug vollständig ausgebucht ist.
      *
      * Ein Flug gilt als ausgebucht, wenn keine freien Sitzplätze mehr
@@ -500,8 +488,7 @@ public class Flug implements Serializable {
     @Override
     public String toString() {
         return this.fluggesellschaft.getName()  
-            + " Flug " + this.fluggesellschaft.getAirlineCode()
-            + this.flugnummer
+            + " Flug " + this.flugnummer
             + " von " + this.startFlughafen.getIataCode()
             + " nach " + this.zielFlughafen.getIataCode()
             + ", Abflug: " + this.abflugzeit

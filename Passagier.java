@@ -5,6 +5,11 @@ import java.io.Serializable;
  */
 public class Passagier implements Serializable{
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Die ID des Passagiers. */
     private String passagierId;
     /** Der Name des Passagiers. */
