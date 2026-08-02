@@ -41,7 +41,6 @@ public class Manager {
         while (true) {
 
 
-           ConsoleImagePrinter.printResource("/Aviagator.png", 50);
 
 
 
