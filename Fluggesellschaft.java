@@ -26,7 +26,13 @@ public class Fluggesellschaft implements Serializable {
      * @param airlineCode der eindeutige Airline-Code der Fluggesellschaft
      */
     public Fluggesellschaft(String name, String airlineCode) {
+
         this.name = name;
+
+        if (airlineCode.isEmpty() || airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0)) || !Character.isLetter(airlineCode.charAt(1))) {
+            throw new IllegalArgumentException("Der IATA-Code muss aus zwei Buchstaben bestehen!");
+        }
+
         this.airlineCode = airlineCode.toUpperCase();
     }
 

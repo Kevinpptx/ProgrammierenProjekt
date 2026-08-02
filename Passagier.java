@@ -26,6 +26,15 @@ public class Passagier implements Serializable{
      */
     // Konstruktor
     public Passagier(String passagierId, String name, String email) {
+        
+        if (name.isEmpty() || email.isEmpty()) {
+            throw new IllegalArgumentException("Die Felder Name und E-Mail dürfen nicht leer sein.");
+        }
+
+        if (!email.contains("@") || (!email.contains("."))) {
+            throw new IllegalArgumentException("Bitte geben Sie eine gültige E-Mail-Adresse ein!");
+        }
+        
         this.passagierId = passagierId;
         this.name = name;
         this.email = email;

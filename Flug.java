@@ -88,6 +88,16 @@ public class Flug implements Serializable {
                 LocalDateTime ankunftszeit, 
                 double basispreis) {
 
+                if (fluggesellschaft == null
+                || flugzeug == null
+                || startFlughafen == null
+                || zielFlughafen == null
+                || abflugzeit == null
+                || ankunftszeit == null) {
+
+            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
+        }
+
         if (flugnummer == null || flugnummer.isBlank()) {
             throw new IllegalArgumentException("Die Flugnummer darf nicht leer sein.");
         }
@@ -100,16 +110,6 @@ public class Flug implements Serializable {
         // Verhindert, dass ein Flug vor seinem Abflug ankommt
         if (!ankunftszeit.isAfter(abflugzeit)) {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
-        }
-
-        if (fluggesellschaft == null
-                || flugzeug == null
-                || startFlughafen == null
-                || zielFlughafen == null
-                || abflugzeit == null
-                || ankunftszeit == null) {
-
-            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
         }
 
 

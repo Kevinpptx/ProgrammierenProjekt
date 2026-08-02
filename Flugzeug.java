@@ -57,6 +57,23 @@ public class Flugzeug implements Serializable{
             int sitzeProReihe,
             int businessReihen) {
 
+        // Überprüfen, ob das Flugzeug "Sinn ergibt"
+        if (anzahlReihen <= 0) {
+            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
+        }
+
+        if (anzahlReihen <= 0 || businessReihen > anzahlReihen) {
+            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 1 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
+        }
+
+        if (anzahlReihen > 100) {
+            throw new IllegalArgumentException("Die Anzahl der Sitzreihen darf nicht größer als 100 sein.");
+        }
+
+        if (sitzeProReihe > 26) {
+            throw new IllegalArgumentException("Die Anzahl der Sitzplätze pro Reihe darf nicht größer als 26 sein.");
+        }
+
         this.code = code;
         this.modell = modell;
 
