@@ -32,52 +32,84 @@ public class UIKunde {
 
 public void kunde()
 {
-    System.out.println("-------------------Herzlich Willkommen-------------------------");
-    System.out.println("Drücken Sie die 1, wenn Sie neuer Kunde sind. ");
-    System.out.println("Drücken Sie die 2, wenn Sie bereits Kunde sind. ");
-    int auswahl = Manager.intscanner();
-    switch (auswahl)
-    {
-        case 1:
-            System.out.println("Bitte geben Sie Ihren Namen ein: ");
-            String name = Manager.Stringscanner();
-            System.out.println("Bitte geben Sie Ihre E-Mail-Adresse ein: ");
-            String mail = Manager.Stringscanner();
 
-            Passagier p = bs.initialisierePassagier(name, mail);
 
-            System.out.println( p.toString());
-            datenHandler.speichere(anwendungsdaten);
+    while (true) {
+
+        System.out.println("-------------------Herzlich Wilkommen-------------------------");
+        System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
+        System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
+        System.out.println("Drücken Sie die 3: Wenn sie zurück wollen ");
+
+        int auswahl = Manager.intscanner();
+
+        switch (auswahl) {
+
+            case 1:
+                System.out.println("Bitte geben sie ihren Namen ein ");
+                String name = Manager.Stringscanner();
+
+                System.out.println("Bitte geben sie ihren E-Mail ein ");
+                String mail = Manager.Stringscanner();
+
+                try {
+                    Passagier passagier = bs.initialisierePassagier(name, mail);
+
+                    datenHandler.speichere(anwendungsdaten);
+
+                    System.out.println("Kunde erfolgreich angelegt:");
+                    System.out.println(passagier);
+
+                    hauptmanagerk(passagier);
+                    return;
+
+                } catch (Exception e) {
+                    System.out.println("Fehler: " + e.getMessage());
+                    break;
+                }
 
             case 2:
+
+                if (bs.getPassagiere().isEmpty()) {
+                    System.out.println("Es sind noch keine Kunden vorhanden.");
+                    break;
+                }
 
                 System.out.println("Passagierliste:");
 
                 for (int i = 0; i < bs.getPassagiere().size(); i++) {
-                    System.out.println(i + ": " + bs.getPassagiere().get(i));
+                    System.out.println("ID: " + i + ": " + bs.getPassagiere().get(i));
                 }
 
                 System.out.println("Bitte wählen Sie einen Passagier über die ID:");
                 int id = Manager.intscanner();
 
+
+                if (id < 0 || id >= bs.getPassagiere().size()) {
+                    System.out.println("Diese Passagier-ID existiert nicht.");
+                    break;
+                }
+
                 Passagier ausgewaehlterPassagier = bs.getPassagiere().get(id);
+
 
                 System.out.println("Sie haben ausgewählt:");
                 System.out.println(ausgewaehlterPassagier);
 
                 datenHandler.speichere(anwendungsdaten);
                 hauptmanagerk(ausgewaehlterPassagier);
-
-
                 break;
 
-        default:
-            System.out.println("Ungültige Eingabe.\n");
-            kunde();
-            break;
 
+            case 3:
+                return;
+
+            default:
+                System.out.println("Ungültige Eingabe.\n");
+                break;
+
+        }
     }
-
 
 
 }
@@ -85,11 +117,9 @@ public void kunde()
 
 
     public void hauptmanagerk(Passagier passagier ) {
-        // Flüge Buchen und Suchen
-        // Sitzplatz auswählen, Gepäck anegeben --> im Buchungsmodus
-        // Umbuchung auf andere Flüge vornehmen
-        // Buchung stornieren
 
+
+    while (true) {
 
         System.out.println("-------------------Willkommen "+ passagier.getName() + " im Hauptmanager-------------------------");
         System.out.println("Willkommen, was möchten Sie tun?: ");
@@ -117,11 +147,15 @@ public void kunde()
                 buchunganzeigen(passagier);
                 break;
             case 5:
-                kunde();
+                return;
+
+            default:
+                System.out.println("Ungültige Eingabe.");
+                break;
 
         }
 
-
+    }
 
     }
 
@@ -171,9 +205,11 @@ try {
 
     if (fluege.isEmpty()) {
         System.out.println("Keine Flüge gefunden.\n");
+        return;
     } else {
         for (int i = 0; i < fluege.size(); i++) {
             System.out.println("Flug " + (i) + ": " + fluege.get(i));
+
         }
     }
 
@@ -209,8 +245,6 @@ try {
 
     bs.buchungVornehmen(passagier,fluege.get(index), sitzplatz, koffer, sitzklasse );
     datenHandler.speichere(anwendungsdaten);
-
-    hauptmanagerk(passagier);
 
 
 } catch (Exception e) {
@@ -274,6 +308,7 @@ try {
 
             if (fluege.isEmpty()) {
                 System.out.println("Keine Flüge gefunden.\n");
+                return;
             } else {
                 for (int i = 0; i < fluege.size(); i++) {
                     System.out.println("Flug " + (i) + ": " + fluege.get(i));
@@ -313,7 +348,6 @@ try {
 
             datenHandler.speichere(anwendungsdaten);
 
-            hauptmanagerk(passagier);
 
 
         } catch (Exception e) {
@@ -341,7 +375,7 @@ try {
 
         bs.stornieren(bs.sucheBuchungNachNummer(nummer));
         datenHandler.speichere(anwendungsdaten);
-        hauptmanagerk(passagier);
+
 
     }
 
