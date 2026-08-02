@@ -416,10 +416,11 @@ public class Flug implements Serializable {
      * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen
      *         Buchung als Strings
      */
-    public ArrayList<String> zeigeGepaekÜbersicht() {
+    public ArrayList<String> zeigeGepackUebersicht() {
         ArrayList<String> neueListe = new ArrayList<>();
         for (int i = 0; i < sitzplan.length; i++) {
             for (int j = 0; j < sitzplan[i].length; j++) {
+                if (sitzplan[i][j].getIstFrei()) continue;
                 neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
                         + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
             }
