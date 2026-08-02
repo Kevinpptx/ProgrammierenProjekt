@@ -195,7 +195,7 @@ public class Buchungssystem implements Serializable {
             Sitzklasse sitzklasse) {
         // wenn die Buchung nicht vorhanden ist
         if (buchung == null) {
-            throw new NoSuchElementException("Fehler! Es ist keine Buchung angegeben, von der Umgebucht werden soll.");
+            throw new NoSuchElementException("Fehler! Es ist keine Buchung angegeben, von der umgebucht werden soll.");
         }
 
         // wenn beide Buchungsparameter leer sind

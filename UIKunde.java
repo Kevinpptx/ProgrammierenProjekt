@@ -33,8 +33,8 @@ public class UIKunde {
 public void kunde()
 {
     System.out.println("-------------------Herzlich Willkommen-------------------------");
-    System.out.println("Drücken Sie die 1, wenn Sie neuer Kunde sind ");
-    System.out.println("Drücken Sie die 2, wenn Sie bereits Kunde sind ");
+    System.out.println("Drücken Sie die 1, wenn Sie neuer Kunde sind. ");
+    System.out.println("Drücken Sie die 2, wenn Sie bereits Kunde sind. ");
     int auswahl = Manager.intscanner();
     switch (auswahl)
     {
@@ -93,11 +93,11 @@ public void kunde()
 
         System.out.println("-------------------Willkommen "+ passagier.getName() + " im Hauptmanager-------------------------");
         System.out.println("Willkommen, was möchten Sie tun?: ");
-        System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen");
-        System.out.println("Drücken Sie die 2, um eine Umbuchungen auf einen anderen Flug vorzunehmen");
-        System.out.println("Drücken Sie die 3, um eine Buchung stornieren");
-        System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen");
-        System.out.println("Drücken Sie die 5, um zum Start zu gelangen");
+        System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen.");
+        System.out.println("Drücken Sie die 2, um eine Umbuchungen auf einen anderen Flug vorzunehmen.");
+        System.out.println("Drücken Sie die 3, um eine Buchung stornieren.");
+        System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
+        System.out.println("Drücken Sie die 5, um zum Start zu gelangen.");
 
         int auswhal = Manager.intscanner();
 
