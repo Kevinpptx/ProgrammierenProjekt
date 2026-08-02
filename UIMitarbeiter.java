@@ -93,7 +93,7 @@ public class UIMitarbeiter {
 
                 case 6:
                     System.out.println(bs.getBuchungen());
-                    System.out.println("Buchungen: " + bs.getAnzahlBuchungen());
+                    System.out.println("Anzahl Buchungen: " + bs.getAnzahlBuchungen());
                     break;
 
                case 7:
