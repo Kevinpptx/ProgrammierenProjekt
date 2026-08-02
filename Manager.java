@@ -46,13 +46,13 @@ public class Manager {
 
 
                 System.out.print("\n --------------------------------------------");
-                System.out.println("\n Herzlich Wilkommen zum Avigator");
-                System.out.print("--------------------------------------------");
-                System.out.print("\n Als welche Art von Benutzer möchten sie das System nutzen?");
-                System.out.print("\n Drücken sie die 1. Um sich als Admin anzumelden");
-                System.out.println("\n Drücken sie die 2. Um sich als Kunde anzumelden");
-                System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
-                System.out.println("--------------------------------------------");
+        System.out.println("\n Herzlich Willkommen beim Avigator!");
+        System.out.print("--------------------------------------------");
+        System.out.print("\n Als welche Art von Benutzer möchten Sie das System nutzen?");
+        System.out.print("\n Drücken Sie die 1, um sich als Admin anzumelden.");
+        System.out.println("\n Drücken sie die 2, um sich als Kunde anzumelden.");
+        System.out.println(" Drücken sie die 3, um das Programm zu beenden.");
+        System.out.println("--------------------------------------------");
 
                 int auswahl = intscanner();
                     switch (auswahl) {
@@ -81,7 +81,7 @@ public class Manager {
             String auswahl = SCANNER.nextLine().trim();
             return  Integer.parseInt(auswahl);
         } catch (NumberFormatException  e) {
-
+            System.out.println("Kein gültiger Wert! \n");
             return -1;
         }
     }

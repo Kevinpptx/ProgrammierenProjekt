@@ -115,7 +115,7 @@ public void kunde()
                 return;
 
             default:
-                System.out.println("Ungültige Eingabe.");
+                System.out.println("Ungültige Eingabe.\n");
                 break;
 
         }
@@ -217,7 +217,7 @@ try {
     );
 
     if (fluege.isEmpty()) {
-        System.out.println("Keine Flüge gefunden.");
+        System.out.println("Keine Flüge gefunden.\n");
         return;
     } else {
         for (int i = 0; i < fluege.size(); i++) {
@@ -320,7 +320,7 @@ try {
             );
 
             if (fluege.isEmpty()) {
-                System.out.println("Keine Flüge gefunden.");
+                System.out.println("Keine Flüge gefunden.\n");
                 return;
             } else {
                 for (int i = 0; i < fluege.size(); i++) {

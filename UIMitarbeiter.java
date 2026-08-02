@@ -60,21 +60,21 @@ public class UIMitarbeiter {
 
         while (true) {
 
-            System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
-            System.out.println("Wilkommen Admin was möchten sie tun: ");
-            System.out.println("Drücken Sie die 1: Um Fluggeselschaften hinzufügen oder zu entfernen ");
-            System.out.println("Drücken Sie die 2 Um Flugzeuge einer FlugeselschaftFlotte hinzuzufügen oder zu entfernen");
-            System.out.println("Drücken Sie die 3 Um Flughäfen hinzuzufügen oder zu entfernen");
-            System.out.println("Drücken Sie die 4 Um einen Flug anzulegen ");
-            System.out.println("Drücken Sie die 5 Um einen Flug zu entfernen ");
-            System.out.println("Drücken Sie die 6 Um die Flug auslasstung zu sehen ");
-            System.out.println("Drücken Sie die 7, zur Abmeldung");
+        System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
+        System.out.println("Willkommen Admin, was möchten Sie tun?: ");
+        System.out.println("Drücken Sie die 1, um Fluggesellschaften hinzufügen oder zu entfernen. ");
+        System.out.println("Drücken Sie die 2, um Flugzeuge einer Flugesellschaftsflotte hinzuzufügen oder zu entfernen.");
+        System.out.println("Drücken Sie die 3, um Flughäfen hinzuzufügen oder zu entfernen.");
+        System.out.println("Drücken Sie die 4, um einen neuen Flug anzulegen. ");
+        System.out.println("Drücken Sie die 5, um einen Flug zu entfernen. ");
+        System.out.println("Drücken Sie die 6, um die Flugauslastung zu sehen. ");
+        System.out.println("Drücken Sie die 7, um sich abzumelden.");
 
-            int auswhal = Manager.intscanner();
+            int auswahl = Manager.intscanner();
 
-            switch (auswhal) {
+            switch (auswahl) {
                 case 1:
-                    fluggeselschaftenManager();
+                    fluggesellschaftenManager();
                     break;
                 case 2:
                     flottenManager();
@@ -106,19 +106,19 @@ public class UIMitarbeiter {
     }
 
 
-    public  void fluggeselschaftenManager() {
+    public  void fluggesellschaftenManager() {
 
         while (true) {
-            System.out.println("---------Willkommen im fluggesselschaftenManager---------");
-            System.out.println("Drücken Sie die 1 um Fluggesselschaften hinzuzufügen  ");
-            System.out.println("Drücken Sie die 2 um Fluggesselschaften zu entfernen");
-            System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
-            System.out.println("---------------------------------------------------------");
+        System.out.println("---------Willkommen im Fluggesellschaftenmanager---------");
+        System.out.println("Drücken Sie die 1, um eine Fluggesellschaft hinzuzufügen.  ");
+        System.out.println("Drücken Sie die 2, um eine Fluggesellschaft zu entfernen.");
+        System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
+        System.out.println("---------------------------------------------------------");
 
             int auswahl = Manager.intscanner();
             switch (auswahl) {
                 case 1:
-                    fluggeselschaftanlegen();
+                    fluggesellschaftAnlegen();
                     break;
                 case 2:
                     fluggeselschaftentfernen();
@@ -140,9 +140,9 @@ public class UIMitarbeiter {
         while (true) {
 
             System.out.println("--------------Willkommen im FlottenManager---------------");
-            System.out.println("Drücken Sie die 1 um Flugzeuge der Flotte hinzuzufügen ");
-            System.out.println("Drücken Sie die 2 um Flugzeug zu entfernen");
-            System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
+            System.out.println("Drücken Sie die 1, um Flugzeuge der Flotte hinzuzufügen.");
+            System.out.println("Drücken Sie die 2, um Flugzeug zu entfernen.");
+            System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
             System.out.println("---------------------------------------------------------");
 
             int auswahl = Manager.intscanner();
@@ -168,10 +168,10 @@ public class UIMitarbeiter {
     public  void flughafenManager() {
 
         while (true) {
-            System.out.println("--------------Willkommen im flughafenManager---------------");
-            System.out.println("Drücken Sie die 1 um einen Flughafen hinzuzufügen ");
-            System.out.println("Drücken Sie die 2 um einen Flughafen zu entfernen");
-            System.out.println("Drücken Sie die 3 um zurück zum Hauptmanager zu gelangen");
+            System.out.println("--------------Willkommen im Flughafenmanager---------------");
+            System.out.println("Drücken Sie die 1, um einen Flughafen hinzuzufügen. ");
+            System.out.println("Drücken Sie die 2, um einen Flughafen zu entfernen.");
+            System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
             System.out.println("---------------------------------------------------------");
             int auswahl = Manager.intscanner();
             switch (auswahl) {
@@ -184,7 +184,7 @@ public class UIMitarbeiter {
                 case 3:
                     return;
                 default:
-                    System.out.print("Ungültige Eingabe");
+                    System.out.print("Ungültige Eingabe! \n");
                     break;
             }
 
@@ -195,7 +195,7 @@ public class UIMitarbeiter {
 
 
     //Fluggeselschaftanlegen
-    public void fluggeselschaftanlegen() {
+    public void fluggesellschaftAnlegen() {
         System.out.println("--------------Fluggesellschaft anlegen---------------------------");
         System.out.println("Name Fluggesellschaft: ");
         String name = Manager.Stringscanner();
@@ -288,8 +288,7 @@ public class UIMitarbeiter {
             System.out.println("Fehler: " + e.getMessage());
             return;
         }
-            System.out.println("Das Flugzeug wurde erfolgreich der Flotte Hinzugefügt ");
-
+            System.out.println("Das Flugzeug wurde der Flotte erfolgreich hinzugefügt!");
         }
 
 
@@ -338,7 +337,7 @@ public class UIMitarbeiter {
 
         System.out.println("Flughafen: " + vs.getFlughafenNachCode(iatacode)  + " erfolgreich hinzugefügt!");
         System.out.println("--------------------------------------------------------------------");
-        System.out.println("Zurück zum Flughafen Manager ");
+        System.out.println("Zurück zum Flughafenmanager.");
 
     }
 
