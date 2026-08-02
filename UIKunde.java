@@ -99,9 +99,9 @@ public void kunde()
         System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
         System.out.println("Drücken Sie die 5, um zum Start zu gelangen.");
 
-        int auswhal = Manager.intscanner();
+        int auswahl = Manager.intscanner();
 
-        switch(auswhal) {
+        switch(auswahl) {
             case 1:
                 flugsundb(passagier);
                 break;
