@@ -25,6 +25,11 @@ import java.util.NoSuchElementException;
 public class Verwaltungssystem implements Serializable {
 
     /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Enthält alle im Verwaltungssystem registrierten Fluggesellschaften.
      */
     private final ArrayList<Fluggesellschaft> fluggesellschaften = new ArrayList<>();

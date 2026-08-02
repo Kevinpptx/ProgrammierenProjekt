@@ -21,6 +21,12 @@ import java.util.NoSuchElementException;
  * @version 1.0
  */
 public class Flug implements Serializable {
+
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Die eindeutige Flugnummer des Fluges */
     private String flugnummer;
 
