@@ -500,8 +500,7 @@ public class Flug implements Serializable {
     @Override
     public String toString() {
         return this.fluggesellschaft.getName()  
-            + " Flug " + this.fluggesellschaft.getAirlineCode()
-            + this.flugnummer
+            + " Flug " + this.flugnummer
             + " von " + this.startFlughafen.getIataCode()
             + " nach " + this.zielFlughafen.getIataCode()
             + ", Abflug: " + this.abflugzeit
