@@ -99,9 +99,9 @@ public void kunde()
         System.out.println("Drücken Sie die 5: Um zum start zu gelangen ");
         // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
 
-        int auswhal = Manager.intscanner();
+        int auswahl = Manager.intscanner();
 
-        switch(auswhal) {
+        switch(auswahl) {
             case 1:
                 flugsundb(passagier);
                 break;

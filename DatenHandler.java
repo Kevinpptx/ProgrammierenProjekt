@@ -56,7 +56,7 @@ public class DatenHandler {
   
                 oos.writeObject(anwendungsdaten);
 
-                System.out.println("Die Anwendungsdaten wurde gespeichert.");
+                System.out.println("Die Anwendungsdaten wurden gespeichert.");
             }
 
         } catch (IOException e) {

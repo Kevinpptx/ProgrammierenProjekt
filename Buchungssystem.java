@@ -99,19 +99,16 @@ public class Buchungssystem implements Serializable {
         }
 
         try {
-            int[] koordinatenSitzplatz = flug.ermittleReiheUndNummer(sitzplatznummer);
-            int reihe = koordinatenSitzplatz[0];
-            int nummer = koordinatenSitzplatz[1];
-            flug.belegeSitzplatz(reihe, nummer);
+
+            // Objekte holen / erstellen
+            Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
             GepaeckInformation gepaeckinfo = new GepaeckInformation(anzahlKoffer);
-            Sitzplatz sitzplatz = new Sitzplatz(sitzplatznummer, sitzklasse);
             List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
 
-            // prueft ob der Flug vorhanden ist
-            //getFluege ist Teil der Klasse "Verwaltungssystem, die @cedbe6 implementiert hat"
-
-                try {
+            // Platz validieren und ggf. belegen
+            try {
                     flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
+                    flug.belegeSitzplatz(sitzplatz);
                 } catch (Exception e) {
                     throw e;
                 }
