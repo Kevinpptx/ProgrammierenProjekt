@@ -93,9 +93,8 @@ public class Manager {
 
             String zeichen = SCANNER.nextLine().trim();
             return zeichen;
-
-        } catch (NumberFormatException  e) {
-
+        } catch (InputMismatchException e) {
+            System.out.println("Kein gültiger Wert! \n");
             return null;
         }
     }

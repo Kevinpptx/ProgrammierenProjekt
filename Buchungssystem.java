@@ -72,9 +72,9 @@ public class Buchungssystem implements Serializable {
             passagiere.add(p);
             return p;
         } else if (name == null) {
-            throw new IllegalArgumentException("Du hast keinen Namen angegeben");
+            throw new IllegalArgumentException("Fehler! Es wurde kein Name eingegeben.");
         } else {
-            throw new IllegalArgumentException("Du hast keine Mail-Adresse eingegeben");
+            throw new IllegalArgumentException("Fehler! Es wurde keine Mail-Adresse eingegeben.");
         }
 
     }
@@ -98,7 +98,7 @@ public class Buchungssystem implements Serializable {
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
             Sitzklasse sitzklasse) {
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
-            throw new IllegalArgumentException("Mindestens einer übergebenen der Parameter ist ungültig");
+            throw new IllegalArgumentException("Fehler! Mindestens einer der übergebenen Werte ist ungültig.");
         }
 
         try {
@@ -142,7 +142,7 @@ public class Buchungssystem implements Serializable {
                 return b;
             }
         }
-        throw new IllegalArgumentException("Es gibt diese Buchungsnummer nicht");
+        throw new IllegalArgumentException("Fehler! Die Buchung mit der Buchungsnummer " + buchungsnummer + " ist nicht vorhanden.");
     }
 
     /**
@@ -195,22 +195,22 @@ public class Buchungssystem implements Serializable {
             Sitzklasse sitzklasse) {
         // wenn die Buchung nicht vorhanden ist
         if (buchung == null) {
-            throw new NoSuchElementException("Es ist keine Buchung angegeben, von der Umgebucht werden soll");
+            throw new NoSuchElementException("Fehler! Es ist keine Buchung angegeben, von der umgebucht werden soll.");
         }
 
         // wenn beide Buchungsparameter leer sind
         else if (neuerFlug == null && neueSitzplatznummer == null) {
-            throw new NoSuchElementException("Beide Buchungsparameter sind leer");
+            throw new NoSuchElementException("Beide Buchungsparameter sind leer.");
         }
 
         // wenn schon einmal umgebucht wurde
         else if (buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
-            throw new IllegalStateException("Du hast schon eine Umbuchung vorgenommen");
+            throw new IllegalStateException("Fehler! Es wurde bereits eine Umbuchung vorgenommen.");
         }
 
         // wenn keine Sitzklasse angegeben wurde
         else if (sitzklasse == null) {
-            throw new NoSuchElementException("Du hast keine Sitzklasse eingegeben");
+            throw new NoSuchElementException("Fehler! Es wurde keine Sitzklasse angegeben.");
         }
 
         // wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
@@ -311,9 +311,9 @@ public class Buchungssystem implements Serializable {
             betrag = buchung.stornierenMitGebühr();
             buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
         } else if (!buchungen.contains(buchung)) {
-            throw new NoSuchElementException("Die Buchung ist nicht im System und kann daher nicht storniert werden");
+            throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden und kann daher nicht storniert werden.");
         } else {
-            throw new IllegalArgumentException("Es wurde keine Buchung übergeben");
+            throw new IllegalArgumentException("Fehler! Es wurde keine Buchung übergeben.");
         }
         return betrag;
     }

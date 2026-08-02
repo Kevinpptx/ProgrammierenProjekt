@@ -178,7 +178,7 @@ public class Buchung implements Serializable {
                 " von Passagier " + this.passagier.getName() +
                 " betreffend Flug " + this.flug.getFlugnummer() +
                 " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
-                " in Klasse " + this.sitzplatz.getSitzklasse() +
+                " in Sitzklasse " + this.sitzplatz.getSitzklasse() +
                 " hat den Status " + this.buchungsstatus +
                 " und es liegen folgende Gepäckinformationen vor: " +
                 this.gepaeckInformation.toString() +
