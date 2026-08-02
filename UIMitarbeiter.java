@@ -67,7 +67,7 @@ public class UIMitarbeiter {
         System.out.println("Drücken Sie die 3, um Flughäfen hinzuzufügen oder zu entfernen.");
         System.out.println("Drücken Sie die 4, um einen neuen Flug anzulegen. ");
         System.out.println("Drücken Sie die 5, um einen Flug zu entfernen. ");
-        System.out.println("Drücken Sie die 6, um die Flugauslastung zu sehen. ");
+        System.out.println("Drücken Sie die 6, um die Buchungen zu sehen. ");
         System.out.println("Drücken Sie die 7, um sich abzumelden.");
 
             int auswahl = Manager.intscanner();
@@ -93,6 +93,7 @@ public class UIMitarbeiter {
 
                 case 6:
                     System.out.println(bs.getBuchungen());
+                    System.out.println("Buchungen: " + bs.getAnzahlBuchungen());
                     break;
 
                case 7:
@@ -233,13 +234,15 @@ public class UIMitarbeiter {
         try {
                 String code = Manager.Stringscanner();
             vs.entferneFluggesellschaft(vs.getFluggesellschaft(code));
+
+            datenHandler.speichere(anwendungsdaten);
+            System.out.println("Fluggesellschaft erfolgreich entfernt.");
+
         }
         catch (Exception e) {
             System.out.println("Fehler: " + e.getMessage());
         }
 
-        datenHandler.speichere(anwendungsdaten);
-        System.out.println("Fluggesellschaft erfolgreich entfernt.");
     }
 
 
@@ -301,8 +304,10 @@ public class UIMitarbeiter {
              System.out.println("Bitte geben Sie den Flugzeugcode zur Löschung ein:");
              String code = Manager.Stringscanner();
              vs.entferneFlugzeug(code);
-             System.out.println("Flugzeug wurde erfolgreich gelöscht!");
+
              datenHandler.speichere(anwendungsdaten);
+
+             System.out.println("Flugzeug wurde erfolgreich gelöscht!");
 
          } catch (Exception e) {
              System.out.println("Fehler: " + e.getMessage());
@@ -491,11 +496,12 @@ try {
     int tag = Manager.intscanner();
     abflug =  LocalDate.of(jahr, monat, tag );
 
-    System.out.print(vs.sucheFlugNachNummer(flugnummer, abflug ) + " wurde erfolgreich gelöscht!");
-    vs.entferneFlug(vs.sucheFlugNachNummer(flugnummer, abflug ));
+    Flug flug = vs.sucheFlugNachNummer(flugnummer, abflug);
+
+    vs.entferneFlug(flug);
     datenHandler.speichere(anwendungsdaten);
 
-
+    System.out.println(flug + " wurde erfolgreich gelöscht!");
 
 }catch (Exception e)
 {
