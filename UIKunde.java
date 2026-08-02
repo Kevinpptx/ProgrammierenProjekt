@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UIKunde {
@@ -31,16 +32,16 @@ public class UIKunde {
 
 public void kunde()
 {
-    System.out.println("-------------------Herzlich Wilkommen-------------------------");
-    System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
-    System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
+    System.out.println("-------------------Herzlich Willkommen-------------------------");
+    System.out.println("Drücken Sie die 1, wenn Sie neuer Kunde sind. ");
+    System.out.println("Drücken Sie die 2, wenn Sie bereits Kunde sind. ");
     int auswahl = Manager.intscanner();
     switch (auswahl)
     {
         case 1:
-            System.out.println("Bitte geben sie ihren Namen ein ");
+            System.out.println("Bitte geben Sie Ihren Namen ein: ");
             String name = Manager.Stringscanner();
-            System.out.println("Bitte geben sie ihren E-Mail ein ");
+            System.out.println("Bitte geben Sie Ihre E-Mail-Adresse ein: ");
             String mail = Manager.Stringscanner();
 
             Passagier p = bs.initialisierePassagier(name, mail);
@@ -71,7 +72,7 @@ public void kunde()
                 break;
 
         default:
-            System.out.println("Ungültige Eingabe.");
+            System.out.println("Ungültige Eingabe.\n");
             kunde();
             break;
 
@@ -91,13 +92,12 @@ public void kunde()
 
 
         System.out.println("-------------------Willkommen "+ passagier.getName() + " im Hauptmanager-------------------------");
-        System.out.println("Wilkommen was möchten sie tun: ");
-        System.out.println("Drücken Sie die 1: Um Flüge zu suchen und zu Buchen ");
-        System.out.println("Drücken Sie die 2: Umbuchungen auf andere Flüge vornehmen");
-        System.out.println("Drücken Sie die 3: Buchung stornieren");
-        System.out.println("Drücken Sie die 4: Um Buchungen anzuzeigen ");
-        System.out.println("Drücken Sie die 5: Um zum start zu gelangen ");
-        // An alle flüge mit auslastung denken!!!!!!!!!! anzeigen jetzt bei cedric
+        System.out.println("Willkommen, was möchten Sie tun?: ");
+        System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen.");
+        System.out.println("Drücken Sie die 2, um eine Umbuchungen auf einen anderen Flug vorzunehmen.");
+        System.out.println("Drücken Sie die 3, um eine Buchung stornieren.");
+        System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
+        System.out.println("Drücken Sie die 5, um zum Start zu gelangen.");
 
         int auswahl = Manager.intscanner();
 
@@ -130,20 +130,20 @@ public void kunde()
     public void flugsundb(Passagier passagier ) {
 
 
-        System.out.println("-------------------Willkommen bei Flüge Buchen und Suchen-------------------------");
+        System.out.println("-------------------Willkommen im Bereich für Flugsuche und Buchung-------------------------");
 
         System.out.println(vs.getFlughaefen().toString());
 
 try {
     ArrayList<Flug> fluege = new ArrayList<>();
 
-    System.out.print("Zielflughafenname (leer lassen, wenn egal): ");
+    System.out.print("Name Zielflughafen (optional): ");
     String ziel = Manager.Stringscanner();
 
-    System.out.print("Startflughafenname (leer lassen, wenn egal): ");
+    System.out.print("Name Startflughafen (optional): ");
      String start = Manager.Stringscanner();
 
-    System.out.print("Flugnummer (leer lassen, wenn unbekannt): ");
+    System.out.print("Flugnummer (optional): ");
     String flugnummer = Manager.Stringscanner();
 
     if (!flugnummer.isBlank()) {
@@ -170,18 +170,18 @@ try {
     );
 
     if (fluege.isEmpty()) {
-        System.out.println("Keine Flüge gefunden.");
+        System.out.println("Keine Flüge gefunden.\n");
     } else {
         for (int i = 0; i < fluege.size(); i++) {
             System.out.println("Flug " + (i) + ": " + fluege.get(i));
         }
     }
 
-    System.out.println("Bitte geben sie die Listen nummer ihres gewünschten Fluges ein: ");
+    System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
     int index = Manager.intscanner();
     fluege.get(index).zeigeSitzplan();
 
-    System.out.println("Bitte geben sie die Sitzplatz nummer ein: ");
+    System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
     String sitzplatz = Manager.Stringscanner();
 
     System.out.println("Sitzklasse wählen:");
@@ -203,7 +203,7 @@ try {
     }
 
 
-    System.out.println("Bitte geben sie die anzahl der koffer ein: ");
+    System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
     int  koffer = Manager.intscanner();
 
 
@@ -223,14 +223,14 @@ try {
     {
 
 
-        System.out.println("-------------------Willkommen bei Umbuchen -------------------------");
+        System.out.println("-------------------Willkommen im Umbuchungsbereich-------------------------");
         for (Buchung b : bs.getBuchungen()) {
             if (b.getPassagier().equals(passagier)) {
                 System.out.println(b);
             }
         }
 
-        System.out.println("Bitte Buchungsnummer zum Umbuchen angeben");
+        System.out.println("Bitte Buchungsnummer für Umbuchung angeben:");
 
         String nummer = Manager.Stringscanner();
 
@@ -240,13 +240,13 @@ try {
         try {
             ArrayList<Flug> fluege = new ArrayList<>();
 
-            System.out.print("Zielflughafenname (leer lassen, wenn egal): ");
+            System.out.print("Name Zielflughafen (optional): ");
             String ziel = Manager.Stringscanner();
 
-            System.out.print("Startflughafenname (leer lassen, wenn egal): ");
+            System.out.print("Name Startflughafen (optional): ");
             String start = Manager.Stringscanner();
 
-            System.out.print("Flugnummer (leer lassen, wenn unbekannt): ");
+            System.out.print("Flugnummer (optional): ");
             String flugnummer = Manager.Stringscanner();
 
             if (!flugnummer.isBlank()) {
@@ -273,18 +273,18 @@ try {
             );
 
             if (fluege.isEmpty()) {
-                System.out.println("Keine Flüge gefunden.");
+                System.out.println("Keine Flüge gefunden.\n");
             } else {
                 for (int i = 0; i < fluege.size(); i++) {
                     System.out.println("Flug " + (i) + ": " + fluege.get(i));
                 }
             }
 
-            System.out.println("Bitte geben sie die Listen nummer ihres gewünschten Fluges ein: ");
+            System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
             int index = Manager.intscanner();
             fluege.get(index).zeigeSitzplan();
 
-            System.out.println("Bitte geben sie die Sitzplatz nummer ein: ");
+            System.out.println("Bitte geben Sie die gewünschte Sitzplatznummer ein: ");
             String sitzplatz = Manager.Stringscanner();
 
             System.out.println("Sitzklasse wählen:");
@@ -301,7 +301,7 @@ try {
                     sitzklasse = Sitzklasse.BUSINESS;
                     break;
                 default:
-                    System.out.println("Ungültige Eingabe.");
+                    System.out.println("Ungültige Eingabe.\n");
                     return;
             }
 
@@ -328,14 +328,14 @@ try {
 
     public void stornieren(Passagier passagier)
     {
-        System.out.println("-------------------Willkommen bei Flüge Stornieren-------------------------");
+        System.out.println("-------------------Willkommen im Stornierungsbereich-------------------------");
         for (Buchung b : bs.getBuchungen()) {
             if (b.getPassagier().equals(passagier)) {
                 System.out.println(b);
             }
         }
 
-        System.out.println("Bitte Buchungsnummer zum Stornieren angeben");
+        System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
 
         String nummer = Manager.Stringscanner();
 

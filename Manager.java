@@ -41,12 +41,12 @@ public class Manager {
 
         Scanner sc = new Scanner(System.in);
         System.out.print("\n --------------------------------------------");
-        System.out.println("\n Herzlich Wilkommen zum Avigator");
+        System.out.println("\n Herzlich Willkommen beim Avigator!");
         System.out.print("--------------------------------------------");
-        System.out.print("\n Als welche Art von Benutzer möchten sie das System nutzen?");
-        System.out.print("\n Drücken sie die 1. Um sich als Admin anzumelden");
-        System.out.println("\n Drücken sie die 2. Um sich als Kunde anzumelden");
-        System.out.println(" Drücken sie die 3. Um das Programm zu beenden");
+        System.out.print("\n Als welche Art von Benutzer möchten Sie das System nutzen?");
+        System.out.print("\n Drücken Sie die 1, um sich als Admin anzumelden.");
+        System.out.println("\n Drücken sie die 2, um sich als Kunde anzumelden.");
+        System.out.println(" Drücken sie die 3, um das Programm zu beenden.");
         System.out.println("--------------------------------------------");
 
 
@@ -66,7 +66,7 @@ public class Manager {
                 datenHandler.speichere(anwendungsdaten);
                 System.exit(0);
         default:
-            System.out.print("Falsche eingabe ");
+            System.out.print("Falsche Eingabe!\n ");
             start();
     }
 }
@@ -80,7 +80,7 @@ public class Manager {
             int auswahl = sc.nextInt();
             return auswahl;
         } catch (InputMismatchException e) {
-            System.out.println("kein gültiger wert");
+            System.out.println("Kein gültiger Wert! \n");
             return -1;
         }
     }
@@ -93,7 +93,7 @@ public class Manager {
             String zeichen = sc.nextLine();
             return zeichen;
         } catch (InputMismatchException e) {
-            System.out.println("kein gültiger wert");
+            System.out.println("Kein gültiger Wert! \n");
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class Manager {
             double zahl = sc.nextDouble();
             return zahl;
         } catch (InputMismatchException e) {
-            System.out.println("kein gültiger wert");
+            System.out.println("Kein gültiger Wert! \n");
             return -1.1;
         }
     }
