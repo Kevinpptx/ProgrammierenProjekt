@@ -6,6 +6,11 @@ import java.io.Serializable;
  * sowie einen Belegungsstatus.
  */
 public class Sitzplatz implements Serializable{
+    
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
 
     /** Eindeutige Nummer des Sitzplatzes. */
     private String sitzplatzNummer;

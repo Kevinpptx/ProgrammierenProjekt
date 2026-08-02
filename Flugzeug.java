@@ -8,6 +8,11 @@ import java.io.Serializable;
 public class Flugzeug implements Serializable{
 
     /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Eindeutiger Code des Flugzeugs.
      */
     private String code;

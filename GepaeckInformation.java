@@ -6,6 +6,11 @@ import java.io.Serializable;
  */
 public class GepaeckInformation implements Serializable{
 
+    /**
+     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Die Anzahl der Koffer, die ein Passagier mit sich führt. */
     private int anzahlKoffer;
 
