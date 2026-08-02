@@ -165,11 +165,26 @@ public class Buchungssystem implements Serializable {
             throw e;
         }
         if (umbuchungMoeglich) {
-            Sitzplatz platz = new Sitzplatz(sitzplatznummer, sitzklasse);
+            //gibt den alten Sitzplatz frei
+            buchung.getSitzplatz().freigeben();
+
+            //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn
+            Sitzplatz platz = flug.findeSitzplatz(sitzplatznummer);
+            platz.belegen();
+
+            //berechnet die Umbuchungsgebuehr
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, platz);
+            
+            //weist den neuen Sitzplatz der Buchung zu
             buchung.setSitzplatz(platz);
+
+            //weist die Buchung dem Sitzplatz zu
             platz.setBuchung(buchung);
+
+            //weist den (neuen oder bestehenden) Flug der Buchung zu
             buchung.setFlug(flug);
+
+            //aendert den Buchungsstatus
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
         }
 
