@@ -81,7 +81,7 @@ public class Manager {
             String auswahl = SCANNER.nextLine().trim();
             return  Integer.parseInt(auswahl);
         } catch (NumberFormatException  e) {
-            System.out.println("Kein gültiger Wert! \n");
+
             return -1;
         }
     }
@@ -93,8 +93,7 @@ public class Manager {
 
             String zeichen = SCANNER.nextLine().trim();
             return zeichen;
-        } catch (InputMismatchException e) {
-            System.out.println("Kein gültiger Wert! \n");
+        } catch (NumberFormatException e) {
             return null;
         }
     }

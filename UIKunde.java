@@ -32,17 +32,7 @@ public class UIKunde {
 
 public void kunde()
 {
-    System.out.println("-------------------Herzlich Willkommen-------------------------");
-    System.out.println("Drücken Sie die 1, wenn Sie neuer Kunde sind. ");
-    System.out.println("Drücken Sie die 2, wenn Sie bereits Kunde sind. ");
-    int auswahl = Manager.intscanner();
-    switch (auswahl)
-    {
-        case 1:
-            System.out.println("Bitte geben Sie Ihren Namen ein: ");
-            String name = Manager.Stringscanner();
-            System.out.println("Bitte geben Sie Ihre E-Mail-Adresse ein: ");
-            String mail = Manager.Stringscanner();
+
 
     while (true) {
 
@@ -127,10 +117,7 @@ public void kunde()
 
 
     public void hauptmanagerk(Passagier passagier ) {
-        // Flüge Buchen und Suchen
-        // Sitzplatz auswählen, Gepäck anegeben --> im Buchungsmodus
-        // Umbuchung auf andere Flüge vornehmen
-        // Buchung stornieren
+
 
     while (true) {
 
