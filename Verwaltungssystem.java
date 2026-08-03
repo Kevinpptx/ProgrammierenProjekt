@@ -165,7 +165,7 @@ public class Verwaltungssystem implements Serializable {
         Iterator<Flugzeug> iterator = this.flugzeuge.iterator();
 
         while (iterator.hasNext()) {
-            if (iterator.next().getCode().equals(code)) {
+            if (iterator.next().getCode().equalsIgnoreCase(code)) {
                 throw new IllegalArgumentException("Ein Flugzeug mit dem Code " + code + " existiert bereits.");
             }
         }
