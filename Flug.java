@@ -88,6 +88,16 @@ public class Flug implements Serializable {
                 LocalDateTime ankunftszeit, 
                 double basispreis) {
 
+                if (fluggesellschaft == null
+                || flugzeug == null
+                || startFlughafen == null
+                || zielFlughafen == null
+                || abflugzeit == null
+                || ankunftszeit == null) {
+
+            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
+        }
+
         if (flugnummer == null || flugnummer.isBlank()) {
             throw new IllegalArgumentException("Die Flugnummer darf nicht leer sein.");
         }
@@ -100,16 +110,6 @@ public class Flug implements Serializable {
         // Verhindert, dass ein Flug vor seinem Abflug ankommt
         if (!ankunftszeit.isAfter(abflugzeit)) {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
-        }
-
-        if (fluggesellschaft == null
-                || flugzeug == null
-                || startFlughafen == null
-                || zielFlughafen == null
-                || abflugzeit == null
-                || ankunftszeit == null) {
-
-            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
         }
 
 
@@ -416,10 +416,11 @@ public class Flug implements Serializable {
      * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen
      *         Buchung als Strings
      */
-    public ArrayList<String> zeigeGepaekÜbersicht() {
+    public ArrayList<String> zeigeGepackUebersicht() {
         ArrayList<String> neueListe = new ArrayList<>();
         for (int i = 0; i < sitzplan.length; i++) {
             for (int j = 0; j < sitzplan[i].length; j++) {
+                if (sitzplan[i][j].getIstFrei()) continue;
                 neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
                         + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
             }

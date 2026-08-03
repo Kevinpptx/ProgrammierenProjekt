@@ -39,6 +39,11 @@ public class Flughafen implements Serializable{
      * @param land Land des Flughafens
      */
     public Flughafen(String name, String iataCode, String stadt, String land) {
+        
+        if (iataCode.isEmpty() || iataCode.length() != 3) {
+            throw new IllegalArgumentException("Der IATA-Code muss dreistellig im Format XYZ eingegeben werden.");
+        }
+        
         this.name = name;
         this.iataCode = iataCode;
         this.stadt = stadt;
