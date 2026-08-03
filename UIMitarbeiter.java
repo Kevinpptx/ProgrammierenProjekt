@@ -498,7 +498,7 @@ try {
 
     Flug flug = vs.sucheFlugNachNummer(flugnummer, abflug);
 
-    if(!bs.findeRelevanteBuchungen(flug).isEmpty()) {
+    if(bs.findeRelevanteBuchungen(flug).isEmpty()) {
         vs.entferneFlug(flug);
         datenHandler.speichere(anwendungsdaten);
         System.out.println(flug + " wurde erfolgreich gelöscht!");
