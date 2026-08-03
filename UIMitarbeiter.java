@@ -498,10 +498,15 @@ try {
 
     Flug flug = vs.sucheFlugNachNummer(flugnummer, abflug);
 
-    vs.entferneFlug(flug);
-    datenHandler.speichere(anwendungsdaten);
-
-    System.out.println(flug + " wurde erfolgreich gelöscht!");
+    if(bs.findeRelevanteBuchungen(flug).isEmpty()) {
+        vs.entferneFlug(flug);
+        datenHandler.speichere(anwendungsdaten);
+        System.out.println(flug + " wurde erfolgreich gelöscht!");
+    }
+    else {
+        System.out.println("Dieser Flug beinhaltet leider noch Buchungen und kann daher nicht gelöscht werden.");
+    }
+    
 
 }catch (Exception e)
 {

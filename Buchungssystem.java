@@ -346,6 +346,23 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
+     * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen Flug beinhalten und noch nicht storniert wurden
+     * @param flug , der auf nicht stornierte Buchungen überprüft werden soll
+     * @return Liste an Buchungen, die die Kriterien erfüllen
+     */
+    public ArrayList<Buchung> findeRelevanteBuchungen(Flug flug) {
+        ArrayList<Buchung> relevanteBuchungen = new ArrayList<Buchung>();
+        for(int i = 0; i< buchungen.size(); i++) {
+            Buchung bTemp = buchungen.get(i);
+            if(bTemp.getFlug().equals(flug) && bTemp.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+               relevanteBuchungen.add(bTemp); 
+            }
+        }
+        
+        return relevanteBuchungen;
+    }
+
+    /**
      * 
      * @return Anzahl an der getätigten Buchungen
      */
