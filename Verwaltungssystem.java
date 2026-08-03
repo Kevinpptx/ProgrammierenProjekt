@@ -479,27 +479,36 @@ public class Verwaltungssystem implements Serializable {
         LocalDateTime lAbflug = abflugzeit;
         LocalDateTime lAnkunft = ankunftszeit;
 
+        
         for (int i = 0; i < anzahlTageWiederholungen; i++) {
-            // Erstelle Flug und Rückflug
-            erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis));
+            try{    
+                // Erstelle Flug und Rückflug
+                erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis));
 
-            if(rueckflug){
-                Duration flugdauer = Duration.between(lAbflug, lAnkunft);
-                Duration turnAroundTime = Duration.ofHours(1);
-                LocalDateTime abflugszeitRueckflug = lAnkunft.plus(turnAroundTime);
+                if(rueckflug){
+                    Duration flugdauer = Duration.between(lAbflug, lAnkunft);
+                    Duration turnAroundTime = Duration.ofHours(1);
+                    LocalDateTime abflugszeitRueckflug = lAnkunft.plus(turnAroundTime);
 
-                /*
-                    Fluggesellschaft und Flugzeug bleiben gleich
-                    zielFlughafen und startFlughafen werden getauscht 
-                    Die Ankfuntszeit des Hinflugs wird plus eine TurnAroundTime von 1 Std als neue Abflugzeit gesetzt
-                    Die Ankunftszeit des Rückfluges ist die aus dem Hinflug errechnete Flugdauer auf die neue Abflugszeit addiert
-                    Basispreis bleibt gleich wie beim Hinflug
-                */
-                erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
+                    /*
+                        Fluggesellschaft und Flugzeug bleiben gleich
+                        zielFlughafen und startFlughafen werden getauscht 
+                        Die Ankfuntszeit des Hinflugs wird plus eine TurnAroundTime von 1 Std als neue Abflugzeit gesetzt
+                        Die Ankunftszeit des Rückfluges ist die aus dem Hinflug errechnete Flugdauer auf die neue Abflugszeit addiert
+                        Basispreis bleibt gleich wie beim Hinflug
+                    */
+                    erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
+                }
+
+                lAbflug = lAbflug.plusDays(1);
+                lAnkunft = lAnkunft.plusDays(1);
             }
-
-            lAbflug = lAbflug.plusDays(1);
-            lAnkunft = lAnkunft.plusDays(1);
+        
+            catch(IllegalArgumentException e) {
+                //Wenn irgendein Flug nicht möglich ist, wird die Stelle und der Grund dafür zurückgegeben
+                int stelleWiederholung = i + 1;
+                throw new IllegalArgumentException("Fehler bei Wiederholung " + stelleWiederholung + " : " + e.getLocalizedMessage());
+            }
         }
         return erzeugteFluege;
     }
