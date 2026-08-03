@@ -318,7 +318,7 @@ public class Buchungssystem implements Serializable {
                 buchung.getSitzplatz().freigeben();
             } else {
                 throw new IllegalArgumentException(
-                        "Du kannst eine bereits stornierte Buchung nicht erneut stornieren!");
+                        "Sie können eine bereits stornierte Buchung nicht erneut stornieren!");
             }
 
         }
