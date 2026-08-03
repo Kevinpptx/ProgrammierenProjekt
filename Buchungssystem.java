@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.naming.OperationNotSupportedException;
+
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten
  * Buchungsprozess.
@@ -31,13 +33,13 @@ public class Buchungssystem implements Serializable {
      * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen
      * Grundlage für die Buchungsnummer
      */
-    private  int anzahlBuchungen;
+    private int anzahlBuchungen;
 
     /**
      * Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen
      * Grundlage für die Passagiernummer
      */
-    private  int anzahlPassagiere;
+    private int anzahlPassagiere;
 
     /**
      * Konstruktor der Klasse, der die temporäre Lösung der Datenspeicherung
@@ -50,8 +52,6 @@ public class Buchungssystem implements Serializable {
         anzahlPassagiere = 0;
 
     }
-
-
 
     /**
      * Erstellt ein Objekt vom Typ Passagier und prüft, ob die übergebenenn
@@ -90,9 +90,10 @@ public class Buchungssystem implements Serializable {
      *                        umgewandelt, um die Methode "belegeSitzplatz()" der
      *                        Klasse Flug auszufuehren. Wird außerdem für die
      *                        Erstellung und Zuweisung eines Sitzplatzes benoetigt.
-     * @param anzahlKoffer : Anzahl der gebuchten Koffer
+     * @param anzahlKoffer    : Anzahl der gebuchten Koffer
      * @return Buchung, die soeben erstellt wurde
-     * @throws RuntimeException basierend darauf, was dazu geführt hat, dass die Buchung ungueltig ist
+     * @throws RuntimeException basierend darauf, was dazu geführt hat, dass die
+     *                          Buchung ungueltig ist
      */
 
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
@@ -110,11 +111,11 @@ public class Buchungssystem implements Serializable {
 
             // Platz validieren und ggf. belegen
             try {
-                    flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
-                    flug.belegeSitzplatz(sitzplatz);
-                } catch (Exception e) {
-                    throw e;
-                }
+                flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
+                flug.belegeSitzplatz(sitzplatz);
+            } catch (Exception e) {
+                throw e;
+            }
 
             Buchung b = new Buchung(passagier, flug, sitzplatz, gepaeckinfo);
             b.setBuchungsnummer("bu" + anzahlBuchungen);
@@ -142,7 +143,8 @@ public class Buchungssystem implements Serializable {
                 return b;
             }
         }
-        throw new IllegalArgumentException("Fehler! Die Buchung mit der Buchungsnummer " + buchungsnummer + " ist nicht vorhanden.");
+        throw new IllegalArgumentException(
+                "Fehler! Die Buchung mit der Buchungsnummer " + buchungsnummer + " ist nicht vorhanden.");
     }
 
     /**
@@ -297,28 +299,36 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * storniert eine vorhandene Buchung
+     * storniert eine vorhandene Buchung; ändert den Buchungsstatus und gibt den Sitzplatz der Buchung frei
      * 
      * @param buchung
      * @return die Storno-Gebühr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in
      *                                  der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde
+     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde
      */
     public double stornieren(Buchung buchung) {
         double betrag = 0.0;
-        if (buchung != null) {
-            betrag = buchung.stornierenMitGebühr();
-            buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
-        } else if (!buchungen.contains(buchung)) {
-            throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden und kann daher nicht storniert werden.");
-        } else {
-            throw new IllegalArgumentException("Fehler! Es wurde keine Buchung übergeben.");
+        if (buchung == null) {
+            throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
+        } else if (buchungen.contains(buchung)) {
+            if (buchung.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+                betrag = buchung.stornierenMitGebühr();
+                buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
+                buchung.getSitzplatz().freigeben();
+            } else {
+                throw new IllegalArgumentException(
+                        "Sie können eine bereits stornierte Buchung nicht erneut stornieren!");
+            }
+
+        }
+
+        else {
+            throw new NoSuchElementException(
+                    "Die Buchung ist nicht im System vorhanden und kann daher nicht storniert werden!");
         }
         return betrag;
     }
-
-
 
     /**
      * 
