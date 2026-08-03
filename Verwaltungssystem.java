@@ -81,14 +81,19 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param fluggesellschaft die zu entfernende Fluggesellschaft
      * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null}
-     * oder nicht registriert ist oder noch einem Flug zugeordnet ist
+     * oder nicht registriert ist, noch Flugzeuge enthält oder noch einem Flug zugeordnet ist
      */
     public void entferneFluggesellschaft(Fluggesellschaft fluggesellschaft) {
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaft-Objekt hat eine Nullreferenz");
         } else if (!this.fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaften-Objekt wurde bisher noch nicht hinzugefügt.");
-        } else {
+        } 
+        else if (!fluggesellschaft.getFlotte().isEmpty()) {
+            //Fluggesellschaften, die noch Flugzeuge in ihrer Flotte haben, können nicht gelöscht werden
+            throw new IllegalArgumentException("Der Fluggesellschaft sind noch Flugzeuge zugewiesen.");
+        }
+        else {
 
             Iterator<Flug> iterator = fluege.iterator();
 
