@@ -77,29 +77,37 @@ public void kunde()
 
                 System.out.println("Passagierliste:");
 
-                for (int i = 0; i < bs.getPassagiere().size(); i++) {
-                    System.out.println("ID: " + i + ": " + bs.getPassagiere().get(i));
+                for (Passagier passagier : bs.getPassagiere()) {
+                    System.out.println(passagier.toString());
+            }
+
+                System.out.println("\nBitte wählen Sie einen Passagier über die ID:");
+                String id = Manager.Stringscanner();
+
+                Passagier ausgewaehlterPassagier = null;
+
+
+                for (Passagier passagier : bs.getPassagiere()) {
+                    if (passagier.getPassagierId().equalsIgnoreCase(id)) {
+                        ausgewaehlterPassagier = passagier;
+                        break;
+                    }
                 }
 
-                System.out.println("Bitte wählen Sie einen Passagier über die ID:");
-                int id = Manager.intscanner();
 
 
-                if (id < 0 || id >= bs.getPassagiere().size()) {
-                    System.out.println("Diese Passagier-ID existiert nicht.");
-                    break;
-                }
-
-                Passagier ausgewaehlterPassagier = bs.getPassagiere().get(id);
-
-
-                System.out.println("Sie haben ausgewählt:");
-                System.out.println(ausgewaehlterPassagier);
-
-                datenHandler.speichere(anwendungsdaten);
-                hauptmanagerk(ausgewaehlterPassagier);
+            if (ausgewaehlterPassagier == null){
+                System.out.println("Diese Passagier-ID existiert nicht.");
                 break;
+            }
 
+
+        System.out.println("Sie haben ausgewählt:");
+        System.out.println(ausgewaehlterPassagier);
+
+        datenHandler.speichere(anwendungsdaten);
+        hauptmanagerk(ausgewaehlterPassagier);
+        break;
 
             case 3:
                 return;

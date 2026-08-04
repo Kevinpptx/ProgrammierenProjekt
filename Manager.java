@@ -45,7 +45,7 @@ public class Manager {
 
 
 
-                System.out.print("\n --------------------------------------------");
+                System.out.print("\n--------------------------------------------");
         System.out.println("\n Herzlich Willkommen beim Avigator!");
         System.out.print("--------------------------------------------");
         System.out.print("\n Als welche Art von Benutzer möchten Sie das System nutzen?");

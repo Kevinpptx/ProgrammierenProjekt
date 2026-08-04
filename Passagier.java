@@ -28,6 +28,7 @@ public class Passagier implements Serializable{
     public Passagier(String passagierId, String name, String email) {
         
         if (name.isEmpty() || email.isEmpty()) {
+
             throw new IllegalArgumentException("Die Felder Name und E-Mail dürfen nicht leer sein.");
         }
 
