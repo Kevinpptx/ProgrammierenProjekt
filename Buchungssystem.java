@@ -67,10 +67,19 @@ public class Buchungssystem implements Serializable {
     public Passagier initialisierePassagier(String name, String email) {
         if (name != null && email != null) {
             anzahlPassagiere++;
-            String vorlaeufigePassagierId = "p" + Integer.toString(anzahlPassagiere);
-            Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
-            passagiere.add(p);
-            return p;
+            try {
+                String vorlaeufigePassagierId = "p" + Integer.toString(anzahlPassagiere);
+                Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
+                passagiere.add(p);
+                return p;
+            }
+            catch (IllegalArgumentException e) {
+                anzahlPassagiere--;
+                throw e;
+            }
+
+
+
         } else if (name == null) {
             throw new IllegalArgumentException("Fehler! Es wurde kein Name eingegeben.");
         } else {
