@@ -268,6 +268,19 @@ try {
 
         String nummer = Manager.Stringscanner();
 
+        try {
+        Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+
+        if (!buchung.getPassagier().equals(passagier)) {
+            System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
+            return;
+        }
+    }
+    catch (Exception e) {
+        System.out.println( "Fehler "+ e.getMessage());
+    }
+
+
 
         System.out.println(vs.getFlughaefen().toString());
 
@@ -341,13 +354,8 @@ try {
             }
 
 
-
-
             bs.umbuchen( bs.sucheBuchungNachNummer(nummer) ,fluege.get(index), sitzplatz, sitzklasse );
-
-
             datenHandler.speichere(anwendungsdaten);
-
 
 
         } catch (Exception e) {
@@ -372,9 +380,25 @@ try {
         System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
 
         String nummer = Manager.Stringscanner();
+try {
+    Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-        bs.stornieren(bs.sucheBuchungNachNummer(nummer));
-        datenHandler.speichere(anwendungsdaten);
+    if (!buchung.getPassagier().equals(passagier)) {
+        System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
+        return;
+    }
+
+    bs.stornieren(buchung);
+    datenHandler.speichere(anwendungsdaten);
+
+
+}
+catch (Exception e) {
+    System.out.println( "Fehler "+ e.getMessage());
+}
+
+
+
 
 
     }
