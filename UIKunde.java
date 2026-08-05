@@ -229,7 +229,6 @@ try {
         flugIndex = Manager.intscanner();
 
         try {
-            flugIndex = Manager.intscanner();
             flug = fluege.get(flugIndex);
         } catch (Exception e) {
             System.out.println("Listennummer existiert nicht. Bitte geben Sie eine gültige Nummer ein!");
