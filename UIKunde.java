@@ -176,6 +176,9 @@ public void kunde()
 
         System.out.println(vs.getFlughaefen().toString());
 
+        // vergangene Flüge löschen
+        datenHandler.alteFluegeLoeschen();
+
 try {
     ArrayList<Flug> fluege = new ArrayList<>();
 
