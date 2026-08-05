@@ -211,20 +211,17 @@ try {
             "--------------------------------------------------------------------------------"
     );
 
-    int flugIndexe = 0;
-
     if (fluege.isEmpty()) {
         System.out.println("Keine Flüge gefunden.\n");
         return;
     } else {
         for (int i = 0; i < fluege.size(); i++) {
             System.out.println("Flug " + (i) + ": " + fluege.get(i));
-            flugIndexe++;
         }
     }
 
     int flugIndex = -1;
-    Flug flug;
+    Flug flug = null;
 
     while (flugIndex == -1) {
 
@@ -242,7 +239,7 @@ try {
 
     flug.zeigeSitzplan();
 
-    String sitzplatz;
+    String sitzplatz = "";
 
     while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
         System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
