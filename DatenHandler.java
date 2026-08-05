@@ -115,11 +115,39 @@ public class DatenHandler {
             Object objekt = ois.readObject();
 
             if ((objekt instanceof Anwendungsdaten)) {
+                // HIER alte Flüge löschen, und speichern, bevor es returned wird??????
                 return (Anwendungsdaten) objekt;
             } else { 
                 throw new ClassCastException("Die gespeicherte Datei enthält keine Anwendungsdaten");
             }
         }
+    }
+
+    /**
+     * Überprüft, ob es "alte" Flüge gibt, die in der Vergangenheit liegen.
+     * Diese kann man nicht mehr buchen.
+     * Falls ja, werden diese also aus dem Speicher gelöscht.
+     * 
+     * @param anwendungsdaten die zu speichernden Anwendungsdaten
+     * @throws IllegalArgumentException wenn die Anwendungsdaten
+     *         {@code null} sind
+     */
+    private void alteFluegeLoeschen(Anwendungsdaten anwendungsdaten) {
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+        ArrayList<Flug> fluege = anwendungsdaten.getVerwaltungssystem().getFluege();
+        Iterator<Flug> iterator = fluege.iterator();
+
+        while (iterator.hasNext()) {
+            
+            Flug f = iterator.next();
+
+            if (f.getAbflugszeit().isBefore(LocalDateTime.now())) {
+                iterator.remove();
+            }
     }
 }
 
