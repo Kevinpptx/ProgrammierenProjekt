@@ -4,6 +4,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Verwaltet das Speichern und Laden der Anwendungsdaten.
@@ -121,5 +124,32 @@ public class DatenHandler {
             }
         }
     }
-}
 
+    /**
+     * Überprüft, ob es "alte" Flüge gibt, die in der Vergangenheit liegen.
+     * Diese kann man nicht mehr buchen.
+     * Falls ja, werden diese also aus dem Speicher gelöscht.
+     * 
+     * @param anwendungsdaten die zu speichernden Anwendungsdaten
+     * @throws IllegalArgumentException wenn die Anwendungsdaten
+     *         {@code null} sind
+     */
+    public void alteFluegeLoeschen(Anwendungsdaten anwendungsdaten) {
+
+        if (anwendungsdaten == null) {
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+        }
+
+        List<Flug> fluege = anwendungsdaten.getVerwaltungssystem().getFluege();
+        Iterator<Flug> iterator = fluege.iterator();
+
+        while (iterator.hasNext()) {
+            
+            Flug f = iterator.next();
+
+            if (f.getAbflugszeit().isBefore(LocalDateTime.now())) {
+                iterator.remove();
+            }
+        }
+    }
+}

@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UIKunde {
@@ -175,6 +174,9 @@ public void kunde()
         System.out.println("-------------------Willkommen im Bereich für Flugsuche und Buchung-------------------------");
 
         System.out.println(vs.getFlughaefen().toString());
+
+        // vergangene Flüge löschen
+        datenHandler.alteFluegeLoeschen(anwendungsdaten);
 
 try {
     ArrayList<Flug> fluege = new ArrayList<>();
