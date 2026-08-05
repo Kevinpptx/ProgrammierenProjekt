@@ -244,12 +244,12 @@ try {
 
     String sitzplatz;
 
-    while (sitzplatz.isEmpty || flug.findeSitzplatz(sitzplatz) == null) {
+    while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
         System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
         sitzplatz = Manager.Stringscanner();
     }
 
-    Sitzklasse sitzklasse = sitzplatz.getSitzklasse();
+    Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
 
     System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
     int  koffer = Manager.intscanner();
