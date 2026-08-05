@@ -115,7 +115,6 @@ public class DatenHandler {
             Object objekt = ois.readObject();
 
             if ((objekt instanceof Anwendungsdaten)) {
-                // HIER alte Flüge löschen, und speichern, bevor es returned wird??????
                 return (Anwendungsdaten) objekt;
             } else { 
                 throw new ClassCastException("Die gespeicherte Datei enthält keine Anwendungsdaten");
