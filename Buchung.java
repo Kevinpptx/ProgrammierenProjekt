@@ -163,6 +163,14 @@ public class Buchung implements Serializable {
         return gepaeckInformation;
     }
 
+    public double getGezahlterPreis() {
+        return gezahlterPreis;
+    }
+
+    public void setGezahlterPreis(double preis) {
+        this.gezahlterPreis = preis;
+    }
+
 
     /**
      * Gibt eine textuelle Beschreibung der Buchung zurück.
