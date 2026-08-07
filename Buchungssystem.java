@@ -190,8 +190,9 @@ public class Buchungssystem implements Serializable {
             neuerSitzplatz.belegen();
             neuerSitzplatz.setBuchung(buchung);
 
-            //berechnet die Umbuchungsgebuehr
+            //berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
+            buchung.setGezahlterPreis(buchung.getGezahlterPreis() + gebuehr);
             
             //weist den neuen Sitzplatz der Buchung zu
             buchung.setSitzplatz(neuerSitzplatz);
@@ -312,21 +313,27 @@ public class Buchungssystem implements Serializable {
      * @return
      */
     public double berechneUmbuchungsgebuehr(Buchung buchung, Flug flug, Sitzplatz sitzplatz) {
-        // Wenn positiv, also der neue Flug mehr kostet, dann auf Gebühr aufschlagen
-        double ticketDifferenz = buchung.getFlug().getBasispreis() - flug.getBasispreis();
-        double finaleGebühr = 0.0;
+        // Legt zuerst die Variablen für die Berechnung fest
+        double preisAlterFlug = buchung.getGezahlterPreis();
+        double preisNeuerFlug;
+        double ticketDifferenz;
+        double finaleGebuehr;
 
-        if (ticketDifferenz > 0) {
-            // Business Class ggf. aufschlagen
-            if (sitzplatz.getSitzklasse() == Sitzklasse.ECONOMY) {
-                finaleGebühr = buchung.getUmbuchungsgebuehr() + ticketDifferenz;
-            } else if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
-                finaleGebühr = buchung.getUmbuchungsgebuehr() + ticketDifferenz * buchung.getBusinesspreisfaktor();
-            }
-        } else
-            finaleGebühr = buchung.getUmbuchungsgebuehr();
+        //berechnet den neuen Preis anhand der Sitzklasse
+        if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
+            preisNeuerFlug = flug.getBasispreis() * buchung.getBusinesspreisfaktor();
+        }
+        else {
+            preisNeuerFlug = flug.getBasispreis();
+        }
 
-        return finaleGebühr;
+        //berechnet die Differenz aus altem und neuen Flug
+        ticketDifferenz = preisNeuerFlug - preisAlterFlug;
+
+        // berechnet die finale Gebühr und schlägt die Ticketdifferenz auf, wenn diese positiv ist
+        finaleGebuehr = buchung.getUmbuchungsgebuehr() + Math.max(0, ticketDifferenz);
+
+        return finaleGebuehr;
     }
 
     /**
