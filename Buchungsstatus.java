@@ -1,5 +1,6 @@
 public enum Buchungsstatus {
     AKTIV,
     STORNIERT,
-    UMGEBUCHT
+    UMGEBUCHT,
+    VERGANGEN
 }

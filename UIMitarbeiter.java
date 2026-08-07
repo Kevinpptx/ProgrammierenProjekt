@@ -432,8 +432,14 @@ public class UIMitarbeiter {
 
                 System.out.println("An wie vielen Tagen soll der Flug stattfinden?: ");
                 int wiederholung = Manager.intscanner();
-
+                try {
                 vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
+                datenHandler.speichere(anwendungsdaten);
+                System.out.println("Die Fluege wurden erfolgreich angelegt.");
+                }
+                catch (Exception e) {
+                    System.out.println("Fehler beim Erstellen der Flüge: " + e.getMessage());
+                }
                 datenHandler.speichere(anwendungsdaten);
 
             }
