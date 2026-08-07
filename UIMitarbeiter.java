@@ -28,7 +28,7 @@ public class UIMitarbeiter {
     }
 
     // Der Mitarbeiter meldet sich über ein Passwort als Admin an
-    public void loggin() {
+    public void login() {
         int passwort = 1234;
         int i;
 

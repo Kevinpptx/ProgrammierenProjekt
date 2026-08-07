@@ -92,7 +92,7 @@ public class Manager {
                 int auswahl = intscanner();
                     switch (auswahl) {
                     case 1:
-                        uiMitarbeiter.loggin();
+                        uiMitarbeiter.login();
                         break;
                     case 2:
                         uiKunde.kunde();
