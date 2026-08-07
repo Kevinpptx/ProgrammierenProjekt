@@ -176,22 +176,29 @@ public class Buchungssystem implements Serializable {
             throw e;
         }
         if (umbuchungMoeglich) {
-            //gibt den alten Sitzplatz frei
-            buchung.getSitzplatz().freigeben();
+            //nimmt sich den alten Sitzplatz aus der Buchung
+            Sitzplatz alterSitzplatz = buchung.getSitzplatz();
 
-            //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn
-            Sitzplatz platz = flug.findeSitzplatz(sitzplatznummer);
-            platz.belegen();
+            //gibt den alten Sitzplatz frei
+            alterSitzplatz.freigeben();
+
+            //setzt die Buchungsreferenz in dem alten Sitzplatz auf null
+            alterSitzplatz.setBuchung(null);
+
+            //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive der Buchungsreferenz des Sitzplatzes).
+            Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
+            neuerSitzplatz.belegen();
+            neuerSitzplatz.setBuchung(buchung);
 
             //berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
-            gebuehr = berechneUmbuchungsgebuehr(buchung, flug, platz);
+            gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
             buchung.setGezahlterPreis(buchung.getGezahlterPreis() + gebuehr);
             
             //weist den neuen Sitzplatz der Buchung zu
-            buchung.setSitzplatz(platz);
+            buchung.setSitzplatz(neuerSitzplatz);
 
             //weist die Buchung dem Sitzplatz zu
-            platz.setBuchung(buchung);
+            neuerSitzplatz.setBuchung(buchung);
 
             //weist den (neuen oder bestehenden) Flug der Buchung zu
             buchung.setFlug(flug);
@@ -222,7 +229,7 @@ public class Buchungssystem implements Serializable {
             Sitzklasse sitzklasse) {
         // wenn die Buchung nicht vorhanden ist
         if (buchung == null) {
-            throw new NoSuchElementException("Fehler! Es ist keine Buchung angegeben, von der umgebucht werden soll.");
+            throw new NoSuchElementException("Es ist keine Buchung angegeben, von der umgebucht werden soll.");
         }
 
         // wenn beide Buchungsparameter leer sind
@@ -230,14 +237,14 @@ public class Buchungssystem implements Serializable {
             throw new NoSuchElementException("Beide Buchungsparameter sind leer.");
         }
 
-        // wenn schon einmal umgebucht wurde
-        else if (buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
-            throw new IllegalStateException("Fehler! Es wurde bereits eine Umbuchung vorgenommen.");
+        // wenn schon einmal umgebucht oder der Flug storniert wurde
+        else if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV) {
+            throw new IllegalStateException("Nur aktive Buchungen können umgebucht werden.");
         }
 
         // wenn keine Sitzklasse angegeben wurde
         else if (sitzklasse == null) {
-            throw new NoSuchElementException("Fehler! Es wurde keine Sitzklasse angegeben.");
+            throw new NoSuchElementException("Es wurde keine Sitzklasse angegeben.");
         }
 
         // wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
@@ -336,20 +343,20 @@ public class Buchungssystem implements Serializable {
      * @return die Storno-Gebühr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in
      *                                  der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde
+     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde, oder schon vergangen ist.
      */
     public double stornieren(Buchung buchung) {
         double betrag = 0.0;
         if (buchung == null) {
             throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
         } else if (buchungen.contains(buchung)) {
-            if (buchung.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+            if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
                 betrag = buchung.stornierenMitGebühr();
                 buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
                 buchung.getSitzplatz().freigeben();
             } else {
                 throw new IllegalArgumentException(
-                        "Sie können eine bereits stornierte Buchung nicht erneut stornieren!");
+                        "Sie können eine bereits stornierte oder vergangene Buchung nicht stornieren!");
             }
 
         }

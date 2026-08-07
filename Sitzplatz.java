@@ -5,8 +5,8 @@ import java.io.Serializable;
  * Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse
  * sowie einen Belegungsstatus.
  */
-public class Sitzplatz implements Serializable{
-    
+public class Sitzplatz implements Serializable {
+
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
@@ -18,6 +18,10 @@ public class Sitzplatz implements Serializable{
     /** Sitzklasse des Sitzplatzes. */
     private Sitzklasse sitzklasse;
 
+    /**
+     * Buchung, die dem Sitz zugewiesen ist. Bei Erstellung hat dieses Attribut eine
+     * null-Referenz.
+     */
     private Buchung buchung;
 
     /** Gibt an, ob der Sitzplatz belegt ist. */
@@ -29,7 +33,7 @@ public class Sitzplatz implements Serializable{
      * Der Sitzplatz ist nach der Erstellung zunächst frei.
      *
      * @param sitzplatznummer die Nummer des Sitzplatzes
-     * @param sitzklasse die Sitzklasse des Sitzplatzes
+     * @param sitzklasse      die Sitzklasse des Sitzplatzes
      */
     public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
         this.sitzplatzNummer = sitzplatzNummer;
