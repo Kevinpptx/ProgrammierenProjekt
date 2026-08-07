@@ -176,7 +176,7 @@ public void kunde()
 
         System.out.println(vs.getFlughaefen().toString());
 
-                // alte Fluege loeschen, danach die Buchungsstatusse der betroffenen Fluege auf VERGANGEN aendern
+        // alte Fluege loeschen, danach die Buchungsstatusse der betroffenen Fluege auf VERGANGEN aendern
         ArrayList<String> betroffeneFlugnummern = vs.alteFluegeLoeschen();
 
         // Wenn welche geloescht wurden, durch alle Buchungen iterieren und entsprechen abaendern

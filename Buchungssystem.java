@@ -409,6 +409,10 @@ public class Buchungssystem implements Serializable {
         return buchungen;
     }
 
+    /**
+     * 
+     * @return Liste aller Passagiere Buchungen
+     */
     public ArrayList<Passagier> getPassagiere() {
         return passagiere;
     }
