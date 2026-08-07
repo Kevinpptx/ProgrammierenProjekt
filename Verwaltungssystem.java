@@ -838,4 +838,29 @@ public class Verwaltungssystem implements Serializable {
         }
         return neueListe;
     }
+
+    /**
+     * Überprüft, ob es "alte" Fluege gibt, die in der Vergangenheit liegen.
+     * Diese kann man nicht mehr buchen.
+     * Falls ja, werden diese also aus dem Speicher geloescht.
+     * 
+     * @return Liste mit geloeschten Fluegen
+     */
+    public ArrayList<String> alteFluegeLoeschen() {
+
+        Iterator<Flug> iterator = fluege.iterator();
+        ArrayList<String> betroffeneFlugnummern = new ArrayList<String>();
+
+        while (iterator.hasNext()) {
+            
+            Flug f = iterator.next();
+
+            if (f.getAbflugszeit().isBefore(LocalDateTime.now())) {
+                betroffeneFlugnummern.add(f.getFlugnummer());
+                iterator.remove();
+            }
+        }
+
+        return betroffeneFlugnummern;
+    }
 }

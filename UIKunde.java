@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UIKunde {
@@ -175,8 +176,31 @@ public void kunde()
 
         System.out.println(vs.getFlughaefen().toString());
 
-        // vergangene Flüge löschen
-        datenHandler.alteFluegeLoeschen(anwendungsdaten);
+        // alte Fluege loeschen, danach die Buchungsstatusse der betroffenen Fluege auf VERGANGEN aendern
+        ArrayList<String> betroffeneFlugnummern = vs.alteFluegeLoeschen();
+
+        // Wenn welche geloescht wurden, durch alle Buchungen iterieren und entsprechen abaendern
+        if (!betroffeneFlugnummern.isEmpty()) {
+
+            ArrayList<Buchung> buchungen = bs.getBuchungen();
+
+            for (String flugnummer : betroffeneFlugnummern) {
+
+                for (Buchung buchung : buchungen) {
+
+                    Flug flug = buchung.getFlug();
+
+                    // zweiter Check verhindert, dass Buchungen mit selber Flugnummer an anderen Tagen geloescht werden
+                    if (flug.getFlugnummer().equals(flugnummer)
+                        && flug.getAbflugszeit().toLocalDate().equals(LocalDate.now())) {
+
+                    buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
+                }
+                }
+            }
+        }
+        
+
 
 try {
     ArrayList<Flug> fluege = new ArrayList<>();
