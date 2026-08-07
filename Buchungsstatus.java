@@ -7,12 +7,15 @@
  * <p>
  * STORNIERT: nicht mehr gültige Buchung, weil sie schon storniert ist.
  * <p>
+ * VERGANGEN: eine Buchung in der Vergangenheit (anhand der Ankunftszeit des Fluges)
+ * <p>
  * WICHTIG: ALLE Methoden behandeln AKTIV und UMGEBUCHT als gültige Buchungen
- * und STORNIERT als ungültig. Man kann aber Buchungen nur einmal umbuchen, also
+ * und STORNIERT und VERGANGEN als ungültig. Man kann aber Buchungen nur einmal umbuchen, also
  * nur dann, wenn der Status AKTIV ist
  */
 public enum Buchungsstatus {
     AKTIV,
     STORNIERT,
-    UMGEBUCHT
+    UMGEBUCHT,
+    VERGANGEN
 }

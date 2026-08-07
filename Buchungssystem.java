@@ -329,20 +329,20 @@ public class Buchungssystem implements Serializable {
      * @return die Storno-Gebühr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in
      *                                  der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde
+     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde, oder schon vergangen ist.
      */
     public double stornieren(Buchung buchung) {
         double betrag = 0.0;
         if (buchung == null) {
             throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
         } else if (buchungen.contains(buchung)) {
-            if (buchung.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+            if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
                 betrag = buchung.stornierenMitGebühr();
                 buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
                 buchung.getSitzplatz().freigeben();
             } else {
                 throw new IllegalArgumentException(
-                        "Sie können eine bereits stornierte Buchung nicht erneut stornieren!");
+                        "Sie können eine bereits stornierte oder vergangene Buchung nicht stornieren!");
             }
 
         }
