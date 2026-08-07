@@ -199,8 +199,6 @@ public void kunde()
                 }
             }
         }
-        
-
 
 try {
     ArrayList<Flug> fluege = new ArrayList<>();

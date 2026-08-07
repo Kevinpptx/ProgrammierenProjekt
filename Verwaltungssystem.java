@@ -447,32 +447,12 @@ public class Verwaltungssystem implements Serializable {
      */
     public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
             LocalDateTime ankunftszeit, double basispreis, boolean rueckflug, int anzahlTageWiederholungen) {
-        if (fluggesellschaft == null) {
-            throw new IllegalArgumentException("Die Fluggesellschaft darf nicht null sein.");
-        }
-
-        if (flugzeug == null) {
-            throw new IllegalArgumentException("Das Flugzeug darf nicht null sein.");
-        }
-
-        if (startFlughafen == null || zielFlughafen == null) {
-            throw new IllegalArgumentException("Start- und Zielflughafen dürfen nicht null sein.");
-        }
-
-        if (abflugzeit == null || ankunftszeit == null) {
-            throw new IllegalArgumentException("Abflug- und Ankunftszeit dürfen nicht null sein.");
-        }
-
-        if (!fluggesellschaften.contains(fluggesellschaft)) {
-            throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
-        }
-
-        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
-            throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
-        }
-
-        if (!fluggesellschaft.besitztFlugzeug(flugzeug)) {
-            throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
+        
+        //validiert den Flug und wirft die Exception
+        try {
+            validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
+        } catch (Exception e) {
+            throw e;
         }
 
         if (anzahlTageWiederholungen <1) {
@@ -484,36 +464,50 @@ public class Verwaltungssystem implements Serializable {
         LocalDateTime lAbflug = abflugzeit;
         LocalDateTime lAnkunft = ankunftszeit;
 
-        
-        for (int i = 0; i < anzahlTageWiederholungen; i++) {
-            try{    
-                // Erstelle Flug und Rückflug
-                erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis));
+        //Fügt zuerst alle Flüge einer Liste hinzu, um diese danach zu validieren. Validiert die Flugnummer auch gegen diese Liste.
+        for(int i= 0; i< anzahlTageWiederholungen; i++) {
+            
+            String flugnummer = erzeugeFlugnummer(fluggesellschaft, lAbflug, erzeugteFluege);
+            
+            Flug hinflug = new Flug(flugnummer, fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis);
+            
+            erzeugteFluege.add(hinflug);
 
-                if(rueckflug){
-                    Duration flugdauer = Duration.between(lAbflug, lAnkunft);
-                    Duration turnAroundTime = Duration.ofHours(1);
-                    LocalDateTime abflugszeitRueckflug = lAnkunft.plus(turnAroundTime);
+            lAbflug = lAbflug.plusDays(1);
+            lAnkunft = lAnkunft.plusDays(1);
 
-                    /*
-                        Fluggesellschaft und Flugzeug bleiben gleich
-                        zielFlughafen und startFlughafen werden getauscht 
-                        Die Ankfuntszeit des Hinflugs wird plus eine TurnAroundTime von 1 Std als neue Abflugzeit gesetzt
-                        Die Ankunftszeit des Rückfluges ist die aus dem Hinflug errechnete Flugdauer auf die neue Abflugszeit addiert
-                        Basispreis bleibt gleich wie beim Hinflug
-                    */
-                    erzeugteFluege.add(this.fuegeFlugHinzu(fluggesellschaft, flugzeug, zielFlughafen, startFlughafen, abflugszeitRueckflug, abflugszeitRueckflug.plus(flugdauer), basispreis));
+        }
+
+        //wenn es einen Rückflug geben soll, dann wird für jeden Flug ein Rückflug erstellt und über eine Liste in die Gesamtliste hinzugefügt
+        if(rueckflug) {
+            List<Flug> rueckfluege = new ArrayList<>();
+            Duration turnAroundTime = Duration.ofHours(1);
+
+            for (Flug hinflug : erzeugteFluege) {
+                Duration flugdauer = Duration.between(hinflug.getAbflugszeit(), hinflug.getAnkunftszeit());
+                
+                LocalDateTime abflugszeitRueckflug = hinflug.getAnkunftszeit().plus(turnAroundTime);
+                LocalDateTime ankunftszeitRueckflug = abflugszeitRueckflug.plus(flugdauer);
+
+                String flugnummer = erzeugeFlugnummer(fluggesellschaft, abflugszeitRueckflug);
+                Flug flugZurueck = new Flug(flugnummer, fluggesellschaft, flugzeug, hinflug.getZielflughafen(), hinflug.getStartFlughafen(), abflugszeitRueckflug, ankunftszeitRueckflug, hinflug.getBasispreis());
+                
+                rueckfluege.add(flugZurueck);
+            }
+
+            erzeugteFluege.addAll(rueckfluege);
+
+        }
+
+        try {
+            for (Flug flug : erzeugteFluege) {
+                    pruefeFlug(flug, erzeugteFluege);
                 }
 
-                lAbflug = lAbflug.plusDays(1);
-                lAnkunft = lAnkunft.plusDays(1);
-            }
-        
-            catch(IllegalArgumentException e) {
-                //Wenn irgendein Flug nicht möglich ist, wird die Stelle und der Grund dafür zurückgegeben
-                int stelleWiederholung = i + 1;
-                throw new IllegalArgumentException("Fehler bei Wiederholung " + stelleWiederholung + " : " + e.getLocalizedMessage());
-            }
+            fluege.addAll(erzeugteFluege);
+        }
+        catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Serie konnte nicht erstellt werden: "+ e.getMessage());
         }
         return erzeugteFluege;
     }
@@ -542,32 +536,11 @@ public class Verwaltungssystem implements Serializable {
      */
     public Flug fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
             LocalDateTime ankunftszeit, double basispreis) {
-        if (fluggesellschaft == null) {
-            throw new IllegalArgumentException("Die Fluggesellschaft darf nicht null sein.");
-        }
-
-        if (flugzeug == null) {
-            throw new IllegalArgumentException("Das Flugzeug darf nicht null sein.");
-        }
-
-        if (startFlughafen == null || zielFlughafen == null) {
-            throw new IllegalArgumentException("Start- und Zielflughafen dürfen nicht null sein.");
-        }
-
-        if (abflugzeit == null || ankunftszeit == null) {
-            throw new IllegalArgumentException("Abflug- und Ankunftszeit dürfen nicht null sein.");
-        }
-
-        if (!fluggesellschaften.contains(fluggesellschaft)) {
-            throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
-        }
-
-        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
-            throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
-        }
-
-        if (!fluggesellschaft.besitztFlugzeug(flugzeug)) {
-            throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
+        //validiert den Flug und wirft die Exception
+        try {
+            validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
+        } catch (Exception e) {
+            throw e;
         }
 
         String flugnummer = this.erzeugeFlugnummer(fluggesellschaft, abflugzeit);
@@ -611,6 +584,61 @@ public class Verwaltungssystem implements Serializable {
         }
     }
 
+    /**
+     * Validiert den Flug in Bezug darauf, ob Fluggesellschaften und Flughäfen registriert sind und das Flugzeug zur Fluggesellschaft gehört.
+     * @param fluggesellschaft
+     * @param flugzeug
+     * @param startFlughafen
+     * @param zielFlughafen
+     * @param abflugzeit
+     * @param ankunftszeit
+     * @param basispreis
+     */
+    public void validiereFlug(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen) {
+
+        if (!fluggesellschaften.contains(fluggesellschaft)) {
+            throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
+        }
+
+        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
+            throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
+        }
+
+        if (!fluggesellschaft.besitztFlugzeug(flugzeug)) {
+            throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
+        }
+
+    }
+
+    private void pruefeFlug (Flug neuerFlug, List<Flug> neueFluege) {
+        //prüfe zuerst gegen vorhandene Fluege
+        for (Flug vorhandenerFlug : fluege) {
+            pruefeUeberschneidung(neuerFlug, vorhandenerFlug);
+        }
+
+        //prüfe danach gegen erzeugte Serienflüge
+        for (Flug vorhandenerNeuerFlug : neueFluege) {
+            if (vorhandenerNeuerFlug.equals(neuerFlug)) {
+                continue;
+            }
+            pruefeUeberschneidung(neuerFlug, vorhandenerNeuerFlug);
+        }
+    }
+
+    private void pruefeUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
+        boolean gleichesFlugzeug = neuerFlug.getFlugzeug().equals(vorhandenerFlug.getFlugzeug());
+        if (!gleichesFlugzeug) {
+            return;
+        }
+
+        boolean zeitlicheUeberschneidung = neuerFlug.getAbflugszeit().isBefore(vorhandenerFlug.getAnkunftszeit()) && neuerFlug.getAnkunftszeit().isAfter(vorhandenerFlug.getAbflugszeit());
+
+        if (zeitlicheUeberschneidung) {
+            throw new IllegalArgumentException("Das Flugzeug ist zu diesem Zeitpunkt bereits verplant");
+        }
+    }
+
+   
 
     /**
      * Erstellt ein {@link LocalDateTime}-Objekt aus den angegebenen
@@ -671,6 +699,76 @@ public class Verwaltungssystem implements Serializable {
                         hoechsteNummer = nummer;
                     }
                 }
+            }
+        }
+
+        return airlineCode.toUpperCase() + String.format("%03d", hoechsteNummer + 1);
+    }
+
+
+
+    /**
+     * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie
+     * Flugnummer.
+     * <p>
+     * Die Flugnummer besteht aus dem großgeschriebenen Airline-Code und einer
+     * dreistelligen, pro Tag und Fluggesellschaft fortlaufenden Nummer.
+     * </p>
+     *
+     * @param fluggesellschaft die Fluggesellschaft des Flugs
+     * @param abflugzeit die Abflugzeit, deren Datum für die Nummerierung gilt
+     * @param neueFluege die erzeugten, aber noch nicht gespeicherten Flüge. Dies ist für die Erzeugung von Serienflügen nötig.
+     * @return die erzeugte Flugnummer, beispielsweise {@code LH001}
+     */
+    private String erzeugeFlugnummer(Fluggesellschaft fluggesellschaft, LocalDateTime abflugzeit, List<Flug> neueFluege) {
+
+        String airlineCode = fluggesellschaft.getAirlineCode().toUpperCase();
+
+        int hoechsteNummer = 0;
+
+        Iterator<Flug> iterator = fluege.iterator();
+
+        while (iterator.hasNext()) {
+
+            Flug vorhandenerFlug = iterator.next();
+
+            boolean gleicherTag = vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
+
+            if (gleicherTag) {
+                boolean gleicheAirline = vorhandenerFlug.getFluggesellschaft().equals(fluggesellschaft);
+
+                if (gleicheAirline) {
+                    String nummernTeil = vorhandenerFlug.getFlugnummer().substring(airlineCode.length());
+
+                    int nummer = Integer.parseInt(nummernTeil);
+
+                    if (nummer > hoechsteNummer) {
+                        hoechsteNummer = nummer;
+                    }
+                }
+            }
+        }
+
+        for(Flug neuerFlug : neueFluege) {
+            //prüft, ob der aktuell betrachtete Flug ab gleichen Tag wie der Flug stattfindet, für den die Nummer erzeugt werden soll
+            boolean gleicherTag = neuerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
+
+            if(!gleicherTag) {
+                continue;
+            }
+
+            //prüft, ob der aktuell betrachtete Flug zur gleichen Airline gehört wie derFlug, für den die Nummer erzeugt werden soll
+            boolean gleicheFluggesellschaft = neuerFlug.getFluggesellschaft().equals(fluggesellschaft);
+
+            if(!gleicheFluggesellschaft) {
+                continue;
+            }
+
+            String nummernteilDerFlugnummer = neuerFlug.getFlugnummer().substring(airlineCode.length());
+            int nummer = Integer.parseInt(nummernteilDerFlugnummer);
+
+            if (nummer > hoechsteNummer) {
+                hoechsteNummer = nummer;
             }
         }
 
