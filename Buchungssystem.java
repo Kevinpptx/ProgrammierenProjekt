@@ -221,7 +221,7 @@ public class Buchungssystem implements Serializable {
             Sitzklasse sitzklasse) {
         // wenn die Buchung nicht vorhanden ist
         if (buchung == null) {
-            throw new NoSuchElementException("Fehler! Es ist keine Buchung angegeben, von der umgebucht werden soll.");
+            throw new NoSuchElementException("Es ist keine Buchung angegeben, von der umgebucht werden soll.");
         }
 
         // wenn beide Buchungsparameter leer sind
@@ -229,14 +229,14 @@ public class Buchungssystem implements Serializable {
             throw new NoSuchElementException("Beide Buchungsparameter sind leer.");
         }
 
-        // wenn schon einmal umgebucht wurde
-        else if (buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
-            throw new IllegalStateException("Fehler! Es wurde bereits eine Umbuchung vorgenommen.");
+        // wenn schon einmal umgebucht oder der Flug storniert wurde
+        else if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV) {
+            throw new IllegalStateException("Nur aktive Buchungen können umgebucht werden.");
         }
 
         // wenn keine Sitzklasse angegeben wurde
         else if (sitzklasse == null) {
-            throw new NoSuchElementException("Fehler! Es wurde keine Sitzklasse angegeben.");
+            throw new NoSuchElementException("Es wurde keine Sitzklasse angegeben.");
         }
 
         // wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
