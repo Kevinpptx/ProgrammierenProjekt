@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Repräsentiert ein Flugzeug mit einem Sitzplan.
@@ -74,7 +75,9 @@ public class Flugzeug implements Serializable{
             throw new IllegalArgumentException("Die Anzahl der Sitzplätze pro Reihe darf nicht größer als 26 sein.");
         }
 
-        this.code = code;
+        // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.code = code.trim().toUpperCase(Locale.ROOT);
         this.modell = modell;
 
         this.sitzplaetzeVorlage = new Sitzplatz[anzahlReihen][sitzeProReihe];
