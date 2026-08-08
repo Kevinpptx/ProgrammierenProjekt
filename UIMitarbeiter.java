@@ -1,15 +1,54 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Die Klasse {@code UIMitarbeiter} stellt die Konsolenoberfläche
+ * für Mitarbeiter und Administratoren bereit.
+ *
+ * Nach erfolgreicher Anmeldung können Fluggesellschaften, Flugzeuge,
+ * Flughäfen und Flüge verwaltet werden. Zusätzlich können alle vorhandenen
+ * Buchungen angezeigt werden.
+ *
+ * Änderungen werden mithilfe des {@link DatenHandler} dauerhaft gespeichert.
+ *
+ * @author Lars
+ * @version 1.0
+ */
+
 public class UIMitarbeiter {
 
+    /**
+     * DatenHandler zum Speichern der Anwendungsdaten.
+     */
+    private final DatenHandler datenHandler;
 
-    private final DatenHandler datenHandler; 
+    /**
+     * Enthält die aktuell verwendeten Anwendungsdaten.
+     */
     private final Anwendungsdaten anwendungsdaten;
-    private final Buchungssystem bs; 
+
+    /**
+     * Buchungssystem zur Verwaltung und Anzeige der Buchungen.
+     */
+    private final Buchungssystem bs;
+
+    /**
+     * Verwaltungssystem zur Verwaltung von Fluggesellschaften,
+     * Flugzeugen, Flughäfen und Flügen.
+     */
     private final Verwaltungssystem vs;
 
-
+    /**
+     * Erstellt eine neue Mitarbeiteroberfläche.
+     *
+     * Das Buchungs- und Verwaltungssystem werden aus den übergebenen
+     * Anwendungsdaten übernommen.
+     *
+     * @param datenHandler Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     * @throws IllegalArgumentException wenn der DatenHandler oder die
+     *                                  Anwendungsdaten {@code null} sind
+     */
     public UIMitarbeiter(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
         if (datenHandler == null) {
@@ -27,6 +66,16 @@ public class UIMitarbeiter {
         this.vs = anwendungsdaten.getVerwaltungssystem();
     }
 
+
+    /**
+     * Führt die Anmeldung eines Mitarbeiters durch.
+     *
+     * Der Mitarbeiter muss das festgelegte vierstellige Passwort eingeben.
+     * Insgesamt stehen vier Anmeldeversuche zur Verfügung. Nach einer
+     * erfolgreichen Anmeldung wird das Hauptmenü geöffnet.
+     *
+     * Sind alle Versuche aufgebraucht, wird die Anmeldung beendet.
+     */
     // Der Mitarbeiter meldet sich über ein Passwort als Admin an
     public void login() {
         int passwort = 1234;
@@ -55,6 +104,15 @@ public class UIMitarbeiter {
         }
 
 
+    /**
+     * Zeigt das Hauptmenü für Mitarbeiter an.
+     *
+     * Über dieses Menü können Fluggesellschaften, Flugzeuge, Flughäfen
+     * und Flüge verwaltet werden. Außerdem können die vorhandenen
+     * Buchungen angezeigt werden.
+     *
+     * Das Menü wird so lange wiederholt, bis sich der Mitarbeiter abmeldet.
+     */
     // Wenn der Mitarbeiter das Passwort eingegeben hat, kann er mehrere
     public void hauptmanager() {
 
@@ -107,6 +165,13 @@ public class UIMitarbeiter {
     }
 
 
+    /**
+     * Zeigt das Verwaltungsmenü für Fluggesellschaften an.
+     *
+     * Der Mitarbeiter kann eine neue Fluggesellschaft anlegen,
+     * eine vorhandene Fluggesellschaft entfernen oder zum
+     * Hauptmenü zurückkehren.
+     */
     public  void fluggesellschaftenManager() {
 
         while (true) {
@@ -135,7 +200,13 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Zeigt das Verwaltungsmenü für Flugzeugflotten an.
+     *
+     * Der Mitarbeiter kann ein Flugzeug zur Flotte einer Fluggesellschaft
+     * hinzufügen, ein vorhandenes Flugzeug entfernen oder zum Hauptmenü
+     * zurückkehren.
+     */
     public  void flottenManager() {
 
         while (true) {
@@ -165,7 +236,13 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Zeigt das Verwaltungsmenü für Flughäfen an.
+     *
+     * Der Mitarbeiter kann einen neuen Flughafen hinzufügen,
+     * einen vorhandenen Flughafen entfernen oder zum Hauptmenü
+     * zurückkehren.
+     */
     public  void flughafenManager() {
 
         while (true) {
@@ -194,7 +271,13 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Legt eine neue Fluggesellschaft an.
+     *
+     * Der Mitarbeiter gibt den Namen und den Airlinecode ein.
+     * Anschließend wird die Fluggesellschaft dem Verwaltungssystem
+     * hinzugefügt und dauerhaft gespeichert.
+     */
     //Fluggeselschaftanlegen
     public void fluggesellschaftAnlegen() {
         System.out.println("--------------Fluggesellschaft anlegen---------------------------");
@@ -222,9 +305,14 @@ public class UIMitarbeiter {
 
     }
 
-    
 
 
+    /**
+     * Entfernt eine vorhandene Fluggesellschaft.
+     *
+     * Die Fluggesellschaft wird über ihren Airlinecode ausgewählt.
+     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     */
     public  void fluggeselschaftentfernen() {
         System.out.println("--------------Fluggesellschaft entfernen---------------------------");
         System.out.println(" Welche Fluggesellschaft möchten Sie entfernen?: ");
@@ -245,7 +333,15 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Fügt der Flotte einer Fluggesellschaft ein neues Flugzeug hinzu.
+     *
+     * Zuerst wird die Fluggesellschaft über ihren Airlinecode ausgewählt.
+     * Danach werden Flugzeugcode, Modell, Reihenanzahl, Sitze pro Reihe
+     * und Anzahl der Businessreihen abgefragt.
+     *
+     * Nach erfolgreicher Erstellung wird das Flugzeug gespeichert.
+     */
     //FlugzeugderFlotteHinzufügen
 
     public  void flugzeugderFlotteHinzufügen() {
@@ -295,7 +391,15 @@ public class UIMitarbeiter {
         }
 
 
-     public  void flugzeugeEntfernen() {
+    /**
+     * Entfernt ein Flugzeug aus dem Verwaltungssystem.
+     *
+     * Zunächst werden alle vorhandenen Flugzeuge angezeigt. Das gewünschte
+     * Flugzeug wird anschließend über seinen Flugzeugcode ausgewählt.
+     *
+     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     */
+    public  void flugzeugeEntfernen() {
 
          System.out.println("----------------------Flugzeug entfernen------------------------------");
 
@@ -317,7 +421,12 @@ public class UIMitarbeiter {
 
 
 
-
+/**
+ * Fügt dem Verwaltungssystem einen neuen Flughafen hinzu.
+ *
+ * Der Mitarbeiter gibt den Namen, IATA-Code, die Stadt und das Land
+ * des Flughafens ein. Anschließend wird der Flughafen erzeugt und gespeichert.
+ */
     public  void hinzufügenFlughafen()
     {
         System.out.println("----------------------Flughafen hinzufügen------------------------------");
@@ -346,6 +455,13 @@ public class UIMitarbeiter {
 
     }
 
+
+    /**
+     * Entfernt einen vorhandenen Flughafen.
+     *
+     * Der Flughafen wird über seinen IATA-Code ausgewählt. Nach
+     * erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     */
     public void entferneFlughafen()
     {
         System.out.println("----------------------Flughafen entfernen-------------------------------");
@@ -371,7 +487,17 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Legt einen neuen Flug im Verwaltungssystem an.
+     *
+     * Für den Flug werden der Basispreis, die Fluggesellschaft,
+     * das Flugzeug, der Startflughafen, der Zielflughafen sowie
+     * die Abflug- und Ankunftszeit abgefragt.
+     *
+     * Zusätzlich kann ein Rückflug beziehungsweise eine Wiederholung
+     * ausgewählt werden. Nach erfolgreicher Erstellung werden die
+     * Anwendungsdaten gespeichert.
+     */
     // Flüge anlegen
     public  void fluganlegen()
     {
@@ -461,7 +587,18 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Liest ein Datum und eine Uhrzeit über die Konsole ein.
+     *
+     * Die Methode fragt Jahr, Monat, Tag, Stunde und Minute ab und erstellt
+     * daraus mithilfe des Verwaltungssystems ein {@link LocalDateTime}.
+     *
+     * Der übergebene Text wird in den Eingabeaufforderungen verwendet,
+     * beispielsweise „des Abfluges“ oder „der Ankunft“.
+     *
+     * @param text ergänzender Text für die Eingabeaufforderungen
+     * @return das aus den Eingaben erstellte Datum mit Uhrzeit
+     */
     public  LocalDateTime  anabflug(String text)
     {
         System.out.println("Bitte geben Sie das Jahr " + text + " ein: ");
@@ -481,9 +618,16 @@ public class UIMitarbeiter {
 
     }
 
-
+    /**
+     * Entfernt einen vorhandenen Flug aus dem Verwaltungssystem.
+     *
+     * Der gewünschte Flug wird anhand seiner Flugnummer und seines
+     * Abflugdatums gesucht. Ein Flug kann nur entfernt werden, wenn
+     * keine relevanten Buchungen für diesen Flug vorhanden sind.
+     *
+     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     */
     //Fluglöschen
-
     public  void flugentfernen()
     {
         LocalDate abflug = LocalDate.now();
