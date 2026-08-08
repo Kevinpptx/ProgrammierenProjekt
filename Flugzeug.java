@@ -57,12 +57,21 @@ public class Flugzeug implements Serializable{
             int sitzeProReihe,
             int businessReihen) {
 
-        // Überprüfen, ob das Flugzeug "Sinn ergibt"
+        // Validiert die übergebenen Attribute 
+
+        if (code == null || code.isBlank()) {
+            throw new IllegalArgumentException("Bitte geben Sie einen Code an.");
+        }
+
+        if (modell == null || modell.isBlank()) {
+            throw new IllegalArgumentException("Bitte geben Sie einen Modellnamen an.");
+        }
+
         if (anzahlReihen <= 0) {
             throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        if (anzahlReihen <= 0 || businessReihen > anzahlReihen) {
+        if (businessReihen <= 0 || businessReihen > anzahlReihen) {
             throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 1 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
         }
 
@@ -72,6 +81,10 @@ public class Flugzeug implements Serializable{
 
         if (sitzeProReihe > 26) {
             throw new IllegalArgumentException("Die Anzahl der Sitzplätze pro Reihe darf nicht größer als 26 sein.");
+        }
+
+        if (sitzeProReihe < 1) {
+            throw new IllegalArgumentException("Die Anzahl der Sitze pro Reihe muss mindestens 1 betragen.");
         }
 
         this.code = code;
