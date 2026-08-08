@@ -151,6 +151,7 @@ public class Buchung implements Serializable {
         return businessPreisFaktor;
     }
 
+    //der Setter beinhaltet keine Validierung, da die Methode "validiereUmbuchung()" dies für alle Buchungsparameter erledigt
     public void setFlug(Flug f) {
         this.flug = f;
     }
