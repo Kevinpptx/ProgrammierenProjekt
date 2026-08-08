@@ -71,8 +71,9 @@ public class Flugzeug implements Serializable{
             throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        if (businessReihen <= 0 || businessReihen > anzahlReihen) {
-            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 1 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
+        //Es ist erlaubt, dass ein Flugzeug keine Bisuness-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
+        if (businessReihen < 0 || businessReihen > anzahlReihen) {
+            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
         }
 
         if (anzahlReihen > 100) {
