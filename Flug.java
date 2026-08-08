@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Locale;
 
 /**
  * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
@@ -113,7 +114,9 @@ public class Flug implements Serializable {
         }
 
 
-        this.flugnummer = flugnummer;
+        // entfernt Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.flugnummer = flugnummer.trim().toUpperCase(Locale.ROOT);
         this.fluggesellschaft = fluggesellschaft;
         this.flugzeug = flugzeug;
         this.startFlughafen = startFlughafen;
