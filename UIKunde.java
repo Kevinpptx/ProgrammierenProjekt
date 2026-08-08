@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UIKunde {
 
@@ -182,7 +183,7 @@ public void kunde()
         // Wenn welche geloescht wurden, durch alle Buchungen iterieren und entsprechen abaendern
         if (!betroffeneFlugnummern.isEmpty()) {
 
-            ArrayList<Buchung> buchungen = bs.getBuchungen();
+            List<Buchung> buchungen = bs.getBuchungen();
 
             for (String flugnummer : betroffeneFlugnummern) {
 
