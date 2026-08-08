@@ -310,10 +310,11 @@ try {
             System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
             return;
         }
-    }
-    catch (Exception e) {
-        System.out.println( "Fehler "+ e.getMessage());
-    }
+        }
+        catch (Exception e) {
+            System.out.println( "Fehler "+ e.getMessage());
+            return;
+        }
 
 
 
