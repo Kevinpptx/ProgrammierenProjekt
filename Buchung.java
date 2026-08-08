@@ -163,6 +163,11 @@ public class Buchung implements Serializable {
         return gepaeckInformation;
     }
 
+    public void setGepaeckinformation(int anzahlKoffer) {
+        this.gepaeckInformation.setAnzahlKoffer(anzahlKoffer);
+        this.gezahlterPreis = berechneGezahltenPreis();
+    }
+
     public double getGezahlterPreis() {
         return gezahlterPreis;
     }

@@ -385,6 +385,33 @@ public class Buchungssystem implements Serializable {
         return relevanteBuchungen;
     }
 
+    public double gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
+
+    if (buchung == null) {
+        throw new IllegalArgumentException("Es wurde keine Buchung angegeben.");
+    }
+
+    if (!buchungen.contains(buchung)) {
+        throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden.");
+    }
+
+    if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT) {
+        throw new IllegalStateException("Bei einer stornierten Buchung kann das Gepäck nicht geändert werden.");
+    }
+
+    if (neueAnzahlKoffer < 0) {
+        throw new IllegalArgumentException("Die Anzahl der Koffer darf nicht negativ sein.");
+    }
+
+    double alterPreis = buchung.getGezahlterPreis();
+
+    buchung.setGepaeckinformation(neueAnzahlKoffer);
+
+    double neuerPreis = buchung.getGezahlterPreis();
+
+    return neuerPreis - alterPreis;
+}
+
     /**
      * 
      * @return Anzahl an der getätigten Buchungen
