@@ -46,6 +46,10 @@ public class GepaeckInformation implements Serializable{
      * @param anzahlKoffer die neue Anzahl der Koffer
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
+        if (anzahlKoffer < 0) {
+            throw new IllegalArgumentException("Die angegebene Kofferanzahl darf nicht kleiner als 0 sein. Bitte korrigieren Sie die Eingabe.");
+        }
+
         this.anzahlKoffer = anzahlKoffer;
     }
 

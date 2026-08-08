@@ -190,7 +190,8 @@ public void kunde()
         System.out.println("Drücken Sie die 2, um eine Umbuchung auf einen anderen Flug vorzunehmen.");
         System.out.println("Drücken Sie die 3, um eine Buchung zu stornieren.");
         System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
-        System.out.println("Drücken Sie die 5, um zum Start zu gelangen.");
+        System.out.println("Drücken Sie die 5, um das Gepäck ihrer Buchung anzupassen.");
+        System.out.println("Drücken Sie die 6, um zum Start zu gelangen.");
 
         int auswahl = Manager.intscanner();
 
@@ -210,6 +211,9 @@ public void kunde()
                 buchunganzeigen(passagier);
                 break;
             case 5:
+                gepaeckAendern(passagier);
+                break;
+            case 6:
                 return;
 
             default:
@@ -385,10 +389,11 @@ try {
             System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
             return;
         }
-    }
-    catch (Exception e) {
-        System.out.println( "Fehler "+ e.getMessage());
-    }
+        }
+        catch (Exception e) {
+            System.out.println( "Fehler "+ e.getMessage());
+            return;
+        }
 
 
 
@@ -463,10 +468,23 @@ try {
                     return;
             }
 
+            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            bs.umbuchen( bs.sucheBuchungNachNummer(nummer) ,fluege.get(index), sitzplatz, sitzklasse );
+            bs.umbuchen( buchung, fluege.get(index), sitzplatz, sitzklasse );
             datenHandler.speichere(anwendungsdaten);
 
+            
+            System.out.println("Umbuchung erfolgreich.");
+
+            System.out.println("Möchten Sie die Anzahl Ihrer Koffer ändern?");
+            System.out.println("1 - Ja");
+            System.out.println("2 - Nein");
+
+            int auswahlGepaeck = Manager.intscanner();
+
+            if (auswahlGepaeck == 1) {
+                gepaeckAendern(buchung);
+            }
 
         } catch (Exception e) {
             System.out.println( "Fehler "+ e.getMessage());
@@ -542,6 +560,48 @@ catch (Exception e) {
         }
     }
 
+    public void gepaeckAendern(Passagier passagier) {
+
+        System.out.println("Ihre Buchungen:");
+
+        buchunganzeigen(passagier);
+
+        System.out.println("Bitte Buchungsnummer angeben:");
+        String nummer = Manager.Stringscanner();
+
+        try {
+            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+
+            if (!buchung.getPassagier().equals(passagier)) {
+                System.out.println("Diese Buchung gehört nicht zu diesem Passagier.");
+                return;
+            }
+
+            gepaeckAendern(buchung);
+
+        } catch (Exception e) {
+            System.out.println("Fehler: " + e.getMessage());
+        }
+    }
 
 
+    public void gepaeckAendern(Buchung buchung) {
+
+        try {
+            System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer() );
+
+            System.out.println("Neue Anzahl Koffer:");
+            int neueAnzahl = Manager.intscanner();
+
+            double differenz = bs.gepaeckAendern(buchung, neueAnzahl);
+
+            datenHandler.speichere(anwendungsdaten);
+
+            System.out.println("Gepäck wurde erfolgreich geändert.");
+            System.out.printf("Preisänderung: %.2f €%n", differenz);
+
+        } catch (Exception e) {
+            System.out.println("Fehler: " + e.getMessage());
+        }
+    }
 }

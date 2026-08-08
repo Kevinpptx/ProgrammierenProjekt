@@ -521,7 +521,7 @@ public class UIMitarbeiter {
         System.out.println("---------------------------------------------------------------------------------");
 
         try {
-            geselschaft = Manager.Stringscanner();
+            geselschaft = Manager.Stringscanner().toUpperCase();
             System.out.println("Welches Flugzeug soll für den Flug genutzt werden (Auswahl über Flugzeugcode)?: ");
             System.out.println(vs.getFluggesellschaft(geselschaft).getFlotte());
             System.out.println("------------------------------------------------------------------------");
@@ -533,10 +533,10 @@ public class UIMitarbeiter {
             System.out.println("Wählen Sie den Start- und Zielflughafen aus:");
             System.out.println(vs.getFlughaefen());
             System.out.println("Wählen Sie den Startflughafen aus (Auswahl über IATA-Code): ");
-            startflughafen  = Manager.Stringscanner();
+            startflughafen  = Manager.Stringscanner().toUpperCase();
             System.out.println(vs.getFlughafenNachCode(startflughafen));
             System.out.println("Wählen Sie den Zielflughafen aus (Auswahl über IATA-Code): ");
-            zielflughafen  = Manager.Stringscanner();
+            zielflughafen  = Manager.Stringscanner().toUpperCase();
             System.out.println(vs.getFlughafenNachCode(zielflughafen));
 
 
