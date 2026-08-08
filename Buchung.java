@@ -22,6 +22,7 @@ public class Buchung implements Serializable {
     private GepaeckInformation gepaeckInformation;
     private Buchungsstatus buchungsstatus;
     private double gezahlterPreis;
+    private double gezahlteUmbuchungsgebuehr = 0.0;
 
     // Beispielwerte
     private final double umbuchungsGebühr = 100.00;
@@ -172,10 +173,19 @@ public class Buchung implements Serializable {
         return gezahlterPreis;
     }
 
-    public void setGezahlterPreis(double preis) {
-        this.gezahlterPreis = preis;
+    public void aktualisiereGezahltenPreis() {
+        this.gezahlterPreis = berechneGezahltenPreis();
     }
 
+    public double getGezahlteUmbuchungsgebuehr() {
+        return gezahlteUmbuchungsgebuehr;
+    }
+
+    public void setGezahlteUmbuchungsgebuehr(double gebuehr) {
+        this.gezahlteUmbuchungsgebuehr = gebuehr;
+    }
+
+    
 
     /**
      * Gibt eine textuelle Beschreibung der Buchung zurück.
@@ -197,6 +207,8 @@ public class Buchung implements Serializable {
                 this.gepaeckInformation.toString() +
                 "\n---------------------------------------------\n" +
                 "Damit beträgt die Buchungssumme: " +
-                String.format("%.2f", this.gezahlterPreis) + "€";
+                String.format("%.2f", this.gezahlterPreis) + "€" + 
+                "\nGezahlter Umbuchungsbetrag: " 
+                + String.format("%.2f", this.gezahlteUmbuchungsgebuehr) + "€";
     }
 }

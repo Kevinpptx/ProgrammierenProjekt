@@ -188,11 +188,10 @@ public class Buchungssystem implements Serializable {
             //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive der Buchungsreferenz des Sitzplatzes).
             Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
             neuerSitzplatz.belegen();
-            neuerSitzplatz.setBuchung(buchung);
 
-            //berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
+            // berechnet und speichert den gezahlten Umbuchungsbetrag
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
-            buchung.setGezahlterPreis(buchung.getGezahlterPreis() + gebuehr);
+            buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
             
             //weist den neuen Sitzplatz der Buchung zu
             buchung.setSitzplatz(neuerSitzplatz);
@@ -202,6 +201,9 @@ public class Buchungssystem implements Serializable {
 
             //weist den (neuen oder bestehenden) Flug der Buchung zu
             buchung.setFlug(flug);
+
+            //aktualisiert den gezahlten Preis
+            buchung.aktualisiereGezahltenPreis();
 
             //aendert den Buchungsstatus
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
@@ -327,6 +329,9 @@ public class Buchungssystem implements Serializable {
             preisNeuerFlug = flug.getBasispreis();
         }
 
+        //ergänze Koffergebühr für den neuen Flug 
+        preisNeuerFlug += buchung.getGepaeckinformation().berechneGepaeckgebuehr();
+
         //berechnet die Differenz aus altem und neuen Flug
         ticketDifferenz = preisNeuerFlug - preisAlterFlug;
 
@@ -395,8 +400,8 @@ public class Buchungssystem implements Serializable {
         throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden.");
     }
 
-    if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT) {
-        throw new IllegalStateException("Bei einer stornierten Buchung kann das Gepäck nicht geändert werden.");
+    if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV && buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+        throw new IllegalStateException("Das Gepäck kann bei dieser Buchung nicht mehr geändert werden.");
     }
 
     if (neueAnzahlKoffer < 0) {
@@ -405,7 +410,7 @@ public class Buchungssystem implements Serializable {
 
     double alterPreis = buchung.getGezahlterPreis();
 
-    buchung.setGepaeckinformation(neueAnzahlKoffer);
+    buchung.setAnzahlKoffer(neueAnzahlKoffer);
 
     double neuerPreis = buchung.getGezahlterPreis();
 
