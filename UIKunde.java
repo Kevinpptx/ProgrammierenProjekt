@@ -175,7 +175,7 @@ public void kunde()
      *
      * Von diesem Menü aus kann der Kunde Flüge suchen und buchen,
      * bestehende Buchungen umbuchen oder stornieren sowie seine
-     * aktuellen Buchungen anzeigen lassen.
+     * aktuellen Buchungen anzeigen lassen und die Anzahl der Gepäckstücke anpassen.
      *
      * @param passagier der aktuell angemeldete Passagier
      */
@@ -364,6 +364,9 @@ try {
      *
      * Die Umbuchung wird nur durchgeführt, wenn die angegebene Buchung
      * dem angemeldeten Passagier gehört.
+     * 
+     * Im Anschluss an eine erfolgreiche Umbuchung kann der Kunde
+     * zusätzlich die Anzahl der Gepäckstücke anpassen.
      *
      * @param passagier der Passagier, dessen Buchung geändert werden soll
      */
@@ -560,6 +563,19 @@ catch (Exception e) {
         }
     }
 
+
+    /**
+     * Ermöglicht die nachträgliche Anpassung der Anzahl der Gepäckstücke
+     * für eine Buchung des angegebenen Passagiers.
+     *
+     * Zunächst werden die Buchungen des Passagiers angezeigt und anschließend
+     * die gewünschte Buchung anhand der eingegebenen Buchungsnummer ermittelt.
+     * Es wird geprüft, ob die ausgewählte Buchung tatsächlich dem angegebenen
+     * Passagier zugeordnet ist. Anschließend wird die Änderung der
+     * {@code Gepaeckinformation} für diese Buchung durchgeführt.
+     *
+     * @param passagier der Passagier, dessen Gepäckinformationen geändert werden sollen
+     */
     public void gepaeckAendern(Passagier passagier) {
 
         System.out.println("Ihre Buchungen:");
@@ -585,6 +601,17 @@ catch (Exception e) {
     }
 
 
+    /**
+     * Ändert die Anzahl der Gepäckstücke einer bestehenden Buchung.
+     *
+     * Die aktuell gebuchte Anzahl der Koffer wird angezeigt und eine neue
+     * Anzahl wird vom Benutzer abgefragt. Anschließend werden die
+     * {@code Gepaeckinformation} und der Preis der Buchung entsprechend angepasst.
+     * Die Änderungen werden danach persistent gespeichert und die entstandene
+     * Preisdifferenz wird ausgegeben.
+     *
+     * @param buchung die Buchung, deren Gepäckinformationen geändert werden sollen
+     */
     public void gepaeckAendern(Buchung buchung) {
 
         try {
