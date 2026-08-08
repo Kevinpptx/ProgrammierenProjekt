@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Die Klasse {@code Flughafen} repräsentiert einen Flughafen.
@@ -45,7 +46,9 @@ public class Flughafen implements Serializable{
         }
         
         this.name = name;
-        this.iataCode = iataCode;
+        // entfernt Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.iataCode = iataCode.trim().toUpperCase(Locale.ROOT);
         this.stadt = stadt;
         this.land = land;
     }
