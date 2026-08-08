@@ -2,9 +2,10 @@ import java.io.Serializable;
 
 /**
  * Repräsentiert Informationen über Gepäck in einem Flugzeug.
- * Gepäck besteht aus einer Anzahl von Koffern, die ein Passagier mit sich führt.
+ * Gepäck besteht aus einer Anzahl von Koffern, die ein Passagier mit sich
+ * führt.
  */
-public class GepaeckInformation implements Serializable{
+public class GepaeckInformation implements Serializable {
 
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
@@ -23,12 +24,20 @@ public class GepaeckInformation implements Serializable{
      * @param anzahlKoffer die Anzahl der Koffer
      */
     public GepaeckInformation(int anzahlKoffer) {
-
-        if (anzahlKoffer < 0) {
-            throw new IllegalArgumentException("Die angegebene Kofferanzahl darf nicht kleiner als 0 sein. Bitte korrigieren Sie die Eingabe.");
+        try {
+            validiereGepaeckinfo(anzahlKoffer);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
 
         this.anzahlKoffer = anzahlKoffer;
+    }
+
+    private void validiereGepaeckinfo(int anzahlKoffer) {
+        if (anzahlKoffer < 0) {
+            throw new IllegalArgumentException(
+                    "Die angegebene Kofferanzahl darf nicht kleiner als 0 sein. Bitte korrigieren Sie die Eingabe.");
+        }
     }
 
     /**
@@ -37,15 +46,23 @@ public class GepaeckInformation implements Serializable{
      * @return die Anzahl der Koffer
      */
     public int getAnzahlKoffer() {
-        return anzahlKoffer;  
+        return anzahlKoffer;
     }
 
     /**
      * Setzt die Anzahl der Koffer.
-     *
+     * <p>
+     * WICHTIG: Diese Methode wird MOMENTAN nicht genutzt, weil man in einer
+     * Umbuchung nicht die Anzahl der Koffer ändern kann.
+     * 
      * @param anzahlKoffer die neue Anzahl der Koffer
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
+        try {
+            validiereGepaeckinfo(anzahlKoffer);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
         this.anzahlKoffer = anzahlKoffer;
     }
 
@@ -55,8 +72,8 @@ public class GepaeckInformation implements Serializable{
      * @return die berechnete Gepäckgebühr
      */
     public double berechneGepaeckgebuehr() {
-            return anzahlKoffer * gebuehrProKoffer;
-    }   
+        return anzahlKoffer * gebuehrProKoffer;
+    }
 
     /**
      * Gibt eine String-Darstellung der GepäckInformation zurück.

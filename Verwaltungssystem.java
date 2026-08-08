@@ -937,7 +937,6 @@ public class Verwaltungssystem implements Serializable {
         return neueListe;
     }
 
-
     /**
      * Überprüft, ob es "alte" Fluege gibt, die in der Vergangenheit liegen.
      * Diese kann man nicht mehr buchen.
