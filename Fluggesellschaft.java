@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code
@@ -72,8 +73,8 @@ public class Fluggesellschaft implements Serializable {
      *
      * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
-    public ArrayList<Flugzeug> getFlotte() {
-        return this.flotte;
+    public List<Flugzeug> getFlotte() {
+        return List.copyOf(flotte);
     }
 
     /**
