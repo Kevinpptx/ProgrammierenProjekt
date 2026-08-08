@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  *
  * Änderungen werden mithilfe des {@link DatenHandler} dauerhaft gespeichert.
  *
- * @author Lars
+ * @author Lars Pfeiffer
  * @version 1.0
  */
 

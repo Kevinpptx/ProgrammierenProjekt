@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Änderungen an den Daten werden mithilfe des {@link DatenHandler}
  * gespeichert.
  *
- * @author Lars
+ * @author Lars Pfeiffer
  * @version 1.0
  */
 

@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben
  * über die Konsole eingelesen und überprüft werden können.
  *
- * @author Lars
+ * @author Lars Pfeiffer
  * @version 1.0
  */
 public class Manager {
