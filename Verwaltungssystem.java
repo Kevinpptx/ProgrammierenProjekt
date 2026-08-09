@@ -468,6 +468,10 @@ public class Verwaltungssystem implements Serializable {
         LocalDateTime lAbflug = abflugzeit;
         LocalDateTime lAnkunft = ankunftszeit;
 
+        if(lAbflug == null || lAnkunft == null) {
+            throw new IllegalArgumentException("Die Abflugs- bzw. Ankunftszeit darf nicht null sein.");
+        }
+
         //Fügt zuerst alle Flüge einer Liste hinzu, um diese danach zu validieren. Validiert die Flugnummer auch gegen diese Liste.
         for (int i = 0; i < anzahlTageWiederholungen; i++) {
 
