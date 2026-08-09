@@ -242,7 +242,7 @@ public class Buchungssystem implements Serializable {
             throw new NoSuchElementException("Beide Buchungsparameter sind leer.");
         }
 
-        // wenn schon einmal umgebucht oder der Flug storniert wurde
+        // wenn schon storniert oder der Flug bereits in der Vergangenheit liegt
         else if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT || buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
             throw new IllegalStateException("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
         }
