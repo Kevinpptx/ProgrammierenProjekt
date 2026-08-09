@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -247,35 +249,8 @@ public void kunde()
 
 
 try {
-    ArrayList<Flug> fluege = new ArrayList<>();
 
-    System.out.print("IATA-Code Zielflughafen (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
-    String ziel = Manager.stringscanner();
-
-    System.out.print("IATA-Code Startflughafen (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
-     String start = Manager.stringscanner();
-
-    System.out.print("Flugnummer (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
-    String flugnummer = Manager.stringscanner();
-
-    if (!flugnummer.isBlank()) {
-        fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
-
-    } else if (!start.isBlank() && !ziel.isBlank()) {
-        fluege.addAll(
-                vs.sucheFluegeNachRoute(
-                        vs.getFlughafenNachCode(start),
-                        vs.getFlughafenNachCode(ziel)
-                )
-        );
-
-    } else if (!ziel.isBlank()) {
-        fluege.addAll(
-                vs.sucheFluegeNachZiel(
-                        vs.getFlughafenNachCode(ziel)
-                )
-        );
-    }
+    ArrayList<Flug> fluege = sucheFluege();
 
     System.out.println(
             "--------------------------------------------------------------------------------"
@@ -380,35 +355,7 @@ try {
         System.out.println(vs.getFlughaefen().toString());
 
         try {
-            ArrayList<Flug> fluege = new ArrayList<>();
-
-            System.out.print("Name Zielflughafen (optional): ");
-            String ziel = Manager.stringscanner();
-
-            System.out.print("Name Startflughafen (optional): ");
-            String start = Manager.stringscanner();
-
-            System.out.print("Flugnummer (optional): ");
-            String flugnummer = Manager.stringscanner();
-
-            if (!flugnummer.isBlank()) {
-                fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
-
-            } else if (!start.isBlank() && !ziel.isBlank()) {
-                fluege.addAll(
-                        vs.sucheFluegeNachRoute(
-                                vs.getFlughafenNachName(start),
-                                vs.getFlughafenNachName(ziel)
-                        )
-                );
-
-            } else if (!ziel.isBlank()) {
-                fluege.addAll(
-                        vs.sucheFluegeNachZiel(
-                                vs.getFlughafenNachName(ziel)
-                        )
-                );
-            }
+            ArrayList<Flug> fluege = sucheFluege();
 
             System.out.println(
                     "--------------------------------------------------------------------------------"
@@ -612,5 +559,144 @@ catch (Exception e) {
         } catch (Exception e) {
             System.out.println("Fehler: " + e.getMessage());
         }
+    }
+
+    private ArrayList<Flug> sucheFluege() {
+        
+        ArrayList<Flug> fluege = new ArrayList<>();
+
+        String start = "", ziel = "", flugnummer = "";
+        int zaehler = 0;
+        LocalDate datum = null;
+
+        boolean startUeberspringen = false, flugnummerUeberspringen = false, datumUeberspringen = false;
+
+        while (ziel.length() != 3 || !Character.isAlphabetic(ziel.charAt(0)) || !Character.isAlphabetic(ziel.charAt(1)) || !Character.isAlphabetic(ziel.charAt(2))) {
+            
+            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+            
+            System.out.print("Name Zielflughafen (verpflichtend): ");
+            ziel = Manager.stringscanner();
+
+            zaehler++;
+        }
+
+        zaehler = 0;
+        String entscheidung = " ";
+
+        while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+
+            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            System.out.print("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
+
+            entscheidung = Manager.stringscanner();
+
+            if (entscheidung.charAt(0) == 'n') startUeberspringen = true;
+
+            zaehler++;
+        }
+
+        zaehler = 0;
+
+        if (!startUeberspringen) {
+            while (start.length() != 3 || !Character.isAlphabetic(start.charAt(0)) || !Character.isAlphabetic(start.charAt(1)) || !Character.isAlphabetic(start.charAt(2))) {
+            
+                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+            
+                System.out.print("Name Startflughafen (optional): ");
+                start = Manager.stringscanner();
+
+                zaehler++;
+            }
+        }
+
+        zaehler = 0;
+        entscheidung = " ";
+
+            while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+
+            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            System.out.print("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
+
+            entscheidung = Manager.stringscanner();
+
+            if (entscheidung.charAt(0) == 'n') flugnummerUeberspringen = true;
+
+            zaehler++;
+        }
+
+        zaehler = 0;
+
+        if (!flugnummerUeberspringen) {
+            
+            while (flugnummer.length() != 5 || !Character.isAlphabetic(flugnummer.charAt(0)) || !Character.isAlphabetic(flugnummer.charAt(1)) || !Character.isDigit((flugnummer.charAt(2))) || !Character.isDigit((flugnummer.charAt(3))) || !Character.isDigit((flugnummer.charAt(4)))) {
+
+                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: LH123 \n");
+
+                System.out.print("Flugnummer (optional): ");
+                flugnummer = Manager.stringscanner();
+
+                zaehler++;
+            }
+
+            zaehler = 0;
+            entscheidung = " ";
+            String datumsString = "";
+
+            while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+
+                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                System.out.print("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
+
+                entscheidung = Manager.stringscanner();
+
+                if (entscheidung.charAt(0) == 'n') datumUeberspringen = true;
+
+                zaehler++;
+            }
+
+            zaehler = 0;
+
+            if (!datumUeberspringen) {
+
+                String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
+
+                while (!datumsString.matches(datumRegex)) {
+                    if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                    System.out.print("Bitte geben Sie ein Datum ein: ");
+                    datumsString = Manager.stringscanner();
+                    zaehler++;
+                }
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                datum = LocalDate.parse(datumsString, formatter);
+            }
+        }
+
+        if (!flugnummer.isBlank()) {
+
+            if (datumUeberspringen) {
+                fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
+            } else {
+                fluege.add(vs.sucheFlugNachNummer(flugnummer, datum));
+            }
+
+        } else if (!start.isBlank() && !ziel.isBlank()) {
+            fluege.addAll(
+                    vs.sucheFluegeNachRoute(
+                            vs.getFlughafenNachCode(start),
+                            vs.getFlughafenNachCode(ziel)
+                    )
+            );
+
+        } else if (!ziel.isBlank()) {
+            fluege.addAll(
+                    vs.sucheFluegeNachZiel(
+                            vs.getFlughafenNachCode(ziel)
+                    )
+            );
+        }
+
+        return fluege;
     }
 }
