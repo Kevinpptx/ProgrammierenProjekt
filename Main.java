@@ -10,8 +10,5 @@ public class Main {
         Manager manager = new Manager(datenHandler, anwendungsdaten);
 
         manager.start();
-
-        // UIMitarbeiter.Fluggeselschaftanlegen();
-        //  UIMitarbeiter.hinzufügenFlughafen();
     }
 }
