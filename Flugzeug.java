@@ -159,10 +159,20 @@ public class Flugzeug implements Serializable{
         return this.sitzplaetzeVorlage;
     }
 
+    /**
+     * Gibt die Anzahl der Economy Sitzplätze des Flugzeugs zurück.
+     *
+     * @return anzahl Sitzplätze in der Economy Klasse
+     */
     public int getAnzahlEconomy() {
         return anzahlEconomy;
     }
 
+    /**
+     * Gibt die Anzahl der Business Sitzplätze des Flugzeugs zurück.
+     *
+     * @return anzahl Sitzplätze in der Business Klasse
+     */
     public int getAnzahlBusiness() {
         return anzahlBusiness;
     }
