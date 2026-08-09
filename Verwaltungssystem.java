@@ -414,7 +414,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getLand().equals(land)) {
+            if (f.getLand().equalsIgnoreCase(land)) {
                 ret.add(f);
             }
         }
