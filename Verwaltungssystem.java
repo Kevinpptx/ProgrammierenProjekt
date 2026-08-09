@@ -273,18 +273,20 @@ public class Verwaltungssystem implements Serializable {
      */
     public Flughafen erzeugeFlughafen(String name, String iataCode, String stadt, String land) {
 
+        String code = iataCode.strip().toUpperCase(Locale.ROOT);
+
         Iterator<Flughafen> iterator = this.flughaefen.iterator();
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getIataCode().equals(iataCode)) {
-                throw new IllegalArgumentException("Ein Flughafen mit dem IATACode " + iataCode + " existiert bereits.");
+            if (f.getIataCode().equals(code)) {
+                throw new IllegalArgumentException("Ein Flughafen mit dem IATACode " + code + " existiert bereits.");
             } else if (f.getName().equals(name)) {
                 throw new IllegalArgumentException("Ein Flughafen mit dem Namen " + name + " existiert bereits.");
             }
         }
 
-        Flughafen f = new Flughafen(name, iataCode, stadt, land);
+        Flughafen f = new Flughafen(name, code, stadt, land);
         this.flughaefen.add(f);
 
         return f;
