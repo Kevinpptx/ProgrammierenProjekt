@@ -1,8 +1,10 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code
+ * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit
+ * einem Namen, einem Airline-Code
  * und einer Flotte von Flugzeugen.
  *
  * @author Cedric Beckmann
@@ -16,13 +18,13 @@ public class Fluggesellschaft implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String airlineCode; 
-    private ArrayList<Flugzeug> flotte = new ArrayList<>(); 
+    private String airlineCode;
+    private ArrayList<Flugzeug> flotte = new ArrayList<>();
 
-     /**
+    /**
      * Erzeugt eine neue Fluggesellschaft mit einem Namen und einem Airline-Code.
      *
-     * @param name der Name der Fluggesellschaft
+     * @param name        der Name der Fluggesellschaft
      * @param airlineCode der eindeutige Airline-Code der Fluggesellschaft
      */
     public Fluggesellschaft(String name, String airlineCode) {
@@ -30,11 +32,12 @@ public class Fluggesellschaft implements Serializable {
         if (name == null || airlineCode == null) {
             throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
         }
-        
+
         if (name.isBlank() || airlineCode.isBlank()) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");            
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");
         }
-        if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0)) || !Character.isLetter(airlineCode.charAt(1))) {
+        if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
+                || !Character.isLetter(airlineCode.charAt(1))) {
             throw new IllegalArgumentException("Airline-Code muss aus zwei Buchstaben bestehen!");
         }
 
@@ -47,17 +50,23 @@ public class Fluggesellschaft implements Serializable {
      * Befindet sich das Flugzeug bereits in der Flotte, erfolgt keine Änderung.
      *
      * @param f das hinzuzufügende Flugzeug
+     * @throws IllegalArgumentException wenn das übergebene Flugzeug eine
+     *                                  null-Referenz enthält. Dies sollte eigentlich nicht
+     *                                  vorkommen, weil das Verwaltungssystem
+     *                                  als einzige Klasse die Methode aufruft und
+     *                                  diese vorher ein Flugzeug-Objekt erzeugt.
      */
     public void fuegeFlugzeugHinzu(Flugzeug f) {
-        if(!this.flotte.isEmpty()){
-            if(!this.flotte.contains(f)) {
-                this.flotte.add(f);
-            }
-        } else {
+        if (f == null) {
+            throw new IllegalArgumentException("Das hinzuzufügende Flugzeug enthält eine null-Referenz.");
+        }
+
+        if (!this.flotte.contains(f)) {
             this.flotte.add(f);
         }
+
     }
-        
+
     /**
      * Entfernt ein Flugzeug aus der Flotte der Fluggesellschaft.
      * Befindet sich das Flugzeug nicht in der Flotte, erfolgt keine Änderung.
@@ -65,12 +74,11 @@ public class Fluggesellschaft implements Serializable {
      * @param f das zu entfernende Flugzeug
      */
     public void entferneFlugzeug(Flugzeug f) {
-        if(!this.flotte.isEmpty())
-        {
-            if(this.flotte.contains(f)) {
+        if (!this.flotte.isEmpty()) {
+            if (this.flotte.contains(f)) {
                 this.flotte.remove(f);
-            } 
-        }  
+            }
+        }
     }
 
     /**
@@ -78,8 +86,8 @@ public class Fluggesellschaft implements Serializable {
      *
      * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
-    public ArrayList<Flugzeug> getFlotte() {
-        return this.flotte;
+    public List<Flugzeug> getFlotte() {
+        return List.copyOf(flotte);
     }
 
     /**
@@ -113,14 +121,15 @@ public class Fluggesellschaft implements Serializable {
      */
     @Override
     public String toString() {
-        String s; 
-        s = "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: " + this.flotte.toString();
+        String s;
+        s = "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: "
+                + this.flotte.toString();
         return s;
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) {
+        if (this == o) {
             return true;
         }
 
