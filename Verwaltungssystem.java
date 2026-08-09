@@ -246,13 +246,15 @@ public class Verwaltungssystem implements Serializable {
 
         Iterator<Flugzeug> iterator = this.flugzeuge.iterator();
 
+        String flugzeugCode = code.strip().toUpperCase(Locale.ROOT);
+
         while (iterator.hasNext()) {
             Flugzeug f = iterator.next();
-            if (f.getCode().equals(code)) {
+            if (f.getCode().equals(flugzeugCode)) {
                 return f;
             }
         }
-        throw new IllegalArgumentException("Ein Flugzeug mit dem Code " + code + " existiert nicht.");
+        throw new IllegalArgumentException("Ein Flugzeug mit dem Code " + flugzeugCode + " existiert nicht.");
     }
 
     // Verwaltung Flughafen
