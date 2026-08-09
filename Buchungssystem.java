@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.naming.OperationNotSupportedException;
 
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten

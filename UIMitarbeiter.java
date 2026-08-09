@@ -345,7 +345,6 @@ public class UIMitarbeiter {
     //FlugzeugderFlotteHinzufügen
 
     public  void flugzeugderFlotteHinzufügen() {
-        int laufvariable = -1;
         System.out.println("----------------------Flotte Flugzeuge hinzufügen------------------------------");
         System.out.println("Liste der bestehenden Fluggesellschaften, deren Flotte ein Flugzeug hinzugefügt werden kann:");
         System.out.println(vs.getFluggesellschaften());
