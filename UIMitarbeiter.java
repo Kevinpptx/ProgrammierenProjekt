@@ -286,13 +286,10 @@ public class UIMitarbeiter {
         System.out.println("Airlinecode der Fluggesellschaft: ");
         String airlinecode = Manager.stringscanner();
 
-        Fluggesellschaft FluggeselschaftAnlegen = new Fluggesellschaft(name, airlinecode);
-
-
-
 
         try {
-            vs.fuegeFluggesellschaftHinzu(FluggeselschaftAnlegen);
+            Fluggesellschaft fluggesellschaftAnlegen = new Fluggesellschaft(name, airlinecode);
+            vs.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
             datenHandler.speichere(anwendungsdaten);
         } catch (Exception e) {
             System.out.println("Fehler: " + e.getMessage());
@@ -443,15 +440,18 @@ public class UIMitarbeiter {
         try {
             vs.erzeugeFlughafen(name, iatacode, stadt, land);
             datenHandler.speichere(anwendungsdaten);
+
+            System.out.println("Flughafen: " + vs.getFlughafenNachCode(iatacode)  + " erfolgreich hinzugefügt!");
+            System.out.println("--------------------------------------------------------------------");
+            System.out.println("Zurück zum Flughafenmanager.");
+
+
         }
         catch (Exception e){
             System.out.println("Fehler: " + e.getMessage());
             return;
         }
 
-        System.out.println("Flughafen: " + vs.getFlughafenNachCode(iatacode)  + " erfolgreich hinzugefügt!");
-        System.out.println("--------------------------------------------------------------------");
-        System.out.println("Zurück zum Flughafenmanager.");
 
     }
 
