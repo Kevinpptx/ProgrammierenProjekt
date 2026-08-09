@@ -74,7 +74,6 @@ public class Manager {
      * Das Menü wird so lange angezeigt, bis der Benutzer das Programm
      * über die entsprechende Auswahl beendet.
      */
-// Start Methode um den nutzer festzulegen
     public void start() {
 
 
@@ -85,8 +84,8 @@ public class Manager {
         System.out.print("--------------------------------------------");
         System.out.print("\n Als welche Art von Benutzer möchten Sie das System nutzen?");
         System.out.print("\n Drücken Sie die 1, um sich als Admin anzumelden.");
-        System.out.println("\n Drücken sie die 2, um sich als Kunde anzumelden.");
-        System.out.println(" Drücken sie die 3, um das Programm zu beenden.");
+        System.out.println("\n Drücken Sie die 2, um sich als Kunde anzumelden.");
+        System.out.println(" Drücken Sie die 3, um das Programm zu beenden.");
         System.out.println("--------------------------------------------");
 
                 int auswahl = intscanner();
@@ -102,7 +101,7 @@ public class Manager {
                      return;
 
                     default:
-                    System.out.print("Falsche eingabe ");
+                    System.out.print("Falsche eingabe!");
                     break;
     }
 }
@@ -122,13 +121,15 @@ public class Manager {
     // Scanner um nach den richtigen werten zu filtern
     public static int intscanner() {
 
-        try {
-
+        while(true) {
             String auswahl = SCANNER.nextLine().trim();
+
+            try {
             return  Integer.parseInt(auswahl);
         } catch (NumberFormatException  e) {
+            System.out.print("Ungültige Eingabe! Bitte geben Sie eine Ganze Zahl ein: ");
+        }
 
-            return -1;
         }
     }
 
@@ -141,16 +142,10 @@ public class Manager {
      *
      * @return die eingegebene Zeichenkette
      */
-    // Scanner um nach den richtigen werten zu filtern
-    public static String Stringscanner() {
+    public static String stringscanner() {
 
-        try {
+        return SCANNER.nextLine().trim();
 
-            String zeichen = SCANNER.nextLine().trim();
-            return zeichen;
-        } catch (NumberFormatException e) {
-            return null;
-        }
     }
 
 
@@ -169,16 +164,19 @@ public class Manager {
      */
     public static double doublescanner() {
 
-        try {
+        while (true) {
 
             String zahl = SCANNER.nextLine().trim().replace(",", ".");
 
+        try {
+
             return Double.parseDouble(zahl);
 
-        } catch (NumberFormatException  e) {
-
-            return -1.1;
+        } catch (NumberFormatException e) {
+            System.out.print("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein: ");
         }
+
+    }
     }
 
 

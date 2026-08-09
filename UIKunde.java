@@ -95,10 +95,10 @@ public void kunde()
 
             case 1:
                 System.out.println("Bitte geben sie ihren Namen ein ");
-                String name = Manager.Stringscanner();
+                String name = Manager.stringscanner();
 
                 System.out.println("Bitte geben sie ihren E-Mail ein ");
-                String mail = Manager.Stringscanner();
+                String mail = Manager.stringscanner();
 
                 try {
                     Passagier passagier = bs.initialisierePassagier(name, mail);
@@ -130,7 +130,7 @@ public void kunde()
             }
 
                 System.out.println("\nBitte wählen Sie einen Passagier über die ID:");
-                String id = Manager.Stringscanner();
+                String id = Manager.stringscanner();
 
                 Passagier ausgewaehlterPassagier = null;
 
@@ -276,13 +276,13 @@ try {
     ArrayList<Flug> fluege = new ArrayList<>();
 
     System.out.print("Name Zielflughafen (optional): ");
-    String ziel = Manager.Stringscanner();
+    String ziel = Manager.stringscanner();
 
     System.out.print("Name Startflughafen (optional): ");
-     String start = Manager.Stringscanner();
+     String start = Manager.stringscanner();
 
     System.out.print("Flugnummer (optional): ");
-    String flugnummer = Manager.Stringscanner();
+    String flugnummer = Manager.stringscanner();
 
     if (!flugnummer.isBlank()) {
         fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
@@ -338,7 +338,7 @@ try {
 
     while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
         System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
-        sitzplatz = Manager.Stringscanner();
+        sitzplatz = Manager.stringscanner();
     }
 
     Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
@@ -384,7 +384,7 @@ try {
 
         System.out.println("Bitte Buchungsnummer für Umbuchung angeben:");
 
-        String nummer = Manager.Stringscanner();
+        String nummer = Manager.stringscanner();
 
         try {
         Buchung buchung = bs.sucheBuchungNachNummer(nummer);
@@ -407,13 +407,13 @@ try {
             ArrayList<Flug> fluege = new ArrayList<>();
 
             System.out.print("Name Zielflughafen (optional): ");
-            String ziel = Manager.Stringscanner();
+            String ziel = Manager.stringscanner();
 
             System.out.print("Name Startflughafen (optional): ");
-            String start = Manager.Stringscanner();
+            String start = Manager.stringscanner();
 
             System.out.print("Flugnummer (optional): ");
-            String flugnummer = Manager.Stringscanner();
+            String flugnummer = Manager.stringscanner();
 
             if (!flugnummer.isBlank()) {
                 fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
@@ -452,7 +452,7 @@ try {
             fluege.get(index).zeigeSitzplan();
 
             System.out.println("Bitte geben Sie die gewünschte Sitzplatznummer ein: ");
-            String sitzplatz = Manager.Stringscanner();
+            String sitzplatz = Manager.stringscanner();
 
             System.out.println("Sitzklasse wählen:");
             System.out.println("1 - Economy");
@@ -523,7 +523,7 @@ try {
 
         System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
 
-        String nummer = Manager.Stringscanner();
+        String nummer = Manager.stringscanner();
 try {
     Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
@@ -584,7 +584,7 @@ catch (Exception e) {
         buchunganzeigen(passagier);
 
         System.out.println("Bitte Buchungsnummer angeben:");
-        String nummer = Manager.Stringscanner();
+        String nummer = Manager.stringscanner();
 
         try {
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);

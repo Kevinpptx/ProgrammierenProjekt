@@ -282,9 +282,9 @@ public class UIMitarbeiter {
     public void fluggesellschaftAnlegen() {
         System.out.println("--------------Fluggesellschaft anlegen---------------------------");
         System.out.println("Name Fluggesellschaft: ");
-        String name = Manager.Stringscanner();
+        String name = Manager.stringscanner();
         System.out.println("Airlinecode der Fluggesellschaft: ");
-        String airlinecode = Manager.Stringscanner();
+        String airlinecode = Manager.stringscanner();
 
         Fluggesellschaft FluggeselschaftAnlegen = new Fluggesellschaft(name, airlinecode);
 
@@ -320,7 +320,7 @@ public class UIMitarbeiter {
 
         System.out.println(" Bitte geben Sie den Airlinecode der Fluggesellschaft ein, die Sie entfernen möchten:");
         try {
-                String code = Manager.Stringscanner();
+                String code = Manager.stringscanner();
             vs.entferneFluggesellschaft(vs.getFluggesellschaft(code));
 
             datenHandler.speichere(anwendungsdaten);
@@ -354,7 +354,7 @@ public class UIMitarbeiter {
         // Auswahl der Fluggeselschafften
             System.out.println("--------------------------------------------------------------------");
             System.out.println("Bitte wählen Sie über den Airlinecode die Fluggesellschaft aus, der Sie Flugzeuge hinzufügen möchten: ");
-            String auswahl = Manager.Stringscanner();
+            String auswahl = Manager.stringscanner();
             try {
                 vs.getFluggesellschaft(auswahl);
                 datenHandler.speichere(anwendungsdaten);
@@ -368,9 +368,9 @@ public class UIMitarbeiter {
 
             System.out.println("--------------------------------------------------------------------");
             System.out.println("Bitte geben Sie den Code des Flugzeuges ein: ");
-            String code = Manager.Stringscanner();
+            String code = Manager.stringscanner();
             System.out.println("Bitte geben Sie das Modell des Flugzeuges ein: ");
-            String modell = Manager.Stringscanner();
+            String modell = Manager.stringscanner();
             System.out.println("Bitte geben Sie die Anzahl der Reihen des Flugzeuges ein: ");
             int reihen = Manager.intscanner();
             System.out.println("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges ein: ");
@@ -406,7 +406,7 @@ public class UIMitarbeiter {
          try {
              System.out.println(vs.getAlleFlugzeuge());
              System.out.println("Bitte geben Sie den Flugzeugcode zur Löschung ein:");
-             String code = Manager.Stringscanner();
+             String code = Manager.stringscanner();
              vs.entferneFlugzeug(code);
 
              datenHandler.speichere(anwendungsdaten);
@@ -431,13 +431,13 @@ public class UIMitarbeiter {
     {
         System.out.println("----------------------Flughafen hinzufügen------------------------------");
         System.out.println("Geben Sie den Namen des Flughafens ein:");
-        String name = Manager.Stringscanner();
+        String name = Manager.stringscanner();
         System.out.println("Geben Sie den IATA-Code des Flughafens ein:");
-        String iatacode  = Manager.Stringscanner();
+        String iatacode  = Manager.stringscanner();
         System.out.println("Geben Sie die Stadt des Flughafens ein:");
-        String stadt = Manager.Stringscanner();
+        String stadt = Manager.stringscanner();
         System.out.println("Geben Sie das Land des Flughafens ein: ");
-        String land = Manager.Stringscanner();
+        String land = Manager.stringscanner();
 
         //Methode zum hinzufügen
         try {
@@ -469,7 +469,7 @@ public class UIMitarbeiter {
         System.out.println(vs.getFlughaefen());
         System.out.println("Welchen Flughafen möchten Sie enternen (iataCode) ");
 
-        String iataCode = Manager.Stringscanner();
+        String iataCode = Manager.stringscanner();
 
         //Methode zum entfernen
         try {
@@ -521,11 +521,11 @@ public class UIMitarbeiter {
         System.out.println("---------------------------------------------------------------------------------");
 
         try {
-            geselschaft = Manager.Stringscanner().toUpperCase();
+            geselschaft = Manager.stringscanner().toUpperCase();
             System.out.println("Welches Flugzeug soll für den Flug genutzt werden (Auswahl über Flugzeugcode)?: ");
             System.out.println(vs.getFluggesellschaft(geselschaft).getFlotte());
             System.out.println("------------------------------------------------------------------------");
-            flugzeug  = Manager.Stringscanner();
+            flugzeug  = Manager.stringscanner();
             System.out.println("Ihr ausgewähltes Flugzeug: ");
             System.out.println(vs.getFlugzeug(flugzeug));
 
@@ -533,10 +533,10 @@ public class UIMitarbeiter {
             System.out.println("Wählen Sie den Start- und Zielflughafen aus:");
             System.out.println(vs.getFlughaefen());
             System.out.println("Wählen Sie den Startflughafen aus (Auswahl über IATA-Code): ");
-            startflughafen  = Manager.Stringscanner().toUpperCase();
+            startflughafen  = Manager.stringscanner().toUpperCase();
             System.out.println(vs.getFlughafenNachCode(startflughafen));
             System.out.println("Wählen Sie den Zielflughafen aus (Auswahl über IATA-Code): ");
-            zielflughafen  = Manager.Stringscanner().toUpperCase();
+            zielflughafen  = Manager.stringscanner().toUpperCase();
             System.out.println(vs.getFlughafenNachCode(zielflughafen));
 
 
@@ -636,7 +636,7 @@ public class UIMitarbeiter {
         System.out.println(vs.getFluege());
 try {
     System.out.println("Bitte geben Sie die Flugnummer zum Löschen ein:");
-    String flugnummer = Manager.Stringscanner();
+    String flugnummer = Manager.stringscanner();
     System.out.println("Bitte geben Sie die Abflugszeit ein:");
     System.out.println("Bitte geben Sie das Jahr des Abfluges ein: ");
     int jahr  = Manager.intscanner();
