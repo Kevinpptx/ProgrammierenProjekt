@@ -966,7 +966,7 @@ public class Verwaltungssystem implements Serializable {
 
             for (Buchung buchung : buchungssystem.getBuchungen()) {
 
-                if (buchung.getFlug() == flug) {
+                if (buchung.getFlug() == f) {
                     buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
                 }
             }
@@ -974,5 +974,4 @@ public class Verwaltungssystem implements Serializable {
             iterator.remove();
         }
     }
-}
 }
