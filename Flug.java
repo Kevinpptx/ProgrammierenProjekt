@@ -2,8 +2,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 /**
  * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
@@ -190,7 +190,7 @@ public class Flug implements Serializable {
             }
 
         } else {
-            throw new IllegalStateException("Sitzplatz in Reihe " + reihe + " mit Nummer " + nummer + " existiert nicht. Bitte gültigen Sitzplatz von Reihe 1 bis " + this.sitzplan.length + " und Nummer von 1 bis " +  this.sitzplan[0].length + " wählen.");
+            throw new IllegalStateException("Sitzplatz in Reihe existiert nicht. Bitte gültigen Sitzplatz wählen.");
         }
     }
 
@@ -515,6 +515,8 @@ public class Flug implements Serializable {
 
         Flug f = (Flug) o;
         return this.flugnummer.equalsIgnoreCase(f.getFlugnummer()) 
-                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate());
+                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate())
+                && this.startFlughafen.equals(f.startFlughafen)
+                && this.zielFlughafen.equals(f.zielFlughafen);
     }
 }
