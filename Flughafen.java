@@ -40,7 +40,14 @@ public class Flughafen implements Serializable{
      */
     public Flughafen(String name, String iataCode, String stadt, String land) {
         
-        if (iataCode.isEmpty() || iataCode.length() != 3) {
+        if (name == null || iataCode == null || stadt == null || land == null) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
+        }
+
+        if (name.isBlank() || iataCode.isBlank() || stadt.isBlank() || land.isBlank()) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfen nicht leer sein.");           
+        }
+        if (iataCode.length() != 3) {
             throw new IllegalArgumentException("Der IATA-Code muss dreistellig im Format XYZ eingegeben werden.");
         }
         
