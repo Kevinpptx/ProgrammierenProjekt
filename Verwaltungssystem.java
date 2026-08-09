@@ -334,15 +334,17 @@ public class Verwaltungssystem implements Serializable {
      */
     public Flughafen getFlughafenNachCode(String iataCode) {
 
+        String code = iataCode.strip().toUpperCase(Locale.ROOT);
+
         Iterator<Flughafen> iterator = this.flughaefen.iterator();
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getIataCode().equals(iataCode)) {
+            if (f.getIataCode().equals(code)) {
                 return f;
             }
         }
-        throw new IllegalArgumentException("Der Flughafen mit dem IATACode " + iataCode + " konnte nicht gefunden werden.");
+        throw new IllegalArgumentException("Der Flughafen mit dem IATACode " + code + " konnte nicht gefunden werden.");
     }
 
     /**
@@ -359,7 +361,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getName().equals(name)) {
+            if (f.getName().equalsIgnoreCase(name)) {
                 return f;
             }
         }
@@ -380,7 +382,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getStadt().equals(stadt)) {
+            if (f.getStadt().equalsIgnoreCase(stadt)) {
                 return f;
             }
         }
