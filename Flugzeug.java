@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 /**
  * Repräsentiert ein Flugzeug mit einem Sitzplan.
- * Das Flugzeug besitzt einen eindeutigen Code, ein Modell
+ * Das Flugzeug besitzt eine Versionsnummer, einen eindeutigen Code, ein Modell
  * sowie eine Vorlage aller vorhandenen Sitzplätze.
  */
 public class Flugzeug implements Serializable {
@@ -50,6 +50,7 @@ public class Flugzeug implements Serializable {
      * @param anzahlReihen   Anzahl der Sitzreihen
      * @param sitzeProReihe  Anzahl der Sitzplätze pro Reihe
      * @param businessReihen Anzahl der Business-Reihen
+     * @throws IllegalArgumentException , wenn die Anzahl der Reihen, Businessreihen und Sitze pro Reihe logisch keinen Sinn ergibt
      */
     public Flugzeug(String code,
             String modell,

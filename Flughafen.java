@@ -37,6 +37,7 @@ public class Flughafen implements Serializable{
      * @param iataCode IATA-Code des Flughafens
      * @param stadt Stadt des Flughafens
      * @param land Land des Flughafens
+     * @throws IllegalArgumentException , wenn die Strings eine {@code null} - Referenz enthalten oder leer sind.
      */
     public Flughafen(String name, String iataCode, String stadt, String land) {
         

@@ -17,8 +17,16 @@ public class Fluggesellschaft implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    /** Name der Airline */
     private String name;
+
+    /** Airlinecode, der aus zwei Großbuchstaben besteht. */
     private String airlineCode;
+
+    /**
+     * Flotte der Airline, hier eine {@code ArrayList} aus {@code Flugzeug} -
+     * Objekten.
+     */
     private ArrayList<Flugzeug> flotte = new ArrayList<>();
 
     /**
@@ -26,6 +34,9 @@ public class Fluggesellschaft implements Serializable {
      *
      * @param name        der Name der Fluggesellschaft
      * @param airlineCode der eindeutige Airline-Code der Fluggesellschaft
+     * @throws IllegalArgumentException , wenn die Parameter eine {@code null}-
+     *                                  Referenz haben, leer sind oder der
+     *                                  Airline-Code nicht das passende Format hat.
      */
     public Fluggesellschaft(String name, String airlineCode) {
 
@@ -51,7 +62,8 @@ public class Fluggesellschaft implements Serializable {
      *
      * @param f das hinzuzufügende Flugzeug
      * @throws IllegalArgumentException wenn das übergebene Flugzeug eine
-     *                                  null-Referenz enthält. Dies sollte eigentlich nicht
+     *                                  null-Referenz enthält. Dies sollte
+     *                                  eigentlich nicht
      *                                  vorkommen, weil das Verwaltungssystem
      *                                  als einzige Klasse die Methode aufruft und
      *                                  diese vorher ein Flugzeug-Objekt erzeugt.
@@ -108,6 +120,11 @@ public class Fluggesellschaft implements Serializable {
         return this.airlineCode;
     }
 
+    /**
+     * Prüft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
+     * @param flugzeug : Das zu überprüfende Flugzeug
+     * @return {@code true}, wenn das Flugzeug in der Flotte der Airline ist 
+     */
     public boolean besitztFlugzeug(Flugzeug flugzeug) {
         return flotte.contains(flugzeug);
     }
