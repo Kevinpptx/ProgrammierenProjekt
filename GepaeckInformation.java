@@ -84,7 +84,7 @@ public class GepaeckInformation implements Serializable {
     public String toString() {
         return "Die gebuchte Kofferanzahl beträgt " + this.anzahlKoffer +
                 " und es wurde eine Gebühr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
-                "€ entrichtet.";
+                " Euro entrichtet.";
     }
 
 }
