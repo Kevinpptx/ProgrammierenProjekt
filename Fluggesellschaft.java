@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit
@@ -53,7 +54,10 @@ public class Fluggesellschaft implements Serializable {
         }
 
         this.name = name;
-        this.airlineCode = airlineCode.toUpperCase();
+        
+        // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.airlineCode = airlineCode.trim().toUpperCase(Locale.ROOT);
     }
 
     /**
@@ -75,8 +79,9 @@ public class Fluggesellschaft implements Serializable {
 
         if (!this.flotte.contains(f)) {
             this.flotte.add(f);
-        }
-
+        } else {
+          throw new IllegalArgumentException("Das Flugzeug existiert schon in der Flotte.");
+        }  
     }
 
     /**

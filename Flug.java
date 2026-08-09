@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 /**
@@ -113,7 +114,9 @@ public class Flug implements Serializable {
         }
 
 
-        this.flugnummer = flugnummer;
+        // entfernt Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.flugnummer = flugnummer.trim().toUpperCase(Locale.ROOT);
         this.fluggesellschaft = fluggesellschaft;
         this.flugzeug = flugzeug;
         this.startFlughafen = startFlughafen;
@@ -154,9 +157,6 @@ public class Flug implements Serializable {
             }
         }
     }
-
-
-
    
 
     /**
@@ -457,6 +457,8 @@ public class Flug implements Serializable {
 
         Flug f = (Flug) o;
         return this.flugnummer.equalsIgnoreCase(f.getFlugnummer()) 
-                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate());
+                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate())
+                && this.startFlughafen.equals(f.startFlughafen)
+                && this.zielFlughafen.equals(f.zielFlughafen);
     }
 }
