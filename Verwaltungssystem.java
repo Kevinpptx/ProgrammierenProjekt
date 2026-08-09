@@ -944,7 +944,7 @@ public class Verwaltungssystem implements Serializable {
     public List<String> zeigeAlleFluegeMitAuslastung() {
         ArrayList<String> neueListe = new ArrayList<String>();
         for (int i = 0; i < fluege.size(); i++) {
-            neueListe.add("\nFlug: " + fluege.get(i).getFlugnummer() + "| Auslastung: " + fluege.get(i).berechneAuslastung());
+            neueListe.add("\nFlug: " + fluege.get(i).getFlugnummer() + " | Auslastung: " + fluege.get(i).berechneAuslastung() + "%");
         }
         return neueListe;
     }
