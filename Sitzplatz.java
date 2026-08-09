@@ -36,6 +36,14 @@ public class Sitzplatz implements Serializable {
      * @param sitzklasse      die Sitzklasse des Sitzplatzes
      */
     public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
+        
+        if (sitzplatzNummer == null || sitzklasse == null) {
+            throw new IllegalArgumentException("Keiner der beiden Parameter darf eine null-Referenz enthalten.");
+        }
+
+        if (sitzplatzNummer.isBlank()) {
+            throw new IllegalArgumentException("Die Sitzplatznummer darf nicht leer sein");
+        }
         this.sitzplatzNummer = sitzplatzNummer;
         this.sitzklasse = sitzklasse;
         this.buchung = null;
@@ -71,26 +79,32 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Markiert den Sitzplatz als belegt.
+     * Markiert den Sitzplatz als belegt und weist ihm eine Buchung zu.
      */
-    public void belegen() {
+    public void belegen(Buchung buchung) {
+        if (buchung == null) {
+            throw new IllegalArgumentException("Bitte geben Sie eine Buchung an, die diesen Sitzplatz belegen soll.");
+        }
+        if(belegt) {
+            throw new IllegalArgumentException("Der Sitz ist leider schon belegt.");
+        }
         this.belegt = true;
+        this.buchung = buchung;
     }
 
     /**
-     * Markiert den Sitzplatz als frei.
+     * Markiert den Sitzplatz als frei und löscht die Referenz auf die Buchung.
      */
     public void freigeben() {
         this.belegt = false;
+        this.buchung = null;
     }
 
     public Buchung getBuchung() {
         return buchung;
     }
 
-    public void setBuchung(Buchung buchung) {
-        this.buchung = buchung;
-    }
+    
 
     /**
      * Gibt eine Beschreibung des Sitzplatzes zurück.

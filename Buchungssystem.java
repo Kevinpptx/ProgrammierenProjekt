@@ -72,13 +72,10 @@ public class Buchungssystem implements Serializable {
                 Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
                 passagiere.add(p);
                 return p;
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 anzahlPassagiere--;
                 throw e;
             }
-
-
 
         } else if (name == null) {
             throw new IllegalArgumentException("Fehler! Es wurde kein Name eingegeben.");
@@ -111,9 +108,15 @@ public class Buchungssystem implements Serializable {
             throw new IllegalArgumentException("Fehler! Mindestens einer der übergebenen Werte ist ungültig.");
         }
 
+        if (sitzplatznummer.isBlank()) {
+            throw new IllegalArgumentException("Die Sitzplatznummer darf nicht leer sein");
+        }
+
         try {
 
             // Objekte holen / erstellen
+            // Der Sitzplatz referiert einen Sitzplatz im Flugzeug, daher wirkt sich die
+            // Belegung dieses Sitzplatzes auch auf den Flug aus.
             Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
             GepaeckInformation gepaeckinfo = new GepaeckInformation(anzahlKoffer);
             List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
@@ -121,7 +124,6 @@ public class Buchungssystem implements Serializable {
             // Platz validieren und ggf. belegen
             try {
                 flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
-                flug.belegeSitzplatz(sitzplatz);
             } catch (Exception e) {
                 throw e;
             }
@@ -129,7 +131,7 @@ public class Buchungssystem implements Serializable {
             Buchung b = new Buchung(passagier, flug, sitzplatz, gepaeckinfo);
             b.setBuchungsnummer("bu" + anzahlBuchungen);
             anzahlBuchungen++;
-            sitzplatz.setBuchung(b);
+            sitzplatz.belegen(b);
             buchungen.add(b);
             return b;
         } catch (Exception e) {
@@ -176,34 +178,28 @@ public class Buchungssystem implements Serializable {
             throw e;
         }
         if (umbuchungMoeglich) {
-            //nimmt sich den alten Sitzplatz aus der Buchung
+            // nimmt sich den alten Sitzplatz aus der Buchung
             Sitzplatz alterSitzplatz = buchung.getSitzplatz();
 
-            //gibt den alten Sitzplatz frei
+            // gibt den alten Sitzplatz frei
             alterSitzplatz.freigeben();
 
-            //setzt die Buchungsreferenz in dem alten Sitzplatz auf null
-            alterSitzplatz.setBuchung(null);
-
-            //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive der Buchungsreferenz des Sitzplatzes).
+            // nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive
+            // der Buchungsreferenz des Sitzplatzes).
             Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
-            neuerSitzplatz.belegen();
-            neuerSitzplatz.setBuchung(buchung);
+            neuerSitzplatz.belegen(buchung);
 
-            //berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
+            // berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
             buchung.setGezahlterPreis(buchung.getGezahlterPreis() + gebuehr);
-            
-            //weist den neuen Sitzplatz der Buchung zu
+
+            // weist den neuen Sitzplatz der Buchung zu
             buchung.setSitzplatz(neuerSitzplatz);
 
-            //weist die Buchung dem Sitzplatz zu
-            neuerSitzplatz.setBuchung(buchung);
-
-            //weist den (neuen oder bestehenden) Flug der Buchung zu
+            // weist den (neuen oder bestehenden) Flug der Buchung zu
             buchung.setFlug(flug);
 
-            //aendert den Buchungsstatus
+            // aendert den Buchungsstatus
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
         }
 
@@ -319,38 +315,42 @@ public class Buchungssystem implements Serializable {
         double ticketDifferenz;
         double finaleGebuehr;
 
-        //berechnet den neuen Preis anhand der Sitzklasse
+        // berechnet den neuen Preis anhand der Sitzklasse
         if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
             preisNeuerFlug = flug.getBasispreis() * buchung.getBusinesspreisfaktor();
-        }
-        else {
+        } else {
             preisNeuerFlug = flug.getBasispreis();
         }
 
-        //berechnet die Differenz aus altem und neuen Flug
+        // berechnet die Differenz aus altem und neuen Flug
         ticketDifferenz = preisNeuerFlug - preisAlterFlug;
 
-        // berechnet die finale Gebühr und schlägt die Ticketdifferenz auf, wenn diese positiv ist
+        // berechnet die finale Gebühr und schlägt die Ticketdifferenz auf, wenn diese
+        // positiv ist
         finaleGebuehr = buchung.getUmbuchungsgebuehr() + Math.max(0, ticketDifferenz);
 
         return finaleGebuehr;
     }
 
     /**
-     * storniert eine vorhandene Buchung; ändert den Buchungsstatus und gibt den Sitzplatz der Buchung frei
+     * storniert eine vorhandene Buchung; ändert den Buchungsstatus und gibt den
+     * Sitzplatz der Buchung frei
      * 
      * @param buchung
      * @return die Storno-Gebühr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in
      *                                  der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder wenn die Buchung schon storniert wurde, oder schon vergangen ist.
+     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, oder
+     *                                  wenn die Buchung schon storniert wurde, oder
+     *                                  schon vergangen ist.
      */
     public double stornieren(Buchung buchung) {
         double betrag = 0.0;
         if (buchung == null) {
             throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
         } else if (buchungen.contains(buchung)) {
-            if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
+            if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
+                    || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT) {
                 betrag = buchung.stornierenMitGebühr();
                 buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
                 buchung.getSitzplatz().freigeben();
@@ -369,19 +369,21 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen Flug beinhalten und noch nicht storniert wurden
+     * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen Flug
+     * beinhalten und noch nicht storniert wurden
+     * 
      * @param flug , der auf nicht stornierte Buchungen überprüft werden soll
      * @return Liste an Buchungen, die die Kriterien erfüllen
      */
     public ArrayList<Buchung> findeRelevanteBuchungen(Flug flug) {
         ArrayList<Buchung> relevanteBuchungen = new ArrayList<Buchung>();
-        for(int i = 0; i< buchungen.size(); i++) {
+        for (int i = 0; i < buchungen.size(); i++) {
             Buchung bTemp = buchungen.get(i);
-            if(bTemp.getFlug().equals(flug) && bTemp.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
-               relevanteBuchungen.add(bTemp); 
+            if (bTemp.getFlug().equals(flug) && bTemp.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+                relevanteBuchungen.add(bTemp);
             }
         }
-        
+
         return relevanteBuchungen;
     }
 
