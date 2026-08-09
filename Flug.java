@@ -157,65 +157,7 @@ public class Flug implements Serializable {
             }
         }
     }
-
-     /**
-     * Belegt einen Sitzplatz anhand seiner Reihe und seiner Position innerhalb
-     * dieser Reihe.
-     *
-     * Die Nummerierung beginnt für den Benutzer bei {@code 1}. Intern werden
-     * die Arrayindizes entsprechend um {@code 1} reduziert.
-     *
-     * Ist der gewünschte Sitzplatz bereits belegt oder existiert nicht,
-     * wird eine entsprechende Meldung auf der Konsole ausgegeben.
-     *
-     * @param reihe die Nummer der gewünschten Sitzreihe
-     * @param nummer die Position des gewünschten Sitzplatzes innerhalb der Reihe
-     * @throws IllegalArgumentException wenn der Sitzplatz nicht existiert
-     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
-     */
-    public void belegeSitzplatz(int reihe, int nummer) {
-
-        // Prüft, ob die angegebene Reihe und Sitzplatznummer im Sitzplan existieren
-        if(reihe >= 1 && reihe -1 < this.sitzplan.length 
-        && nummer >= 1 && nummer -1 < this.sitzplan[reihe-1].length) {
-
-            Sitzplatz sitzplatz = this.sitzplan[reihe-1][nummer-1];
-
-            
-            // Ein Sitzplatz kann nur belegt werden, wenn er noch frei ist
-            if(sitzplatz.getIstFrei()) {
-                sitzplatz.belegen();
-            } else {
-                throw new IllegalArgumentException("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
-            }
-
-        } else {
-            throw new IllegalStateException("Sitzplatz in Reihe existiert nicht. Bitte gültigen Sitzplatz wählen.");
-        }
-    }
-
-    /**
-     * Belegt einen Sitzplatz anhand seiner Reihe und seiner Position innerhalb
-     * dieser Reihe.
-     *
-     * Die Nummerierung beginnt für den Benutzer bei {@code 1}. Intern werden
-     * die Arrayindizes entsprechend um {@code 1} reduziert.
-     *
-     * Ist der gewünschte Sitzplatz bereits belegt oder existiert nicht,
-     * wird eine entsprechende Meldung auf der Konsole ausgegeben.
-     *
-     * @param sitzplatz der zu belegende Sitzplatz
-     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
-     */
-    public void belegeSitzplatz(Sitzplatz sitzplatz) {
-        // Ein Sitzplatz kann nur belegt werden, wenn er noch frei ist
-        if(sitzplatz.getIstFrei()) {
-            sitzplatz.belegen();
-        } else {
-            throw new IllegalStateException("Der Sitzplatz " + sitzplatz.getSitzplatzNummer() + " ist bereits belegt.");
-        }
-
-    }
+   
 
     /**
      * Ermittelt alle aktuell freien Sitzplätze des Fluges.

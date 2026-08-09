@@ -15,34 +15,62 @@ public class Buchung implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Die Nummer der Buchung, die anhand der Zahl der schon vorhandenen Buchungen
+     * generiert wird.
+     */
     private String buchungsnummer;
+
+    /**
+     * Der Passagier dieser Buchung. Aus Komplexitätsgründen gehen wir davon aus,
+     * dass jeder Passagier seinen Flug selber buchen muss.
+     */
     private Passagier passagier;
+
+    /** Der gebuchte Flug */
     private Flug flug;
+
+    /** Der gebuchte Sitzplatz */
     private Sitzplatz sitzplatz;
+
+    /** Die Gepäckinformationen des Passagiers */
     private GepaeckInformation gepaeckInformation;
+
+    /** Der aktuelle Status der Buchung */
     private Buchungsstatus buchungsstatus;
     private double gezahlterPreis;
     private double gezahlteUmbuchungsgebuehr = 0.0;
 
-    // Beispielwerte
+    /** Festgelegte pauschale Umbuchungsgebühr */
     private final double umbuchungsGebühr = 100.00;
+
+    /** Festgelegte pauschale Storno-Gebühr */
     private final double stornierungsGebühr = 200.00;
+
+    /** Festgelegter pauschaler Preisfaktor, der auf Business-Flüge anfällt. */
     private final double businessPreisFaktor = 1.65;
 
     /**
-     * Erzeugt eine neue Buchung mit einer Buchungsnummer, einem Passagier,
+     * Erzeugt eine neue Buchung mit einem Passagier,
      * einem Flug, einem Sitzplatz und den zugehörigen Gepäckinformationen.
      * Der Preis der Buchung wird automatisch berechnet und der Status
      * auf {@code AKTIV} gesetzt.
      *
      * Die Buchungsnummer wird in der Klasse Buchungssystem generiert
-     * @param passagier der zugehörige Passagier
-     * @param flug der gebuchte Flug
-     * @param sitzplatz der gebuchte Sitzplatz
+     * 
+     * @param passagier          der zugehörige Passagier
+     * @param flug               der gebuchte Flug
+     * @param sitzplatz          der gebuchte Sitzplatz
      * @param gepaeckInformation die Gepäckinformationen zur Buchung
      */
     public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
+        try {
+            validiereBuchungsparameter(passagier, flug, sitzplatz, gepaeckInformation);
+        } catch (Exception e) {
+            throw e;
+        }
+
         this.passagier = passagier;
         this.flug = flug;
         this.sitzplatz = sitzplatz;
@@ -51,9 +79,35 @@ public class Buchung implements Serializable {
         this.buchungsstatus = Buchungsstatus.AKTIV;
     }
 
+    /**
+     * Erzeugt eine neue Buchung mit einer Buchungsnummer, einem Passagier,
+     * einem Flug, einem Sitzplatz und den zugehörigen Gepäckinformationen.
+     * Der Preis der Buchung wird automatisch berechnet und der Status
+     * auf {@code AKTIV} gesetzt.
+     *
+     * Die Buchungsnummer wird in der Klasse Buchungssystem generiert
+     * 
+     * @param passagier          der zugehörige Passagier
+     * @param flug               der gebuchte Flug
+     * @param sitzplatz          der gebuchte Sitzplatz
+     * @param gepaeckInformation die Gepäckinformationen zur Buchung
+     */
     public Buchung(String buchungsnummer, Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
-        
+
+        try {
+            validiereBuchungsparameter(passagier, flug, sitzplatz, gepaeckInformation);
+        } catch (Exception e) {
+            throw e;
+        }
+
+        if (buchungsnummer == null) {
+            throw new IllegalArgumentException("Die Buchungsnummer hat eine null-Referenz.");
+        }
+
+        if (buchungsnummer.isBlank()) {
+            throw new IllegalArgumentException("Die Buchungsnummer ist leer.");
+        }
         this.buchungsnummer = buchungsnummer;
         this.passagier = passagier;
         this.flug = flug;
@@ -63,6 +117,20 @@ public class Buchung implements Serializable {
         this.buchungsstatus = Buchungsstatus.AKTIV;
     }
 
+    /**
+     * Prüft, ob die Parameter eine {@code null}- Referenz enthalten.
+     * 
+     * @param passagier : der Passagier der Buchung
+     * @param flug : der gebuchte Flug
+     * @param sitzplatz : der gebuchte Sitzplatz
+     * @param gepaeckInformation : die Gepäckinformation der Buchung
+     */
+    private void validiereBuchungsparameter(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
+            GepaeckInformation gepaeckInformation) {
+        if (passagier == null || flug == null || sitzplatz == null || gepaeckInformation == null) {
+            throw new IllegalArgumentException("Einer der Buchungsparameter hat eine null-Referenz.");
+        }
+    }
 
     /**
      * Berechnet den für die Buchung zu zahlenden Preis.
@@ -80,6 +148,11 @@ public class Buchung implements Serializable {
         else
             throw new UnsupportedOperationException("Klasse nicht implementiert.");
     }
+
+    /**
+     * Storniert die Buchung und gibt die Storno-Gebühr zurück.
+     * @return stornierungsGebühr
+     */
     public double stornierenMitGebühr() {
         this.buchungsstatus = Buchungsstatus.STORNIERT;
         return stornierungsGebühr;
@@ -134,59 +207,115 @@ public class Buchung implements Serializable {
         return this.buchungsstatus;
     }
 
+    /**
+     * Legt die Buchungsnummer anhand eines übergebenen Strings fest. Validiert
+     * diesen vorher auf {@code null}- Referenz, ob er leer ist und ob das Format
+     * passt.
+     * 
+     * @param s : der zu überprüfende String
+     */
     public void setBuchungsnummer(String s) {
-        if (s.startsWith("bu")) {
+        if (s == null) {
+            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern enthält eine null-Referenz.");
+        }
+        if (s.isBlank()) {
+            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern ist leer.");
+        }
+        // prüft, ob der übergebene String mit "bu" anfängt und auf mindestens eine
+        // Ziffer endet
+        if (s.startsWith("bu") && s.matches(".*\\d+$")) {
             this.buchungsnummer = s;
+        } else {
+            throw new IllegalArgumentException("Der übergebene String hat nicht das passende Format");
         }
     }
 
+    /**
+     * Gibt die Unbuchungsgebühr zurück.
+     * @return umbuchungsGebühr
+     */
     public double getUmbuchungsgebuehr() {
         return umbuchungsGebühr;
     }
 
+    /**
+     * Gibt die Storno-Gebühr zurück.
+     * @return stornierungsGebühr
+     */
     public double getStornierungsgebuehr() {
         return stornierungsGebühr;
     }
 
+    /**
+     * Gibt den Preisfaktor für Business-Flüge zurück.
+     * @return businessPreisFaktor
+     */
     public double getBusinesspreisfaktor() {
         return businessPreisFaktor;
     }
 
-    //der Setter beinhaltet keine Validierung, da die Methode "validiereUmbuchung()" dies für alle Buchungsparameter erledigt
+    /**
+    * Ändert den Flug auf den übergebenen Flug {@code f}
+     * @param f : Flug, der dieser Buchung zugewiesen werden soll
+     */
     public void setFlug(Flug f) {
         this.flug = f;
     }
 
+    /**
+     * Ändert den Buchungsstatus auf den übergebenen {@code Buchungsstatus}
+     * @param status : der Buchungsstatus, auf den die Buchung geändert werden soll
+     */
     public void setBuchungsstatus(Buchungsstatus status) {
         this.buchungsstatus = status;
     }
 
+    /**
+     * Gibt die Gepäckinfos zurück
+     * @return gepaeckInformation
+     */
     public GepaeckInformation getGepaeckinformation() {
         return gepaeckInformation;
     }
 
-    public void setAnzahlKoffer(int anzahlKoffer) {
-        this.gepaeckInformation.setAnzahlKoffer(anzahlKoffer);
-        this.gezahlterPreis = berechneGezahltenPreis();
-    }
-
+    /**
+     * Gibt den gezahlten Preis zurück.
+     * @return gezahlterPreis
+     */
     public double getGezahlterPreis() {
         return gezahlterPreis;
     }
 
+    /**
+     * Ändert den gezahlten Preis auf den übergebenen {@code double}.
+     * @param preis
+     */
+    public void setGezahlterPreis(double preis) {
+        this.gezahlterPreis = preis;
+    }
+    
+    /**
+     * Aktualisiert den gezahlten Preis, indem dieser neu berechnet wird.
+     */
     public void aktualisiereGezahltenPreis() {
         this.gezahlterPreis = berechneGezahltenPreis();
     }
 
+    /**
+     * Gibt die gezahlte Umbuchungsgebühr zurück.
+     * @return gezahlteUmbuchungsgebuehr
+     */
     public double getGezahlteUmbuchungsgebuehr() {
         return gezahlteUmbuchungsgebuehr;
     }
 
+    /**
+     * Setzt die gezahlte Umbuchungsgebühr auf den übergebenen Parameter
+     * @param gebuehr : die neue gezahlte Umbuchungsgebühr
+     */
     public void setGezahlteUmbuchungsgebuehr(double gebuehr) {
         this.gezahlteUmbuchungsgebuehr = gebuehr;
     }
-
-    
 
     /**
      * Gibt eine textuelle Beschreibung der Buchung zurück.

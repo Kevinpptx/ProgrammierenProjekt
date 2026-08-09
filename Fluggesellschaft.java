@@ -18,8 +18,16 @@ public class Fluggesellschaft implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    /** Name der Airline */
     private String name;
+
+    /** Airlinecode, der aus zwei Großbuchstaben besteht. */
     private String airlineCode;
+
+    /**
+     * Flotte der Airline, hier eine {@code ArrayList} aus {@code Flugzeug} -
+     * Objekten.
+     */
     private ArrayList<Flugzeug> flotte = new ArrayList<>();
 
     /**
@@ -27,16 +35,26 @@ public class Fluggesellschaft implements Serializable {
      *
      * @param name        der Name der Fluggesellschaft
      * @param airlineCode der eindeutige Airline-Code der Fluggesellschaft
+     * @throws IllegalArgumentException , wenn die Parameter eine {@code null}-
+     *                                  Referenz haben, leer sind oder der
+     *                                  Airline-Code nicht das passende Format hat.
      */
     public Fluggesellschaft(String name, String airlineCode) {
 
-        this.name = name;
-
-        if (airlineCode.isEmpty() || airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
-                || !Character.isLetter(airlineCode.charAt(1))) {
-            throw new IllegalArgumentException("Der IATA-Code muss aus zwei Buchstaben bestehen!");
+        if (name == null || airlineCode == null) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
         }
 
+        if (name.isBlank() || airlineCode.isBlank()) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");
+        }
+        if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
+                || !Character.isLetter(airlineCode.charAt(1))) {
+            throw new IllegalArgumentException("Airline-Code muss aus zwei Buchstaben bestehen!");
+        }
+
+        this.name = name;
+        
         // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.airlineCode = airlineCode.trim().toUpperCase(Locale.ROOT);
@@ -47,15 +65,19 @@ public class Fluggesellschaft implements Serializable {
      * Befindet sich das Flugzeug bereits in der Flotte, erfolgt keine Änderung.
      *
      * @param f das hinzuzufügende Flugzeug
+     * @throws IllegalArgumentException wenn das übergebene Flugzeug eine
+     *                                  null-Referenz enthält.
      */
     public void fuegeFlugzeugHinzu(Flugzeug f) {
-        if (!this.flotte.isEmpty()) {
-            if (!this.flotte.contains(f)) {
-                this.flotte.add(f);
-            }
-        } else {
-            this.flotte.add(f);
+        if (f == null) {
+            throw new IllegalArgumentException("Das hinzuzufügende Flugzeug enthält eine null-Referenz.");
         }
+
+        if (!this.flotte.contains(f)) {
+            this.flotte.add(f);
+        } else {
+          throw new IllegalArgumentException("Das Flugzeug existiert schon in der Flotte.");
+        }  
     }
 
     /**
@@ -99,6 +121,11 @@ public class Fluggesellschaft implements Serializable {
         return this.airlineCode;
     }
 
+    /**
+     * Prüft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
+     * @param flugzeug : Das zu überprüfende Flugzeug
+     * @return {@code true}, wenn das Flugzeug in der Flotte der Airline ist 
+     */
     public boolean besitztFlugzeug(Flugzeug flugzeug) {
         return flotte.contains(flugzeug);
     }

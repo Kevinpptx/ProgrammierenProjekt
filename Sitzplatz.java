@@ -3,7 +3,8 @@ import java.util.Locale;
 
 /**
  * Repräsentiert einen Sitzplatz in einem Flugzeug.
- * Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse
+ * Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse, eine Buchung
+ * (wenn er schon verbucht ist)
  * sowie einen Belegungsstatus.
  */
 public class Sitzplatz implements Serializable {
@@ -32,17 +33,26 @@ public class Sitzplatz implements Serializable {
      * Erstellt einen neuen Sitzplatz mit der angegebenen
      * Sitzplatznummer und Sitzklasse.
      * Der Sitzplatz ist nach der Erstellung zunächst frei.
-     *
+     * Die Referenz für die Buchung ist {@code null}.
      * @param sitzplatznummer die Nummer des Sitzplatzes
      * @param sitzklasse      die Sitzklasse des Sitzplatzes
+     * @throws IllegalArgumentException , wenn die Parameter {@code null}-Referenzen enthalten, oder wenn die Buchungsnummer leer ist.
      */
     public Sitzplatz(String sitzplatzNummer, Sitzklasse sitzklasse) {
-        
+
+        if (sitzplatzNummer == null || sitzklasse == null) {
+            throw new IllegalArgumentException("Keiner der beiden Parameter darf eine null-Referenz enthalten.");
+        }
+
+        if (sitzplatzNummer.isBlank()) {
+            throw new IllegalArgumentException("Die Sitzplatznummer darf nicht leer sein");
+        }
+      
         // entfernt Leerzeichen in der Sitzplatznummer, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.sitzplatzNummer = sitzplatzNummer.trim().toUpperCase(Locale.ROOT);
+      
         this.sitzklasse = sitzklasse;
-        this.buchung = null;
         freigeben();
     }
 
@@ -75,25 +85,34 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Markiert den Sitzplatz als belegt.
+     * Markiert den Sitzplatz als belegt und weist ihm eine Buchung zu.
+     * @throws IllegalArgumentException , wenn die Buchung eine {@code null} - Referenz enthält oder wenn der Sitzplatz schon belegt ist.
      */
-    public void belegen() {
+    public void belegen(Buchung buchung) {
+        if (buchung == null) {
+            throw new IllegalArgumentException("Bitte geben Sie eine Buchung an, die diesen Sitzplatz belegen soll.");
+        }
+        if (belegt) {
+            throw new IllegalArgumentException("Der Sitz ist leider schon belegt.");
+        }
         this.belegt = true;
+        this.buchung = buchung;
     }
 
     /**
-     * Markiert den Sitzplatz als frei.
+     * Markiert den Sitzplatz als frei und löscht die Referenz auf die Buchung.
      */
     public void freigeben() {
         this.belegt = false;
+        this.buchung = null;
     }
 
+    /**
+     * Gibt die Buchungsreferenz des Sitzplatzes zurück.
+     * @return buchung
+     */
     public Buchung getBuchung() {
         return buchung;
-    }
-
-    public void setBuchung(Buchung buchung) {
-        this.buchung = buchung;
     }
 
     /**
