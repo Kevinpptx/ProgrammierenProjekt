@@ -468,7 +468,7 @@ public class Verwaltungssystem implements Serializable {
         LocalDateTime lAbflug = abflugzeit;
         LocalDateTime lAnkunft = ankunftszeit;
 
-        if(lAbflug == null || lAnkunft == null) {
+        if (lAbflug == null || lAnkunft == null) {
             throw new IllegalArgumentException("Die Abflugs- bzw. Ankunftszeit darf nicht null sein.");
         }
 
@@ -785,13 +785,18 @@ public class Verwaltungssystem implements Serializable {
      * @param flug der zu entfernende Flug
      * @throws IllegalArgumentException wenn der Flug {@code null} oder nicht im
      * Verwaltungssystem registriert ist
+     * @throws IllegalStateException wenn auf dem Flug noch Buchungen existieren 
      */
     public void entferneFlug(Flug flug) {
+
         if (flug == null) {
             throw new IllegalArgumentException("Der Flug darf nicht null sein.");
         }
         if (!fluege.remove(flug)) {
             throw new IllegalArgumentException("Der Flug ist nicht im Verwaltungssystem registriert.");
+        }
+        if (flug.berechneAuslastung() > 0) {
+            throw new IllegalStateException("Der Flug kann nicht entfernt werden, da noch Buchungen vorhanden sind.");
         }
     }
 
