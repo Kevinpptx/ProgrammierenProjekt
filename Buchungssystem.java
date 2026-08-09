@@ -437,16 +437,12 @@ public class Buchungssystem implements Serializable {
      * 
      * @return Liste aller getätigten Buchungen
      */
-    public ArrayList<Buchung> getBuchungen() {
-        return buchungen;
+    public List<Buchung> getBuchungen() {
+        return List.copyOf(buchungen);
     }
 
-    /**
-     * 
-     * @return Liste aller Passagiere Buchungen
-     */
-    public ArrayList<Passagier> getPassagiere() {
-        return passagiere;
+    public List<Passagier> getPassagiere() {
+        return List.copyOf(passagiere);
     }
 
 }
