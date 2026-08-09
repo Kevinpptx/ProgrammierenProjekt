@@ -249,13 +249,13 @@ public void kunde()
 try {
     ArrayList<Flug> fluege = new ArrayList<>();
 
-    System.out.print("Name Zielflughafen: ");
+    System.out.print("IATA-Code Zielflughafen (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
     String ziel = Manager.stringscanner();
 
-    System.out.print("Name Startflughafen (optional): ");
+    System.out.print("IATA-Code Startflughafen (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
      String start = Manager.stringscanner();
 
-    System.out.print("Flugnummer (optional): ");
+    System.out.print("Flugnummer (mindestens Start-, Ziel-, oder Flugnummer ausfüllen): ");
     String flugnummer = Manager.stringscanner();
 
     if (!flugnummer.isBlank()) {
@@ -264,15 +264,15 @@ try {
     } else if (!start.isBlank() && !ziel.isBlank()) {
         fluege.addAll(
                 vs.sucheFluegeNachRoute(
-                        vs.getFlughafenNachName(start),
-                        vs.getFlughafenNachName(ziel)
+                        vs.getFlughafenNachCode(start),
+                        vs.getFlughafenNachCode(ziel)
                 )
         );
 
     } else if (!ziel.isBlank()) {
         fluege.addAll(
                 vs.sucheFluegeNachZiel(
-                        vs.getFlughafenNachName(ziel)
+                        vs.getFlughafenNachCode(ziel)
                 )
         );
     }
@@ -366,7 +366,7 @@ try {
         Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
         if (!buchung.getPassagier().equals(passagier)) {
-            System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
+            System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!");
             return;
         }
         }
@@ -450,7 +450,7 @@ try {
 
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            bs.umbuchen( buchung, fluege.get(index), sitzplatz, sitzklasse );
+            bs.umbuchen( buchung, fluege.get(index), sitzplatz, sitzklasse);
             datenHandler.speichere(anwendungsdaten);
 
             
