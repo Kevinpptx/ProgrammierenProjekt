@@ -956,21 +956,23 @@ public class Verwaltungssystem implements Serializable {
      *
      * @return Liste mit geloeschten Fluegen
      */
-    public ArrayList<String> alteFluegeLoeschen() {
+    public void alteFluegeLoeschen(Buchungssystem buchungssystem) {
 
-        Iterator<Flug> iterator = fluege.iterator();
-        ArrayList<String> betroffeneFlugnummern = new ArrayList<String>();
+    Iterator<Flug> iterator = fluege.iterator();
 
         while (iterator.hasNext()) {
 
             Flug f = iterator.next();
 
-            if (f.getAbflugszeit().isBefore(LocalDateTime.now())) {
-                betroffeneFlugnummern.add(f.getFlugnummer());
-                iterator.remove();
-            }
-        }
+            for (Buchung buchung : buchungssystem.getBuchungen()) {
 
-        return betroffeneFlugnummern;
+                if (buchung.getFlug() == flug) {
+                    buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
+                }
+            }
+
+            iterator.remove();
+        }
     }
+}
 }

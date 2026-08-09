@@ -328,7 +328,7 @@ public class Flug implements Serializable {
 
                 // Horizontale Trennlinie zwischen zwei Sitzklassen
                 for (int j = 0; j < this.sitzplan[i].length; j++) {
-                    System.out.print("-----");
+                    System.out.print("--- AB HIER ECONOMY ---");
                 }
 
                 System.out.println();
