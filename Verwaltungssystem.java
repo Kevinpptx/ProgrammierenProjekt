@@ -459,7 +459,6 @@ public class Verwaltungssystem implements Serializable {
         //validiere Flug
         validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
 
-
         if (anzahlTageWiederholungen < 1) {
             throw new IllegalArgumentException("Der Flug muss mindestens an einem Tag stattfinden.");
         }
@@ -540,12 +539,9 @@ public class Verwaltungssystem implements Serializable {
      */
     public Flug fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
             LocalDateTime ankunftszeit, double basispreis) {
-        //validiert den Flug und wirft die Exception
-        try {
-            validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
-        } catch (Exception e) {
-            throw e;
-        }
+
+        // validiere Flug
+        validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
 
         String flugnummer = this.erzeugeFlugnummer(fluggesellschaft, abflugzeit);
 
