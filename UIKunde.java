@@ -1,5 +1,3 @@
-import java.time.LocalDate;
-import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -242,7 +240,7 @@ public void kunde()
 
         System.out.println("-------------------Willkommen im Bereich für Flugsuche und Buchung-------------------------");
 
-        alteFluegeLoeschen();
+        vs.alteFluegeLoeschen(bs);
 
         System.out.println(vs.getFlughaefen().toString());
 
@@ -358,7 +356,7 @@ try {
             }
         }
 
-        alteFluegeLoeschen();
+        vs.alteFluegeLoeschen(bs);
 
         System.out.println("Bitte Buchungsnummer für Umbuchung angeben:");
 
@@ -499,7 +497,7 @@ try {
             }
         }
 
-        alteFluegeLoeschen();
+        vs.alteFluegeLoeschen(bs);
 
         System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
 
@@ -596,7 +594,7 @@ catch (Exception e) {
     public void gepaeckAendern(Buchung buchung) {
 
 
-        alteFluegeLoeschen();
+        vs.alteFluegeLoeschen(bs);
 
         try {
             System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer() );
@@ -615,40 +613,4 @@ catch (Exception e) {
             System.out.println("Fehler: " + e.getMessage());
         }
     }
-
-    /**
-     * Löscht alte Flüge und setzt den Buchungsstatus der betroffenen Buchungen
-     * auf {@link Buchungsstatus#VERGANGEN}.
-     * Dabei werden Flugnummer und Abflugdatum geprüft, um Buchungen gleicher
-     * Flugnummer an anderen Tagen nicht zu verändern.
-     */
-    public void alteFluegeLoeschen() {
-
-        // alte Fluege loeschen, danach die Buchungsstatusse der betroffenen Fluege auf VERGANGEN aendern
-        ArrayList<String> betroffeneFlugnummern = vs.alteFluegeLoeschen();
-
-        // Wenn welche geloescht wurden, durch alle Buchungen iterieren und entsprechen abaendern
-        if (!betroffeneFlugnummern.isEmpty()) {
-
-            List<Buchung> buchungen = bs.getBuchungen();
-            for (String flugnummer : betroffeneFlugnummern) {
-
-                for (Buchung buchung : buchungen) {
-                    Flug flug = buchung.getFlug();
-
-                    // zweiter Check verhindert, dass Buchungen mit selber Flugnummer an anderen Tagen geloescht werden
-                    if (flug.getFlugnummer().equals(flugnummer)
-                        && flug.getAbflugszeit().toLocalDate().equals(LocalDate.now())) {
-
-                         buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
-                    }
-                }
-
-            }
-
-        }
-
-    }
-
-
 }
