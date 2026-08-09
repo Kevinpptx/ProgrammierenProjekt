@@ -157,20 +157,7 @@ public class Flug implements Serializable {
 
 
 
-    /**
-     * Belegt einen Sitzplatz anhand seiner Reihe und seiner Position innerhalb
-     * dieser Reihe.
-     *
-     * Die Nummerierung beginnt für den Benutzer bei {@code 1}. Intern werden
-     * die Arrayindizes entsprechend um {@code 1} reduziert.
-     *
-     * Ist der gewünschte Sitzplatz bereits belegt oder existiert nicht,
-     * wird eine entsprechende Meldung auf der Konsole ausgegeben.
-     *
-     * @param sitzplatz der zu belegende Sitzplatz
-     * @throws IllegalStateException wenn der Sitzplatz bereits belegt ist
-     */
-
+   
 
     /**
      * Ermittelt alle aktuell freien Sitzplätze des Fluges.
