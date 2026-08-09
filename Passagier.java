@@ -27,7 +27,11 @@ public class Passagier implements Serializable{
     // Konstruktor
     public Passagier(String passagierId, String name, String email) {
         
-        if (name.isEmpty() || email.isEmpty()) {
+        if (name == null || email == null) {
+            throw new IllegalArgumentException("Die Felder Name und E-Mail dürfen keine null-Referenz beinhalten.");
+        }
+        
+        if (name.isBlank() || email.isBlank()) {
 
             throw new IllegalArgumentException("Die Felder Name und E-Mail dürfen nicht leer sein.");
         }
