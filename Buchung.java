@@ -160,8 +160,18 @@ public class Buchung implements Serializable {
     }
 
     public void setBuchungsnummer(String s) {
-        if (s.startsWith("bu")) {
+        if (s == null) {
+            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern enthält eine null-Referenz.");
+        }
+        if (s.isBlank()) {
+            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern ist leer.");
+        }
+        //prüft, ob der übergebene String mit "bu" anfängt und auf mindestens eine Ziffer endet
+        if (s.startsWith("bu") && s.matches(".*\\d+$")) {
             this.buchungsnummer = s;
+        }
+        else {
+            throw new IllegalArgumentException("Der übergebene String hat nicht das passende Format");
         }
     }
 
