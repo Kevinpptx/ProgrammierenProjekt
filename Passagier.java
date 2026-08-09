@@ -36,13 +36,21 @@ public class Passagier implements Serializable{
             throw new IllegalArgumentException("Die Felder Name und E-Mail dürfen nicht leer sein.");
         }
 
-        if (!email.contains("@") || (!email.contains("."))) {
-            throw new IllegalArgumentException("Bitte geben Sie eine gültige E-Mail-Adresse ein!");
+        try {
+            validiereEmail(email);
+        } catch (Exception e) {
+            throw e;
         }
         
         this.passagierId = passagierId;
         this.name = name;
         this.email = email;
+    }
+
+    private void validiereEmail(String email) {
+        if (!email.contains("@") || (!email.contains("."))) {
+            throw new IllegalArgumentException("Bitte geben Sie eine gültige E-Mail-Adresse ein!");
+        }
     }
 
 
@@ -81,6 +89,11 @@ public class Passagier implements Serializable{
      */
     // Setter-Methoden
     public void setEmail(String email) {
+        try {
+            validiereEmail(email);
+        } catch (Exception e) {
+            throw e;
+        }
         this.email = email;
     }
     
