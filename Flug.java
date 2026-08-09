@@ -2,8 +2,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 /**
  * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
@@ -328,7 +328,7 @@ public class Flug implements Serializable {
 
                 // Horizontale Trennlinie zwischen zwei Sitzklassen
                 for (int j = 0; j < this.sitzplan[i].length; j++) {
-                    System.out.print("-----");
+                    System.out.print("--- AB HIER ECONOMY ---");
                 }
 
                 System.out.println();
