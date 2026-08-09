@@ -304,7 +304,9 @@ public class UIMitarbeiter {
 
         System.out.println("Alle bisherigen Fluggesellschaften: ");
 
-        System.out.println(vs.getFluggesellschaften());
+        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+        }
 
     }
 
@@ -319,7 +321,9 @@ public class UIMitarbeiter {
     public  void fluggeselschaftentfernen() {
         System.out.println("--------------Fluggesellschaft entfernen---------------------------");
         System.out.println(" Welche Fluggesellschaft möchten Sie entfernen?: ");
-        System.out.println(vs.getFluggesellschaften());
+        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+        }
 
         System.out.println(" Bitte geben Sie den Airlinecode der Fluggesellschaft ein, die Sie entfernen möchten:");
         try {
@@ -351,7 +355,9 @@ public class UIMitarbeiter {
         int laufvariable = -1;
         System.out.println("----------------------Flotte Flugzeuge hinzufügen------------------------------");
         System.out.println("Liste der bestehenden Fluggesellschaften, deren Flotte ein Flugzeug hinzugefügt werden kann:");
-        System.out.println(vs.getFluggesellschaften());
+        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+        }
 
 
         // Auswahl der Fluggeselschafften
@@ -407,7 +413,26 @@ public class UIMitarbeiter {
          System.out.println("----------------------Flugzeug entfernen------------------------------");
 
          try {
-             System.out.println(vs.getAlleFlugzeuge());
+            for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+
+                System.out.println();
+                System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+
+                if (fluggesellschaft.getFlotte().isEmpty()) {
+                    System.out.println("Keine Flugzeuge vorhanden.");
+                } else {
+
+                    for (Flugzeug f : fluggesellschaft.getFlotte()) {
+
+                        System.out.println(f.getCode() + " | " + f.getModell()
+                                + " | Business-Sitze: " + f.getAnzahlBusiness()
+                                + " | Economy-Sitze: " + f.getAnzahlEconomy()
+                                + " | Gesamt: " + f.getGesamtSitzanzahl()
+                        );
+                    }
+                }
+            }
+
              System.out.println("Bitte geben Sie den Flugzeugcode zur Löschung ein:");
              String code = Manager.stringscanner();
              vs.entferneFlugzeug(code);
@@ -507,7 +532,7 @@ public class UIMitarbeiter {
     // Flüge anlegen
     public  void fluganlegen()
     {
-        String geselschaft = "";
+        String gesellschaft = "";
         String flugzeug = "";
         String startflughafen = "";
         String zielflughafen = "";
@@ -523,13 +548,21 @@ public class UIMitarbeiter {
 
         //Anzeige der gesamten Fluggesellschaften
         System.out.println("Welche Airline führt den Flug durch (Auswahl über Airlinecode)?:");
-        System.out.println(vs.getFluggesellschaften());
+        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+        }
         System.out.println("---------------------------------------------------------------------------------");
 
         try {
-            geselschaft = Manager.stringscanner().toUpperCase();
+            gesellschaft = Manager.stringscanner().toUpperCase();
             System.out.println("Welches Flugzeug soll für den Flug genutzt werden (Auswahl über Flugzeugcode)?: ");
-            System.out.println(vs.getFluggesellschaft(geselschaft).getFlotte());
+            for (Flugzeug f : vs.getFluggesellschaft(gesellschaft).getFlotte()) {
+
+                System.out.println(f.getCode() + " | " + f.getModell()
+                        + " | Business-Sitze: " + f.getAnzahlBusiness()
+                        + " | Economy-Sitze: " + f.getAnzahlEconomy()
+                        + " | Gesamt: " + f.getGesamtSitzanzahl());
+            }
             System.out.println("------------------------------------------------------------------------");
             flugzeug  = Manager.stringscanner();
             System.out.println("Ihr ausgewähltes Flugzeug: ");
@@ -565,7 +598,7 @@ public class UIMitarbeiter {
                 System.out.println("An wie vielen Tagen soll der Flug stattfinden?: ");
                 int wiederholung = Manager.intscanner();
                 try {
-                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(gesellschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
                 datenHandler.speichere(anwendungsdaten);
                 System.out.println("Die Fluege wurden erfolgreich angelegt.");
                 }
@@ -576,7 +609,7 @@ public class UIMitarbeiter {
 
             }
             else {
-                vs.fuegeFlugHinzu(vs.getFluggesellschaft(geselschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
+                vs.fuegeFlugHinzu(vs.getFluggesellschaft(gesellschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
                 datenHandler.speichere(anwendungsdaten);
 
 
