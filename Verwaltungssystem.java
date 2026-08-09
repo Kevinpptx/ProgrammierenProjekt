@@ -792,12 +792,14 @@ public class Verwaltungssystem implements Serializable {
         if (flug == null) {
             throw new IllegalArgumentException("Der Flug darf nicht null sein.");
         }
-        if (!fluege.remove(flug)) {
+        if (!fluege.contains(flug)) {
             throw new IllegalArgumentException("Der Flug ist nicht im Verwaltungssystem registriert.");
         }
         if (flug.berechneAuslastung() > 0) {
             throw new IllegalStateException("Der Flug kann nicht entfernt werden, da noch Buchungen vorhanden sind.");
         }
+
+        fluege.remove(flug);
     }
 
     /**
