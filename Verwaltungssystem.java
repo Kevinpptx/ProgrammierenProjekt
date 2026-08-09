@@ -497,7 +497,7 @@ public class Verwaltungssystem implements Serializable {
                 LocalDateTime abflugszeitRueckflug = hinflug.getAnkunftszeit().plus(turnAroundTime);
                 LocalDateTime ankunftszeitRueckflug = abflugszeitRueckflug.plus(flugdauer);
 
-                String flugnummer = erzeugeFlugnummer(fluggesellschaft, abflugszeitRueckflug);
+                String flugnummer = erzeugeFlugnummer(fluggesellschaft, abflugszeitRueckflug, erzeugteFluege);
                 Flug flugZurueck = new Flug(flugnummer, fluggesellschaft, flugzeug, hinflug.getZielflughafen(), hinflug.getStartFlughafen(), abflugszeitRueckflug, ankunftszeitRueckflug, hinflug.getBasispreis());
 
                 rueckfluege.add(flugZurueck);
