@@ -159,6 +159,14 @@ public class Flugzeug implements Serializable{
         return this.sitzplaetzeVorlage;
     }
 
+    public int getAnzahlEconomy() {
+        return anzahlEconomy;
+    }
+
+    public int getAnzahlBusiness() {
+        return anzahlBusiness;
+    }
+
     /**
      * Gibt eine Beschreibung des Flugzeugs einschließlich der
      * Sitzplatz-Anordnung zurück.
