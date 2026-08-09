@@ -120,7 +120,7 @@ public class Verwaltungssystem implements Serializable {
     /**
      * Sucht eine Fluggesellschaft anhand ihres Airline-Codes.
      *
-     * @param code der IATA-Code der gesuchten Fluggesellschaft
+     * @param c der IATA-Code der gesuchten Fluggesellschaft
      * @return die Fluggesellschaft mit dem angegebenen Code
      * @throws IllegalArgumentException wenn keine Fluggesellschaft mit dem
      * angegebenen Code existiert
