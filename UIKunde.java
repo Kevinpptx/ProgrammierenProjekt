@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Die Klasse {@code UIKunde} stellt die Konsolenoberfläche für Kunden bereit.
