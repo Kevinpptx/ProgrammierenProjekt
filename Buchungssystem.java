@@ -189,9 +189,9 @@ public class Buchungssystem implements Serializable {
             Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
             neuerSitzplatz.belegen(buchung);
 
-            // berechnet die Umbuchungsgebuehr und addiert sie auf den gezahlten Preis
+            // berechnet und speichert den gezahlten Umbuchungsbetrag
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
-            buchung.setGezahlterPreis(buchung.getGezahlterPreis() + gebuehr);
+            buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
 
             // weist den neuen Sitzplatz der Buchung zu
             buchung.setSitzplatz(neuerSitzplatz);
@@ -199,7 +199,10 @@ public class Buchungssystem implements Serializable {
             // weist den (neuen oder bestehenden) Flug der Buchung zu
             buchung.setFlug(flug);
 
-            // aendert den Buchungsstatus
+            //aktualisiert den gezahlten Preis
+            buchung.aktualisiereGezahltenPreis();
+
+            //aendert den Buchungsstatus
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
         }
 
@@ -322,7 +325,10 @@ public class Buchungssystem implements Serializable {
             preisNeuerFlug = flug.getBasispreis();
         }
 
-        // berechnet die Differenz aus altem und neuen Flug
+        //ergänze Koffergebühr für den neuen Flug 
+        preisNeuerFlug += buchung.getGepaeckinformation().berechneGepaeckgebuehr();
+
+        //berechnet die Differenz aus altem und neuen Flug
         ticketDifferenz = preisNeuerFlug - preisAlterFlug;
 
         // berechnet die finale Gebühr und schlägt die Ticketdifferenz auf, wenn diese
@@ -387,6 +393,33 @@ public class Buchungssystem implements Serializable {
         return relevanteBuchungen;
     }
 
+    public double gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
+
+    if (buchung == null) {
+        throw new IllegalArgumentException("Es wurde keine Buchung angegeben.");
+    }
+
+    if (!buchungen.contains(buchung)) {
+        throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden.");
+    }
+
+    if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV && buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+        throw new IllegalStateException("Das Gepäck kann bei dieser Buchung nicht mehr geändert werden.");
+    }
+
+    if (neueAnzahlKoffer < 0) {
+        throw new IllegalArgumentException("Die Anzahl der Koffer darf nicht negativ sein.");
+    }
+
+    double alterPreis = buchung.getGezahlterPreis();
+
+    buchung.setAnzahlKoffer(neueAnzahlKoffer);
+
+    double neuerPreis = buchung.getGezahlterPreis();
+
+    return neuerPreis - alterPreis;
+}
+
     /**
      * 
      * @return Anzahl an der getätigten Buchungen
@@ -407,12 +440,12 @@ public class Buchungssystem implements Serializable {
      * 
      * @return Liste aller getätigten Buchungen
      */
-    public ArrayList<Buchung> getBuchungen() {
-        return buchungen;
+    public List<Buchung> getBuchungen() {
+        return List.copyOf(buchungen);
     }
 
-    public ArrayList<Passagier> getPassagiere() {
-        return passagiere;
+    public List<Passagier> getPassagiere() {
+        return List.copyOf(passagiere);
     }
 
 }

@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Repräsentiert ein Flugzeug mit einem Sitzplan.
@@ -57,15 +58,24 @@ public class Flugzeug implements Serializable {
             int sitzeProReihe,
             int businessReihen) {
 
-        // Überprüfen, ob das Flugzeug "Sinn ergibt"
+        // Validiert die übergebenen Attribute 
+
+        if (code == null || code.isBlank()) {
+            throw new IllegalArgumentException("Bitte geben Sie einen Code an.");
+        }
+
+        if (modell == null || modell.isBlank()) {
+            throw new IllegalArgumentException("Bitte geben Sie einen Modellnamen an.");
+        }
+
         if (anzahlReihen <= 0) {
             throw new IllegalArgumentException(
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        if (anzahlReihen <= 0 || businessReihen > anzahlReihen) {
-            throw new IllegalArgumentException(
-                    "Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 1 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
+        //Es ist erlaubt, dass ein Flugzeug keine Bisuness-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
+        if (businessReihen < 0 || businessReihen > anzahlReihen) {
+            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
         }
 
         if (anzahlReihen > 100) {
@@ -75,8 +85,15 @@ public class Flugzeug implements Serializable {
         if (sitzeProReihe > 26) {
             throw new IllegalArgumentException("Die Anzahl der Sitzplätze pro Reihe darf nicht größer als 26 sein.");
         }
+        
+        if (sitzeProReihe < 1) {
+            throw new IllegalArgumentException("Die Anzahl der Sitze pro Reihe muss mindestens 1 betragen.");
+        }
+      
+        // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
 
-        this.code = code;
+        this.code = code.trim().toUpperCase(Locale.ROOT);
         this.modell = modell;
 
         this.sitzplaetzeVorlage = new Sitzplatz[anzahlReihen][sitzeProReihe];

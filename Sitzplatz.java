@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Repräsentiert einen Sitzplatz in einem Flugzeug.
@@ -44,9 +45,12 @@ public class Sitzplatz implements Serializable {
         if (sitzplatzNummer.isBlank()) {
             throw new IllegalArgumentException("Die Sitzplatznummer darf nicht leer sein");
         }
-        this.sitzplatzNummer = sitzplatzNummer;
+      
+        // entfernt Leerzeichen in der Sitzplatznummer, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        this.sitzplatzNummer = sitzplatzNummer.trim().toUpperCase(Locale.ROOT);
+      
         this.sitzklasse = sitzklasse;
-        this.buchung = null;
         freigeben();
     }
 
