@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 /**
@@ -124,7 +125,9 @@ public class Verwaltungssystem implements Serializable {
      * @throws IllegalArgumentException wenn keine Fluggesellschaft mit dem
      * angegebenen Code existiert
      */
-    public Fluggesellschaft getFluggesellschaft(String code) {
+    public Fluggesellschaft getFluggesellschaft(String c) {
+
+        String code = c.strip().toUpperCase(Locale.ROOT);
 
         Iterator<Fluggesellschaft> iterator = this.fluggesellschaften.iterator();
 
