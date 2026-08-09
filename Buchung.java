@@ -33,7 +33,7 @@ public class Buchung implements Serializable {
     /** Der gebuchte Sitzplatz */
     private Sitzplatz sitzplatz;
 
-    /** Die Anzahl der Koffer und die Gebühr pro Koffer */
+    /** Die Gepäckinformationen des Passagiers */
     private GepaeckInformation gepaeckInformation;
 
     /** Der aktuelle Status der Buchung */
@@ -255,7 +255,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Flug auf das übergebene Objekt {@code f}
+    * Ändert den Flug auf den übergebenen Flug {@code f}
      * @param f : Flug, der dieser Buchung zugewiesen werden soll
      */
     public void setFlug(Flug f) {
@@ -263,7 +263,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Buchungsstatus auf das übergebene {@code enum}
+     * Ändert den Buchungsstatus auf den übergebenen {@code Buchungsstatus}
      * @param status : der Buchungsstatus, auf den die Buchung geändert werden soll
      */
     public void setBuchungsstatus(Buchungsstatus status) {
