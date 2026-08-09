@@ -162,6 +162,8 @@ public class Verwaltungssystem implements Serializable {
      */
     public Flugzeug erzeugeFlugzeug(Fluggesellschaft fluggesellschaft, String code, String modell, int anzahlReihen, int sitzeProReihe, int businessReihen) {
 
+        String flugzeugCode = code.strip().toUpperCase(Locale.ROOT);
+
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Die übergebene Fluggesellschaft existiert nicht.");
         }
@@ -172,11 +174,11 @@ public class Verwaltungssystem implements Serializable {
         Iterator<Flugzeug> iterator = this.flugzeuge.iterator();
 
         while (iterator.hasNext()) {
-            if (iterator.next().getCode().equalsIgnoreCase(code)) {
-                throw new IllegalArgumentException("Ein Flugzeug mit dem Code " + code + " existiert bereits.");
+            if (iterator.next().getCode().equalsIgnoreCase(flugzeugCode)) {
+                throw new IllegalArgumentException("Ein Flugzeug mit dem Code " + flugzeugCode + " existiert bereits.");
             }
         }
-        Flugzeug f = new Flugzeug(code, modell, anzahlReihen, sitzeProReihe, businessReihen);
+        Flugzeug f = new Flugzeug(flugzeugCode, modell, anzahlReihen, sitzeProReihe, businessReihen);
 
         fluggesellschaft.fuegeFlugzeugHinzu(f);
         this.flugzeuge.add(f);
