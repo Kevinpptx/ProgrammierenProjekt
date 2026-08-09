@@ -281,7 +281,7 @@ public class Verwaltungssystem implements Serializable {
             Flughafen f = iterator.next();
             if (f.getIataCode().equals(code)) {
                 throw new IllegalArgumentException("Ein Flughafen mit dem IATACode " + code + " existiert bereits.");
-            } else if (f.getName().equals(name)) {
+            } else if (f.getName().equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException("Ein Flughafen mit dem Namen " + name + " existiert bereits.");
             }
         }
