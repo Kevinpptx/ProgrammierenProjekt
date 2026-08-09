@@ -7,7 +7,7 @@
  * <p>
  * STORNIERT: nicht mehr gültige Buchung, weil sie schon storniert ist.
  * <p>
- * VERGANGEN: eine Buchung in der Vergangenheit (anhand der Ankunftszeit des Fluges)
+ * VERGANGEN: eine Buchung in der Vergangenheit (anhand der Abflugzeit des Fluges)
  * <p>
  * WICHTIG: ALLE Methoden behandeln AKTIV und UMGEBUCHT als gültige Buchungen
  * und STORNIERT und VERGANGEN als ungültig. Man kann aber Buchungen nur einmal umbuchen, also
