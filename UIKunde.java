@@ -595,6 +595,9 @@ catch (Exception e) {
      */
     public void gepaeckAendern(Buchung buchung) {
 
+
+        alteFluegeLoeschen();
+
         try {
             System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer() );
 
