@@ -42,6 +42,12 @@ public class Buchung implements Serializable {
      */
     public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
+        try {
+            validiereBuchungsparameter(passagier, flug, sitzplatz, gepaeckInformation);
+        } catch (Exception e) {
+            throw e;
+        }
+        
         this.passagier = passagier;
         this.flug = flug;
         this.sitzplatz = sitzplatz;
@@ -53,6 +59,19 @@ public class Buchung implements Serializable {
     public Buchung(String buchungsnummer, Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
         
+        try {
+            validiereBuchungsparameter(passagier, flug, sitzplatz, gepaeckInformation);
+        } catch (Exception e) {
+            throw e;
+        }
+
+        if (buchungsnummer == null) {
+            throw new IllegalArgumentException("Die Buchungsnummer hat eine null-Referenz.");
+        }
+
+        if (buchungsnummer.isBlank()) {
+            throw new IllegalArgumentException("Die Buchungsnummer ist leer.");
+        }
         this.buchungsnummer = buchungsnummer;
         this.passagier = passagier;
         this.flug = flug;
@@ -60,6 +79,13 @@ public class Buchung implements Serializable {
         this.gepaeckInformation = gepaeckInformation;
         this.gezahlterPreis = berechneGezahltenPreis();
         this.buchungsstatus = Buchungsstatus.AKTIV;
+    }
+
+    private void validiereBuchungsparameter(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
+            GepaeckInformation gepaeckInformation) {
+        if (passagier == null || flug == null || sitzplatz == null || gepaeckInformation == null) {
+            throw new IllegalArgumentException("Einer der Buchungsparameter hat eine null-Referenz.");
+        }
     }
 
 
