@@ -337,8 +337,8 @@ public class Buchung implements Serializable {
                 this.gepaeckInformation.toString() +
                 "\n---------------------------------------------\n" +
                 "Damit beträgt die Buchungssumme: " +
-                String.format("%.2f", this.gezahlterPreis) + "€" + 
+                String.format("%.2f", this.gezahlterPreis) + " Euro" + 
                 "\nGezahlter Umbuchungsbetrag: " 
-                + String.format("%.2f", this.gezahlteUmbuchungsgebuehr) + "€";
+                + String.format("%.2f", this.gezahlteUmbuchungsgebuehr) + " Euro";
     }
 }
