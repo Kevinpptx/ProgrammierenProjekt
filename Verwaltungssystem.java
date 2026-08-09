@@ -190,7 +190,7 @@ public class Verwaltungssystem implements Serializable {
      * Entfernt ein Flugzeug aus der Flotte.
      *
      * @param code der IATA-Code des Flugzeugs, das entfernt werden soll
-     * @throws IllegalArgumentException wenn das Flugzeug null ist
+     * @throws IllegalArgumentException wenn der IATA-Code null ist
      * @throws IllegalStateException wenn das Flugzeug nicht zur Flotte gehört
      */
     public void entferneFlugzeug(String code) {
@@ -198,11 +198,7 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Der Flugzeug-Code darf nicht leer sein.");
         }
 
-        Flugzeug flug = this.getFlugzeug(code);
-
-        if (flug == null) {
-            throw new IllegalArgumentException("Es existiert kein Flugzeug mit dem Code " + code + ".");
-        }
+        Flugzeug flug = this.getFlugzeug(code.strip().toUpperCase(Locale.ROOT));
 
         Iterator<Flug> iteratorFlug = this.fluege.iterator();
 
