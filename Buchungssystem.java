@@ -341,7 +341,7 @@ public class Buchungssystem implements Serializable {
      * storniert eine vorhandene Buchung; ändert den Buchungsstatus und gibt den
      * Sitzplatz der Buchung frei
      * 
-     * @param buchung
+     * @param buchung , die storniert werden soll
      * @return die Storno-Gebühr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in
      *                                  der Liste "buchungen" ist
