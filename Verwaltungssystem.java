@@ -611,6 +611,10 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
         }
 
+        if (!flugzeuge.contains(fluggesellschaft)) {
+            throw new IllegalArgumentException("Das Flugzeug wird nicht vom Verwaltungssystem verwaltet");
+        }
+
     }
 
     private void pruefeFlug(Flug neuerFlug, List<Flug> neueFluege) {
