@@ -33,7 +33,7 @@ public class Buchung implements Serializable {
     /** Der gebuchte Sitzplatz */
     private Sitzplatz sitzplatz;
 
-    /** Die Anzahl der Koffer und die Gebühr pro Koffer */
+    /** Die Gepäckinformationen des Passagiers */
     private GepaeckInformation gepaeckInformation;
 
     /** Der aktuelle Status der Buchung */
