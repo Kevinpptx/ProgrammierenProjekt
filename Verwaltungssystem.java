@@ -624,7 +624,7 @@ public class Verwaltungssystem implements Serializable {
 
         //prüfe danach gegen erzeugte Serienflüge
         for (Flug vorhandenerNeuerFlug : neueFluege) {
-            if (vorhandenerNeuerFlug.equals(neuerFlug)) {
+            if (vorhandenerNeuerFlug == neuerFlug) {
                 continue;
             }
             pruefeUeberschneidung(neuerFlug, vorhandenerNeuerFlug);
