@@ -386,7 +386,7 @@ public class Verwaltungssystem implements Serializable {
                 return f;
             }
         }
-        throw new IllegalArgumentException("Der Flughafen mit dem Namen " + stadt + " konnte nicht gefunden werden.");
+        throw new IllegalArgumentException("Der Flughafen in " + stadt + " konnte nicht gefunden werden.");
     }
 
     /**
