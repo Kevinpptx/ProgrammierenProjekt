@@ -120,10 +120,10 @@ public class Buchung implements Serializable {
     /**
      * Prüft, ob die Parameter eine {@code null}- Referenz enthalten.
      * 
-     * @param passagier
-     * @param flug
-     * @param sitzplatz
-     * @param gepaeckInformation
+     * @param passagier : der Passagier der Buchung
+     * @param flug : der gebuchte Flug
+     * @param sitzplatz : der gebuchte Sitzplatz
+     * @param gepaeckInformation : die Gepäckinformation der Buchung
      */
     private void validiereBuchungsparameter(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
             GepaeckInformation gepaeckInformation) {
@@ -149,6 +149,10 @@ public class Buchung implements Serializable {
             throw new UnsupportedOperationException("Klasse nicht implementiert.");
     }
 
+    /**
+     * Storniert die Buchung und gibt die Storno-Gebühr zurück.
+     * @return stornierungsGebühr
+     */
     public double stornierenMitGebühr() {
         this.buchungsstatus = Buchungsstatus.STORNIERT;
         return stornierungsGebühr;
@@ -274,6 +278,10 @@ public class Buchung implements Serializable {
         return gepaeckInformation;
     }
 
+    /**
+     * Gibt den gezahlten Preis zurück.
+     * @return gezahlterPreis
+     */
     public double getGezahlterPreis() {
         return gezahlterPreis;
     }
@@ -285,14 +293,26 @@ public class Buchung implements Serializable {
     public void setGezahlterPreis(double preis) {
         this.gezahlterPreis = preis;
     }
+    
+    /**
+     * Aktualisiert den gezahlten Preis, indem dieser neu berechnet wird.
+     */
     public void aktualisiereGezahltenPreis() {
         this.gezahlterPreis = berechneGezahltenPreis();
     }
 
+    /**
+     * Gibt die gezahlte Umbuchungsgebühr zurück.
+     * @return gezahlteUmbuchungsgebuehr
+     */
     public double getGezahlteUmbuchungsgebuehr() {
         return gezahlteUmbuchungsgebuehr;
     }
 
+    /**
+     * Setzt die gezahlte Umbuchungsgebühr auf den übergebenen Parameter
+     * @param gebuehr : die neue gezahlte Umbuchungsgebühr
+     */
     public void setGezahlteUmbuchungsgebuehr(double gebuehr) {
         this.gezahlteUmbuchungsgebuehr = gebuehr;
     }

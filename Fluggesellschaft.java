@@ -66,11 +66,7 @@ public class Fluggesellschaft implements Serializable {
      *
      * @param f das hinzuzufügende Flugzeug
      * @throws IllegalArgumentException wenn das übergebene Flugzeug eine
-     *                                  null-Referenz enthält. Dies sollte
-     *                                  eigentlich nicht
-     *                                  vorkommen, weil das Verwaltungssystem
-     *                                  als einzige Klasse die Methode aufruft und
-     *                                  diese vorher ein Flugzeug-Objekt erzeugt.
+     *                                  null-Referenz enthält.
      */
     public void fuegeFlugzeugHinzu(Flugzeug f) {
         if (f == null) {

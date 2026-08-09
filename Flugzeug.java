@@ -3,7 +3,7 @@ import java.util.Locale;
 
 /**
  * Repräsentiert ein Flugzeug mit einem Sitzplan.
- * Das Flugzeug besitzt eine Versionsnummer, einen eindeutigen Code, ein Modell
+ * Das Flugzeug besitzt einen eindeutigen Code, ein Modell
  * sowie eine Vorlage aller vorhandenen Sitzplätze.
  */
 public class Flugzeug implements Serializable {
