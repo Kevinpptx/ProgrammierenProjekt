@@ -189,7 +189,7 @@ public class Verwaltungssystem implements Serializable {
     /**
      * Entfernt ein Flugzeug aus der Flotte.
      *
-     * @param flugzeug das zu entfernende Flugzeug
+     * @param code der IATA-Code des Flugzeugs, das entfernt werden soll
      * @throws IllegalArgumentException wenn das Flugzeug null ist
      * @throws IllegalStateException wenn das Flugzeug nicht zur Flotte gehört
      */
