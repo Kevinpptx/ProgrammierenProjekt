@@ -251,7 +251,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Flug auf das übergebene Objekt {@code f}
+    * Ändert den Flug auf den übergebenen Flug {@code f}
      * @param f : Flug, der dieser Buchung zugewiesen werden soll
      */
     public void setFlug(Flug f) {
