@@ -1,6 +1,6 @@
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Die Klasse {@code UIKunde} stellt die Konsolenoberfläche für Kunden bereit.
@@ -346,7 +346,7 @@ try {
     System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
     int  koffer = Manager.intscanner();
 
-    bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse );
+    bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs );
     datenHandler.speichere(anwendungsdaten);
 
 
@@ -474,7 +474,7 @@ try {
 
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            bs.umbuchen( buchung, fluege.get(index), sitzplatz, sitzklasse );
+            bs.umbuchen(buchung, fluege.get(index), sitzplatz, sitzklasse, vs);
             datenHandler.speichere(anwendungsdaten);
 
             

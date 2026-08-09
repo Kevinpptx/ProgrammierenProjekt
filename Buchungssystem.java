@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.naming.OperationNotSupportedException;
-
 /**
  * Die Klasse {@code Buchungssystem} repräsentiert den kompletten
  * Buchungsprozess.
@@ -106,10 +104,20 @@ public class Buchungssystem implements Serializable {
      */
 
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
-            Sitzklasse sitzklasse) {
+            Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
             throw new IllegalArgumentException("Fehler! Mindestens einer der übergebenen Werte ist ungültig.");
         }
+
+        // Existiert der Passagier im System? Wenn nicht: Fehler
+        if (!passagiere.contains(passagier)) {
+            throw new IllegalArgumentException("Der übergebene Passagier existiert nicht (mehr) im System. Bitte einen anderen Passagier wählen oder die Buchung neu vornehmen!");
+        }
+
+        // Existiert der Flug im System? Wenn nicht: Fehler
+         if (!verwaltungssystem.getFluege().contains(flug)) {
+            throw new IllegalArgumentException("Der übergebene Flug existiert nicht (mehr) im System. Bitte einen anderen Flug wählen oder die Buchung neu vornehmen!");
+         }
 
         try {
 
@@ -161,57 +169,47 @@ public class Buchungssystem implements Serializable {
      * Die entgegengenommenen Parameter können neu sein oder nicht, das erfolgt in
      * der Methode {@link validiereUmbuchung}
      * 
-     * @param buchung
-     * @param sitzplatznummer
-     * @param sitzklasse
+     * @param buchung die aktuell vorliegende Buchung
+     * @param Flug der betreffende Flug
+     * @param sitzplatznummer die betreffende Sitzplatznummer
+     * @param sitzklasse mit entsprechender Sitzklasse
      * @return den Buchungsbetrag
      */
-    public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzklasse sitzklasse) {
-        boolean umbuchungMoeglich = false;
-        double gebuehr = 0.0;
-        // versucht, eine Umbuchung vorzunehmen
-        try {
-            umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse);
-        } catch (Exception e) {
-            throw e;
-        }
-        if (umbuchungMoeglich) {
-            //nimmt sich den alten Sitzplatz aus der Buchung
-            Sitzplatz alterSitzplatz = buchung.getSitzplatz();
+    public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
+    boolean umbuchungMoeglich = false;
+    double gebuehr = 0.0;
 
-            //gibt den alten Sitzplatz frei
-            alterSitzplatz.freigeben();
+    // Umbuchung prüfen
+    umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse, verwaltungssystem);
 
-            //setzt die Buchungsreferenz in dem alten Sitzplatz auf null
-            alterSitzplatz.setBuchung(null);
+    if (umbuchungMoeglich) {
+        // alten Sitzplatz merken
+        Sitzplatz alterSitzplatz = buchung.getSitzplatz();
 
-            //nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive der Buchungsreferenz des Sitzplatzes).
-            Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
-            neuerSitzplatz.belegen();
+        // neuen Sitzplatz ermitteln
+        Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
 
-            // berechnet und speichert den gezahlten Umbuchungsbetrag
-            gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
-            buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
-            
-            //weist den neuen Sitzplatz der Buchung zu
-            buchung.setSitzplatz(neuerSitzplatz);
+        // Umbuchungsgebühr berechnen
+        gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
 
-            //weist die Buchung dem Sitzplatz zu
-            neuerSitzplatz.setBuchung(buchung);
+        // neuen Sitzplatz belegen
+        neuerSitzplatz.belegen();
 
-            //weist den (neuen oder bestehenden) Flug der Buchung zu
-            buchung.setFlug(flug);
+        // Buchung aktualisieren
+        buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
+        buchung.setSitzplatz(neuerSitzplatz);
+        neuerSitzplatz.setBuchung(buchung);
+        buchung.setFlug(flug);
+        buchung.aktualisiereGezahltenPreis();
+        buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
 
-            //aktualisiert den gezahlten Preis
-            buchung.aktualisiereGezahltenPreis();
-
-            //aendert den Buchungsstatus
-            buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
-        }
-
-        return gebuehr;
-
+        // Alter Sitzplatz wird erst freigegeben, nachdem die Buchung vollständig vorbereitet wurde
+        alterSitzplatz.freigeben();
+        alterSitzplatz.setBuchung(null);
     }
+
+    return gebuehr;
+}
 
     /**
      * Schaut, ob eine Umbuchung möglich ist.
@@ -228,10 +226,15 @@ public class Buchungssystem implements Serializable {
      * @return
      */
     public boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer,
-            Sitzklasse sitzklasse) {
+            Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
         // wenn die Buchung nicht vorhanden ist
         if (buchung == null) {
             throw new NoSuchElementException("Es ist keine Buchung angegeben, von der umgebucht werden soll.");
+        }
+
+        // wenn neuer Flug gar nicht im System existiert
+        else if (!verwaltungssystem.getFluege().contains(neuerFlug)) {
+            throw new NoSuchElementException("Der Flug, auf den umgebucht werden soll, ist nicht (mehr) im System registriert.");
         }
 
         // wenn beide Buchungsparameter leer sind
@@ -240,8 +243,8 @@ public class Buchungssystem implements Serializable {
         }
 
         // wenn schon einmal umgebucht oder der Flug storniert wurde
-        else if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV) {
-            throw new IllegalStateException("Nur aktive Buchungen können umgebucht werden.");
+        else if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT || buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
+            throw new IllegalStateException("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
         }
 
         // wenn keine Sitzklasse angegeben wurde
@@ -250,7 +253,7 @@ public class Buchungssystem implements Serializable {
         }
 
         // wenn im selben Flug ein anderer Sitzplatz gebucht werden muss
-        else if (neuerFlug == buchung.getFlug()) {
+        else if (neuerFlug == buchung.getFlug() || neuerFlug == null) {
             return validiereUmbuchungimSelbenFlug(buchung, neueSitzplatznummer, sitzklasse);
         }
 
@@ -379,10 +382,10 @@ public class Buchungssystem implements Serializable {
      * @return Liste an Buchungen, die die Kriterien erfüllen
      */
     public ArrayList<Buchung> findeRelevanteBuchungen(Flug flug) {
-        ArrayList<Buchung> relevanteBuchungen = new ArrayList<Buchung>();
+        ArrayList<Buchung> relevanteBuchungen = new ArrayList<>();
         for(int i = 0; i< buchungen.size(); i++) {
             Buchung bTemp = buchungen.get(i);
-            if(bTemp.getFlug().equals(flug) && bTemp.getBuchungsstatus() != Buchungsstatus.STORNIERT) {
+            if(bTemp.getFlug().equals(flug) && bTemp.getBuchungsstatus() != Buchungsstatus.STORNIERT && bTemp.getBuchungsstatus() != Buchungsstatus.VERGANGEN) {
                relevanteBuchungen.add(bTemp); 
             }
         }
