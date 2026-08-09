@@ -611,7 +611,7 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
         }
 
-        if (!flugzeuge.contains(fluggesellschaft)) {
+        if (!flugzeuge.contains(flugzeug)) {
             throw new IllegalArgumentException("Das Flugzeug wird nicht vom Verwaltungssystem verwaltet");
         }
 
@@ -958,20 +958,23 @@ public class Verwaltungssystem implements Serializable {
      */
     public void alteFluegeLoeschen(Buchungssystem buchungssystem) {
 
-    Iterator<Flug> iterator = fluege.iterator();
+        Iterator<Flug> iterator = fluege.iterator();
 
         while (iterator.hasNext()) {
 
-            Flug f = iterator.next();
+            Flug flug = iterator.next();
 
-            for (Buchung buchung : buchungssystem.getBuchungen()) {
+            if (flug.getAbflugszeit().isBefore(LocalDateTime.now())) {
 
-                if (buchung.getFlug() == f) {
-                    buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
+                for (Buchung buchung : buchungssystem.getBuchungen()) {
+
+                    if (buchung.getFlug() == flug) {
+                        buchung.setBuchungsstatus(Buchungsstatus.VERGANGEN);
+                    }
                 }
-            }
 
-            iterator.remove();
+                iterator.remove();
+            }
         }
     }
 }
