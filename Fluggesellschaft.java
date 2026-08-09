@@ -27,12 +27,18 @@ public class Fluggesellschaft implements Serializable {
      */
     public Fluggesellschaft(String name, String airlineCode) {
 
-        this.name = name;
-
-        if (airlineCode.isEmpty() || airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0)) || !Character.isLetter(airlineCode.charAt(1))) {
-            throw new IllegalArgumentException("Der IATA-Code muss aus zwei Buchstaben bestehen!");
+        if (name == null || airlineCode == null) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
+        }
+        
+        if (name.isBlank() || airlineCode.isBlank()) {
+            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");            
+        }
+        if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0)) || !Character.isLetter(airlineCode.charAt(1))) {
+            throw new IllegalArgumentException("Airline-Code muss aus zwei Buchstaben bestehen!");
         }
 
+        this.name = name;
         this.airlineCode = airlineCode.toUpperCase();
     }
 
