@@ -259,7 +259,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Buchungsstatus auf das übergebene {@code enum}
+     * Ändert den Buchungsstatus auf den übergebenen {@code Buchungsstatus}
      * @param status : der Buchungsstatus, auf den die Buchung geändert werden soll
      */
     public void setBuchungsstatus(Buchungsstatus status) {
