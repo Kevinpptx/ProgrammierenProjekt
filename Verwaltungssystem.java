@@ -592,13 +592,10 @@ public class Verwaltungssystem implements Serializable {
      * Validiert den Flug in Bezug darauf, ob Fluggesellschaften und Flughäfen
      * registriert sind und das Flugzeug zur Fluggesellschaft gehört.
      *
-     * @param fluggesellschaft
-     * @param flugzeug
-     * @param startFlughafen
-     * @param zielFlughafen
-     * @param abflugzeit
-     * @param ankunftszeit
-     * @param basispreis
+     * @param fluggesellschaft die den Flug durchführen soll
+     * @param flugzeug mit dem der Flug durchgeführt werden soll
+     * @param startFlughafen von dem der Flug starten soll
+     * @param zielFlughafen zu dem der Flug fliegen soll
      */
     public void validiereFlug(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen) {
 
