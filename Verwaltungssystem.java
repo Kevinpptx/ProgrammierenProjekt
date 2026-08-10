@@ -645,27 +645,6 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Erstellt ein {@link LocalDateTime}-Objekt aus den angegebenen Datums- und
-     * Zeitbestandteilen.
-     *
-     * @param jahr das Jahr
-     * @param monat der Monat von 1 bis 12
-     * @param tag der Tag des Monats
-     * @param stunde die Stunde von 0 bis 23
-     * @param minute die Minute von 0 bis 59
-     * @return das erzeugte Datum mit Uhrzeit
-     * @throws IllegalArgumentException wenn die angegebenen Werte kein gültiges
-     * Datum oder keine gültige Uhrzeit ergeben
-     */
-    public LocalDateTime erstelleLocalDateTime(int jahr, int monat, int tag, int stunde, int minute) {
-        try {
-            return LocalDateTime.of(jahr, monat, tag, stunde, minute);
-        } catch (DateTimeException e) {
-            throw new IllegalArgumentException("Das eingegebene Datum oder die Uhrzeit ist ungültig.", e);
-        }
-    }
-
-    /**
      * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie
      * Flugnummer.
      * <p>

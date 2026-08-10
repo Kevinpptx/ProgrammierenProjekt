@@ -28,7 +28,7 @@ public class DatenHandler {
      * Erzeugt einen neuen DatenHandler.
      */
     public DatenHandler() {
-
+        
     }
     
     /**
