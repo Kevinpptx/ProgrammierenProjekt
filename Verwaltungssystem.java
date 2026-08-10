@@ -906,16 +906,16 @@ public class Verwaltungssystem implements Serializable {
         }
 
         Iterator<Flug> iterator = fluege.iterator();
-        ArrayList<Flug> ret = new ArrayList<>();
+        ArrayList<Flug> gefundeneFluege = new ArrayList<>();
 
         while (iterator.hasNext()) {
             Flug f = iterator.next();
             if (f.getAbflugszeit().toLocalDate().equals(datum)) {
-                ret.add(f);
+                gefundeneFluege.add(f);
             }
         }
-        if (!ret.isEmpty()) {
-            return ret;
+        if (!gefundeneFluege.isEmpty()) {
+            return gefundeneFluege;
         }
         throw new NoSuchElementException("Es wurden keine Flüge an dem Datum " + datum + " gefunden.");
     }
