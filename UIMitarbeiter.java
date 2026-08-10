@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -639,21 +641,40 @@ public class UIMitarbeiter {
      */
     public  LocalDateTime  anabflug(String text)
     {
-        System.out.println("Bitte geben Sie das Jahr " + text + " ein: ");
-        int jahr  = Manager.intscanner();
-        System.out.println("Bitte geben Sie den Monat " + text + " ein: ");
-        int monat = Manager.intscanner();
-        System.out.println("Bitte geben Sie den Tag " + text + " ein: ");
-        int tag = Manager.intscanner();
-        System.out.println("Bitte geben Sie die Stunde " + text + " ein: ");
-        int stunde = Manager.intscanner();
-        System.out.println("Bitte geben Sie die Minute " + text + " ein:");
-        int minute = Manager.intscanner();
-        datenHandler.speichere(anwendungsdaten);
+        String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$", zeitRegex = "^(?:[01]\\d|2[0-3]):[0-5]\\d$", datumsString = "", zeitString = "";
+        int zaehler = 0;
+        LocalDate datum = null;
+        LocalTime zeit = null;
 
-    
-        return vs.erstelleLocalDateTime(jahr, monat, tag, stunde, minute);
+        while (!datumsString.matches(datumRegex)) {
+            
+            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
 
+            System.out.print("Bitte geben Sie ein Datum ein: ");
+
+            datumsString = Manager.stringscanner();
+            zaehler++;
+        }
+
+        zaehler = 0;
+
+        while (!zeitString.matches(zeitRegex)) {
+            
+            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 10:30 \n");
+
+            System.out.print("Bitte geben Sie eine Uhrzeit ein: ");
+
+            zeitString = Manager.stringscanner();
+            zaehler++;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        datum = LocalDate.parse(datumsString, formatter);
+
+        formatter = DateTimeFormatter.ofPattern("HH:mm");
+        zeit = LocalTime.parse(zeitString, formatter);
+
+        return datum.atTime(zeit);
     }
 
     /**
