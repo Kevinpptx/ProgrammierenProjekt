@@ -892,6 +892,35 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
+     * Sucht alle Flüge an einem bestimmten Datum. 
+     *
+     * @param datum das Datum 
+     * @return Liste aller Flüge an dem angegebenen Datum
+     * @throws IllegalArgumentException wenn das Datum {@code null} ist
+     * @throws NoSuchElementException wenn kein Flug an dem Datum gefunden
+     * wurde
+     */
+    public ArrayList<Flug> sucheFluegeNachDatum(LocalDate datum) {
+        if (datum == null) {
+            throw new IllegalArgumentException("Das Datum darf nicht null sein.");
+        }
+
+        Iterator<Flug> iterator = fluege.iterator();
+        ArrayList<Flug> gefundeneFluege = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            Flug f = iterator.next();
+            if (f.getAbflugszeit().toLocalDate().equals(datum)) {
+                gefundeneFluege.add(f);
+            }
+        }
+        if (!gefundeneFluege.isEmpty()) {
+            return gefundeneFluege;
+        }
+        throw new NoSuchElementException("Es wurden keine Flüge an dem Datum " + datum + " gefunden.");
+    }
+
+    /**
      * Sucht einen bestimmten Flug anhand seiner Flugnummer und seines
      * Abflugdatums.
      *
