@@ -174,49 +174,35 @@ public class Buchungssystem implements Serializable {
      * @param sitzklasse mit entsprechender Sitzklasse
      * @return den Buchungsbetrag
      */
-    public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzklasse sitzklasse) {
-        boolean umbuchungMoeglich = false;
-        double gebuehr = 0.0;
-        // versucht, eine Umbuchung vorzunehmen
-        try {
-            umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse);
-        } catch (Exception e) {
-            throw e;
-        }
-        if (umbuchungMoeglich) {
-            // nimmt sich den alten Sitzplatz aus der Buchung
-            Sitzplatz alterSitzplatz = buchung.getSitzplatz();
+public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
+    boolean umbuchungMoeglich = false;
+    double gebuehr = 0.0;
 
-            // gibt den alten Sitzplatz frei
-            alterSitzplatz.freigeben();
+    // Umbuchung prüfen
+    umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse, verwaltungssystem);
 
-            // nimmt sich explizit den Sitz aus dem gewählten Flug und belegt ihn (inklusive
-            // der Buchungsreferenz des Sitzplatzes).
-            Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
-            neuerSitzplatz.belegen(buchung);
+    if (umbuchungMoeglich) {
+        // alten Sitzplatz merken
+        Sitzplatz alterSitzplatz = buchung.getSitzplatz();
 
-            // berechnet und speichert den gezahlten Umbuchungsbetrag
-            gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
-            buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
+        // neuen Sitzplatz ermitteln
+        Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
 
-            // weist den neuen Sitzplatz der Buchung zu
-            buchung.setSitzplatz(neuerSitzplatz);
+        // Umbuchungsgebühr berechnen
+        gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
 
-            // weist den (neuen oder bestehenden) Flug der Buchung zu
-            buchung.setFlug(flug);
+        // neuen Sitzplatz belegen
+        neuerSitzplatz.belegen(buchung);
 
-            //aktualisiert den gezahlten Preis
-            buchung.aktualisiereGezahltenPreis();
-
-            //aendert den Buchungsstatus
-            buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
-        }
-
-        return gebuehr;
+        // Buchung aktualisieren
+        buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
+        buchung.setSitzplatz(neuerSitzplatz);
+        buchung.setFlug(flug);
+        buchung.aktualisiereGezahltenPreis();
+        buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
 
         // Alter Sitzplatz wird erst freigegeben, nachdem die Buchung vollständig vorbereitet wurde
         alterSitzplatz.freigeben();
-        alterSitzplatz.setBuchung(null);
     }
 
     return gebuehr;
