@@ -575,7 +575,7 @@ catch (Exception e) {
             
             if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
             
-            System.out.print("Name Zielflughafen (verpflichtend): ");
+            System.out.print("IATA-Code des Zielflughafens (verpflichtend): ");
             ziel = Manager.stringscanner();
 
             zaehler++;
@@ -584,7 +584,7 @@ catch (Exception e) {
         zaehler = 0;
         String entscheidung = " ";
 
-        while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+        while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
             if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
             System.out.print("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
@@ -603,7 +603,7 @@ catch (Exception e) {
             
                 if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
             
-                System.out.print("Name Startflughafen (optional): ");
+                System.out.print("IATA-Code des Startflughafens (optional): ");
                 start = Manager.stringscanner();
 
                 zaehler++;
@@ -613,7 +613,7 @@ catch (Exception e) {
         zaehler = 0;
         entscheidung = " ";
 
-            while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
             if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
             System.out.print("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
@@ -626,6 +626,7 @@ catch (Exception e) {
         }
 
         zaehler = 0;
+        String datumsString = "";
 
         if (!flugnummerUeberspringen) {
             
@@ -641,9 +642,8 @@ catch (Exception e) {
 
             zaehler = 0;
             entscheidung = " ";
-            String datumsString = "";
 
-            while (entscheidung.charAt(0) != 'j' && entscheidung.charAt(0) != 'n') {
+            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
                 System.out.print("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
@@ -671,6 +671,39 @@ catch (Exception e) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 datum = LocalDate.parse(datumsString, formatter);
             }
+        } else {
+
+            zaehler = 0;
+            entscheidung = " ";
+
+            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+
+                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                System.out.print("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
+
+                entscheidung = Manager.stringscanner();
+
+                if (entscheidung.charAt(0) == 'n') datumUeberspringen = true;
+
+                zaehler++;
+            }
+        }
+
+        zaehler = 0;
+
+        if (!datumUeberspringen) {
+
+            String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
+
+            while (!datumsString.matches(datumRegex)) {
+                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                System.out.print("Bitte geben Sie ein Datum ein: ");
+                datumsString = Manager.stringscanner();
+                zaehler++;
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            datum = LocalDate.parse(datumsString, formatter);
         }
 
         if (!flugnummer.isBlank()) {
@@ -681,6 +714,28 @@ catch (Exception e) {
                 fluege.add(vs.sucheFlugNachNummer(flugnummer, datum));
             }
 
+        } else if (!datumUeberspringen) {
+
+            ArrayList<Flug> fluegeMitGleichemDatum = vs.sucheFluegeNachDatum(datum);
+
+            if (!start.isBlank() && !ziel.isBlank()) {
+
+                ArrayList<Flug> fluegeMitGleicherRoute = vs.sucheFluegeNachRoute(vs.getFlughafenNachCode(start), vs.getFlughafenNachCode(ziel));
+
+                for (Flug f : fluegeMitGleichemDatum) {
+                    if (fluegeMitGleicherRoute.contains(f)) fluege.add(f);
+                }
+
+            } else if (!ziel.isBlank()) {
+                
+                ArrayList<Flug> fluegeMitGleichemZiel = vs.sucheFluegeNachZiel(vs.getFlughafenNachCode(ziel));
+
+                for (Flug f : fluegeMitGleichemDatum) {
+                    if (fluegeMitGleichemZiel.contains(f)) fluege.add(f);
+                }
+
+            }
+            
         } else if (!start.isBlank() && !ziel.isBlank()) {
             fluege.addAll(
                     vs.sucheFluegeNachRoute(
