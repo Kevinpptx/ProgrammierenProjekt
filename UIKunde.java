@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -5,17 +6,15 @@ import java.util.ArrayList;
 /**
  * Die Klasse {@code UIKunde} stellt die Konsolenoberfläche für Kunden bereit.
  *
- * Kunden können sich neu registrieren oder ein bereits vorhandenes
- * Kundenkonto auswählen. Nach der Anmeldung können sie Flüge suchen und
- * buchen, bestehende Buchungen umbuchen oder stornieren und ihre Buchungen
- * anzeigen lassen.
+ * Kunden können sich neu registrieren oder ein bereits vorhandenes Kundenkonto
+ * auswählen. Nach der Anmeldung können sie Flüge suchen und buchen, bestehende
+ * Buchungen umbuchen oder stornieren und ihre Buchungen anzeigen lassen.
  *
  * Änderungen an den Daten werden mithilfe des {@link DatenHandler} gespeichert.
  *
- * @author Lars Pfeiffer
+ * @author Lars Pfeiffer, Cedric Beckmann, Kevin Braun
  * @version 1.0
  */
-
 public class UIKunde {
 
     /**
@@ -38,14 +37,14 @@ public class UIKunde {
      */
     private final Verwaltungssystem vs;
 
-
     /**
-     *Erstellt eine neue Kundenoberfläche.
-     *Das Buchungs- und Verwaltungssystem werden aus den übergebenen Anwendungsdaten übernommen.
+     * Erstellt eine neue Kundenoberfläche. Das Buchungs- und Verwaltungssystem
+     * werden aus den übergebenen Anwendungsdaten übernommen.
      *
      * @param datenHandler Handler zum Speichern der Anwendungsdaten
      * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
-     * @throws IllegalArgumentException wenn der DatenHandler oder dieAnwendungsdaten {@code null} sind
+     * @throws IllegalArgumentException wenn der DatenHandler oder
+     * dieAnwendungsdaten {@code null} sind
      */
     public UIKunde(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
@@ -57,169 +56,157 @@ public class UIKunde {
             throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
         }
 
-
-        this.datenHandler = datenHandler; 
+        this.datenHandler = datenHandler;
         this.anwendungsdaten = anwendungsdaten;
         this.bs = anwendungsdaten.getBuchungssystem();
         this.vs = anwendungsdaten.getVerwaltungssystem();
     }
 
-
     /**
      * Zeigt das Anmeldemenü für Kunden an.
      *
-     * Der Benutzer kann einen neuen Kunden anlegen, einen bestehenden
-     * Passagier über dessen ID auswählen oder zum vorherigen Menü
-     * zurückkehren.
+     * Der Benutzer kann einen neuen Kunden anlegen, einen bestehenden Passagier
+     * über dessen ID auswählen oder zum vorherigen Menü zurückkehren.
      *
      * Nach einer erfolgreichen Anmeldung wird das Kundenhauptmenü geöffnet.
      */
-public void kunde()
-{
+    public void kunde() {
 
+        while (true) {
 
-    while (true) {
+            System.out.println("-------------------Herzlich Wilkommen-------------------------");
+            System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
+            System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
+            System.out.println("Drücken Sie die 3: Wenn sie zurück wollen ");
 
-        System.out.println("-------------------Herzlich Wilkommen-------------------------");
-        System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
-        System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
-        System.out.println("Drücken Sie die 3: Wenn sie zurück wollen ");
+            int auswahl = Manager.intscanner();
 
-        int auswahl = Manager.intscanner();
+            switch (auswahl) {
 
-        switch (auswahl) {
+                case 1:
+                    System.out.println("Bitte geben sie ihren Namen ein ");
+                    String name = Manager.stringscanner();
 
-            case 1:
-                System.out.println("Bitte geben sie ihren Namen ein ");
-                String name = Manager.stringscanner();
+                    System.out.println("Bitte geben sie ihren E-Mail ein ");
+                    String mail = Manager.stringscanner();
 
-                System.out.println("Bitte geben sie ihren E-Mail ein ");
-                String mail = Manager.stringscanner();
+                    try {
+                        Passagier passagier = bs.initialisierePassagier(name, mail);
 
-                try {
-                    Passagier passagier = bs.initialisierePassagier(name, mail);
+                        datenHandler.speichere(anwendungsdaten);
 
-                    datenHandler.speichere(anwendungsdaten);
+                        System.out.println("Kunde erfolgreich angelegt:");
+                        System.out.println(passagier);
 
-                    System.out.println("Kunde erfolgreich angelegt:");
-                    System.out.println(passagier);
+                        hauptmanagerk(passagier);
+                        return;
 
-                    hauptmanagerk(passagier);
-                    return;
-
-                } catch (Exception e) {
-                    System.out.println("Fehler: " + e.getMessage());
-                    break;
-                }
-
-            case 2:
-
-                if (bs.getPassagiere().isEmpty()) {
-                    System.out.println("Es sind noch keine Kunden vorhanden.");
-                    break;
-                }
-
-                System.out.println("Passagierliste:");
-
-                for (Passagier passagier : bs.getPassagiere()) {
-                    System.out.println(passagier.toString());
-            }
-
-                System.out.println("\nBitte wählen Sie einen Passagier über die ID:");
-                String id = Manager.stringscanner();
-
-                Passagier ausgewaehlterPassagier = null;
-
-
-                for (Passagier passagier : bs.getPassagiere()) {
-                    if (passagier.getPassagierId().equalsIgnoreCase(id)) {
-                        ausgewaehlterPassagier = passagier;
+                    } catch (Exception e) {
+                        System.out.println("Fehler: " + e.getMessage());
                         break;
                     }
-                }
 
+                case 2:
 
+                    if (bs.getPassagiere().isEmpty()) {
+                        System.out.println("Es sind noch keine Kunden vorhanden.");
+                        break;
+                    }
 
-            if (ausgewaehlterPassagier == null){
-                System.out.println("Diese Passagier-ID existiert nicht.");
-                break;
+                    System.out.println("Passagierliste:");
+
+                    for (Passagier passagier : bs.getPassagiere()) {
+                        System.out.println(passagier.toString());
+                    }
+
+                    System.out.println("\nBitte wählen Sie einen Passagier über die ID:");
+                    String id = Manager.stringscanner();
+
+                    Passagier ausgewaehlterPassagier = null;
+
+                    for (Passagier passagier : bs.getPassagiere()) {
+                        if (passagier.getPassagierId().equalsIgnoreCase(id)) {
+                            ausgewaehlterPassagier = passagier;
+                            break;
+                        }
+                    }
+
+                    if (ausgewaehlterPassagier == null) {
+                        System.out.println("Diese Passagier-ID existiert nicht.");
+                        break;
+                    }
+
+                    System.out.println("Sie haben ausgewählt:");
+                    System.out.println(ausgewaehlterPassagier);
+
+                    datenHandler.speichere(anwendungsdaten);
+                    hauptmanagerk(ausgewaehlterPassagier);
+                    break;
+
+                case 3:
+                    return;
+
+                default:
+                    System.out.println("Ungültige Eingabe.\n");
+                    break;
+
             }
-
-
-        System.out.println("Sie haben ausgewählt:");
-        System.out.println(ausgewaehlterPassagier);
-
-        datenHandler.speichere(anwendungsdaten);
-        hauptmanagerk(ausgewaehlterPassagier);
-        break;
-
-            case 3:
-                return;
-
-            default:
-                System.out.println("Ungültige Eingabe.\n");
-                break;
-
         }
+
     }
-
-
-}
-
 
     /**
      * Zeigt das Kundenhauptmenü für einen angemeldeten Passagier an.
      *
-     * Von diesem Menü aus kann der Kunde Flüge suchen und buchen,
-     * bestehende Buchungen umbuchen oder stornieren sowie seine
-     * aktuellen Buchungen anzeigen lassen und die Anzahl der Gepäckstücke anpassen.
+     * Von diesem Menü aus kann der Kunde Flüge suchen und buchen, bestehende
+     * Buchungen umbuchen oder stornieren sowie seine aktuellen Buchungen
+     * anzeigen lassen und die Anzahl der Gepäckstücke anpassen.
      *
      * @param passagier der aktuell angemeldete Passagier
      */
-    public void hauptmanagerk(Passagier passagier ) {
+    public void hauptmanagerk(Passagier passagier) {
 
+        while (true) {
 
-    while (true) {
+            System.out.println("-------------------Willkommen " + passagier.getName() + " im Hauptmanager-------------------------");
+            System.out.println("Willkommen, was möchten Sie tun?: ");
+            System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen.");
+            System.out.println("Drücken Sie die 2, um eine Umbuchung auf einen anderen Flug vorzunehmen.");
+            System.out.println("Drücken Sie die 3, um eine Buchung zu stornieren.");
+            System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
+            System.out.println("Drücken Sie die 5, um das Gepäck ihrer Buchung anzupassen.");
+            System.out.println("Drücken Sie die 6, um zum Start zu gelangen.");
 
-        System.out.println("-------------------Willkommen "+ passagier.getName() + " im Hauptmanager-------------------------");
-        System.out.println("Willkommen, was möchten Sie tun?: ");
-        System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen.");
-        System.out.println("Drücken Sie die 2, um eine Umbuchung auf einen anderen Flug vorzunehmen.");
-        System.out.println("Drücken Sie die 3, um eine Buchung zu stornieren.");
-        System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
-        System.out.println("Drücken Sie die 5, um das Gepäck ihrer Buchung anzupassen.");
-        System.out.println("Drücken Sie die 6, um zum Start zu gelangen.");
+            int auswahl = Manager.intscanner();
 
-        int auswahl = Manager.intscanner();
+            switch (auswahl) {
+                case 1:
+                    flugsundb(passagier);
+                    break;
+                case 2:
+                    umbuchen(passagier);
+                    break;
 
-        switch(auswahl) {
-            case 1:
-                flugsundb(passagier);
-                break;
-            case 2:
-                umbuchen(passagier);
-                break;
+                case 3:
+                    stornieren(passagier);
+                    break;
 
-            case 3:
-                stornieren(passagier);
-                break;
+                case 4:
+                    buchunganzeigen(passagier);
+                    break;
+                case 5:
+                    gepaeckAendern(passagier);
+                    break;
+                case 6:
+                    return;
 
-            case 4:
-                buchunganzeigen(passagier);
-                break;
-            case 5:
-                gepaeckAendern(passagier);
-                break;
-            case 6:
-                return;
+                default:
+                    System.out.println("Ungültige Eingabe.");
+                    break;
 
-            default:
-                System.out.println("Ungültige Eingabe.");
-                break;
+            }
 
         }
-
-    }
 
     }
 
@@ -230,15 +217,13 @@ public void kunde()
      * Buchungen aktualisiert. Danach kann nach Flugnummer, Flugroute oder
      * Zielflughafen gesucht werden.
      *
-     * Der Kunde wählt anschließend einen Flug, einen Sitzplatz und die
-     * Anzahl der aufzugebenden Koffer aus. Nach erfolgreicher Buchung
-     * werden die Anwendungsdaten gespeichert.
+     * Der Kunde wählt anschließend einen Flug, einen Sitzplatz und die Anzahl
+     * der aufzugebenden Koffer aus. Nach erfolgreicher Buchung werden die
+     * Anwendungsdaten gespeichert.
      *
      * @param passagier der Passagier, für den der Flug gebucht wird
      */
-
-    public void flugsundb(Passagier passagier ) {
-
+    public void flugsundb(Passagier passagier) {
 
         System.out.println("-------------------Willkommen im Bereich für Flugsuche und Buchung-------------------------");
 
@@ -246,83 +231,77 @@ public void kunde()
 
         System.out.println(vs.getFlughaefen().toString());
 
-
-
-try {
-
-    ArrayList<Flug> fluege = sucheFluege();
-
-    System.out.println(
-            "--------------------------------------------------------------------------------"
-    );
-
-    if (fluege.isEmpty()) {
-        System.out.println("Keine Flüge gefunden.\n");
-        return;
-    } else {
-        for (int i = 0; i < fluege.size(); i++) {
-            System.out.println("Flug " + (i) + ": " + fluege.get(i));
-        }
-    }
-
-    int flugIndex = -1;
-    Flug flug = null;
-
-    while (flugIndex == -1) {
-
-        System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
-        flugIndex = Manager.intscanner();
-
         try {
-            flug = fluege.get(flugIndex);
+
+            ArrayList<Flug> fluege = sucheFluege();
+
+            System.out.println(
+                    "--------------------------------------------------------------------------------"
+            );
+
+            if (fluege.isEmpty()) {
+                System.out.println("Keine Flüge gefunden.\n");
+                return;
+            } else {
+                for (int i = 0; i < fluege.size(); i++) {
+                    System.out.println("Flug " + (i) + ": " + fluege.get(i));
+                }
+            }
+
+            int flugIndex = -1;
+            Flug flug = null;
+
+            while (flugIndex == -1) {
+
+                System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
+                flugIndex = Manager.intscanner();
+
+                try {
+                    flug = fluege.get(flugIndex);
+                } catch (Exception e) {
+                    System.out.println("Listennummer existiert nicht. Bitte geben Sie eine gültige Nummer ein!");
+                    flugIndex = -1;
+                }
+            }
+
+            flug.zeigeSitzplan();
+
+            String sitzplatz = "";
+
+            while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
+                System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
+                sitzplatz = Manager.stringscanner();
+            }
+
+            Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
+
+            System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
+            int koffer = Manager.intscanner();
+
+            bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs);
+            datenHandler.speichere(anwendungsdaten);
+
         } catch (Exception e) {
-            System.out.println("Listennummer existiert nicht. Bitte geben Sie eine gültige Nummer ein!");
-            flugIndex = -1;
+            System.out.println("Fehler " + e.getMessage());
         }
-    }
-
-    flug.zeigeSitzplan();
-
-    String sitzplatz = "";
-
-    while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
-        System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
-        sitzplatz = Manager.stringscanner();
-    }
-
-    Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
-
-    System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
-    int  koffer = Manager.intscanner();
-
-    bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs );
-    datenHandler.speichere(anwendungsdaten);
-
-
-} catch (Exception e) {
-    System.out.println( "Fehler "+ e.getMessage());
-}
     }
 
     /**
      * Führt die Umbuchung einer vorhandenen Buchung durch.
      *
-     * Zunächst werden alle Buchungen des Passagiers angezeigt. Der Kunde
-     * wählt eine Buchung über die Buchungsnummer aus. Danach sucht er
-     * einen neuen Flug und wählt einen neuen Sitzplatz sowie eine
-     * Sitzklasse.
+     * Zunächst werden alle Buchungen des Passagiers angezeigt. Der Kunde wählt
+     * eine Buchung über die Buchungsnummer aus. Danach sucht er einen neuen
+     * Flug und wählt einen neuen Sitzplatz sowie eine Sitzklasse.
      *
-     * Die Umbuchung wird nur durchgeführt, wenn die angegebene Buchung
-     * dem angemeldeten Passagier gehört.
-     * 
-     * Im Anschluss an eine erfolgreiche Umbuchung kann der Kunde
-     * zusätzlich die Anzahl der Gepäckstücke anpassen.
+     * Die Umbuchung wird nur durchgeführt, wenn die angegebene Buchung dem
+     * angemeldeten Passagier gehört.
+     *
+     * Im Anschluss an eine erfolgreiche Umbuchung kann der Kunde zusätzlich die
+     * Anzahl der Gepäckstücke anpassen.
      *
      * @param passagier der Passagier, dessen Buchung geändert werden soll
      */
-    public void umbuchen(Passagier passagier)
-    {
-
+    public void umbuchen(Passagier passagier) {
 
         System.out.println("-------------------Willkommen im Umbuchungsbereich-------------------------");
         for (Buchung b : bs.getBuchungen()) {
@@ -338,19 +317,16 @@ try {
         String nummer = Manager.stringscanner();
 
         try {
-        Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-        if (!buchung.getPassagier().equals(passagier)) {
-            System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!");
+            if (!buchung.getPassagier().equals(passagier)) {
+                System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Fehler " + e.getMessage());
             return;
         }
-        }
-        catch (Exception e) {
-            System.out.println( "Fehler "+ e.getMessage());
-            return;
-        }
-
-
 
         System.out.println(vs.getFlughaefen().toString());
 
@@ -400,7 +376,6 @@ try {
             bs.umbuchen(buchung, fluege.get(index), sitzplatz, sitzklasse, vs);
             datenHandler.speichere(anwendungsdaten);
 
-            
             System.out.println("Umbuchung erfolgreich.");
 
             System.out.println("Möchten Sie die Anzahl Ihrer Koffer ändern?");
@@ -414,29 +389,24 @@ try {
             }
 
         } catch (Exception e) {
-            System.out.println( "Fehler "+ e.getMessage());
+            System.out.println("Fehler " + e.getMessage());
         }
 
-
-
     }
-
 
     /**
      * Storniert eine Buchung des angegebenen Passagiers.
      *
-     * Es werden zunächst alle Buchungen des Passagiers angezeigt.
-     * Anschließend wird die gewünschte Buchung über ihre Buchungsnummer
-     * ausgewählt. Die Stornierung ist nur möglich, wenn die Buchung dem
-     * angemeldeten Passagier gehört.
+     * Es werden zunächst alle Buchungen des Passagiers angezeigt. Anschließend
+     * wird die gewünschte Buchung über ihre Buchungsnummer ausgewählt. Die
+     * Stornierung ist nur möglich, wenn die Buchung dem angemeldeten Passagier
+     * gehört.
      *
-     * Nach erfolgreicher Stornierung werden die Anwendungsdaten
-     * gespeichert.
+     * Nach erfolgreicher Stornierung werden die Anwendungsdaten gespeichert.
      *
      * @param passagier der Passagier, dessen Buchung storniert werden soll
      */
-    public void stornieren(Passagier passagier)
-    {
+    public void stornieren(Passagier passagier) {
         System.out.println("-------------------Willkommen im Stornierungsbereich-------------------------");
         for (Buchung b : bs.getBuchungen()) {
             if (b.getPassagier().equals(passagier)) {
@@ -449,26 +419,20 @@ try {
         System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
 
         String nummer = Manager.stringscanner();
-try {
-    Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+        try {
+            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-    if (!buchung.getPassagier().equals(passagier)) {
-        System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
-        return;
-    }
+            if (!buchung.getPassagier().equals(passagier)) {
+                System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
+                return;
+            }
 
-    bs.stornieren(buchung);
-    datenHandler.speichere(anwendungsdaten);
+            bs.stornieren(buchung);
+            datenHandler.speichere(anwendungsdaten);
 
-
-}
-catch (Exception e) {
-    System.out.println( "Fehler "+ e.getMessage());
-}
-
-
-
-
+        } catch (Exception e) {
+            System.out.println("Fehler " + e.getMessage());
+        }
 
     }
 
@@ -480,8 +444,7 @@ catch (Exception e) {
      *
      * @param passagier der Passagier, dessen Buchungen angezeigt werden
      */
-    public void buchunganzeigen(Passagier passagier)
-    {
+    public void buchunganzeigen(Passagier passagier) {
         for (Buchung b : bs.getBuchungen()) {
             if (b.getPassagier().equals(passagier)) {
                 System.out.println(b);
@@ -489,10 +452,9 @@ catch (Exception e) {
         }
     }
 
-
     /**
-     * Ermöglicht die nachträgliche Anpassung der Anzahl der Gepäckstücke
-     * für eine Buchung des angegebenen Passagiers.
+     * Ermöglicht die nachträgliche Anpassung der Anzahl der Gepäckstücke für
+     * eine Buchung des angegebenen Passagiers.
      *
      * Zunächst werden die Buchungen des Passagiers angezeigt und anschließend
      * die gewünschte Buchung anhand der eingegebenen Buchungsnummer ermittelt.
@@ -500,7 +462,8 @@ catch (Exception e) {
      * Passagier zugeordnet ist. Anschließend wird die Änderung der
      * {@code Gepaeckinformation} für diese Buchung durchgeführt.
      *
-     * @param passagier der Passagier, dessen Gepäckinformationen geändert werden sollen
+     * @param passagier der Passagier, dessen Gepäckinformationen geändert
+     * werden sollen
      */
     public void gepaeckAendern(Passagier passagier) {
 
@@ -526,25 +489,24 @@ catch (Exception e) {
         }
     }
 
-
     /**
      * Ändert die Anzahl der Gepäckstücke einer bestehenden Buchung.
      *
      * Die aktuell gebuchte Anzahl der Koffer wird angezeigt und eine neue
      * Anzahl wird vom Benutzer abgefragt. Anschließend werden die
-     * {@code Gepaeckinformation} und der Preis der Buchung entsprechend angepasst.
-     * Die Änderungen werden danach persistent gespeichert und die entstandene
-     * Preisdifferenz wird ausgegeben.
+     * {@code Gepaeckinformation} und der Preis der Buchung entsprechend
+     * angepasst. Die Änderungen werden danach persistent gespeichert und die
+     * entstandene Preisdifferenz wird ausgegeben.
      *
-     * @param buchung die Buchung, deren Gepäckinformationen geändert werden sollen
+     * @param buchung die Buchung, deren Gepäckinformationen geändert werden
+     * sollen
      */
     public void gepaeckAendern(Buchung buchung) {
-
 
         vs.alteFluegeLoeschen(bs);
 
         try {
-            System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer() );
+            System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer());
 
             System.out.println("Neue Anzahl Koffer:");
             int neueAnzahl = Manager.intscanner();
@@ -562,7 +524,7 @@ catch (Exception e) {
     }
 
     private ArrayList<Flug> sucheFluege() {
-        
+
         ArrayList<Flug> fluege = new ArrayList<>();
 
         String start = "", ziel = "", flugnummer = "";
@@ -572,9 +534,11 @@ catch (Exception e) {
         boolean startUeberspringen = false, flugnummerUeberspringen = false, datumUeberspringen = false;
 
         while (ziel.length() != 3 || !Character.isAlphabetic(ziel.charAt(0)) || !Character.isAlphabetic(ziel.charAt(1)) || !Character.isAlphabetic(ziel.charAt(2))) {
-            
-            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
-            
+
+            if (zaehler != 0) {
+                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+            }
+
             System.out.print("IATA-Code des Zielflughafens (verpflichtend): ");
             ziel = Manager.stringscanner();
 
@@ -586,12 +550,16 @@ catch (Exception e) {
 
         while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
-            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            if (zaehler != 0) {
+                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            }
             System.out.print("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
-            if (entscheidung.charAt(0) == 'n') startUeberspringen = true;
+            if (entscheidung.charAt(0) == 'n') {
+                startUeberspringen = true;
+            }
 
             zaehler++;
         }
@@ -600,9 +568,11 @@ catch (Exception e) {
 
         if (!startUeberspringen) {
             while (start.length() != 3 || !Character.isAlphabetic(start.charAt(0)) || !Character.isAlphabetic(start.charAt(1)) || !Character.isAlphabetic(start.charAt(2))) {
-            
-                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
-            
+
+                if (zaehler != 0) {
+                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+                }
+
                 System.out.print("IATA-Code des Startflughafens (optional): ");
                 start = Manager.stringscanner();
 
@@ -613,14 +583,18 @@ catch (Exception e) {
         zaehler = 0;
         entscheidung = " ";
 
-            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+        while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
-            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            if (zaehler != 0) {
+                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+            }
             System.out.print("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
-            if (entscheidung.charAt(0) == 'n') flugnummerUeberspringen = true;
+            if (entscheidung.charAt(0) == 'n') {
+                flugnummerUeberspringen = true;
+            }
 
             zaehler++;
         }
@@ -629,10 +603,12 @@ catch (Exception e) {
         String datumsString = "";
 
         if (!flugnummerUeberspringen) {
-            
+
             while (flugnummer.length() != 5 || !Character.isAlphabetic(flugnummer.charAt(0)) || !Character.isAlphabetic(flugnummer.charAt(1)) || !Character.isDigit((flugnummer.charAt(2))) || !Character.isDigit((flugnummer.charAt(3))) || !Character.isDigit((flugnummer.charAt(4)))) {
 
-                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: LH123 \n");
+                if (zaehler != 0) {
+                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: LH123 \n");
+                }
 
                 System.out.print("Flugnummer (optional): ");
                 flugnummer = Manager.stringscanner();
@@ -645,12 +621,16 @@ catch (Exception e) {
 
             while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
-                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                if (zaehler != 0) {
+                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                }
                 System.out.print("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
-                if (entscheidung.charAt(0) == 'n') datumUeberspringen = true;
+                if (entscheidung.charAt(0) == 'n') {
+                    datumUeberspringen = true;
+                }
 
                 zaehler++;
             }
@@ -662,7 +642,9 @@ catch (Exception e) {
                 String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
 
                 while (!datumsString.matches(datumRegex)) {
-                    if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                    if (zaehler != 0) {
+                        System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                    }
                     System.out.print("Bitte geben Sie ein Datum ein: ");
                     datumsString = Manager.stringscanner();
                     zaehler++;
@@ -678,12 +660,16 @@ catch (Exception e) {
 
             while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
 
-                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                if (zaehler != 0) {
+                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                }
                 System.out.print("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
-                if (entscheidung.charAt(0) == 'n') datumUeberspringen = true;
+                if (entscheidung.charAt(0) == 'n') {
+                    datumUeberspringen = true;
+                }
 
                 zaehler++;
             }
@@ -696,7 +682,9 @@ catch (Exception e) {
             String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
 
             while (!datumsString.matches(datumRegex)) {
-                if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                if (zaehler != 0) {
+                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                }
                 System.out.print("Bitte geben Sie ein Datum ein: ");
                 datumsString = Manager.stringscanner();
                 zaehler++;
@@ -723,19 +711,23 @@ catch (Exception e) {
                 ArrayList<Flug> fluegeMitGleicherRoute = vs.sucheFluegeNachRoute(vs.getFlughafenNachCode(start), vs.getFlughafenNachCode(ziel));
 
                 for (Flug f : fluegeMitGleichemDatum) {
-                    if (fluegeMitGleicherRoute.contains(f)) fluege.add(f);
+                    if (fluegeMitGleicherRoute.contains(f)) {
+                        fluege.add(f);
+                    }
                 }
 
             } else if (!ziel.isBlank()) {
-                
+
                 ArrayList<Flug> fluegeMitGleichemZiel = vs.sucheFluegeNachZiel(vs.getFlughafenNachCode(ziel));
 
                 for (Flug f : fluegeMitGleichemDatum) {
-                    if (fluegeMitGleichemZiel.contains(f)) fluege.add(f);
+                    if (fluegeMitGleichemZiel.contains(f)) {
+                        fluege.add(f);
+                    }
                 }
 
             }
-            
+
         } else if (!start.isBlank() && !ziel.isBlank()) {
             fluege.addAll(
                     vs.sucheFluegeNachRoute(
