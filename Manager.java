@@ -101,7 +101,7 @@ public class Manager {
                      return;
 
                     default:
-                    System.out.print("Falsche eingabe!");
+                         UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
     }
 }
@@ -127,7 +127,7 @@ public class Manager {
             try {
             return  Integer.parseInt(auswahl);
         } catch (NumberFormatException  e) {
-            System.out.print("Ungültige Eingabe! Bitte geben Sie eine Ganze Zahl ein: ");
+            UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Ganzzahl ein.");
         }
 
         }
@@ -173,7 +173,7 @@ public class Manager {
             return Double.parseDouble(zahl);
 
         } catch (NumberFormatException e) {
-            System.out.print("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein: ");
+            UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
         }
 
     }
