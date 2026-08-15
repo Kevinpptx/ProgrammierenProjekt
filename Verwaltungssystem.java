@@ -64,13 +64,14 @@ public class Verwaltungssystem implements Serializable {
      * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null}
      * ist oder bereits registriert wurde
      */
-    public void fuegeFluggesellschaftHinzu(Fluggesellschaft fluggesellschaft) {
+    public Fluggesellschaft fuegeFluggesellschaftHinzu(Fluggesellschaft fluggesellschaft) {
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaft-Objekt hat eine Nullreferenz");
         } else if (this.fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaften-Objekt ist schon in der Liste enthalten");
         } else {
             this.fluggesellschaften.add(fluggesellschaft);
+            return fluggesellschaft;
         }
     }
 
