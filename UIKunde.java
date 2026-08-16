@@ -338,15 +338,8 @@ public class UIKunde {
             System.out.printf("%-13s%s%n", "Sitzklasse:", sitzklasse);
             System.out.printf("%-13s%d%n", "Koffer:", koffer);
 
-            double ticketpreis;
-
-            if (sitzklasse == Sitzklasse.BUSINESS) {
-                ticketpreis = flug.getBasispreis() * buchungsvorschau.getBusinesspreisfaktor();
-            } else {
-                ticketpreis = flug.getBasispreis();
-            }
-
             double gepaeckpreis = buchungsvorschau.getGepaeckinformation().berechneGepaeckgebuehr();
+            double ticketpreis = buchungsvorschau.getGezahlterPreis() - gepaeckpreis;
 
             System.out.printf("%-13s%.2f Euro%n", "Ticketpreis:", ticketpreis);
             System.out.printf("%-13s%.2f Euro%n", "Gepäck:", gepaeckpreis);
@@ -559,8 +552,6 @@ public class UIKunde {
 
             Buchung buchungsvorschau = new Buchung(passagier, neuerFlug, neuerSitzplatz, new GepaeckInformation(buchung.getGepaeckinformation().getAnzahlKoffer()));
 
-            bs.validiereUmbuchung(buchung, neuerFlug, sitzplatz, sitzklasse, vs);
-
             double bisherigerBuchungspreis = buchung.getGezahlterPreis();
             double neuerBuchungspreis = buchungsvorschau.getGezahlterPreis();
             double umbuchungsgebuehr = buchung.getUmbuchungsgebuehr();
@@ -569,7 +560,7 @@ public class UIKunde {
 
             UIHelper.druckeUeberschrift("Umbuchungsübersicht");
 
-            System.out.printf("%-27s%s | %s%n","Bisheriger Flug:", buchung.getFlug().getFlugnummer(), buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER));;
+            System.out.printf("%-27s%s | %s%n","Bisheriger Flug:", buchung.getFlug().getFlugnummer(), buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
 
             System.out.printf("%-27s%s | %s%n", "Neuer Flug:", neuerFlug.getFlugnummer(), neuerFlug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
 
@@ -648,6 +639,11 @@ public class UIKunde {
 
             if (!buchung.getPassagier().equals(passagier)) {
                 UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier.");
+                return;
+            }
+
+            if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV && buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht erneut storniert werden.");
                 return;
             }
 

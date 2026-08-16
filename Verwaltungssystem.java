@@ -514,7 +514,7 @@ public class Verwaltungssystem implements Serializable {
 
             fluege.addAll(erzeugteFluege);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Serie konnte nicht erstellt werden: " + e.getMessage());
+            throw new IllegalArgumentException("Das Flugpaar konnte nicht erstellt werden: " + e.getMessage());
         }
         return erzeugteFluege;
     }
