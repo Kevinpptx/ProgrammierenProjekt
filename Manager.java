@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 /**
@@ -5,14 +6,13 @@ import java.util.Scanner;
  * Sie zeigt das Hauptmenü an und leitet den Benutzer abhängig von seiner
  * Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
  *
- * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben
- * über die Konsole eingelesen und überprüft werden können.
+ * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben über
+ * die Konsole eingelesen und überprüft werden können.
  *
  * @author Lars Pfeiffer
  * @version 1.0
  */
 public class Manager {
-
 
     /**
      * DatenHandler zum Speichern der Anwendungsdaten.
@@ -34,15 +34,14 @@ public class Manager {
      */
     private final UIMitarbeiter uiMitarbeiter;
 
-
     /**
      * Zentraler Scanner zum Einlesen von Konsoleneingaben.
      */
     private static final Scanner SCANNER = new Scanner(System.in);
 
     /**
-     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten
-     * und den DatenHandler.
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den
+     * DatenHandler.
      *
      * @param datenHandler Handler zum Speichern der Anwendungsdaten
      * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
@@ -63,77 +62,73 @@ public class Manager {
         this.uiMitarbeiter = new UIMitarbeiter(datenHandler, anwendungsdaten);
     }
 
-
     /**
      * Startet das Avigator-System und zeigt das Hauptmenü an.
      *
-     * Der Benutzer kann sich als Administrator oder Kunde anmelden.
-     * Außerdem kann das Programm beendet werden. Beim Beenden werden
-     * die aktuellen Anwendungsdaten gespeichert.
+     * Der Benutzer kann sich als Administrator oder Kunde anmelden. Außerdem
+     * kann das Programm beendet werden. Beim Beenden werden die aktuellen
+     * Anwendungsdaten gespeichert.
      *
-     * Das Menü wird so lange angezeigt, bis der Benutzer das Programm
-     * über die entsprechende Auswahl beendet.
+     * Das Menü wird so lange angezeigt, bis der Benutzer das Programm über die
+     * entsprechende Auswahl beendet.
      */
     public void start() {
 
-
         while (true) {
 
-            System.out.print("\n--------------------------------------------");
-        System.out.println("\n Herzlich Willkommen beim Avigator!");
-        System.out.print("--------------------------------------------");
-        System.out.print("\n Als welche Art von Benutzer möchten Sie das System nutzen?");
-        System.out.print("\n Drücken Sie die 1, um sich als Admin anzumelden.");
-        System.out.println("\n Drücken Sie die 2, um sich als Kunde anzumelden.");
-        System.out.println(" Drücken Sie die 3, um das Programm zu beenden.");
-        System.out.println("--------------------------------------------");
+            UIHelper.druckeUeberschrift("Herzlich Willkommen beim Avigator!");
 
-                int auswahl = intscanner();
-                    switch (auswahl) {
-                    case 1:
-                        uiMitarbeiter.login();
-                        break;
-                    case 2:
-                        uiKunde.kunde();
-                         break;
-                    case 3:
-                     datenHandler.speichere(anwendungsdaten);
-                     return;
+            UIHelper.druckeEingabeaufforderung("Als welche Art von Benutzer möchten Sie das System nutzen?");
 
-                    default:
-                         UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine der angezeigten Zahlen ein.");
+            UIHelper.druckeMenuepunkt(1,"Admin");
+            UIHelper.druckeMenuepunkt(2,"Kunde");
+            UIHelper.druckeMenuepunkt(0 ,"Programm beenden");
+
+            UIHelper.druckeTrennlinie();
+
+            int auswahl = intscanner();
+            switch (auswahl) {
+                case 1:
+                    uiMitarbeiter.login();
                     break;
-    }
-}
-    }
+                case 2:
+                    uiKunde.kunde();
+                    break;
+                case 0:
+                    datenHandler.speichere(anwendungsdaten);
+                    return;
 
+                default:
+                    UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine der angezeigten Zahlen ein.");
+                    break;
+            }
+        }
+    }
 
     /**
      * Liest eine Ganzzahl über die Konsole ein.
      *
-     * Die Eingabe wird zunächst als Text eingelesen und anschließend
-     * in einen {@code int}-Wert umgewandelt. Ist keine gültige Ganzzahl
-     * eingegeben worden, wird {@code -1} zurückgegeben.
+     * Die Eingabe wird zunächst als Text eingelesen und anschließend in einen
+     * {@code int}-Wert umgewandelt. Ist keine gültige Ganzzahl eingegeben
+     * worden, wird {@code -1} zurückgegeben.
      *
-     * @return die eingegebene Ganzzahl oder {@code -1} bei einer
-     *         ungültigen Eingabe
+     * @return die eingegebene Ganzzahl oder {@code -1} bei einer ungültigen
+     * Eingabe
      */
     // Scanner um nach den richtigen werten zu filtern
     public static int intscanner() {
 
-        while(true) {
+        while (true) {
             String auswahl = SCANNER.nextLine().trim();
 
             try {
-            return  Integer.parseInt(auswahl);
-        } catch (NumberFormatException  e) {
-            UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Ganzzahl ein.");
-        }
+                return Integer.parseInt(auswahl);
+            } catch (NumberFormatException e) {
+                UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Ganzzahl ein.");
+            }
 
         }
     }
-
-
 
     /**
      * Liest eine Zeichenkette über die Konsole ein.
@@ -148,19 +143,17 @@ public class Manager {
 
     }
 
-
     /**
      * Liest eine Kommazahl über die Konsole ein.
      *
-     * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma
-     * als Dezimaltrennzeichen. Ein Komma wird vor der Umwandlung
-     * durch einen Punkt ersetzt.
+     * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als
+     * Dezimaltrennzeichen. Ein Komma wird vor der Umwandlung durch einen Punkt
+     * ersetzt.
      *
-     * Ist die Eingabe keine gültige Kommazahl, wird {@code -1.1}
-     * zurückgegeben.
+     * Ist die Eingabe keine gültige Kommazahl, wird {@code -1.1} zurückgegeben.
      *
-     * @return die eingegebene Kommazahl oder {@code -1.1} bei einer
-     *         ungültigen Eingabe
+     * @return die eingegebene Kommazahl oder {@code -1.1} bei einer ungültigen
+     * Eingabe
      */
     public static double doublescanner() {
 
@@ -168,16 +161,15 @@ public class Manager {
 
             String zahl = SCANNER.nextLine().trim().replace(",", ".");
 
-        try {
+            try {
 
-            return Double.parseDouble(zahl);
+                return Double.parseDouble(zahl);
 
-        } catch (NumberFormatException e) {
-            UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
+            } catch (NumberFormatException e) {
+                UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
+            }
+
         }
-
     }
-    }
-
 
 }

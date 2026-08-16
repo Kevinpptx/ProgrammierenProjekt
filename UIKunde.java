@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * Änderungen an den Daten werden mithilfe des {@link DatenHandler} gespeichert.
  *
- * @author Lars Pfeiffer, Cedric Beckmann, Kevin Braun
+ * @author Lars Pfeiffer, Cedric Beckmann
  * @version 1.0
  */
 public class UIKunde {
