@@ -38,6 +38,11 @@ public class UIKunde {
     private final Verwaltungssystem vs;
 
     /**
+     * Formatiert Datum und Uhrzeit im Format {@code dd.MM.yyyy HH:mm}.
+     */
+    private static final DateTimeFormatter DATUM_ZEIT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+    /**
      * Erstellt eine neue Kundenoberfläche. Das Buchungs- und Verwaltungssystem
      * werden aus den übergebenen Anwendungsdaten übernommen.
      *
@@ -74,80 +79,102 @@ public class UIKunde {
 
         while (true) {
 
-            System.out.println("-------------------Herzlich Wilkommen-------------------------");
-            System.out.println("Drücken Sie die 1: Wenn sie neuer kunde sind ");
-            System.out.println("Drücken Sie die 2: Wenn sie bereits kunde sind ");
-            System.out.println("Drücken Sie die 3: Wenn sie zurück wollen ");
+            UIHelper.druckeUeberschrift("Herzlich willkommen");
+
+            UIHelper.druckeMenuepunkt(1, "Als neuer Kunde registrieren");
+            UIHelper.druckeMenuepunkt(2, "Als bestehender Kunde anmelden");
+            UIHelper.druckeMenuepunkt(0, "Zurück");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
 
                 case 1:
-                    System.out.println("Bitte geben sie ihren Namen ein ");
-                    String name = Manager.stringscanner();
+                    String name;
 
-                    System.out.println("Bitte geben sie ihren E-Mail ein ");
-                    String mail = Manager.stringscanner();
+                    while (true) {
+                        UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihren Namen ein:");
+                        name = Manager.stringscanner();
 
-                    try {
-                        Passagier passagier = bs.initialisierePassagier(name, mail);
+                        if (!name.isBlank()) {
+                            break;
+                        }
 
-                        datenHandler.speichere(anwendungsdaten);
+                        UIHelper.druckeFehler("Der Name darf nicht leer sein.");
+                    }
 
-                        System.out.println("Kunde erfolgreich angelegt:");
-                        System.out.println(passagier);
+                    while (true) {
+                        UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihre E-Mail ein:");
+                        String mail = Manager.stringscanner();
 
-                        hauptmanagerk(passagier);
-                        return;
+                        try {
+                            Passagier passagier = bs.initialisierePassagier(name, mail);
 
-                    } catch (Exception e) {
-                        System.out.println("Fehler: " + e.getMessage());
-                        break;
+                            datenHandler.speichere(anwendungsdaten);
+
+                            UIHelper.druckeErfolg("Sie wurden erfolgreich registriert.");
+
+                            hauptmanagerk(passagier);
+                            return;
+
+                        } catch (Exception e) {
+                            UIHelper.druckeFehler(e.getMessage());
+                        }
                     }
 
                 case 2:
 
                     if (bs.getPassagiere().isEmpty()) {
-                        System.out.println("Es sind noch keine Kunden vorhanden.");
+                        UIHelper.druckeHinweis("Es sind noch keine Kunden vorhanden.");
                         break;
                     }
 
-                    System.out.println("Passagierliste:");
+                    UIHelper.druckeUeberschrift("Passagierauswahl");
 
                     for (Passagier passagier : bs.getPassagiere()) {
-                        System.out.println(passagier.toString());
+                        System.out.println(passagier.getPassagierId() + " - " + passagier.getName() + " - " + passagier.getEmail());
                     }
 
-                    System.out.println("\nBitte wählen Sie einen Passagier über die ID:");
-                    String id = Manager.stringscanner();
+                    UIHelper.druckeTrennlinie();
 
-                    Passagier ausgewaehlterPassagier = null;
+                    UIHelper.druckeEingabeaufforderung("Bitte wählen Sie einen Passagier über die ID.");
+                    UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zurückzukehren.");
 
-                    for (Passagier passagier : bs.getPassagiere()) {
-                        if (passagier.getPassagierId().equalsIgnoreCase(id)) {
-                            ausgewaehlterPassagier = passagier;
+                    while (true) {
+                        String id = Manager.stringscanner();
+
+                        if (id.equals("0")) {
                             break;
                         }
+
+                        Passagier ausgewaehlterPassagier = null;
+
+                        for (Passagier passagier : bs.getPassagiere()) {
+                            if (passagier.getPassagierId().equalsIgnoreCase(id)) {
+                                ausgewaehlterPassagier = passagier;
+                                break;
+                            }
+                        }
+
+                        if (ausgewaehlterPassagier == null) {
+                            UIHelper.druckeFehler("Diese Passagier-ID existiert nicht.");
+                            UIHelper.druckeEingabeaufforderung("Bitte geben Sie eine gültige Passagier-ID ein oder 0 zum Zurückkehren:");
+                            continue;
+                        }
+
+                        UIHelper.druckeErfolg("Angemeldet als " + ausgewaehlterPassagier.getName() + ".");
+
+                        hauptmanagerk(ausgewaehlterPassagier);
+                        return;
                     }
 
-                    if (ausgewaehlterPassagier == null) {
-                        System.out.println("Diese Passagier-ID existiert nicht.");
-                        break;
-                    }
-
-                    System.out.println("Sie haben ausgewählt:");
-                    System.out.println(ausgewaehlterPassagier);
-
-                    datenHandler.speichere(anwendungsdaten);
-                    hauptmanagerk(ausgewaehlterPassagier);
-                    break;
-
-                case 3:
+                case 0:
                     return;
 
                 default:
-                    System.out.println("Ungültige Eingabe.\n");
+                    UIHelper.druckeFehler("Ungültige Eingabe.");
                     break;
 
             }
@@ -168,21 +195,58 @@ public class UIKunde {
 
         while (true) {
 
-            System.out.println("-------------------Willkommen " + passagier.getName() + " im Hauptmanager-------------------------");
-            System.out.println("Willkommen, was möchten Sie tun?: ");
-            System.out.println("Drücken Sie die 1, um Flüge zu suchen und zu buchen.");
-            System.out.println("Drücken Sie die 2, um eine Umbuchung auf einen anderen Flug vorzunehmen.");
-            System.out.println("Drücken Sie die 3, um eine Buchung zu stornieren.");
-            System.out.println("Drücken Sie die 4, um Buchungen anzuzeigen.");
-            System.out.println("Drücken Sie die 5, um das Gepäck ihrer Buchung anzupassen.");
-            System.out.println("Drücken Sie die 6, um zum Start zu gelangen.");
+            UIHelper.druckeUeberschrift("Willkommen " + passagier.getName() + " im Kundenbereich");
+
+            UIHelper.druckeEingabeaufforderung("Was möchten Sie tun?");
+            UIHelper.druckeMenuepunkt(1, "Flüge suchen und buchen");
+            UIHelper.druckeMenuepunkt(2, "Buchungen verwalten");
+            UIHelper.druckeMenuepunkt(0, "Abmelden");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
                 case 1:
-                    flugsundb(passagier);
+                    fluegeSuchenUndBuchen(passagier);
                     break;
+                case 2:
+                    buchungenVerwalten(passagier);
+                    break;
+                case 0:
+                    return;
+
+                default:
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
+                    break;
+
+            }
+        }
+    }
+
+    public void buchungenVerwalten(Passagier passagier) {
+
+        while (true) {
+
+            UIHelper.druckeUeberschrift("Buchungen verwalten");
+
+            UIHelper.druckeMenuepunkt(1, "Buchungen anzeigen");
+            UIHelper.druckeMenuepunkt(2, "Buchung umbuchen");
+            UIHelper.druckeMenuepunkt(3, "Buchung stornieren");
+            UIHelper.druckeMenuepunkt(4, "Gepäck ändern");
+            UIHelper.druckeMenuepunkt(0, "Zurück");
+
+            UIHelper.druckeTrennlinie();
+
+            int auswahl = Manager.intscanner();
+
+            switch (auswahl) {
+
+                case 1:
+                    UIHelper.druckeUeberschrift("Meine Buchungen");
+                    buchungenAnzeigen(passagier);
+                    break;
+
                 case 2:
                     umbuchen(passagier);
                     break;
@@ -192,22 +256,17 @@ public class UIKunde {
                     break;
 
                 case 4:
-                    buchunganzeigen(passagier);
-                    break;
-                case 5:
                     gepaeckAendern(passagier);
                     break;
-                case 6:
+
+                case 0:
                     return;
 
                 default:
-                    System.out.println("Ungültige Eingabe.");
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
-
             }
-
         }
-
     }
 
     /**
@@ -223,66 +282,220 @@ public class UIKunde {
      *
      * @param passagier der Passagier, für den der Flug gebucht wird
      */
-    public void flugsundb(Passagier passagier) {
+    public void fluegeSuchenUndBuchen(Passagier passagier) {
 
-        System.out.println("-------------------Willkommen im Bereich für Flugsuche und Buchung-------------------------");
+        UIHelper.druckeUeberschrift("Flüge suchen und buchen");
 
         vs.alteFluegeLoeschen(bs);
 
-        System.out.println(vs.getFlughaefen().toString());
+        this.druckeFlughaefen();
 
         try {
 
             ArrayList<Flug> fluege = sucheFluege();
 
-            System.out.println(
-                    "--------------------------------------------------------------------------------"
-            );
+            UIHelper.druckeTrennlinie();
 
             if (fluege.isEmpty()) {
-                System.out.println("Keine Flüge gefunden.\n");
+                UIHelper.druckeHinweis("Keine Flüge gefunden.");
                 return;
             } else {
-                for (int i = 0; i < fluege.size(); i++) {
-                    System.out.println("Flug " + (i) + ": " + fluege.get(i));
-                }
+                this.druckeFluege(fluege);
             }
 
-            int flugIndex = -1;
-            Flug flug = null;
+            Flug flug = flugAuswaehlen(fluege);
 
-            while (flugIndex == -1) {
-
-                System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
-                flugIndex = Manager.intscanner();
-
-                try {
-                    flug = fluege.get(flugIndex);
-                } catch (Exception e) {
-                    System.out.println("Listennummer existiert nicht. Bitte geben Sie eine gültige Nummer ein!");
-                    flugIndex = -1;
-                }
-            }
-
-            flug.zeigeSitzplan();
-
-            String sitzplatz = "";
-
-            while (sitzplatz.isEmpty() || flug.findeSitzplatz(sitzplatz) == null) {
-                System.out.println("Bitte geben Sie die Sitzplatznummer ein: ");
-                sitzplatz = Manager.stringscanner();
-            }
+            String sitzplatz = sitzplatzAuswaehlen(flug);
 
             Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
 
-            System.out.println("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten: ");
-            int koffer = Manager.intscanner();
+            int koffer;
 
-            bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs);
+            while (true) {
+
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten:");
+
+                koffer = Manager.intscanner();
+
+                if (koffer < 0) {
+                    UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
+                    continue;
+                }
+
+                break;
+            }
+
+            // Buchungsvorschau, damit der Kunde den ausgewählten Flug akzeptieren kann
+            Buchung buchungsvorschau = new Buchung(passagier, flug, flug.findeSitzplatz(sitzplatz), new GepaeckInformation(koffer));
+
+            UIHelper.druckeUeberschrift("Buchungsübersicht");
+
+            System.out.printf("%-13s%s%n", "Flug:", flug.getFlugnummer());
+            System.out.printf("%-13s%s%n", "Airline:", flug.getFluggesellschaft().getName());
+            System.out.printf("%-13s%s -> %s%n", "Route:", flug.getStartFlughafen().getIataCode(), flug.getZielflughafen().getIataCode());
+
+            System.out.printf("%-13s%s%n", "Abflug:", flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
+
+            System.out.printf("%-13s%s%n", "Sitzplatz:", sitzplatz);
+            System.out.printf("%-13s%s%n", "Sitzklasse:", sitzklasse);
+            System.out.printf("%-13s%d%n", "Koffer:", koffer);
+
+            double ticketpreis;
+
+            if (sitzklasse == Sitzklasse.BUSINESS) {
+                ticketpreis = flug.getBasispreis() * buchungsvorschau.getBusinesspreisfaktor();
+            } else {
+                ticketpreis = flug.getBasispreis();
+            }
+
+            double gepaeckpreis = buchungsvorschau.getGepaeckinformation().berechneGepaeckgebuehr();
+
+            System.out.printf("%-13s%.2f Euro%n", "Ticketpreis:", ticketpreis);
+            System.out.printf("%-13s%.2f Euro%n", "Gepäck:", gepaeckpreis);
+
+            UIHelper.druckeTrennlinie();
+
+            System.out.printf("%-13s%.2f Euro%n","Gesamtpreis:",buchungsvorschau.getGezahlterPreis());
+
+            UIHelper.druckeTrennlinie();
+
+            String bestaetigung = "";
+
+            while (!bestaetigung.equalsIgnoreCase("j") && !bestaetigung.equalsIgnoreCase("n")) {
+
+                UIHelper.druckeEingabeaufforderung("Möchten Sie die Buchung verbindlich durchführen? [j/n]");
+
+                bestaetigung = Manager.stringscanner();
+
+                if (!bestaetigung.equalsIgnoreCase("j") && !bestaetigung.equalsIgnoreCase("n")) {
+                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+                }
+            }
+
+            if (bestaetigung.equalsIgnoreCase("n")) {
+                UIHelper.druckeHinweis("Die Buchung wurde abgebrochen.");
+                return;
+            }
+
+            Buchung buchung = bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs);
+
+            UIHelper.druckeUeberschrift("Buchungsbestätigung");
+
+            System.out.println("Buchungsnummer: " + buchung.getBuchungsnummer());
+            System.out.println("Flug:           " + buchung.getFlug().getFlugnummer());
+            System.out.println("Sitzplatz:      " + buchung.getSitzplatz().getSitzplatzNummer());
+            System.out.println("Sitzklasse:     " + buchung.getSitzplatz().getSitzklasse());
+            System.out.println("Koffer:         "
+                    + buchung.getGepaeckinformation().getAnzahlKoffer());
+
+            System.out.printf("Gesamtpreis:    %.2f Euro%n", buchung.getGezahlterPreis());
+
             datenHandler.speichere(anwendungsdaten);
 
+            UIHelper.druckeErfolg("Die Buchung wurde erfolgreich durchgeführt.");
+
         } catch (Exception e) {
-            System.out.println("Fehler " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
+        }
+    }
+
+    private void druckeFlughaefen() {
+
+        UIHelper.druckeEingabeaufforderung("Verfügbare Flughäfen:");
+
+        UIHelper.druckeTrennlinie();
+
+        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
+
+        UIHelper.druckeTrennlinie();
+
+        for (Flughafen flughafen : vs.getFlughaefen()) {
+            System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
+                    flughafen.getIataCode(),
+                    flughafen.getName(),
+                    flughafen.getStadt(),
+                    flughafen.getLand());
+        }
+
+        UIHelper.druckeTrennlinie();
+    }
+
+    private void druckeFluege(ArrayList<Flug> fluege) {
+
+        UIHelper.druckeUeberschrift("Gefundene Flüge");
+
+            System.out.printf("%-4s | %-8s | %-15s | %-11s | %-17s | %-17s%n", "Nr.", "Flug", "Airline", "Route", "Abflug", "Ankunft");
+
+            UIHelper.druckeTrennlinie();
+
+            for (int i = 0; i < fluege.size(); i++) {
+
+                Flug flug = fluege.get(i);
+
+                System.out.printf(
+                        "%-4d | %-8s | %-15s | %-11s | %-17s | %-17s%n",
+                        i + 1,
+                        flug.getFlugnummer(),
+                        flug.getFluggesellschaft().getName(),
+                        flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                        flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
+                        flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER)
+                );
+            }
+
+            UIHelper.druckeTrennlinie();
+    }
+
+    private Flug flugAuswaehlen(ArrayList<Flug> fluege) {
+
+        Flug flug = null;
+
+        while (flug == null) {
+
+            UIHelper.druckeEingabeaufforderung(
+                    "Bitte geben Sie die Nummer Ihres gewünschten Fluges ein:"
+            );
+
+            int auswahl = Manager.intscanner();
+
+            if (auswahl < 1 || auswahl > fluege.size()) {
+                UIHelper.druckeFehler("Ungültige Flugauswahl.");
+                continue;
+            }
+
+            flug = fluege.get(auswahl - 1);
+        }
+
+        return flug;
+    }
+
+    private String sitzplatzAuswaehlen(Flug flug) {
+
+        UIHelper.druckeUeberschrift("Sitzplatzauswahl");
+
+        flug.zeigeSitzplan();
+
+        while (true) {
+
+            UIHelper.druckeEingabeaufforderung(
+                    "Bitte geben Sie die gewünschte Sitzplatznummer ein:"
+            );
+
+            String sitzplatz = Manager.stringscanner().toUpperCase();
+
+            Sitzplatz ausgewaehlterSitzplatz = flug.findeSitzplatz(sitzplatz);
+
+            if (ausgewaehlterSitzplatz == null) {
+                UIHelper.druckeFehler("Dieser Sitzplatz existiert nicht.");
+                continue;
+            }
+
+            if (!ausgewaehlterSitzplatz.getIstFrei()) {
+                UIHelper.druckeFehler("Dieser Sitzplatz ist bereits belegt.");
+                continue;
+            }
+
+            return sitzplatz;
         }
     }
 
@@ -303,16 +516,13 @@ public class UIKunde {
      */
     public void umbuchen(Passagier passagier) {
 
-        System.out.println("-------------------Willkommen im Umbuchungsbereich-------------------------");
-        for (Buchung b : bs.getBuchungen()) {
-            if (b.getPassagier().equals(passagier)) {
-                System.out.println(b);
-            }
-        }
+        UIHelper.druckeUeberschrift("Buchung umbuchen");
 
-        vs.alteFluegeLoeschen(bs);
+        buchungenAnzeigen(passagier);
 
-        System.out.println("Bitte Buchungsnummer für Umbuchung angeben:");
+        UIHelper.druckeTrennlinie();
+
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Buchungsnummer der umzubuchenden Buchung ein:");
 
         String nummer = Manager.stringscanner();
 
@@ -320,78 +530,74 @@ public class UIKunde {
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
-                System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!");
+                UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier!");
                 return;
             }
+
+            if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT || buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
+                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
+                return;
+            }
+
         } catch (Exception e) {
-            System.out.println("Fehler " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
             return;
         }
 
-        System.out.println(vs.getFlughaefen().toString());
+        druckeFlughaefen();
 
         try {
             ArrayList<Flug> fluege = sucheFluege();
 
-            System.out.println(
-                    "--------------------------------------------------------------------------------"
-            );
-
             if (fluege.isEmpty()) {
-                System.out.println("Keine Flüge gefunden.\n");
+                UIHelper.druckeHinweis("Keine Flüge gefunden.");
                 return;
-            } else {
-                for (int i = 0; i < fluege.size(); i++) {
-                    System.out.println("Flug " + (i) + ": " + fluege.get(i));
-                }
             }
 
-            System.out.println("Bitte geben Sie die Listennummer Ihres gewünschten Fluges ein: ");
-            int index = Manager.intscanner();
-            fluege.get(index).zeigeSitzplan();
+            druckeFluege(fluege);
 
-            System.out.println("Bitte geben Sie die gewünschte Sitzplatznummer ein: ");
-            String sitzplatz = Manager.stringscanner();
+            Flug neuerFlug = flugAuswaehlen(fluege);
 
-            System.out.println("Sitzklasse wählen:");
-            System.out.println("1 - Economy");
-            System.out.println("2 - Business");
+            String sitzplatz = sitzplatzAuswaehlen(neuerFlug);
 
-            int auswahl = Manager.intscanner();
-            Sitzklasse sitzklasse;
-            switch (auswahl) {
-                case 1:
-                    sitzklasse = Sitzklasse.ECONOMY;
-                    break;
-                case 2:
-                    sitzklasse = Sitzklasse.BUSINESS;
-                    break;
-                default:
-                    System.out.println("Ungültige Eingabe.\n");
-                    return;
-            }
+            Sitzklasse sitzklasse =
+                    neuerFlug.findeSitzplatz(sitzplatz).getSitzklasse();
 
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            bs.umbuchen(buchung, fluege.get(index), sitzplatz, sitzklasse, vs);
+            bs.umbuchen(buchung, neuerFlug, sitzplatz, sitzklasse, vs);
+
             datenHandler.speichere(anwendungsdaten);
 
-            System.out.println("Umbuchung erfolgreich.");
+            UIHelper.druckeErfolg("Die Umbuchung wurde erfolgreich durchgeführt.");
 
-            System.out.println("Möchten Sie die Anzahl Ihrer Koffer ändern?");
-            System.out.println("1 - Ja");
-            System.out.println("2 - Nein");
+            UIHelper.druckeTrennlinie();
 
-            int auswahlGepaeck = Manager.intscanner();
+            while (true) {
 
-            if (auswahlGepaeck == 1) {
-                gepaeckAendern(buchung);
+                UIHelper.druckeEingabeaufforderung("Möchten Sie die Anzahl Ihrer Koffer ebenfalls ändern?");
+
+                UIHelper.druckeMenuepunkt(1, "Ja");
+                UIHelper.druckeMenuepunkt(2, "Nein");
+
+                UIHelper.druckeTrennlinie();
+
+                int auswahlGepaeck = Manager.intscanner();
+
+                if (auswahlGepaeck == 1) {
+                    gepaeckAendern(buchung);
+                    return;
+                }
+
+                if (auswahlGepaeck == 2) {
+                    return;
+                }
+
+                UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie 1 oder 2 ein.");
             }
-
         } catch (Exception e) {
-            System.out.println("Fehler " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
         }
-
     }
 
     /**
@@ -407,31 +613,31 @@ public class UIKunde {
      * @param passagier der Passagier, dessen Buchung storniert werden soll
      */
     public void stornieren(Passagier passagier) {
-        System.out.println("-------------------Willkommen im Stornierungsbereich-------------------------");
-        for (Buchung b : bs.getBuchungen()) {
-            if (b.getPassagier().equals(passagier)) {
-                System.out.println(b);
-            }
-        }
 
-        vs.alteFluegeLoeschen(bs);
+        UIHelper.druckeUeberschrift("Buchung stornieren");
 
-        System.out.println("Bitte Buchungsnummer für Stornierung angeben:");
+        buchungenAnzeigen(passagier);
+
+        UIHelper.druckeTrennlinie();
+
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Buchungsnummer der Buchung ein, die Sie stornieren möchten:");
 
         String nummer = Manager.stringscanner();
         try {
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
-                System.out.println("Fehler: Diese Buchung gehört nicht zu diesem Passagier!.");
+                UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier.");
                 return;
             }
 
             bs.stornieren(buchung);
             datenHandler.speichere(anwendungsdaten);
 
+            UIHelper.druckeErfolg("Die Buchung wurde erfolgreich storniert.");
+
         } catch (Exception e) {
-            System.out.println("Fehler " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
         }
 
     }
@@ -444,11 +650,41 @@ public class UIKunde {
      *
      * @param passagier der Passagier, dessen Buchungen angezeigt werden
      */
-    public void buchunganzeigen(Passagier passagier) {
-        for (Buchung b : bs.getBuchungen()) {
-            if (b.getPassagier().equals(passagier)) {
-                System.out.println(b);
+    public void buchungenAnzeigen(Passagier passagier) {
+
+        vs.alteFluegeLoeschen(bs);
+
+        boolean buchungVorhanden = false;
+
+       System.out.printf("%-8s | %-8s | %-11s | %-17s | %-6s | %-10s | %-6s | %-12s | %-10s%n", "Buchung", "Flug", "Route", "Abflug", "Sitz", "Klasse", "Koffer", "Preis", "Status");
+
+        UIHelper.druckeTrennlinie();
+
+        for (Buchung buchung : bs.getBuchungen()) {
+
+            if (buchung.getPassagier().equals(passagier)) {
+
+                buchungVorhanden = true;
+
+                Flug flug = buchung.getFlug();
+
+                System.out.printf(
+                    "%-8s | %-8s | %-11s | %-17s | %-6s | %-10s | %-6d | %-12s | %-10s%n",
+                    buchung.getBuchungsnummer(),
+                    flug.getFlugnummer(),
+                    flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                    flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
+                    buchung.getSitzplatz().getSitzplatzNummer(),
+                    buchung.getSitzplatz().getSitzklasse(),
+                    buchung.getGepaeckinformation().getAnzahlKoffer(),
+                    String.format("%.2f Euro", buchung.getGezahlterPreis()),
+                    buchung.getBuchungsstatus()
+                );
             }
+        }
+
+        if (!buchungVorhanden) {
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen.");
         }
     }
 
@@ -467,25 +703,33 @@ public class UIKunde {
      */
     public void gepaeckAendern(Passagier passagier) {
 
-        System.out.println("Ihre Buchungen:");
+        UIHelper.druckeUeberschrift("Gepäck ändern");
 
-        buchunganzeigen(passagier);
+        buchungenAnzeigen(passagier);
 
-        System.out.println("Bitte Buchungsnummer angeben:");
+        UIHelper.druckeTrennlinie();
+
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Buchungsnummer der Buchung ein, bei der Sie das Gepäck anpassen wollen:");
+
         String nummer = Manager.stringscanner();
 
         try {
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
-                System.out.println("Diese Buchung gehört nicht zu diesem Passagier.");
+                UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier.");
+                return;
+            }
+
+            if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV && buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+                UIHelper.druckeFehler("Das Gepäck kann bei dieser Buchung nicht mehr geändert werden.");
                 return;
             }
 
             gepaeckAendern(buchung);
 
         } catch (Exception e) {
-            System.out.println("Fehler: " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
         }
     }
 
@@ -506,20 +750,42 @@ public class UIKunde {
         vs.alteFluegeLoeschen(bs);
 
         try {
-            System.out.println("Aktuell gebuchte Koffer: " + buchung.getGepaeckinformation().getAnzahlKoffer());
+            int aktuell = buchung.getGepaeckinformation().getAnzahlKoffer();
 
-            System.out.println("Neue Anzahl Koffer:");
-            int neueAnzahl = Manager.intscanner();
+            UIHelper.druckeEingabeaufforderung("Aktuell gebuchte Koffer: " + aktuell);
+
+            int neueAnzahl;
+
+            while (true) {
+
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie die neue Anzahl der Koffer ein:");
+
+                neueAnzahl = Manager.intscanner();
+
+                if (neueAnzahl < 0) {
+                    UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
+                    continue;
+                }
+
+                break;
+            }
 
             double differenz = bs.gepaeckAendern(buchung, neueAnzahl);
 
             datenHandler.speichere(anwendungsdaten);
 
-            System.out.println("Gepäck wurde erfolgreich geändert.");
-            System.out.printf("Preisänderung: %.2f €%n", differenz);
+            UIHelper.druckeErfolg("Das Gepäck wurde erfolgreich geändert.");
+
+            if (differenz > 0) {
+                System.out.printf("Zusätzlicher Betrag: %.2f Euro%n", differenz);
+            } else if (differenz < 0) {
+                System.out.printf("Erstattung: %.2f Euro%n", Math.abs(differenz));
+            } else {
+                UIHelper.druckeHinweis("Der Gesamtpreis hat sich nicht geändert.");
+            }
 
         } catch (Exception e) {
-            System.out.println("Fehler: " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
         }
     }
 
@@ -536,11 +802,11 @@ public class UIKunde {
         while (ziel.length() != 3 || !Character.isAlphabetic(ziel.charAt(0)) || !Character.isAlphabetic(ziel.charAt(1)) || !Character.isAlphabetic(ziel.charAt(2))) {
 
             if (zaehler != 0) {
-                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+                UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
             }
 
-            System.out.print("IATA-Code des Zielflughafens (verpflichtend): ");
-            ziel = Manager.stringscanner();
+            UIHelper.druckeEingabeaufforderung("IATA-Code des Zielflughafens (verpflichtend):");
+            ziel = Manager.stringscanner().toUpperCase();
 
             zaehler++;
         }
@@ -548,16 +814,16 @@ public class UIKunde {
         zaehler = 0;
         String entscheidung = " ";
 
-        while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+        while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
-                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
             }
-            System.out.print("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
+            UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
-            if (entscheidung.charAt(0) == 'n') {
+            if (entscheidung.equalsIgnoreCase("n")) {
                 startUeberspringen = true;
             }
 
@@ -570,11 +836,11 @@ public class UIKunde {
             while (start.length() != 3 || !Character.isAlphabetic(start.charAt(0)) || !Character.isAlphabetic(start.charAt(1)) || !Character.isAlphabetic(start.charAt(2))) {
 
                 if (zaehler != 0) {
-                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: FRA \n");
+                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
                 }
 
-                System.out.print("IATA-Code des Startflughafens (optional): ");
-                start = Manager.stringscanner();
+                UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens (optional):");
+                start = Manager.stringscanner().toUpperCase();
 
                 zaehler++;
             }
@@ -583,16 +849,16 @@ public class UIKunde {
         zaehler = 0;
         entscheidung = " ";
 
-        while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+        while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
-                System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
             }
-            System.out.print("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
+            UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
-            if (entscheidung.charAt(0) == 'n') {
+            if (entscheidung.equalsIgnoreCase("n")) {
                 flugnummerUeberspringen = true;
             }
 
@@ -607,11 +873,11 @@ public class UIKunde {
             while (flugnummer.length() != 5 || !Character.isAlphabetic(flugnummer.charAt(0)) || !Character.isAlphabetic(flugnummer.charAt(1)) || !Character.isDigit((flugnummer.charAt(2))) || !Character.isDigit((flugnummer.charAt(3))) || !Character.isDigit((flugnummer.charAt(4)))) {
 
                 if (zaehler != 0) {
-                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: LH123 \n");
+                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: LH123");
                 }
 
-                System.out.print("Flugnummer (optional): ");
-                flugnummer = Manager.stringscanner();
+                UIHelper.druckeEingabeaufforderung("Flugnummer (optional):");
+                flugnummer = Manager.stringscanner().toUpperCase();
 
                 zaehler++;
             }
@@ -619,16 +885,16 @@ public class UIKunde {
             zaehler = 0;
             entscheidung = " ";
 
-            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+            while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
-                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
                 }
-                System.out.print("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
+                UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
-                if (entscheidung.charAt(0) == 'n') {
+                if (entscheidung.equalsIgnoreCase("n")) {
                     datumUeberspringen = true;
                 }
 
@@ -643,9 +909,9 @@ public class UIKunde {
 
                 while (!datumsString.matches(datumRegex)) {
                     if (zaehler != 0) {
-                        System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                        UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                     }
-                    System.out.print("Bitte geben Sie ein Datum ein: ");
+                    UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum ein:");
                     datumsString = Manager.stringscanner();
                     zaehler++;
                 }
@@ -658,16 +924,16 @@ public class UIKunde {
             zaehler = 0;
             entscheidung = " ";
 
-            while (!entscheidung.substring(0, 1).equalsIgnoreCase("j") && !entscheidung.substring(0, 1).equalsIgnoreCase("n")) {
+            while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
-                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: j \n");
+                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
                 }
-                System.out.print("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
+                UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
-                if (entscheidung.charAt(0) == 'n') {
+                if (entscheidung.equalsIgnoreCase("n")) {
                     datumUeberspringen = true;
                 }
 
@@ -683,9 +949,9 @@ public class UIKunde {
 
             while (!datumsString.matches(datumRegex)) {
                 if (zaehler != 0) {
-                    System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
+                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                 }
-                System.out.print("Bitte geben Sie ein Datum ein: ");
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum ein:");
                 datumsString = Manager.stringscanner();
                 zaehler++;
             }

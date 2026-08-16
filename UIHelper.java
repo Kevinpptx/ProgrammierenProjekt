@@ -1,6 +1,6 @@
 public class UIHelper {
 
-    private static final int BREITE = 100;
+    private static final int BREITE = 120;
 
     public static void druckeUeberschrift(String text) {
         druckeTrennlinie();
