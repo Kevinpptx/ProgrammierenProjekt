@@ -1127,7 +1127,7 @@ public class UIKunde {
                     if (zaehler != 0) {
                         UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                     }
-                    UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum ein:");
+                    UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
                     datumsString = Manager.stringscanner();
                     zaehler++;
                 }
@@ -1167,7 +1167,7 @@ public class UIKunde {
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                 }
-                UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum ein:");
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
                 datumsString = Manager.stringscanner();
                 zaehler++;
             }
