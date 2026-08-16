@@ -187,11 +187,17 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Entfernt ein Flugzeug aus der Flotte.
+     * Entfernt ein Flugzeug aus dem Verwaltungssystem und aus der Flotte der
+     * zugehörigen Fluggesellschaft.
      *
-     * @param code der IATA-Code des Flugzeugs, das entfernt werden soll
-     * @throws IllegalArgumentException wenn der IATA-Code null ist
-     * @throws IllegalStateException wenn das Flugzeug nicht zur Flotte gehört
+     * Ein Flugzeug kann nur entfernt werden, wenn es für keinen vorhandenen Flug
+     * mehr eingeplant ist.
+     *
+     * @param code der Code des zu entfernenden Flugzeugs
+     * @throws IllegalArgumentException wenn der Code {@code null} ist oder kein
+     * Flugzeug mit diesem Code existiert
+     * @throws IllegalStateException wenn das Flugzeug noch für einen Flug
+     * eingeplant ist oder keiner Fluggesellschaft zugeordnet werden kann
      */
     public void entferneFlugzeug(String code) {
         if (code == null) {
@@ -426,32 +432,33 @@ public class Verwaltungssystem implements Serializable {
         }
     }
 
-    // Verwaltung Flüge
     /**
-     * Erzeugt einen neuen Flug und registriert ihn im Verwaltungssystem.
-     * <p>
-     * Die Flugnummer wird automatisch aus dem Airline-Code und einer
-     * fortlaufenden Nummer für den jeweiligen Abflugtag gebildet. Zusätzlich
-     * wird geprüft, ob das Flugzeug im angegebenen Zeitraum bereits für einen
-     * anderen Flug eingeplant ist.
-     * </p>
+     * Erzeugt und registriert einen oder mehrere Flüge im Verwaltungssystem.
+     *
+     * Für jeden angegebenen Tag wird ein Hinflug erzeugt. Ist {@code rueckflug}
+     * gesetzt, wird zu jedem Hinflug zusätzlich ein Rückflug erzeugt. Die
+     * Flugnummern werden automatisch anhand der Fluggesellschaft und des
+     * jeweiligen Abflugtages vergeben.
+     *
+     * Vor dem Speichern wird geprüft, ob die erzeugten Flüge gültig sind und ob
+     * sich die Einsatzzeiten des verwendeten Flugzeugs mit vorhandenen oder neu
+     * erzeugten Flügen überschneiden.
      *
      * @param fluggesellschaft die ausführende Fluggesellschaft
-     * @param flugzeug das für den Flug eingesetzte Flugzeug
+     * @param flugzeug das für die Flüge eingesetzte Flugzeug
      * @param startFlughafen der Startflughafen
      * @param zielFlughafen der Zielflughafen
-     * @param abflugzeit Datum und Uhrzeit des Abflugs
-     * @param ankunftszeit Datum und Uhrzeit der Ankunft
-     * @param basispreis der Basispreis des Flugs
-     * @param rueckflug ob ein Rückflug angelegt werden soll
-     * @param anzahlTageWiederholungen Anzahl der Tage, an denen der Flug
-     * nacheinander stattfindet (bei einmaligen Flügen: 1)
-     * @return die neu erzeugten und registrierten Flüge in einer
-     * ArrayList<Flug>
-     * @throws IllegalArgumentException wenn eine übergebene Referenz
-     * {@code null} ist, benötigte Objekte nicht registriert sind, das Flugzeug
-     * nicht zur Fluggesellschaft gehört, der Flug bereits existiert oder sich
-     * die Einsatzzeiten des Flugzeugs überschneiden
+     * @param abflugzeit Datum und Uhrzeit des ersten Abflugs
+     * @param ankunftszeit Datum und Uhrzeit der ersten Ankunft
+     * @param basispreis der Basispreis der Flüge
+     * @param rueckflug {@code true}, wenn zusätzlich Rückflüge erzeugt werden sollen
+     * @param anzahlTageWiederholungen Anzahl der aufeinanderfolgenden Tage,
+     * an denen der Flug stattfinden soll
+     * @return Liste aller neu erzeugten und registrierten Flüge
+     * @throws IllegalArgumentException wenn die übergebenen Daten ungültig sind,
+     * benötigte Objekte nicht registriert sind, das Flugzeug nicht zur
+     * Fluggesellschaft gehört, weniger als ein Wiederholungstag angegeben wurde
+     * oder sich Flugzeiten des verwendeten Flugzeugs überschneiden
      */
     public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
             LocalDateTime ankunftszeit, double basispreis, boolean rueckflug, int anzahlTageWiederholungen) {
@@ -617,6 +624,15 @@ public class Verwaltungssystem implements Serializable {
 
     }
 
+    /**
+     * Prüft einen neu erzeugten Flug auf zeitliche Überschneidungen mit bereits
+     * registrierten sowie weiteren neu erzeugten Flügen.
+     *
+     * @param neuerFlug der zu prüfende Flug
+     * @param neueFluege die gemeinsam neu erzeugten Flüge
+     * @throws IllegalArgumentException wenn sich die Einsatzzeiten desselben
+     * Flugzeugs überschneiden
+     */
     private void pruefeFlug(Flug neuerFlug, List<Flug> neueFluege) {
         //prüfe zuerst gegen vorhandene Fluege
         for (Flug vorhandenerFlug : fluege) {
@@ -632,6 +648,15 @@ public class Verwaltungssystem implements Serializable {
         }
     }
 
+    /**
+     * Prüft zwei Flüge auf eine zeitliche Überschneidung beim Einsatz desselben
+     * Flugzeugs.
+     *
+     * @param neuerFlug der neu zu planende Flug
+     * @param vorhandenerFlug der Vergleichsflug
+     * @throws IllegalArgumentException wenn dasselbe Flugzeug in sich
+     * überschneidenden Zeiträumen eingesetzt wird
+     */
     private void pruefeUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
         boolean gleichesFlugzeug = neuerFlug.getFlugzeug().equals(vorhandenerFlug.getFlugzeug());
         if (!gleichesFlugzeug) {
@@ -958,11 +983,14 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Überprüft, ob es "alte" Fluege gibt, die in der Vergangenheit liegen.
-     * Diese kann man nicht mehr buchen. Falls ja, werden diese also aus dem
-     * Speicher geloescht.
+     * Entfernt alle Flüge aus dem Verwaltungssystem, deren Abflugzeit bereits
+     * vergangen ist.
      *
-     * @return Liste mit geloeschten Fluegen
+     * Vor dem Entfernen eines solchen Fluges werden alle zugehörigen Buchungen
+     * auf den Buchungsstatus {@code VERGANGEN} gesetzt.
+     *
+     * @param buchungssystem das Buchungssystem mit den zu aktualisierenden
+     * Buchungen
      */
     public void alteFluegeLoeschen(Buchungssystem buchungssystem) {
 

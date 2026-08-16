@@ -572,17 +572,20 @@ public class UIMitarbeiter {
     }
 
     /**
-     * Legt einen neuen Flug im Verwaltungssystem an.
+     * Legt einen neuen Flug oder mehrere wiederkehrende Flugpaare im
+     * Verwaltungssystem an.
      *
-     * Für den Flug werden der Basispreis, die Fluggesellschaft, das Flugzeug,
-     * der Startflughafen, der Zielflughafen sowie die Abflug- und Ankunftszeit
-     * abgefragt.
+     * Zunächst werden Basispreis, Fluggesellschaft und ein zugehöriges Flugzeug
+     * ausgewählt. Anschließend werden Start- und Zielflughafen sowie Abflug- und
+     * Ankunftszeit erfasst. Ungültige Codes für Fluggesellschaften, Flugzeuge
+     * oder Flughäfen werden erneut abgefragt.
      *
-     * Zusätzlich kann ein Rückflug beziehungsweise eine Wiederholung ausgewählt
-     * werden. Nach erfolgreicher Erstellung werden die Anwendungsdaten
-     * gespeichert.
+     * Danach kann entweder ein einzelner Flug oder ein Flug mit Rückflug angelegt
+     * werden. Bei einem Flug mit Rückflug wird zusätzlich angegeben, an wie vielen
+     * aufeinanderfolgenden Tagen das Flugpaar stattfinden soll.
+     *
+     * Erfolgreich erzeugte Flüge werden anschließend dauerhaft gespeichert.
      */
-    // Flüge anlegen
     public void flugAnlegen() {
 
         String gesellschaft;
@@ -847,13 +850,16 @@ public class UIMitarbeiter {
     }
 
     /**
-     * Entfernt einen vorhandenen Flug aus dem Verwaltungssystem.
+     * Entfernt einen ausgewählten Flug aus dem Verwaltungssystem.
      *
-     * Der gewünschte Flug wird anhand seiner Flugnummer und seines Abflugdatums
-     * gesucht. Ein Flug kann nur entfernt werden, wenn keine relevanten
-     * Buchungen für diesen Flug vorhanden sind.
+     * Zunächst werden vergangene Flüge entfernt und alle verbleibenden Flüge
+     * gruppiert nach Fluggesellschaft nummeriert angezeigt. Der Mitarbeiter wählt
+     * den zu entfernenden Flug anschließend über diese Nummer aus oder bricht den
+     * Vorgang mit {@code 0} ab.
      *
-     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     * Ein Flug kann nur entfernt werden, wenn keine relevanten Buchungen mehr für
+     * ihn vorhanden sind. Nach erfolgreicher Entfernung werden die
+     * Anwendungsdaten gespeichert.
      */
     public void flugEntfernen() {
 
@@ -1009,9 +1015,18 @@ public class UIMitarbeiter {
     }
 
     /**
-     * Zeigt Detailinformationen zu einem ausgewählten Flug an.
+     * Zeigt Detailinformationen zu einem ausgewählten Flug und stellt weitere
+     * Ansichten für diesen Flug bereit.
      *
-     * @param flug der ausgewählte Flug
+     * Angezeigt werden unter anderem Fluggesellschaft, Route, Abflug- und
+     * Ankunftszeit, eingesetztes Flugzeug und aktuelle Auslastung. Über ein
+     * Untermenü können zusätzlich der Sitzplan sowie eine Passagier- und
+     * Gepäckübersicht aufgerufen werden.
+     *
+     * Das Untermenü wird so lange angezeigt, bis der Benutzer zur Flugübersicht
+     * zurückkehrt.
+     *
+     * @param flug der Flug, dessen Detailinformationen angezeigt werden
      */
     public void flugdetails(Flug flug) {
 
@@ -1076,6 +1091,17 @@ public class UIMitarbeiter {
         }
     }
 
+    /**
+     * Zeigt alle vorhandenen Buchungen in einer tabellarischen Übersicht an.
+     *
+     * Vor der Anzeige werden vergangene Flüge entfernt und die betroffenen
+     * Buchungsstatus aktualisiert. Angezeigt werden unter anderem Passagier,
+     * Flug, Route, Abflugzeit, Sitzplatz, Sitzklasse, Gepäck, Buchungspreis und
+     * Buchungsstatus.
+     *
+     * Zusätzlich wird die aktuelle Anzahl der gespeicherten Buchungen ausgegeben.
+     * Sind keine Buchungen vorhanden, wird ein entsprechender Hinweis angezeigt.
+     */
     private void buchungenAnzeigen() {
 
         UIHelper.druckeUeberschrift("Buchungsübersicht");

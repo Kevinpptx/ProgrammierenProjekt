@@ -224,6 +224,15 @@ public class UIKunde {
         }
     }
 
+    /**
+     * Zeigt das Verwaltungsmenü für die Buchungen eines Passagiers an.
+     *
+     * Über das Menü können Buchungen angezeigt, umgebucht oder storniert sowie
+     * Gepäckinformationen geändert werden. Das Menü wird so lange angezeigt,
+     * bis der Benutzer zum Kundenhauptmenü zurückkehrt.
+     *
+     * @param passagier der aktuell angemeldete Passagier
+     */
     public void buchungenVerwalten(Passagier passagier) {
 
         while (true) {
@@ -272,13 +281,14 @@ public class UIKunde {
     /**
      * Ermöglicht einem Passagier die Suche und Buchung eines Fluges.
      *
-     * Vor der Suche werden veraltete Flüge entfernt und die betroffenen
-     * Buchungen aktualisiert. Danach kann nach Flugnummer, Flugroute oder
-     * Zielflughafen gesucht werden.
+     * Vor der Suche werden vergangene Flüge entfernt und betroffene Buchungen
+     * entsprechend aktualisiert. Anschließend kann die Flugsuche anhand
+     * verschiedener Kriterien eingeschränkt werden.
      *
-     * Der Kunde wählt anschließend einen Flug, einen Sitzplatz und die Anzahl
-     * der aufzugebenden Koffer aus. Nach erfolgreicher Buchung werden die
-     * Anwendungsdaten gespeichert.
+     * Nach Auswahl eines Fluges, eines freien Sitzplatzes und der gewünschten
+     * Gepäckmenge wird eine Buchungsvorschau mit Ticketpreis, Gepäckkosten und
+     * Gesamtpreis angezeigt. Die Buchung wird erst nach einer ausdrücklichen
+     * Bestätigung des Benutzers durchgeführt und anschließend gespeichert.
      *
      * @param passagier der Passagier, für den der Flug gebucht wird
      */
@@ -377,6 +387,11 @@ public class UIKunde {
         }
     }
 
+
+    /**
+     * Gibt alle im Verwaltungssystem registrierten Flughäfen in einer
+     * tabellarischen Übersicht aus.
+     */
     private void druckeFlughaefen() {
 
         UIHelper.druckeEingabeaufforderung("Verfügbare Flughäfen:");
@@ -398,6 +413,14 @@ public class UIKunde {
         UIHelper.druckeTrennlinie();
     }
 
+    /**
+     * Gibt die übergebenen Flüge nummeriert in einer tabellarischen Übersicht aus.
+     *
+     * Angezeigt werden Flugnummer, Fluggesellschaft, Route sowie Abflug- und
+     * Ankunftszeit.
+     *
+     * @param fluege die anzuzeigenden Flüge
+     */
     private void druckeFluege(ArrayList<Flug> fluege) {
 
         UIHelper.druckeUeberschrift("Gefundene Flüge");
@@ -424,6 +447,14 @@ public class UIKunde {
             UIHelper.druckeTrennlinie();
     }
 
+    /**
+     * Liest die Auswahl eines Fluges aus einer zuvor nummerierten Flugliste ein.
+     *
+     * Ungültige Nummern werden abgewiesen und erneut abgefragt.
+     *
+     * @param fluege die zur Auswahl stehenden Flüge
+     * @return der vom Benutzer ausgewählte Flug
+     */
     private Flug flugAuswaehlen(ArrayList<Flug> fluege) {
 
         Flug flug = null;
@@ -447,6 +478,16 @@ public class UIKunde {
         return flug;
     }
 
+    /**
+     * Zeigt den Sitzplan eines Fluges an und liest die gewünschte
+     * Sitzplatznummer ein.
+     *
+     * Nicht vorhandene oder bereits belegte Sitzplätze werden abgewiesen und
+     * erneut abgefragt.
+     *
+     * @param flug der Flug, für den ein Sitzplatz ausgewählt werden soll
+     * @return die Nummer des ausgewählten freien Sitzplatzes
+     */
     private String sitzplatzAuswaehlen(Flug flug) {
 
         UIHelper.druckeUeberschrift("Sitzplatzauswahl");
@@ -478,19 +519,26 @@ public class UIKunde {
     }
 
     /**
-     * Führt die Umbuchung einer vorhandenen Buchung durch.
+     * Ermöglicht das Umbuchen einer bestehenden Buchung des angegebenen
+     * Passagiers.
      *
-     * Zunächst werden alle Buchungen des Passagiers angezeigt. Der Kunde wählt
-     * eine Buchung über die Buchungsnummer aus. Danach sucht er einen neuen
-     * Flug und wählt einen neuen Sitzplatz sowie eine Sitzklasse.
+     * Zunächst werden vergangene Flüge und die zugehörigen Buchungsstatus
+     * aktualisiert. Eine Umbuchung ist nur möglich, wenn mindestens eine
+     * bearbeitbare Buchung vorhanden ist.
      *
-     * Die Umbuchung wird nur durchgeführt, wenn die angegebene Buchung dem
-     * angemeldeten Passagier gehört.
+     * Nach Auswahl der Buchung wird geprüft, ob diese dem angemeldeten Passagier
+     * gehört und noch umgebucht werden darf. Anschließend wählt der Benutzer
+     * einen neuen Flug und einen freien Sitzplatz aus.
      *
-     * Im Anschluss an eine erfolgreiche Umbuchung kann der Kunde zusätzlich die
-     * Anzahl der Gepäckstücke anpassen.
+     * Vor der Durchführung werden der bisherige und der neue Buchungspreis,
+     * die Umbuchungsgebühr sowie der zusätzlich zu zahlende Betrag angezeigt.
+     * Die Umbuchung wird erst nach einer ausdrücklichen Bestätigung durchgeführt
+     * und anschließend gespeichert.
      *
-     * @param passagier der Passagier, dessen Buchung geändert werden soll
+     * Nach erfolgreicher Umbuchung kann optional auch die Anzahl der gebuchten
+     * Koffer geändert werden.
+     *
+     * @param passagier der Passagier, dessen Buchung umgebucht werden soll
      */
     public void umbuchen(Passagier passagier) {
 
@@ -605,14 +653,20 @@ public class UIKunde {
     }
 
     /**
-     * Storniert eine Buchung des angegebenen Passagiers.
+     * Ermöglicht die Stornierung einer bestehenden Buchung des angegebenen
+     * Passagiers.
      *
-     * Es werden zunächst alle Buchungen des Passagiers angezeigt. Anschließend
-     * wird die gewünschte Buchung über ihre Buchungsnummer ausgewählt. Die
-     * Stornierung ist nur möglich, wenn die Buchung dem angemeldeten Passagier
-     * gehört.
+     * Zunächst werden vergangene Flüge und die zugehörigen Buchungsstatus
+     * aktualisiert. Eine Stornierung ist nur möglich, wenn mindestens eine
+     * bearbeitbare Buchung vorhanden ist.
      *
-     * Nach erfolgreicher Stornierung werden die Anwendungsdaten gespeichert.
+     * Nach Auswahl der Buchung wird geprüft, ob diese dem angemeldeten Passagier
+     * gehört und noch storniert werden darf. Vor der Durchführung werden der
+     * aktuelle Buchungspreis, die Stornierungsgebühr und der daraus resultierende
+     * Erstattungsbetrag angezeigt.
+     *
+     * Die Stornierung wird erst nach einer ausdrücklichen Bestätigung durchgeführt
+     * und anschließend gespeichert.
      *
      * @param passagier der Passagier, dessen Buchung storniert werden soll
      */
@@ -690,10 +744,16 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt alle Buchungen des angegebenen Passagiers an.
+     * Zeigt alle Buchungen des angegebenen Passagiers in einer tabellarischen
+     * Übersicht an.
      *
-     * Dafür werden sämtliche Buchungen durchsucht. Angezeigt werden nur
-     * Buchungen, die dem übergebenen Passagier zugeordnet sind.
+     * Vor der Anzeige werden vergangene Flüge entfernt und die zugehörigen
+     * Buchungsstatus aktualisiert. Angezeigt werden unter anderem Flug,
+     * Route, Abflugzeit, Sitzplatz, Sitzklasse, Gepäck, Buchungspreis und
+     * Buchungsstatus.
+     *
+     * Sind für den Passagier keine Buchungen vorhanden, wird ein entsprechender
+     * Hinweis ausgegeben.
      *
      * @param passagier der Passagier, dessen Buchungen angezeigt werden
      */
@@ -736,17 +796,20 @@ public class UIKunde {
     }
 
     /**
-     * Ermöglicht die nachträgliche Anpassung der Anzahl der Gepäckstücke für
-     * eine Buchung des angegebenen Passagiers.
+     * Ermöglicht die Auswahl einer Buchung, deren Gepäckmenge geändert werden
+     * soll.
      *
-     * Zunächst werden die Buchungen des Passagiers angezeigt und anschließend
-     * die gewünschte Buchung anhand der eingegebenen Buchungsnummer ermittelt.
-     * Es wird geprüft, ob die ausgewählte Buchung tatsächlich dem angegebenen
-     * Passagier zugeordnet ist. Anschließend wird die Änderung der
-     * {@code Gepaeckinformation} für diese Buchung durchgeführt.
+     * Zunächst werden vergangene Flüge und die zugehörigen Buchungsstatus
+     * aktualisiert. Sind keine bearbeitbaren Buchungen vorhanden, wird der
+     * Vorgang beendet.
+     *
+     * Anschließend wählt der Passagier eine Buchung über deren Buchungsnummer aus.
+     * Es wird geprüft, ob die Buchung dem angemeldeten Passagier gehört und ob
+     * ihr Status eine Gepäckänderung erlaubt. Die eigentliche Änderung wird
+     * anschließend an {@link #gepaeckAendern(Buchung)} übergeben.
      *
      * @param passagier der Passagier, dessen Gepäckinformationen geändert
-     * werden sollen
+     *                   werden sollen
      */
     public void gepaeckAendern(Passagier passagier) {
 
@@ -790,14 +853,19 @@ public class UIKunde {
     /**
      * Ändert die Anzahl der Gepäckstücke einer bestehenden Buchung.
      *
-     * Die aktuell gebuchte Anzahl der Koffer wird angezeigt und eine neue
-     * Anzahl wird vom Benutzer abgefragt. Anschließend werden die
-     * {@code Gepaeckinformation} und der Preis der Buchung entsprechend
-     * angepasst. Die Änderungen werden danach persistent gespeichert und die
-     * entstandene Preisdifferenz wird ausgegeben.
+     * Zunächst werden die aktuell gebuchte und die gewünschte neue Anzahl der
+     * Koffer ermittelt. Negative Werte werden abgewiesen und bei unveränderter
+     * Kofferanzahl wird der Vorgang beendet.
      *
-     * @param buchung die Buchung, deren Gepäckinformationen geändert werden
-     * sollen
+     * Vor der tatsächlichen Änderung wird anhand einer Buchungsvorschau der neue
+     * Buchungspreis ermittelt. Anschließend werden der bisherige und der neue
+     * Buchungspreis sowie der zusätzlich zu zahlende Betrag beziehungsweise der
+     * Erstattungsbetrag angezeigt.
+     *
+     * Die Gepäckänderung wird erst nach einer ausdrücklichen Bestätigung
+     * durchgeführt und anschließend gespeichert.
+     *
+     * @param buchung die Buchung, deren Gepäckinformationen geändert werden sollen
      */
     public void gepaeckAendern(Buchung buchung) {
 
@@ -871,6 +939,16 @@ public class UIKunde {
     }
 }
 
+    /**
+     * Liest eine Ja-Nein-Bestätigung des Benutzers ein.
+     *
+     * Akzeptiert werden die Eingaben {@code j} und {@code n} unabhängig von
+     * Groß- und Kleinschreibung. Ungültige Eingaben werden erneut abgefragt.
+     *
+     * @param text der Text der Bestätigungsfrage
+     * @return {@code true} bei einer Bestätigung mit {@code j},
+     *         sonst {@code false}
+     */
     private boolean bestaetigungEinlesen(String text) {
 
         while (true) {
@@ -891,6 +969,17 @@ public class UIKunde {
     }
 
 
+    /**
+     * Prüft, ob für den angegebenen Passagier mindestens eine bearbeitbare
+     * Buchung vorhanden ist.
+     *
+     * Als bearbeitbar gelten Buchungen mit dem Status {@code AKTIV} oder
+     * {@code UMGEBUCHT}.
+     *
+     * @param passagier der zu überprüfende Passagier
+     * @return {@code true}, wenn mindestens eine bearbeitbare Buchung vorhanden
+     *         ist, sonst {@code false}
+     */
     private boolean hatBearbeitbareBuchungen(Passagier passagier) {
 
         for (Buchung buchung : bs.getBuchungen()) {
@@ -905,6 +994,17 @@ public class UIKunde {
         return false;
     }
 
+    /**
+     * Liest die Suchkriterien für eine Flugsuche ein und ermittelt die dazu
+     * passenden Flüge.
+     *
+     * Der Zielflughafen ist verpflichtend. Zusätzlich können ein Startflughafen,
+     * eine Flugnummer und ein Datum als weitere Suchkriterien angegeben werden.
+     * Die eingegebenen Kriterien werden miteinander kombiniert und über die
+     * Suchmethoden des Verwaltungssystems ausgewertet.
+     *
+     * @return Liste der Flüge, die den angegebenen Suchkriterien entsprechen
+     */
     private ArrayList<Flug> sucheFluege() {
 
         ArrayList<Flug> fluege = new ArrayList<>();

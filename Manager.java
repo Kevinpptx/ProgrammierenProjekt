@@ -108,14 +108,12 @@ public class Manager {
     /**
      * Liest eine Ganzzahl über die Konsole ein.
      *
-     * Die Eingabe wird zunächst als Text eingelesen und anschließend in einen
-     * {@code int}-Wert umgewandelt. Ist keine gültige Ganzzahl eingegeben
-     * worden, wird {@code -1} zurückgegeben.
+     * Die Eingabe wird als Text eingelesen und anschließend in einen
+     * {@code int}-Wert umgewandelt. Bei einer ungültigen Eingabe wird eine
+     * Fehlermeldung ausgegeben und die Eingabe erneut abgefragt.
      *
-     * @return die eingegebene Ganzzahl oder {@code -1} bei einer ungültigen
-     * Eingabe
+     * @return die eingegebene Ganzzahl
      */
-    // Scanner um nach den richtigen werten zu filtern
     public static int intscanner() {
 
         while (true) {
@@ -148,12 +146,10 @@ public class Manager {
      *
      * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als
      * Dezimaltrennzeichen. Ein Komma wird vor der Umwandlung durch einen Punkt
-     * ersetzt.
+     * ersetzt. Bei einer ungültigen Eingabe wird eine Fehlermeldung ausgegeben
+     * und die Eingabe erneut abgefragt.
      *
-     * Ist die Eingabe keine gültige Kommazahl, wird {@code -1.1} zurückgegeben.
-     *
-     * @return die eingegebene Kommazahl oder {@code -1.1} bei einer ungültigen
-     * Eingabe
+     * @return die eingegebene Kommazahl
      */
     public static double doublescanner() {
 
