@@ -53,15 +53,17 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Erstellt ein Objekt vom Typ Passagier und prüft, ob die übergebenenn
-     * Parameter gültig sind.
-     * 
-     * @param name  : Name, der beim Erstellen eines Passagiers diesem zugewiesen
-     *              werden soll
-     * @param email : Mail-Adresse des Passagiers, die der Passagier beim
-     *              erstmaligen anmelden angeben soll, damit man mit ihm in Kontakt
-     *              treten könnte.
-     * @return
+     * Erstellt und registriert einen neuen Passagier.
+     *
+     * Für den Passagier wird automatisch eine fortlaufende Passagier-ID erzeugt.
+     * Kann der Passagier aufgrund ungültiger Daten nicht erstellt werden, wird
+     * der interne Zähler wieder zurückgesetzt.
+     *
+     * @param name der Name des Passagiers
+     * @param email die E-Mail-Adresse des Passagiers
+     * @return der neu erstellte und registrierte Passagier
+     * @throws IllegalArgumentException wenn Name oder E-Mail-Adresse ungültig
+     * oder {@code null} sind
      */
     public Passagier initialisierePassagier(String name, String email) {
         if (name != null && email != null) {
@@ -85,22 +87,25 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Erstellt ein Objekt der Klasse Buchung, wenn die eingegebenen Parameter
-     * valide sind, der angegebene Flug in der Liste der vorhandenen Fluege ist und
-     * der Sitzplatz fuer den Flug existiert
-     * 
-     * @param passagier       : der Passagier, für den die Buchung erstellt wird
-     * @param flug            : Der Flug, der gebucht werden soll
-     * @param sitzplatznummer : wird in Reihe und Nummer des Sitzplatzes
-     *                        umgewandelt, um die Methode "belegeSitzplatz()" der
-     *                        Klasse Flug auszufuehren. Wird außerdem für die
-     *                        Erstellung und Zuweisung eines Sitzplatzes benoetigt.
-     * @param anzahlKoffer    : Anzahl der gebuchten Koffer
-     * @return Buchung, die soeben erstellt wurde
-     * @throws RuntimeException basierend darauf, was dazu geführt hat, dass die
-     *                          Buchung ungueltig ist
+     * Erstellt und registriert eine neue Buchung für einen Passagier.
+     *
+     * Vor der Buchung wird geprüft, ob Passagier und Flug im jeweiligen System
+     * vorhanden sind und ob der gewünschte Sitzplatz für die angegebene
+     * Sitzklasse gültig und frei ist.
+     *
+     * Bei erfolgreicher Buchung wird eine Buchungsnummer vergeben, der Sitzplatz
+     * belegt und die Buchung im Buchungssystem gespeichert.
+     *
+     * @param passagier der Passagier, für den die Buchung erstellt wird
+     * @param flug der zu buchende Flug
+     * @param sitzplatznummer die Nummer des gewünschten Sitzplatzes
+     * @param anzahlKoffer die Anzahl der aufzugebenden Koffer
+     * @param sitzklasse die gewünschte Sitzklasse
+     * @param verwaltungssystem das Verwaltungssystem zur Prüfung des Fluges
+     * @return die neu erstellte Buchung
+     * @throws IllegalArgumentException wenn übergebene Werte ungültig sind oder
+     * Passagier, Flug beziehungsweise Sitzplatz nicht gültig sind
      */
-
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
             Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
@@ -164,15 +169,21 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Bucht einen Passagier um.
-     * Die entgegengenommenen Parameter können neu sein oder nicht, das erfolgt in
-     * der Methode {@link validiereUmbuchung}
-     * 
-     * @param buchung die aktuell vorliegende Buchung
-     * @param Flug der betreffende Flug
-     * @param sitzplatznummer die betreffende Sitzplatznummer
-     * @param sitzklasse mit entsprechender Sitzklasse
-     * @return den Buchungsbetrag
+     * Bucht eine bestehende Buchung auf einen anderen Flug beziehungsweise
+     * Sitzplatz um.
+     *
+     * Vor der Änderung wird die Umbuchung validiert und der zusätzlich zu
+     * zahlende Umbuchungsbetrag berechnet. Anschließend werden der neue Sitzplatz,
+     * Flug und Buchungspreis übernommen, der Buchungsstatus auf
+     * {@code UMGEBUCHT} gesetzt und der bisherige Sitzplatz freigegeben.
+     *
+     * @param buchung die umzubuchende Buchung
+     * @param flug der neue Flug
+     * @param sitzplatznummer die Nummer des neuen Sitzplatzes
+     * @param sitzklasse die Sitzklasse des neuen Sitzplatzes
+     * @param verwaltungssystem das Verwaltungssystem zur Validierung des Fluges
+     * @return der zusätzlich zu zahlende Umbuchungsbetrag einschließlich
+     * Umbuchungsgebühr und gegebenenfalls positiver Preisdifferenz
      */
 public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
     boolean umbuchungMoeglich = false;
@@ -209,18 +220,21 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
 }
 
     /**
-     * Schaut, ob eine Umbuchung möglich ist.
-     * Geht dafür bei Buchung auf einen neuen Flug alle Sitzplätze des neuen Fluges
-     * durch und schaut, ob die Sitzplatznummer im neuen Flug existiert.
-     * Bei Buchung auf neue Sitzplatznummer wird nur geprüft, ob der neue Sitzplatz
-     * noch frei ist
-     * Schaut vorher, ob die Objekte nicht null sind
-     * Prüft, ob eine Umbuchung schon vorgenommen wurde
-     * 
-     * @param buchung
-     * @param neuerFlug
-     * @param neueSitzplatznummer
-     * @return
+     * Prüft, ob eine Umbuchung mit den angegebenen Daten durchgeführt werden kann.
+     *
+     * Dabei werden unter anderem die Existenz des neuen Fluges, der
+     * Buchungsstatus sowie Sitzplatz und Sitzklasse geprüft. Abhängig davon, ob
+     * innerhalb desselben Fluges oder auf einen anderen Flug umgebucht wird,
+     * erfolgt die entsprechende Sitzplatzvalidierung.
+     *
+     * @param buchung die umzubuchende Buchung
+     * @param neuerFlug der gewünschte neue Flug
+     * @param neueSitzplatznummer die Nummer des gewünschten neuen Sitzplatzes
+     * @param sitzklasse die gewünschte Sitzklasse
+     * @param verwaltungssystem das Verwaltungssystem zur Prüfung des neuen Fluges
+     * @return {@code true}, wenn die Umbuchung gültig ist
+     * @throws NoSuchElementException wenn benötigte Buchungs- oder Flugdaten fehlen
+     * @throws IllegalStateException wenn die Buchung storniert oder vergangen ist
      */
     public boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer,
             Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem) {
@@ -305,14 +319,17 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
     }
 
     /**
-     * Berechnet die Gebühr für die Umbuchung und gibt diese zurück
-     * 
-     * @param buchung   : Buchung, die umgebucht wurde
-     * @param flug      : flug, auf den umgebucht wurde (wird für den Basispreis
-     *                  benötigt)
-     * @param sitzplatz : Sitzplatz, auf den umgebucht wurde (wichtig für die
-     *                  Sitzklasse)
-     * @return
+     * Berechnet den bei einer Umbuchung zusätzlich zu zahlenden Betrag.
+     *
+     * Der Betrag setzt sich aus der festen Umbuchungsgebühr und einer möglichen
+     * positiven Differenz zwischen dem bisherigen und dem neuen Buchungspreis
+     * zusammen. Ist der neue Flug günstiger, wird die Preisdifferenz nicht
+     * erstattet.
+     *
+     * @param buchung die bisherige Buchung
+     * @param flug der neue Flug
+     * @param sitzplatz der neue Sitzplatz
+     * @return der zusätzlich zu zahlende Umbuchungsbetrag
      */
     public double berechneUmbuchungsgebuehr(Buchung buchung, Flug flug, Sitzplatz sitzplatz) {
         // Legt zuerst die Variablen für die Berechnung fest
@@ -396,6 +413,23 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
         return relevanteBuchungen;
     }
 
+    /**
+     * Ändert die Anzahl der gebuchten Koffer einer bestehenden Buchung.
+     *
+     * Die Änderung ist nur für vorhandene Buchungen mit dem Status
+     * {@code AKTIV} oder {@code UMGEBUCHT} möglich. Nach der Änderung der
+     * Gepäckmenge wird der Buchungspreis neu berechnet.
+     *
+     * @param buchung die zu ändernde Buchung
+     * @param neueAnzahlKoffer die neue Anzahl der gebuchten Koffer
+     * @return die Differenz zwischen neuem und bisherigem Buchungspreis; ein
+     * positiver Wert entspricht einem zusätzlich zu zahlenden Betrag, ein
+     * negativer Wert einer Erstattung
+     * @throws IllegalArgumentException wenn keine Buchung angegeben wurde oder
+     * die Kofferanzahl negativ ist
+     * @throws NoSuchElementException wenn die Buchung nicht im System vorhanden ist
+     * @throws IllegalStateException wenn der Buchungsstatus keine Änderung erlaubt
+     */
     public double gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
 
     if (buchung == null) {
@@ -418,14 +452,17 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
 
     buchung.getGepaeckinformation().setAnzahlKoffer(neueAnzahlKoffer);
 
+    buchung.aktualisiereGezahltenPreis();
+
     double neuerPreis = buchung.getGezahlterPreis();
 
     return neuerPreis - alterPreis;
 }
 
     /**
-     * 
-     * @return Anzahl an der getätigten Buchungen
+     * Gibt den aktuellen Zähler der bisher vergebenen Buchungsnummern zurück.
+     *
+     * @return Anzahl der bisher vergebenen Buchungsnummern
      */
     public int getAnzahlBuchungen() {
         return anzahlBuchungen;
@@ -447,6 +484,11 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
         return List.copyOf(buchungen);
     }
 
+    /**
+     * Gibt alle registrierten Passagiere zurück.
+     *
+     * @return unveränderbare Kopie der registrierten Passagiere
+     */
     public List<Passagier> getPassagiere() {
         return List.copyOf(passagiere);
     }

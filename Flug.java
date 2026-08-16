@@ -260,20 +260,32 @@ public class Flug implements Serializable {
      */
     public void zeigeSitzplan() {
 
+        String ersteKlasse = " " + this.sitzplan[0][0].getSitzklasse() + " ";
+
+        int breite = this.sitzplan[0].length * 5 + 1;
+        int anzahlStriche = Math.max(0, breite - ersteKlasse.length());
+
+        int links = anzahlStriche / 2;
+        int rechts = anzahlStriche - links;
+
+        System.out.println("-".repeat(links) + ersteKlasse + "-".repeat(rechts));
+        System.out.println();
+
         for (int i = 0; i < this.sitzplan.length; i++) {
-            
-            /*
-             * Prüft ab der zweiten Reihe, ob sich die Sitzklasse gegenüber
-             * der vorherigen Reihe verändert hat.
-             */
-            if(i>0 && this.sitzplan[i-1][0].getSitzklasse() != this.sitzplan[i][0].getSitzklasse()) {
 
-                // Horizontale Trennlinie zwischen zwei Sitzklassen
-                for (int j = 0; j < this.sitzplan[i].length; j++) {
-                    System.out.print("--- AB HIER ECONOMY ---");
-                }
+            if (i > 0 && this.sitzplan[i - 1][0].getSitzklasse()
+                    != this.sitzplan[i][0].getSitzklasse()) {
 
-                System.out.println();
+                String text = " " + this.sitzplan[i][0].getSitzklasse() + " ";
+
+                int breiteKlasse = this.sitzplan[i].length * 5 + 1;
+                int stricheKlasse = Math.max(0, breiteKlasse - text.length());
+
+                int linksKlasse = stricheKlasse / 2;
+                int rechtsKlasse = stricheKlasse - linksKlasse;
+
+                System.out.println("-".repeat(linksKlasse) + text + "-".repeat(rechtsKlasse));
+
                 System.out.println();
             }
 

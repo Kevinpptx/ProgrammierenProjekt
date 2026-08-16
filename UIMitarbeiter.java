@@ -1,23 +1,25 @@
+
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 
 /**
- * Die Klasse {@code UIMitarbeiter} stellt die Konsolenoberfläche
- * für Mitarbeiter und Administratoren bereit.
+ * Die Klasse {@code UIMitarbeiter} stellt die Konsolenoberfläche für
+ * Mitarbeiter und Administratoren bereit.
  *
- * Nach erfolgreicher Anmeldung können Fluggesellschaften, Flugzeuge,
- * Flughäfen und Flüge verwaltet werden. Zusätzlich können alle vorhandenen
- * Buchungen angezeigt werden.
+ * Nach erfolgreicher Anmeldung können Fluggesellschaften, Flugzeuge, Flughäfen
+ * und Flüge verwaltet werden. Zusätzlich können alle vorhandenen Buchungen
+ * angezeigt werden.
  *
  * Änderungen werden mithilfe des {@link DatenHandler} dauerhaft gespeichert.
  *
- * @author Lars Pfeiffer
- * @version 1.0
+ * @author Lars Pfeiffer, Cedric Beckmann
+ * @version 1.1
  */
-
 public class UIMitarbeiter {
 
     /**
@@ -36,10 +38,15 @@ public class UIMitarbeiter {
     private final Buchungssystem bs;
 
     /**
-     * Verwaltungssystem zur Verwaltung von Fluggesellschaften,
-     * Flugzeugen, Flughäfen und Flügen.
+     * Verwaltungssystem zur Verwaltung von Fluggesellschaften, Flugzeugen,
+     * Flughäfen und Flügen.
      */
     private final Verwaltungssystem vs;
+
+    /**
+     * Formatiert Datum und Uhrzeit im Format {@code dd.MM.yyyy HH:mm}.
+     */
+    private static final DateTimeFormatter DATUM_ZEIT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     /**
      * Erstellt eine neue Mitarbeiteroberfläche.
@@ -50,7 +57,7 @@ public class UIMitarbeiter {
      * @param datenHandler Handler zum Speichern der Anwendungsdaten
      * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
      * @throws IllegalArgumentException wenn der DatenHandler oder die
-     *                                  Anwendungsdaten {@code null} sind
+     * Anwendungsdaten {@code null} sind
      */
     public UIMitarbeiter(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
@@ -62,13 +69,11 @@ public class UIMitarbeiter {
             throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
         }
 
-
-        this.datenHandler = datenHandler; 
+        this.datenHandler = datenHandler;
         this.anwendungsdaten = anwendungsdaten;
         this.bs = anwendungsdaten.getBuchungssystem();
         this.vs = anwendungsdaten.getVerwaltungssystem();
     }
-
 
     /**
      * Führt die Anmeldung eines Mitarbeiters durch.
@@ -86,33 +91,31 @@ public class UIMitarbeiter {
 
         for (i = 3; i >= 0; i--) {
 
-            System.out.println("Geben Sie bitte Ihr Passwort ein:");
+            UIHelper.druckeEingabeaufforderung("Geben Sie bitte Ihr Passwort ein:");
 
             int eingabe = Manager.intscanner();
 
-
             if (passwort == eingabe) {
-                System.out.println("Sie haben sich erfolgreich angemeldet! ");
+                UIHelper.druckeErfolg("Sie haben sich erfolgreich angemeldet.");
                 hauptmanager();
                 return;
 
             } else if (i == 0) {
-                System.out.println("Keine Eingaben mehr übrig, bitte wenden Sie sich an den Administrator!");
+                UIHelper.druckeFehler("Keine Versuche mehr übrig. Bitte wenden Sie sich an den Administrator.");
                 //  System.exit(0);
             } else {
-                System.out.println("Falsche Eingabe. Sie haben noch " + i + " Versuche.");
+                UIHelper.druckeFehler("Falsche Eingabe. Sie haben noch " + i + " Versuche.");
             }
 
         }
-        }
-
+    }
 
     /**
      * Zeigt das Hauptmenü für Mitarbeiter an.
      *
-     * Über dieses Menü können Fluggesellschaften, Flugzeuge, Flughäfen
-     * und Flüge verwaltet werden. Außerdem können die vorhandenen
-     * Buchungen angezeigt werden.
+     * Über dieses Menü können Fluggesellschaften, Flugzeuge, Flughäfen und
+     * Flüge verwaltet werden. Außerdem können die vorhandenen Buchungen
+     * angezeigt werden.
      *
      * Das Menü wird so lange wiederholt, bis sich der Mitarbeiter abmeldet.
      */
@@ -121,16 +124,20 @@ public class UIMitarbeiter {
 
         while (true) {
 
-        System.out.println("-------------------Willkommen im Hauptmanager-------------------------");
-        System.out.println("Willkommen Admin, was möchten Sie tun?: ");
-        System.out.println("Drücken Sie die 1, um Fluggesellschaften hinzufügen oder zu entfernen. ");
-        System.out.println("Drücken Sie die 2, um Flugzeuge einer Flugesellschaftsflotte hinzuzufügen oder zu entfernen.");
-        System.out.println("Drücken Sie die 3, um Flughäfen hinzuzufügen oder zu entfernen.");
-        System.out.println("Drücken Sie die 4, um einen neuen Flug anzulegen. ");
-        System.out.println("Drücken Sie die 5, um einen Flug zu entfernen. ");
-        System.out.println("Drücken Sie die 6, um die Buchungen zu sehen. ");
-        System.out.println("Drücken Sie die 7, um die Flugübersicht anzuzeigen.");
-        System.out.println("Drücken Sie die 8, um sich abzumelden.");
+            UIHelper.druckeUeberschrift("Willkommen im Hauptmanager");
+
+            UIHelper.druckeEingabeaufforderung("Was möchten Sie tun?");
+
+            UIHelper.druckeMenuepunkt(1, "Fluggesellschaften verwalten");
+            UIHelper.druckeMenuepunkt(2, "Flugzeuge verwalten");
+            UIHelper.druckeMenuepunkt(3, "Flughäfen verwalten");
+            UIHelper.druckeMenuepunkt(4, "Flug anlegen");
+            UIHelper.druckeMenuepunkt(5, "Flug entfernen");
+            UIHelper.druckeMenuepunkt(6, "Buchungen anzeigen");
+            UIHelper.druckeMenuepunkt(7, "Flugübersicht anzeigen");
+            UIHelper.druckeMenuepunkt(0, "Abmelden");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
 
@@ -147,47 +154,46 @@ public class UIMitarbeiter {
                     break;
 
                 case 4:
-                    fluganlegen();
+                    flugAnlegen();
                     break;
                 case 5:
-                    flugentfernen();
+                    flugEntfernen();
                     break;
 
                 case 6:
-                    System.out.println(bs.getBuchungen());
-                    System.out.println("Anzahl Buchungen: " + bs.getAnzahlBuchungen());
+                    buchungenAnzeigen();
                     break;
 
                 case 7:
                     fluguebersicht();
                     break;
 
-                case 8:
-                   return;
+                case 0:
+                    return;
 
                 default:
-                    System.out.println("Ungültige Eingabe.");
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
         }
     }
 
-
     /**
      * Zeigt das Verwaltungsmenü für Fluggesellschaften an.
      *
-     * Der Mitarbeiter kann eine neue Fluggesellschaft anlegen,
-     * eine vorhandene Fluggesellschaft entfernen oder zum
-     * Hauptmenü zurückkehren.
+     * Der Mitarbeiter kann eine neue Fluggesellschaft anlegen, eine vorhandene
+     * Fluggesellschaft entfernen oder zum Hauptmenü zurückkehren.
      */
-    public  void fluggesellschaftenManager() {
+    public void fluggesellschaftenManager() {
 
         while (true) {
-        System.out.println("---------Willkommen im Fluggesellschaftenmanager---------");
-        System.out.println("Drücken Sie die 1, um eine Fluggesellschaft hinzuzufügen.  ");
-        System.out.println("Drücken Sie die 2, um eine Fluggesellschaft zu entfernen.");
-        System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
-        System.out.println("---------------------------------------------------------");
+            UIHelper.druckeUeberschrift("Willkommen im Fluggesellschaftenmanager");
+
+            UIHelper.druckeMenuepunkt(1, "Fluggesellschaft hinzufügen");
+            UIHelper.druckeMenuepunkt(2, "Fluggesellschaft entfernen");
+            UIHelper.druckeMenuepunkt(0, "Zurück zum Hauptmanager");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
             switch (auswahl) {
@@ -197,11 +203,11 @@ public class UIMitarbeiter {
                 case 2:
                     fluggeselschaftentfernen();
                     break;
-                case 3:
+                case 0:
                     return;
 
                 default:
-                    System.out.print("Ungültige Eingabe");
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
         }
@@ -215,15 +221,17 @@ public class UIMitarbeiter {
      * hinzufügen, ein vorhandenes Flugzeug entfernen oder zum Hauptmenü
      * zurückkehren.
      */
-    public  void flottenManager() {
+    public void flottenManager() {
 
         while (true) {
 
-            System.out.println("--------------Willkommen im FlottenManager---------------");
-            System.out.println("Drücken Sie die 1, um Flugzeuge der Flotte hinzuzufügen.");
-            System.out.println("Drücken Sie die 2, um Flugzeug zu entfernen.");
-            System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
-            System.out.println("---------------------------------------------------------");
+            UIHelper.druckeUeberschrift("Willkommen im Flottenmanager");
+
+            UIHelper.druckeMenuepunkt(1, "Flugzeug hinzufügen");
+            UIHelper.druckeMenuepunkt(2, "Flugzeug entfernen");
+            UIHelper.druckeMenuepunkt(0, "Zurück zum Hauptmanager");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
 
@@ -234,10 +242,10 @@ public class UIMitarbeiter {
                 case 2:
                     flugzeugeEntfernen();
                     break;
-                case 3:
+                case 0:
                     return;
-                default:
-                    System.out.print("Ungültige Eingabe");
+                default:    
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
         }
@@ -247,18 +255,21 @@ public class UIMitarbeiter {
     /**
      * Zeigt das Verwaltungsmenü für Flughäfen an.
      *
-     * Der Mitarbeiter kann einen neuen Flughafen hinzufügen,
-     * einen vorhandenen Flughafen entfernen oder zum Hauptmenü
-     * zurückkehren.
+     * Der Mitarbeiter kann einen neuen Flughafen hinzufügen, einen vorhandenen
+     * Flughafen entfernen oder zum Hauptmenü zurückkehren.
      */
-    public  void flughafenManager() {
+    public void flughafenManager() {
 
         while (true) {
-            System.out.println("--------------Willkommen im Flughafenmanager---------------");
-            System.out.println("Drücken Sie die 1, um einen Flughafen hinzuzufügen. ");
-            System.out.println("Drücken Sie die 2, um einen Flughafen zu entfernen.");
-            System.out.println("Drücken Sie die 3, um zurück zum Hauptmanager zu gelangen.");
-            System.out.println("---------------------------------------------------------");
+
+            UIHelper.druckeUeberschrift("Willkommen im Flughafenmanager");
+
+            UIHelper.druckeMenuepunkt(1, "Flughafen hinzufügen");
+            UIHelper.druckeMenuepunkt(2, "Flughafen entfernen");
+            UIHelper.druckeMenuepunkt(0, "Zurück zum Hauptmanager");
+
+            UIHelper.druckeTrennlinie();
+
             int auswahl = Manager.intscanner();
             switch (auswahl) {
                 case 1:
@@ -267,77 +278,82 @@ public class UIMitarbeiter {
                 case 2:
                     entferneFlughafen();
                     break;
-                case 3:
+                case 0:
                     return;
                 default:
-                    System.out.print("Ungültige Eingabe! \n");
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
 
         }
-
 
     }
 
     /**
      * Legt eine neue Fluggesellschaft an.
      *
-     * Der Mitarbeiter gibt den Namen und den Airlinecode ein.
-     * Anschließend wird die Fluggesellschaft dem Verwaltungssystem
-     * hinzugefügt und dauerhaft gespeichert.
+     * Der Mitarbeiter gibt den Namen und den Airlinecode ein. Anschließend wird
+     * die Fluggesellschaft dem Verwaltungssystem hinzugefügt und dauerhaft
+     * gespeichert.
      */
     //Fluggeselschaftanlegen
     public void fluggesellschaftAnlegen() {
-        System.out.println("--------------Fluggesellschaft anlegen---------------------------");
-        System.out.println("Name Fluggesellschaft: ");
-        String name = Manager.stringscanner();
-        System.out.println("Airlinecode der Fluggesellschaft: ");
-        String airlinecode = Manager.stringscanner();
 
+        UIHelper.druckeUeberschrift("Fluggesellschaft anlegen");
+
+        UIHelper.druckeEingabeaufforderung("Name Fluggesellschaft: ");
+        String name = Manager.stringscanner();
+
+        UIHelper.druckeEingabeaufforderung("Airlinecode der Fluggesellschaft: ");
+        String airlinecode = Manager.stringscanner();
 
         try {
             Fluggesellschaft fluggesellschaftAnlegen = new Fluggesellschaft(name, airlinecode);
-            vs.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
+            Fluggesellschaft fluggesellschaft = vs.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
             datenHandler.speichere(anwendungsdaten);
+
+            UIHelper.druckeErfolg("Die Fluggesellschaft " + fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName() + " wurde erfolgreich angelegt.");
         } catch (Exception e) {
-            System.out.println("Fehler: " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
             return;
         }
+
+        UIHelper.druckeTrennlinie();
 
         System.out.println("Alle bisherigen Fluggesellschaften: ");
 
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
-            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+            System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
     }
 
-
-
     /**
      * Entfernt eine vorhandene Fluggesellschaft.
      *
-     * Die Fluggesellschaft wird über ihren Airlinecode ausgewählt.
-     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     * Die Fluggesellschaft wird über ihren Airlinecode ausgewählt. Nach
+     * erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
      */
-    public  void fluggeselschaftentfernen() {
-        System.out.println("--------------Fluggesellschaft entfernen---------------------------");
-        System.out.println(" Welche Fluggesellschaft möchten Sie entfernen?: ");
+    public void fluggeselschaftentfernen() {
+
+        UIHelper.druckeUeberschrift("Fluggesellschaft entfernen");
+
+        System.out.println("Folgende Fluggesellschaften können entfernt werden:");
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
-            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+            System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
-        System.out.println(" Bitte geben Sie den Airlinecode der Fluggesellschaft ein, die Sie entfernen möchten:");
+        UIHelper.druckeTrennlinie();
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Airlinecode der zu entfernenden Fluggesellschaft ein:");
         try {
-                String code = Manager.stringscanner();
+            String code = Manager.stringscanner();
             vs.entferneFluggesellschaft(vs.getFluggesellschaft(code));
 
             datenHandler.speichere(anwendungsdaten);
-            System.out.println("Fluggesellschaft erfolgreich entfernt.");
+            UIHelper.druckeErfolg("Fluggesellschaft erfolgreich entfernt.");
 
-        }
-        catch (Exception e) {
-            System.out.println("Fehler: " + e.getMessage());
+        } catch (Exception e) {
+            UIHelper.druckeFehler(e.getMessage());
         }
 
     }
@@ -346,60 +362,69 @@ public class UIMitarbeiter {
      * Fügt der Flotte einer Fluggesellschaft ein neues Flugzeug hinzu.
      *
      * Zuerst wird die Fluggesellschaft über ihren Airlinecode ausgewählt.
-     * Danach werden Flugzeugcode, Modell, Reihenanzahl, Sitze pro Reihe
-     * und Anzahl der Businessreihen abgefragt.
+     * Danach werden Flugzeugcode, Modell, Reihenanzahl, Sitze pro Reihe und
+     * Anzahl der Businessreihen abgefragt.
      *
      * Nach erfolgreicher Erstellung wird das Flugzeug gespeichert.
      */
     //FlugzeugderFlotteHinzufügen
+    public void flugzeugderFlotteHinzufügen() {
 
-    public  void flugzeugderFlotteHinzufügen() {
-        System.out.println("----------------------Flotte Flugzeuge hinzufügen------------------------------");
-        System.out.println("Liste der bestehenden Fluggesellschaften, deren Flotte ein Flugzeug hinzugefügt werden kann:");
+        UIHelper.druckeUeberschrift("Flugzeug der Flotte hinzufügen");
+
+
+        System.out.println("Folgenden Fluggesellschaften kann ein Flugzeug hinzugefügt werden:");
+
+        UIHelper.druckeTrennlinie();
+
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
-            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+            System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
-
 
         // Auswahl der Fluggeselschafften
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Bitte wählen Sie über den Airlinecode die Fluggesellschaft aus, der Sie Flugzeuge hinzufügen möchten: ");
-            String auswahl = Manager.stringscanner();
-            try {
-                vs.getFluggesellschaft(auswahl);
-                datenHandler.speichere(anwendungsdaten);
-            }
-            catch (Exception e)
-            {
-                System.out.println("Fehler: " + e.getMessage());
-                return;
-            }
+        UIHelper.druckeTrennlinie();
 
+        UIHelper.druckeEingabeaufforderung("Bitte wählen Sie über den Airlinecode die Fluggesellschaft aus, der Sie Flugzeuge hinzufügen möchten: ");
 
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Bitte geben Sie den Code des Flugzeuges ein: ");
-            String code = Manager.stringscanner();
-            System.out.println("Bitte geben Sie das Modell des Flugzeuges ein: ");
-            String modell = Manager.stringscanner();
-            System.out.println("Bitte geben Sie die Anzahl der Reihen des Flugzeuges ein: ");
-            int reihen = Manager.intscanner();
-            System.out.println("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges ein: ");
-            int sitze = Manager.intscanner();
-            System.out.println("Bitte geben Sie die Anzahl der Businessreihen des Flugzeuges ein: ");
-            int business = Manager.intscanner();
-
-
-            // Flugzeug erstellen
+        String auswahl = Manager.stringscanner();
         try {
-            vs.erzeugeFlugzeug(vs.getFluggesellschaft(auswahl), code, modell, reihen, sitze, business);
-            datenHandler.speichere(anwendungsdaten);
+            vs.getFluggesellschaft(auswahl);
+
         } catch (Exception e) {
-            System.out.println("Fehler: " + e.getMessage());
+            UIHelper.druckeFehler(e.getMessage());
             return;
         }
-            System.out.println("Das Flugzeug wurde der Flotte erfolgreich hinzugefügt!");
-        }
 
+        UIHelper.druckeTrennlinie();
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie einen Code für das Flugzeug ein:");
+        String code = Manager.stringscanner();
+        while(code.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen Code für das Flugzeug an: ");
+            code = Manager.stringscanner();
+        } 
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie das Modell des Flugzeuges ein: ");
+        String modell = Manager.stringscanner();
+        while(modell.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie ein Modell für das Flugzeug an: ");
+            modell = Manager.stringscanner();
+        } 
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Reihen des Flugzeuges ein: ");
+        int reihen = Manager.intscanner();
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges ein: ");
+        int sitze = Manager.intscanner();
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Businessreihen des Flugzeuges ein: ");
+        int business = Manager.intscanner();
+
+        // Flugzeug erstellen
+        try {
+             Flugzeug flugzeug = vs.erzeugeFlugzeug(vs.getFluggesellschaft(auswahl), code, modell, reihen, sitze, business);
+             datenHandler.speichere(anwendungsdaten);
+             UIHelper.druckeErfolg("Das Flugzeug " + flugzeug.getCode() + " wurde erfolgreich hinzugefügt.");
+        } catch (Exception e) {
+            UIHelper.druckeFehler(e.getMessage());
+            return;
+        }
+    }
 
     /**
      * Entfernt ein Flugzeug aus dem Verwaltungssystem.
@@ -409,18 +434,17 @@ public class UIMitarbeiter {
      *
      * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
      */
-    public  void flugzeugeEntfernen() {
+    public void flugzeugeEntfernen() {
 
-         System.out.println("----------------------Flugzeug entfernen------------------------------");
+        UIHelper.druckeUeberschrift("Flugzeug entfernen");
 
-         try {
+        try {
             for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
 
-                System.out.println();
-                System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+                System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
 
                 if (fluggesellschaft.getFlotte().isEmpty()) {
-                    System.out.println("Keine Flugzeuge vorhanden.");
+                    UIHelper.druckeHinweis("Keine Flugzeuge vorhanden.");
                 } else {
 
                     for (Flugzeug f : fluggesellschaft.getFlotte()) {
@@ -432,74 +456,104 @@ public class UIMitarbeiter {
                         );
                     }
                 }
+
+                UIHelper.druckeTrennlinie();
+
             }
 
-             System.out.println("Bitte geben Sie den Flugzeugcode zur Löschung ein:");
-             String code = Manager.stringscanner();
-             vs.entferneFlugzeug(code);
+            UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Flugzeugcode des zu entfernenden Flugzeugs ein:");
 
-             datenHandler.speichere(anwendungsdaten);
+            String code = Manager.stringscanner();
+            vs.entferneFlugzeug(code);
 
-             System.out.println("Flugzeug wurde erfolgreich gelöscht!");
+            datenHandler.speichere(anwendungsdaten);
 
-         } catch (Exception e) {
-             System.out.println("Fehler: " + e.getMessage());
-             return;
-         }
-     }
+            UIHelper.druckeErfolg("Das Flugzeug wurde erfolgreich entfernt.");
 
+        } catch (Exception e) {
+            UIHelper.druckeFehler(e.getMessage());
+            return;
+        }
+    }
 
+    /**
+     * Fügt dem Verwaltungssystem einen neuen Flughafen hinzu.
+     *
+     * Der Mitarbeiter gibt den Namen, IATA-Code, die Stadt und das Land des
+     * Flughafens ein. Anschließend wird der Flughafen erzeugt und gespeichert.
+     */
+    public void hinzufügenFlughafen() {
 
-/**
- * Fügt dem Verwaltungssystem einen neuen Flughafen hinzu.
- *
- * Der Mitarbeiter gibt den Namen, IATA-Code, die Stadt und das Land
- * des Flughafens ein. Anschließend wird der Flughafen erzeugt und gespeichert.
- */
-    public  void hinzufügenFlughafen()
-    {
-        System.out.println("----------------------Flughafen hinzufügen------------------------------");
-        System.out.println("Geben Sie den Namen des Flughafens ein:");
+        UIHelper.druckeUeberschrift("Flughafen hinzufügen");
+
+        UIHelper.druckeEingabeaufforderung("Geben Sie den Namen des Flughafens ein:");
         String name = Manager.stringscanner();
-        System.out.println("Geben Sie den IATA-Code des Flughafens ein:");
-        String iatacode  = Manager.stringscanner();
-        System.out.println("Geben Sie die Stadt des Flughafens ein:");
+        while(name.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen Namen für den Flughafen ein: ");
+            name = Manager.stringscanner();
+        } 
+
+        UIHelper.druckeEingabeaufforderung("Geben Sie den IATA-Code des Flughafens ein:");
+        String iatacode = Manager.stringscanner();
+        while(iatacode.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen IATA-Code für den Flughafen ein: ");
+            iatacode = Manager.stringscanner();
+        }
+
+        UIHelper.druckeEingabeaufforderung("Geben Sie die Stadt des Flughafens ein:");
         String stadt = Manager.stringscanner();
-        System.out.println("Geben Sie das Land des Flughafens ein: ");
+        while(stadt.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie eine Stadt für den Flughafen ein: ");
+            stadt = Manager.stringscanner();
+        }
+
+        
+        UIHelper.druckeEingabeaufforderung("Geben Sie das Land des Flughafens ein: ");
         String land = Manager.stringscanner();
+        while(land.isEmpty()) {
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie ein Land für den Flughafen ein: ");
+            land = Manager.stringscanner();
+        }
 
         //Methode zum hinzufügen
         try {
-            vs.erzeugeFlughafen(name, iatacode, stadt, land);
+            Flughafen flughafen = vs.erzeugeFlughafen(name, iatacode, stadt, land);
+
             datenHandler.speichere(anwendungsdaten);
+            UIHelper.druckeErfolg("Der Flughafen " +  flughafen.getIataCode() + " " + flughafen.getName() + " wurde erfolgreich hinzugefügt.");
 
-            System.out.println("Flughafen: " + vs.getFlughafenNachCode(iatacode)  + " erfolgreich hinzugefügt!");
-            System.out.println("--------------------------------------------------------------------");
-            System.out.println("Zurück zum Flughafenmanager.");
-
-
-        }
-        catch (Exception e){
-            System.out.println("Fehler: " + e.getMessage());
+        } catch (Exception e) {
+            UIHelper.druckeFehler(e.getMessage());
             return;
         }
 
-
     }
-
 
     /**
      * Entfernt einen vorhandenen Flughafen.
      *
-     * Der Flughafen wird über seinen IATA-Code ausgewählt. Nach
-     * erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     * Der Flughafen wird über seinen IATA-Code ausgewählt. Nach erfolgreicher
+     * Entfernung werden die Anwendungsdaten gespeichert.
      */
-    public void entferneFlughafen()
-    {
-        System.out.println("----------------------Flughafen entfernen-------------------------------");
-        System.out.println("Welchen Flughafen möchten Sie entfernen (Auswahl über IATA-Code)?: ");
-        System.out.println(vs.getFlughaefen());
-        System.out.println("Welchen Flughafen möchten Sie enternen (iataCode) ");
+    public void entferneFlughafen() {
+
+        UIHelper.druckeUeberschrift("Flughafen entfernen");
+
+        System.out.println("Folgende Flughäfen können entfernt werden: ");
+
+        UIHelper.druckeTrennlinie();
+
+        System.out.printf("%-6s | %-35s | %-15s | %-15s%n","IATA", "Flughafen", "Ort", "Land");
+
+        UIHelper.druckeTrennlinie();
+
+        for (Flughafen flughafen : vs.getFlughaefen()) {
+            System.out.printf("%-4s | %-35s | %-15s | %s%n", flughafen.getIataCode(), flughafen.getName(), flughafen.getStadt(), flughafen.getLand());
+        }
+
+        UIHelper.druckeTrennlinie();
+
+        UIHelper.druckeEingabeaufforderung("Wählen Sie den Flughafen zum Entfernen über den IATA-Code: ");
 
         String iataCode = Manager.stringscanner();
 
@@ -509,228 +563,388 @@ public class UIMitarbeiter {
 
             vs.entferneFlughafen(flughafen);
             datenHandler.speichere(anwendungsdaten);
-            System.out.println("Flughafen " + iataCode + " erfolgreich entfernt.");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Fehler: " + e.getMessage());
+            UIHelper.druckeErfolg("Flughafen " + iataCode + " erfolgreich entfernt.");
+        } catch (Exception e) {
+            UIHelper.druckeFehler(e.getMessage());
 
         }
 
     }
 
     /**
-     * Legt einen neuen Flug im Verwaltungssystem an.
+     * Legt einen neuen Flug oder mehrere wiederkehrende Flugpaare im
+     * Verwaltungssystem an.
      *
-     * Für den Flug werden der Basispreis, die Fluggesellschaft,
-     * das Flugzeug, der Startflughafen, der Zielflughafen sowie
-     * die Abflug- und Ankunftszeit abgefragt.
+     * Zunächst werden Basispreis, Fluggesellschaft und ein zugehöriges Flugzeug
+     * ausgewählt. Anschließend werden Start- und Zielflughafen sowie Abflug- und
+     * Ankunftszeit erfasst. Ungültige Codes für Fluggesellschaften, Flugzeuge
+     * oder Flughäfen werden erneut abgefragt.
      *
-     * Zusätzlich kann ein Rückflug beziehungsweise eine Wiederholung
-     * ausgewählt werden. Nach erfolgreicher Erstellung werden die
-     * Anwendungsdaten gespeichert.
+     * Danach kann entweder ein einzelner Flug oder ein Flug mit Rückflug angelegt
+     * werden. Bei einem Flug mit Rückflug wird zusätzlich angegeben, an wie vielen
+     * aufeinanderfolgenden Tagen das Flugpaar stattfinden soll.
+     *
+     * Erfolgreich erzeugte Flüge werden anschließend dauerhaft gespeichert.
      */
-    // Flüge anlegen
-    public  void fluganlegen()
-    {
-        String gesellschaft = "";
-        String flugzeug = "";
-        String startflughafen = "";
-        String zielflughafen = "";
-        LocalDateTime abflug = LocalDateTime.now();
-        LocalDateTime ankunft =  LocalDateTime.now();
+    public void flugAnlegen() {
 
-        System.out.println("---------------------------Willkommen im Bereich Flug anlegen-----------------------------");
+        String gesellschaft;
+        String flugzeug;
+        String startflughafen;
+        String zielflughafen;
+        LocalDateTime abflug;
+        LocalDateTime ankunft;
 
+        UIHelper.druckeUeberschrift("Flug anlegen");
 
-        // Abfrage des Basispreises
-        System.out.println("Bitte geben Sie den Basispreis Ihres Flugs ein: ");
+        // Basispreis
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Basispreis des Flugs ein:");
         double basispreis = Manager.doublescanner();
+        System.out.println();
 
-        //Anzeige der gesamten Fluggesellschaften
-        System.out.println("Welche Airline führt den Flug durch (Auswahl über Airlinecode)?:");
+        UIHelper.druckeTrennlinie();
+
+        // Fluggesellschaft auswählen
+        UIHelper.druckeEingabeaufforderung("Welche Airline führt den Flug durch? Auswahl über Airlinecode:");
+
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
-            System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
+            System.out.println(
+                    fluggesellschaft.getAirlineCode() + " - "+ fluggesellschaft.getName());
         }
-        System.out.println("---------------------------------------------------------------------------------");
 
-        try {
+        UIHelper.druckeTrennlinie();
+
+        Fluggesellschaft ausgewaehlteGesellschaft;
+
+        while (true) {
+
             gesellschaft = Manager.stringscanner().toUpperCase();
-            System.out.println("Welches Flugzeug soll für den Flug genutzt werden (Auswahl über Flugzeugcode)?: ");
-            for (Flugzeug f : vs.getFluggesellschaft(gesellschaft).getFlotte()) {
 
-                System.out.println(f.getCode() + " | " + f.getModell()
-                        + " | Business-Sitze: " + f.getAnzahlBusiness()
-                        + " | Economy-Sitze: " + f.getAnzahlEconomy()
-                        + " | Gesamt: " + f.getGesamtSitzanzahl());
+            try {
+                ausgewaehlteGesellschaft = vs.getFluggesellschaft(gesellschaft);
+                break;
+            } catch (Exception e) {
+                UIHelper.druckeFehler(e.getMessage());
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie einen gültigen Airlinecode ein:");
             }
-            System.out.println("------------------------------------------------------------------------");
-            flugzeug  = Manager.stringscanner();
-            System.out.println("Ihr ausgewähltes Flugzeug: ");
-            System.out.println(vs.getFlugzeug(flugzeug));
-
-            System.out.println("------------------------------------------------------------------------");
-            System.out.println("Wählen Sie den Start- und Zielflughafen aus:");
-            System.out.println(vs.getFlughaefen());
-            System.out.println("Wählen Sie den Startflughafen aus (Auswahl über IATA-Code): ");
-            startflughafen  = Manager.stringscanner().toUpperCase();
-            System.out.println(vs.getFlughafenNachCode(startflughafen));
-            System.out.println("Wählen Sie den Zielflughafen aus (Auswahl über IATA-Code): ");
-            zielflughafen  = Manager.stringscanner().toUpperCase();
-            System.out.println(vs.getFlughafenNachCode(zielflughafen));
-
-
-            System.out.println("---------------------------Bitte geben Sie die Abflugszeiten an-----------------------------");
-            abflug = anabflug("des Abfluges");
-            System.out.println("---------------------------Bitte geben Sie die Ankuftszeiten an-----------------------------");
-            ankunft =  anabflug("der Ankunft");
-
-            System.out.println("--------------------------------------------------------------------------------------------");
-            System.out.println("Wollen Sie noch einen Rückflug hinzufügen? Drücken Sie die 1.");
-            System.out.println("Wollen Sie keinen Rückflug hinzufügen? Drücken Sie die 2.");
-            int ruck = Manager.intscanner();
-
-            if (ruck == 1)
-            {
-                System.out.println("---------------------------Rückflug-----------------------------");
-
-                boolean rucke = true;
-
-                System.out.println("An wie vielen Tagen soll der Flug stattfinden?: ");
-                int wiederholung = Manager.intscanner();
-                try {
-                vs.fuegeFlugHinzu(vs.getFluggesellschaft(gesellschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis, rucke, wiederholung);
-                datenHandler.speichere(anwendungsdaten);
-                System.out.println("Die Fluege wurden erfolgreich angelegt.");
-                }
-                catch (Exception e) {
-                    System.out.println("Fehler beim Erstellen der Flüge: " + e.getMessage());
-                }
-                datenHandler.speichere(anwendungsdaten);
-
-            }
-            else {
-                vs.fuegeFlugHinzu(vs.getFluggesellschaft(gesellschaft), vs.getFlugzeug(flugzeug), vs.getFlughafenNachCode(startflughafen), vs.getFlughafenNachCode(zielflughafen), abflug, ankunft, basispreis);
-                datenHandler.speichere(anwendungsdaten);
-
-
-            }
-
-
-
-        }
-        catch ( IllegalArgumentException e )
-        {
-            System.out.println("Fehler: " + e.getMessage());
-
         }
 
+        // Flugzeug auswählen
+
+        if (ausgewaehlteGesellschaft.getFlotte().isEmpty()) {
+            UIHelper.druckeHinweis("Für diese Fluggesellschaft sind keine Flugzeuge vorhanden.");
+            return;
+        }
+
+        for (Flugzeug f : ausgewaehlteGesellschaft.getFlotte()) {
+            System.out.println(
+                    f.getCode()
+                    + " | " + f.getModell()
+                    + " | Business-Sitze: " + f.getAnzahlBusiness()
+                    + " | Economy-Sitze: " + f.getAnzahlEconomy()
+                    + " | Gesamt: " + f.getGesamtSitzanzahl()
+            );
+        }
+
+        UIHelper.druckeTrennlinie();
+
+        Flugzeug ausgewaehltesFlugzeug;
+
+        while (true) {
+
+            UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Flugzeugcode ein:");
+
+            flugzeug = Manager.stringscanner().toUpperCase();
+
+            try {
+                ausgewaehltesFlugzeug = vs.getFlugzeug(flugzeug);
+
+                if (!ausgewaehlteGesellschaft.getFlotte().contains(ausgewaehltesFlugzeug)) {
+                    UIHelper.druckeFehler("Dieses Flugzeug gehört nicht zur ausgewählten Fluggesellschaft.");
+                    continue;
+                }
+
+                break;
+
+            } catch (Exception e) {
+                UIHelper.druckeFehler(e.getMessage());
+            }
+        }
+
+        UIHelper.druckeHinweis("Ausgewähltes Flugzeug: " + ausgewaehltesFlugzeug.getCode() + " - " + ausgewaehltesFlugzeug.getModell() + ", " 
+                + ausgewaehltesFlugzeug.getGesamtSitzanzahl() + " Sitzplätze");
+
+        UIHelper.druckeTrennlinie();
+
+
+        // Flughäfen anzeigen
+        UIHelper.druckeEingabeaufforderung("Folgende Flughäfen stehen zur Verfügung: ");
+
+        UIHelper.druckeTrennlinie();
+        System.out.printf("%-6s | %-35s | %-15s | %-15s%n","IATA", "Flughafen", "Ort", "Land");
+        UIHelper.druckeTrennlinie();
+
+        for (Flughafen flughafen : vs.getFlughaefen()) {
+            System.out.printf("%-6s | %-35s | %-15s | %-15s%n", flughafen.getIataCode(), flughafen.getName(), flughafen.getStadt(), flughafen.getLand());
+        }
+
+        UIHelper.druckeTrennlinie();
+
+        // Startflughafen
+        Flughafen ausgewaehlterStartflughafen;
+
+        while (true) {
+
+            UIHelper.druckeEingabeaufforderung("Wählen Sie den Startflughafen aus. Auswahl über IATA-Code:");
+
+            startflughafen = Manager.stringscanner().toUpperCase();
+
+            try {
+                ausgewaehlterStartflughafen = vs.getFlughafenNachCode(startflughafen);
+                break;
+            } catch (Exception e) {
+                UIHelper.druckeFehler(e.getMessage());
+            }
+        }
+
+        // Zielflughafen
+        Flughafen ausgewaehlterZielflughafen;
+
+        while (true) {
+
+            UIHelper.druckeEingabeaufforderung("Wählen Sie den Zielflughafen aus. Auswahl über IATA-Code:");
+
+            zielflughafen = Manager.stringscanner().toUpperCase();
+
+            try {
+                ausgewaehlterZielflughafen = vs.getFlughafenNachCode(zielflughafen);
+                break;
+            } catch (Exception e) {
+                UIHelper.druckeFehler(e.getMessage());
+            }
+        }
+
+        UIHelper.druckeErfolg("Der Flug geht von " + ausgewaehlterStartflughafen.getName() + " nach " + ausgewaehlterZielflughafen.getName() + ".");
+
+        UIHelper.druckeTrennlinie();
+        
+        // Zeiten
+        abflug = datumUndUhrzeitEinlesen("des Abfluges");
+
+        ankunft = datumUndUhrzeitEinlesen("der Ankunft");
+
+        UIHelper.druckeTrennlinie();
+
+        // Rückflug / Serienflug
+        boolean gueltigeAuswahl = false;
+
+        while (!gueltigeAuswahl) {
+
+            UIHelper.druckeMenuepunkt(1, "Flug mit Rückflug anlegen");
+            UIHelper.druckeMenuepunkt(0, "Flug ohne Rückflug anlegen");
+
+            UIHelper.druckeTrennlinie();
+
+            int auswahl = Manager.intscanner();
+
+            switch (auswahl) {
+
+                case 1:
+                    UIHelper.druckeEingabeaufforderung("An wie vielen Tagen soll das Flugpaar stattfinden?");
+
+                    int wiederholung = Manager.intscanner();
+
+                    try {
+                        vs.fuegeFlugHinzu(
+                                ausgewaehlteGesellschaft,
+                                ausgewaehltesFlugzeug,
+                                ausgewaehlterStartflughafen,
+                                ausgewaehlterZielflughafen,
+                                abflug,
+                                ankunft,
+                                basispreis,
+                                true,
+                                wiederholung
+                        );
+
+                        datenHandler.speichere(anwendungsdaten);
+
+                        UIHelper.druckeErfolg("Die Flüge wurden erfolgreich angelegt.");
+
+                        gueltigeAuswahl = true;
+
+                    } catch (Exception e) {
+                        UIHelper.druckeFehler(e.getMessage());
+                        return;
+                    }
+
+                    break;
+
+                case 0:
+                    try {
+                        vs.fuegeFlugHinzu(
+                                ausgewaehlteGesellschaft,
+                                ausgewaehltesFlugzeug,
+                                ausgewaehlterStartflughafen,
+                                ausgewaehlterZielflughafen,
+                                abflug,
+                                ankunft,
+                                basispreis
+                        );
+
+                        datenHandler.speichere(anwendungsdaten);
+
+                        UIHelper.druckeErfolg("Der Flug wurde erfolgreich angelegt.");
+
+                    } catch (Exception e) {
+                        UIHelper.druckeFehler(e.getMessage());
+                    }
+
+                    return;
+
+                default:
+                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie 1 oder 0 ein.");
+            }
+        }
     }
 
     /**
-     * Liest ein Datum und eine Uhrzeit über die Konsole ein.
+     * Liest Datum und Uhrzeit für einen Flugzeitpunkt ein und gibt diese als
+     * LocalDateTime zurück. Ungültige Eingaben werden erneut abgefragt.
      *
-     * Die Methode fragt Jahr, Monat, Tag, Stunde und Minute ab und erstellt
-     * daraus mithilfe des Verwaltungssystems ein {@link LocalDateTime}.
-     *
-     * Der übergebene Text wird in den Eingabeaufforderungen verwendet,
-     * beispielsweise „des Abfluges“ oder „der Ankunft“.
-     *
-     * @param text ergänzender Text für die Eingabeaufforderungen
-     * @return das aus den Eingaben erstellte Datum mit Uhrzeit
+     * @param text Beschreibung des Zeitpunkts, z. B. "des Abfluges"
+     * @return eingegebenes Datum mit Uhrzeit als LocalDateTime
      */
-    public  LocalDateTime  anabflug(String text)
-    {
-        String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$", zeitRegex = "^(?:[01]\\d|2[0-3]):[0-5]\\d$", datumsString = "", zeitString = "";
-        int zaehler = 0;
+    public LocalDateTime datumUndUhrzeitEinlesen(String text) {
+
+        DateTimeFormatter datumsFormatter = DateTimeFormatter.ofPattern("dd.MM.uuuu").withResolverStyle(ResolverStyle.STRICT);
+        DateTimeFormatter zeitFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+
         LocalDate datum = null;
         LocalTime zeit = null;
 
-        while (!datumsString.matches(datumRegex)) {
+        while (datum == null) {
+            UIHelper.druckeEingabeaufforderung("Bitte geben Sie das Datum (dd.MM.yyyy) " + text + " ein:");
+
+            try {
+                datum = LocalDate.parse(Manager.stringscanner(),datumsFormatter);
+                System.out.println();
+            } catch (DateTimeException e) {
+                UIHelper.druckeFehler("Ungültiges Datum. Beispiel: 01.01.2026");
+            }
             
-            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 01.01.2026 \n");
-
-            System.out.print("Bitte geben Sie ein Datum ein: ");
-
-            datumsString = Manager.stringscanner();
-            zaehler++;
         }
 
-        zaehler = 0;
+        while (zeit == null) {
+            UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Uhrzeit (HH:mm) " + text + " ein:");
 
-        while (!zeitString.matches(zeitRegex)) {
-            
-            if (zaehler != 0) System.out.print("Bitte eine gültige Eingabe tätigen. Beispiel für Format: 10:30 \n");
-
-            System.out.print("Bitte geben Sie eine Uhrzeit ein: ");
-
-            zeitString = Manager.stringscanner();
-            zaehler++;
+            try {
+                zeit = LocalTime.parse(Manager.stringscanner(), zeitFormatter);
+                System.out.println();
+            } catch (DateTimeException e) {
+                UIHelper.druckeFehler("Ungültige Uhrzeit. Beispiel: 10:30");
+            }
         }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        datum = LocalDate.parse(datumsString, formatter);
-
-        formatter = DateTimeFormatter.ofPattern("HH:mm");
-        zeit = LocalTime.parse(zeitString, formatter);
 
         return datum.atTime(zeit);
     }
 
     /**
-     * Entfernt einen vorhandenen Flug aus dem Verwaltungssystem.
+     * Entfernt einen ausgewählten Flug aus dem Verwaltungssystem.
      *
-     * Der gewünschte Flug wird anhand seiner Flugnummer und seines
-     * Abflugdatums gesucht. Ein Flug kann nur entfernt werden, wenn
-     * keine relevanten Buchungen für diesen Flug vorhanden sind.
+     * Zunächst werden vergangene Flüge entfernt und alle verbleibenden Flüge
+     * gruppiert nach Fluggesellschaft nummeriert angezeigt. Der Mitarbeiter wählt
+     * den zu entfernenden Flug anschließend über diese Nummer aus oder bricht den
+     * Vorgang mit {@code 0} ab.
      *
-     * Nach erfolgreicher Entfernung werden die Anwendungsdaten gespeichert.
+     * Ein Flug kann nur entfernt werden, wenn keine relevanten Buchungen mehr für
+     * ihn vorhanden sind. Nach erfolgreicher Entfernung werden die
+     * Anwendungsdaten gespeichert.
      */
-    //Fluglöschen
-    public  void flugentfernen()
-    {
-        LocalDate abflug = LocalDate.now();
+    public void flugEntfernen() {
 
-        System.out.println("---------------------------Willkommen im Bereich Flug entfernen-----------------------------");
-        System.out.println(vs.getFluege());
-try {
-    System.out.println("Bitte geben Sie die Flugnummer zum Löschen ein:");
-    String flugnummer = Manager.stringscanner();
-    System.out.println("Bitte geben Sie die Abflugszeit ein:");
-    System.out.println("Bitte geben Sie das Jahr des Abfluges ein: ");
-    int jahr  = Manager.intscanner();
-    System.out.println("Bitte geben Sie den Monat des Abfluges ein: ");
-    int monat = Manager.intscanner();
-    System.out.println("Bitte geben Sie den Tag des Abfluges ein: ");
-    int tag = Manager.intscanner();
-    abflug =  LocalDate.of(jahr, monat, tag );
+        vs.alteFluegeLoeschen(bs);
 
-    Flug flug = vs.sucheFlugNachNummer(flugnummer, abflug);
+        UIHelper.druckeUeberschrift("Flug entfernen");
 
-    if(bs.findeRelevanteBuchungen(flug).isEmpty()) {
-        vs.entferneFlug(flug);
-        datenHandler.speichere(anwendungsdaten);
-        System.out.println(flug + " wurde erfolgreich gelöscht!");
+        ArrayList<Flug> auswaehlbareFluege = new ArrayList<>();
+        int nummer = 1;
+
+        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+
+            System.out.println();
+            System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
+
+            boolean hatFluege = false;
+
+            for (Flug flug : vs.getFluege()) {
+
+                if (flug.getFluggesellschaft().equals(fluggesellschaft)) {
+
+                    hatFluege = true;
+                    auswaehlbareFluege.add(flug);
+
+                    System.out.println(
+                            String.format("%3d: ", nummer)
+                            + flug.getFlugnummer()
+                            + " | "
+                            + flug.getStartFlughafen().getIataCode()
+                            + " -> "
+                            + flug.getZielflughafen().getIataCode()
+                            + " | Abflug: "
+                            + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                    );
+
+                    nummer++;
+                }
+            }
+
+            if (!hatFluege) {
+                UIHelper.druckeHinweis("Keine aktiven Flüge.");
+            }
+        }
+
+        System.out.println();
+
+        if (auswaehlbareFluege.isEmpty()) {
+            UIHelper.druckeHinweis("Es sind keine Flüge zum Entfernen vorhanden.");
+            return;
+        }
+
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Nummer des zu entfernenden Fluges ein:");
+        UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zum Hauptmanager zurückzukehren.");
+
+        int auswahl = Manager.intscanner();
+
+        if (auswahl == 0) {
+            return;
+        }
+
+        if (auswahl < 1 || auswahl > auswaehlbareFluege.size()) {
+            UIHelper.druckeFehler("Ungültige Auswahl.");
+            return;
+        }
+
+        Flug flug = auswaehlbareFluege.get(auswahl - 1);
+
+        if (bs.findeRelevanteBuchungen(flug).isEmpty()) {
+
+            vs.entferneFlug(flug);
+            datenHandler.speichere(anwendungsdaten);
+
+            UIHelper.druckeErfolg("Der Flug " + flug.getFlugnummer() + " am " + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER) + " wurde erfolgreich entfernt.");
+
+        } else {
+            UIHelper.druckeFehler("Dieser Flug beinhaltet noch Buchungen und kann daher nicht entfernt werden.");
+        }
     }
-    else {
-        System.out.println("Dieser Flug beinhaltet leider noch Buchungen und kann daher nicht gelöscht werden.");
-    }
-    
-
-}catch (Exception e)
-{
-    System.out.println("Fehler beim Entfernen: " + e.getMessage());
-}
-    }
-
-
 
     /**
      * Zeigt alle aktiven Flüge gruppiert nach Fluggesellschaft an.
      *
-     * Für Fluggesellschaften ohne aktive Flüge wird ein entsprechender
-     * Hinweis ausgegeben. Anschließend kann ein Flug ausgewählt werden,
-     * um weitere Informationen anzuzeigen.
+     * Für Fluggesellschaften ohne aktive Flüge wird ein entsprechender Hinweis
+     * ausgegeben. Anschließend kann ein Flug ausgewählt werden, um weitere
+     * Informationen anzuzeigen.
      */
     private void fluguebersicht() {
 
@@ -738,7 +952,7 @@ try {
 
         while (true) {
 
-            System.out.println("----------------------Flugübersicht----------------------");
+            UIHelper.druckeUeberschrift("Flugübersicht");
 
             ArrayList<Flug> auswaehlbareFluege = new ArrayList<>();
             int nummer = 1;
@@ -765,7 +979,7 @@ try {
                                 + " -> "
                                 + flug.getZielflughafen().getIataCode()
                                 + " | Abflug: "
-                                + flug.getAbflugszeit()
+                                + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
                                 + " | Auslastung: "
                                 + flug.berechneAuslastung()
                                 + "%"
@@ -776,13 +990,13 @@ try {
                 }
 
                 if (!hatFluege) {
-                    System.out.println("Keine aktiven Flüge.");
+                    UIHelper.druckeHinweis("Keine aktiven Flüge.");
                 }
             }
 
-            System.out.println();
-            System.out.println("Geben Sie die Nummer eines Fluges ein, um weitere Informationen anzuzeigen.");
-            System.out.println("Drücken Sie 0, um zum Hauptmanager zurückzukehren.");
+            UIHelper.druckeTrennlinie();
+            UIHelper.druckeEingabeaufforderung("Geben Sie die Nummer eines Fluges ein, um weitere Informationen anzuzeigen.");
+            UIHelper.druckeEingabeaufforderung("Drücken Sie 0, um zum Hauptmanager zurückzukehren.");
 
             int auswahl = Manager.intscanner();
 
@@ -791,7 +1005,7 @@ try {
             }
 
             if (auswahl < 1 || auswahl > auswaehlbareFluege.size()) {
-                System.out.println("Ungültige Auswahl.");
+                UIHelper.druckeFehler("Ungültige Auswahl.");
                 continue;
             }
 
@@ -801,48 +1015,56 @@ try {
     }
 
     /**
-     * Zeigt Detailinformationen zu einem ausgewählten Flug an.
+     * Zeigt Detailinformationen zu einem ausgewählten Flug und stellt weitere
+     * Ansichten für diesen Flug bereit.
      *
-     * @param flug der ausgewählte Flug
+     * Angezeigt werden unter anderem Fluggesellschaft, Route, Abflug- und
+     * Ankunftszeit, eingesetztes Flugzeug und aktuelle Auslastung. Über ein
+     * Untermenü können zusätzlich der Sitzplan sowie eine Passagier- und
+     * Gepäckübersicht aufgerufen werden.
+     *
+     * Das Untermenü wird so lange angezeigt, bis der Benutzer zur Flugübersicht
+     * zurückkehrt.
+     *
+     * @param flug der Flug, dessen Detailinformationen angezeigt werden
      */
     public void flugdetails(Flug flug) {
 
         while (true) {
 
-            System.out.println();
-            System.out.println("----------------------Flugdetails----------------------");
+            UIHelper.druckeUeberschrift("Flugdetails - " +  flug.getFlugnummer());
             System.out.println("Flug: " + flug.getFlugnummer());
             System.out.println("Fluggesellschaft: " + flug.getFluggesellschaft().getName());
             System.out.println("Route: " + flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode());
-            System.out.println("Abflug: " + flug.getAbflugszeit());
-            System.out.println("Ankunft: " + flug.getAnkunftszeit());
+            System.out.println("Abflug: " + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
+            System.out.println("Ankunft: " + flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER));
             System.out.println("Flugzeug: " + flug.getFlugzeug().getModell() + " (" + flug.getFlugzeug().getCode() + ")");
             System.out.println("Auslastung: " + flug.berechneAuslastung() + "%");
 
-            System.out.println();
-            System.out.println("Drücken Sie die 1, um den Sitzplan anzuzeigen.");
-            System.out.println("Drücken Sie die 2, um die Passagier- und Gepäckübersicht anzuzeigen.");
-            System.out.println("Drücken Sie die 3, um zur Flugübersicht zurückzukehren.");
+            UIHelper.druckeTrennlinie();
+
+            UIHelper.druckeMenuepunkt(1, "Sitzplan anzeigen");
+            UIHelper.druckeMenuepunkt(2, "Passagier- und Gepäckübersicht anzeigen");
+            UIHelper.druckeMenuepunkt(0, "Zurück zur Flugübersicht");
+
+            UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
 
                 case 1:
-                    System.out.println();
-                    System.out.println("Sitzplan für Flug " + flug.getFlugnummer() + ":");
+                    UIHelper.druckeUeberschrift("Sitzplan für Flug " + flug.getFlugnummer());
                     flug.zeigeSitzplan();
                     break;
 
                 case 2:
-                    System.out.println();
-                    System.out.println("Passagier- und Gepäckübersicht für Flug " + flug.getFlugnummer() + ":");
-                    System.out.println();
+                    UIHelper.druckeUeberschrift("Passagier- und Gepäckübersicht für Flug " + flug.getFlugnummer());
 
                     ArrayList<Buchung> buchungen = bs.findeRelevanteBuchungen(flug);
 
                     if (buchungen.isEmpty()) {
-                        System.out.println("Für diesen Flug liegen keine Buchungen vor.");
+                        UIHelper.druckeHinweis("Für diesen Flug liegen keine Buchungen vor.");
                     } else {
                         int nummer = 1;
 
@@ -859,14 +1081,69 @@ try {
                     }
                     break;
 
-                case 3:
+                case 0:
                     return;
 
                 default:
-                    System.out.println("Ungültige Eingabe.");
+                    UIHelper.druckeFehler("Ungültige Eingabe.");
                     break;
             }
         }
     }
-}
 
+    /**
+     * Zeigt alle vorhandenen Buchungen in einer tabellarischen Übersicht an.
+     *
+     * Vor der Anzeige werden vergangene Flüge entfernt und die betroffenen
+     * Buchungsstatus aktualisiert. Angezeigt werden unter anderem Passagier,
+     * Flug, Route, Abflugzeit, Sitzplatz, Sitzklasse, Gepäck, Buchungspreis und
+     * Buchungsstatus.
+     *
+     * Zusätzlich wird die aktuelle Anzahl der gespeicherten Buchungen ausgegeben.
+     * Sind keine Buchungen vorhanden, wird ein entsprechender Hinweis angezeigt.
+     */
+    private void buchungenAnzeigen() {
+
+        UIHelper.druckeUeberschrift("Buchungsübersicht");
+
+        vs.alteFluegeLoeschen(bs);
+
+        if (bs.getBuchungen().isEmpty()) {
+            UIHelper.druckeHinweis("Es sind keine Buchungen vorhanden.");
+            return;
+        }
+
+        System.out.printf(
+                "%-8s | %-11s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6s | %-12s | %-9s%n",
+                "Buchung", "Passagier", "Flug", "Route", "Abflug", "Sitz", "Klasse", "Koffer", "Preis", "Status");
+
+        UIHelper.druckeTrennlinie();
+
+        for (Buchung buchung : bs.getBuchungen()) {
+
+            Flug flug = buchung.getFlug();
+
+            String passagier = buchung.getPassagier().getPassagierId()
+                    + " " + buchung.getPassagier().getName();
+
+            System.out.printf(
+                    "%-8s | %-11.11s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6d | %-12s | %-9s%n",
+                    buchung.getBuchungsnummer(),
+                    passagier,
+                    flug.getFlugnummer(),
+                    flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                    flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
+                    buchung.getSitzplatz().getSitzplatzNummer(),
+                    buchung.getSitzplatz().getSitzklasse(),
+                    buchung.getGepaeckinformation().getAnzahlKoffer(),
+                    String.format("%.2f Euro", buchung.getGezahlterPreis()),
+                    buchung.getBuchungsstatus()
+            );
+        }
+
+        UIHelper.druckeTrennlinie();
+
+        UIHelper.druckeHinweis("Anzahl der Buchungen: " + bs.getBuchungen().size());
+    }
+
+}
