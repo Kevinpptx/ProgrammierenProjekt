@@ -418,6 +418,8 @@ public double umbuchen(Buchung buchung, Flug flug, String sitzplatznummer, Sitzk
 
     buchung.getGepaeckinformation().setAnzahlKoffer(neueAnzahlKoffer);
 
+    buchung.aktualisiereGezahltenPreis();
+
     double neuerPreis = buchung.getGezahlterPreis();
 
     return neuerPreis - alterPreis;
