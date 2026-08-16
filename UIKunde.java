@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Änderungen an den Daten werden mithilfe des {@link DatenHandler} gespeichert.
  *
  * @author Lars Pfeiffer, Cedric Beckmann
- * @version 1.0
+ * @version 1.1
  */
 public class UIKunde {
 
@@ -294,8 +294,6 @@ public class UIKunde {
 
             ArrayList<Flug> fluege = sucheFluege();
 
-            UIHelper.druckeTrennlinie();
-
             if (fluege.isEmpty()) {
                 UIHelper.druckeHinweis("Keine Flüge gefunden.");
                 return;
@@ -359,20 +357,7 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            String bestaetigung = "";
-
-            while (!bestaetigung.equalsIgnoreCase("j") && !bestaetigung.equalsIgnoreCase("n")) {
-
-                UIHelper.druckeEingabeaufforderung("Möchten Sie die Buchung verbindlich durchführen? [j/n]");
-
-                bestaetigung = Manager.stringscanner();
-
-                if (!bestaetigung.equalsIgnoreCase("j") && !bestaetigung.equalsIgnoreCase("n")) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
-                }
-            }
-
-            if (bestaetigung.equalsIgnoreCase("n")) {
+            if (!bestaetigungEinlesen("Möchten Sie die Buchung verbindlich durchführen?")) {
                 UIHelper.druckeHinweis("Die Buchung wurde abgebrochen.");
                 return;
             }
@@ -518,6 +503,13 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Buchung umbuchen");
 
+        vs.alteFluegeLoeschen(bs);
+
+        if (!hatBearbeitbareBuchungen(passagier)) {
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die umgebucht werden können.");
+            return;
+        }
+
         buchungenAnzeigen(passagier);
 
         UIHelper.druckeTrennlinie();
@@ -526,11 +518,13 @@ public class UIKunde {
 
         String nummer = Manager.stringscanner();
 
+        Buchung buchung;
+
         try {
-            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+            buchung = bs.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
-                UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier!");
+                UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier.");
                 return;
             }
 
@@ -559,11 +553,48 @@ public class UIKunde {
             Flug neuerFlug = flugAuswaehlen(fluege);
 
             String sitzplatz = sitzplatzAuswaehlen(neuerFlug);
+            
+            Sitzplatz neuerSitzplatz = neuerFlug.findeSitzplatz(sitzplatz);
+            Sitzklasse sitzklasse = neuerSitzplatz.getSitzklasse();
 
-            Sitzklasse sitzklasse =
-                    neuerFlug.findeSitzplatz(sitzplatz).getSitzklasse();
+            Buchung buchungsvorschau = new Buchung(passagier, neuerFlug, neuerSitzplatz, new GepaeckInformation(buchung.getGepaeckinformation().getAnzahlKoffer()));
 
-            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+            bs.validiereUmbuchung(buchung, neuerFlug, sitzplatz, sitzklasse, vs);
+
+            double bisherigerBuchungspreis = buchung.getGezahlterPreis();
+            double neuerBuchungspreis = buchungsvorschau.getGezahlterPreis();
+            double umbuchungsgebuehr = buchung.getUmbuchungsgebuehr();
+            double zusaetzlichZuZahlen = bs.berechneUmbuchungsgebuehr( buchung, neuerFlug, neuerSitzplatz);
+
+
+            UIHelper.druckeUeberschrift("Umbuchungsübersicht");
+
+            System.out.printf("%-27s%s | %s%n","Bisheriger Flug:", buchung.getFlug().getFlugnummer(), buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER));;
+
+            System.out.printf("%-27s%s | %s%n", "Neuer Flug:", neuerFlug.getFlugnummer(), neuerFlug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
+
+            System.out.printf("%-27s%s -> %s%n", "Neue Route:", neuerFlug.getStartFlughafen().getIataCode(), neuerFlug.getZielflughafen().getIataCode());
+
+            System.out.printf("%-27s%s%n", "Neuer Sitzplatz:", sitzplatz);
+
+            System.out.printf("%-27s%s%n", "Sitzklasse:", sitzklasse);
+
+            System.out.printf("%-27s%.2f Euro%n","Bisheriger Buchungspreis:", bisherigerBuchungspreis);
+
+            System.out.printf("%-27s%.2f Euro%n","Neuer Buchungspreis:", neuerBuchungspreis);
+
+            System.out.printf("%-27s%.2f Euro%n","Umbuchungsgebühr:", umbuchungsgebuehr);
+
+            UIHelper.druckeTrennlinie();
+
+            System.out.printf("%-27s%.2f Euro%n", "Zusätzlich zu zahlen:", zusaetzlichZuZahlen);
+
+            UIHelper.druckeTrennlinie();
+
+            if (!bestaetigungEinlesen("Möchten Sie die Umbuchung verbindlich durchführen?")) {
+                UIHelper.druckeHinweis("Die Umbuchung wurde abgebrochen.");
+                return;
+            }
 
             bs.umbuchen(buchung, neuerFlug, sitzplatz, sitzklasse, vs);
 
@@ -573,28 +604,10 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            while (true) {
-
-                UIHelper.druckeEingabeaufforderung("Möchten Sie die Anzahl Ihrer Koffer ebenfalls ändern?");
-
-                UIHelper.druckeMenuepunkt(1, "Ja");
-                UIHelper.druckeMenuepunkt(2, "Nein");
-
-                UIHelper.druckeTrennlinie();
-
-                int auswahlGepaeck = Manager.intscanner();
-
-                if (auswahlGepaeck == 1) {
-                    gepaeckAendern(buchung);
-                    return;
-                }
-
-                if (auswahlGepaeck == 2) {
-                    return;
-                }
-
-                UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie 1 oder 2 ein.");
+            if (bestaetigungEinlesen("Möchten Sie die Anzahl Ihrer Koffer ebenfalls ändern?")) {
+                gepaeckAendern(buchung);
             }
+
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
         }
@@ -616,6 +629,13 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Buchung stornieren");
 
+        vs.alteFluegeLoeschen(bs);
+
+        if (!hatBearbeitbareBuchungen(passagier)) {
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die storniert werden können.");
+            return;
+        }
+
         buchungenAnzeigen(passagier);
 
         UIHelper.druckeTrennlinie();
@@ -628,6 +648,37 @@ public class UIKunde {
 
             if (!buchung.getPassagier().equals(passagier)) {
                 UIHelper.druckeFehler("Diese Buchung gehört nicht zu diesem Passagier.");
+                return;
+            }
+
+            double buchungspreis = buchung.getGezahlterPreis();
+            double stornierungsgebuehr = buchung.getStornierungsgebuehr();
+            double erstattungsbetrag = Math.max(0, buchungspreis - stornierungsgebuehr);
+
+            UIHelper.druckeUeberschrift("Stornierungsübersicht");
+
+            System.out.printf("%-22s%s%n", "Buchungsnummer:", buchung.getBuchungsnummer());
+
+            System.out.printf("%-22s%s | %s%n", "Flug:",
+                    buchung.getFlug().getFlugnummer(),
+                    buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
+
+            System.out.printf("%-22s%s -> %s%n","Route:",
+                    buchung.getFlug().getStartFlughafen().getIataCode(),
+                    buchung.getFlug().getZielflughafen().getIataCode());
+
+            System.out.printf("%-22s%.2f Euro%n","Buchungspreis:", buchungspreis);
+
+            System.out.printf("%-22s%.2f Euro%n", "Stornierungsgebühr:", stornierungsgebuehr);
+
+            UIHelper.druckeTrennlinie();
+
+            System.out.printf("%-22s%.2f Euro%n", "Erstattungsbetrag:", erstattungsbetrag);
+
+            UIHelper.druckeTrennlinie();
+
+            if (!bestaetigungEinlesen("Möchten Sie die Buchung wirklich stornieren?")) {
+                UIHelper.druckeHinweis("Die Stornierung wurde abgebrochen.");
                 return;
             }
 
@@ -705,6 +756,13 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Gepäck ändern");
 
+        vs.alteFluegeLoeschen(bs);
+
+        if (!hatBearbeitbareBuchungen(passagier)) {
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, bei denen das Gepäck geändert werden kann.");
+            return;
+        }
+
         buchungenAnzeigen(passagier);
 
         UIHelper.druckeTrennlinie();
@@ -747,46 +805,108 @@ public class UIKunde {
      */
     public void gepaeckAendern(Buchung buchung) {
 
-        vs.alteFluegeLoeschen(bs);
+    vs.alteFluegeLoeschen(bs);
 
-        try {
-            int aktuell = buchung.getGepaeckinformation().getAnzahlKoffer();
+    try {
+        int aktuelleAnzahl = buchung.getGepaeckinformation().getAnzahlKoffer();
 
-            UIHelper.druckeEingabeaufforderung("Aktuell gebuchte Koffer: " + aktuell);
+        UIHelper.druckeEingabeaufforderung("Aktuell gebuchte Koffer: " + aktuelleAnzahl);
 
-            int neueAnzahl;
+        int neueAnzahl;
 
-            while (true) {
+        while (true) {
 
-                UIHelper.druckeEingabeaufforderung("Bitte geben Sie die neue Anzahl der Koffer ein:");
+            UIHelper.druckeEingabeaufforderung("Bitte geben Sie die neue Anzahl der Koffer ein:");
 
-                neueAnzahl = Manager.intscanner();
+            neueAnzahl = Manager.intscanner();
 
-                if (neueAnzahl < 0) {
-                    UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
-                    continue;
-                }
-
-                break;
+            if (neueAnzahl < 0) {
+                UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
+                continue;
             }
 
-            double differenz = bs.gepaeckAendern(buchung, neueAnzahl);
-
-            datenHandler.speichere(anwendungsdaten);
-
-            UIHelper.druckeErfolg("Das Gepäck wurde erfolgreich geändert.");
-
-            if (differenz > 0) {
-                System.out.printf("Zusätzlicher Betrag: %.2f Euro%n", differenz);
-            } else if (differenz < 0) {
-                System.out.printf("Erstattung: %.2f Euro%n", Math.abs(differenz));
-            } else {
-                UIHelper.druckeHinweis("Der Gesamtpreis hat sich nicht geändert.");
+            if (neueAnzahl == aktuelleAnzahl) {
+                UIHelper.druckeHinweis("Die Anzahl der Koffer wurde nicht geändert.");
+                return;
             }
 
-        } catch (Exception e) {
-            UIHelper.druckeFehler(e.getMessage());
+            break;
         }
+
+        Buchung buchungsvorschau = new Buchung(buchung.getPassagier(), buchung.getFlug(), buchung.getSitzplatz(), new GepaeckInformation(neueAnzahl));
+
+        double bisherigerPreis = buchung.getGezahlterPreis();
+        double neuerPreis = buchungsvorschau.getGezahlterPreis();
+        double differenz = neuerPreis - bisherigerPreis;
+
+        UIHelper.druckeUeberschrift("Gepäckänderung");
+
+        System.out.printf("%-27s%d%n", "Bisherige Koffer:", aktuelleAnzahl);
+
+        System.out.printf("%-27s%d%n", "Neue Koffer:", neueAnzahl);
+
+        System.out.printf("%-27s%.2f Euro%n", "Bisheriger Buchungspreis:", bisherigerPreis);
+
+        System.out.printf("%-27s%.2f Euro%n", "Neuer Buchungspreis:", neuerPreis);
+
+        UIHelper.druckeTrennlinie();
+
+        if (differenz > 0) {
+            System.out.printf("%-27s%.2f Euro%n", "Zusätzlich zu zahlen:", differenz);
+        } else {
+            System.out.printf("%-27s%.2f Euro%n", "Erstattungsbetrag:", Math.abs(differenz));
+        }
+
+        UIHelper.druckeTrennlinie();
+
+        if (!bestaetigungEinlesen("Möchten Sie die Gepäckänderung verbindlich durchführen?")) {
+            UIHelper.druckeHinweis("Die Gepäckänderung wurde abgebrochen.");
+            return;
+        }
+
+        bs.gepaeckAendern(buchung, neueAnzahl);
+
+        datenHandler.speichere(anwendungsdaten);
+
+        UIHelper.druckeErfolg("Das Gepäck wurde erfolgreich geändert.");
+
+    } catch (Exception e) {
+        UIHelper.druckeFehler(e.getMessage());
+    }
+}
+
+    private boolean bestaetigungEinlesen(String text) {
+
+        while (true) {
+            UIHelper.druckeEingabeaufforderung(text + " [j/n]");
+
+            String eingabe = Manager.stringscanner();
+
+            if (eingabe.equalsIgnoreCase("j")) {
+                return true;
+            }
+
+            if (eingabe.equalsIgnoreCase("n")) {
+                return false;
+            }
+
+            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+        }
+    }
+
+
+    private boolean hatBearbeitbareBuchungen(Passagier passagier) {
+
+        for (Buchung buchung : bs.getBuchungen()) {
+
+            if (buchung.getPassagier().equals(passagier)
+                    && (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
+                    || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private ArrayList<Flug> sucheFluege() {

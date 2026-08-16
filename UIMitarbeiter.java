@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Änderungen werden mithilfe des {@link DatenHandler} dauerhaft gespeichert.
  *
  * @author Lars Pfeiffer, Cedric Beckmann
- * @version 1.0
+ * @version 1.1
  */
 public class UIMitarbeiter {
 
