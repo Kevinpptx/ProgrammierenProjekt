@@ -398,7 +398,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
 
         UIHelper.druckeTrennlinie();
 
