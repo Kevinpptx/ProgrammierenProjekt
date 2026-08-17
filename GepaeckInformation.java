@@ -1,9 +1,8 @@
 import java.io.Serializable;
 
 /**
- * Repräsentiert Informationen über Gepäck in einem Flugzeug.
- * Gepäck besteht aus einer Anzahl von Koffern, die ein Passagier mit sich
- * führt.
+ * Repräsentiert Informationen über Gepäck in einem Flugzeug. Gepäck besteht aus einer Anzahl von Koffern, die ein
+ * Passagier mit sich führt.
  */
 public class GepaeckInformation implements Serializable {
 
@@ -12,10 +11,14 @@ public class GepaeckInformation implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    /** Die Anzahl der Koffer, die ein Passagier mit sich führt. */
+    /**
+     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
+     */
     private int anzahlKoffer;
 
-    /** Die Der Preis eines Koffers. Wert 40 ist ein fiktiver Standardwert. */
+    /**
+     * Die Der Preis eines Koffers. Wert 40 ist ein fiktiver Standardwert.
+     */
     double gebuehrProKoffer = 40.0;
 
     /**
@@ -24,6 +27,7 @@ public class GepaeckInformation implements Serializable {
      * @param anzahlKoffer die Anzahl der Koffer
      */
     public GepaeckInformation(int anzahlKoffer) {
+
         try {
             validiereGepaeckinfo(anzahlKoffer);
         } catch (IllegalArgumentException e) {
@@ -34,6 +38,7 @@ public class GepaeckInformation implements Serializable {
     }
 
     private void validiereGepaeckinfo(int anzahlKoffer) {
+
         if (anzahlKoffer < 0) {
             throw new IllegalArgumentException(
                     "Die angegebene Kofferanzahl darf nicht kleiner als 0 sein. Bitte korrigieren Sie die Eingabe.");
@@ -46,18 +51,17 @@ public class GepaeckInformation implements Serializable {
      * @return die Anzahl der Koffer
      */
     public int getAnzahlKoffer() {
+
         return anzahlKoffer;
     }
 
     /**
      * Setzt die Anzahl der Koffer.
-     * <p>
-     * WICHTIG: Diese Methode wird MOMENTAN nicht genutzt, weil man in einer
-     * Umbuchung nicht die Anzahl der Koffer ändern kann.
-     * 
+     *
      * @param anzahlKoffer die neue Anzahl der Koffer
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
+
         try {
             validiereGepaeckinfo(anzahlKoffer);
         } catch (IllegalArgumentException e) {
@@ -72,6 +76,7 @@ public class GepaeckInformation implements Serializable {
      * @return die berechnete Gepäckgebühr
      */
     public double berechneGepaeckgebuehr() {
+
         return anzahlKoffer * gebuehrProKoffer;
     }
 
@@ -82,9 +87,10 @@ public class GepaeckInformation implements Serializable {
      */
     @Override
     public String toString() {
+
         return "Die gebuchte Kofferanzahl beträgt " + this.anzahlKoffer +
-                " und es wurde eine Gebühr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
-                " Euro entrichtet.";
+               " und es wurde eine Gebühr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
+               " Euro entrichtet.";
     }
 
 }

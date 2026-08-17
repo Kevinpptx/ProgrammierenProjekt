@@ -6,17 +6,15 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 
 /**
- * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer
- * Fluggesellschaft zwischen einem Start- und einem Zielflughafen.
- *
- * Ein Flug besitzt eine Flugnummer, eine Fluggesellschaft, ein eingesetztes
- * Flugzeug, einen Start- und Zielflughafen, eine Abflug- und Ankunftszeit
- * sowie einen Basispreis.
- *
- * Zusätzlich besitzt jeder Flug einen eigenen Sitzplan. Dieser wird bei der
- * Erstellung des Fluges anhand der Sitzplatzvorlage des eingesetzten Flugzeugs
- * initialisiert. Dadurch kann die Sitzplatzbelegung für jeden Flug unabhängig
- * verwaltet werden.
+ * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer Fluggesellschaft zwischen einem Start- und einem
+ * Zielflughafen.
+ * <p>
+ * Ein Flug besitzt eine Flugnummer, eine Fluggesellschaft, ein eingesetztes Flugzeug, einen Start- und Zielflughafen,
+ * eine Abflug- und Ankunftszeit sowie einen Basispreis.
+ * <p>
+ * Zusätzlich besitzt jeder Flug einen eigenen Sitzplan. Dieser wird bei der Erstellung des Fluges anhand der
+ * Sitzplatzvorlage des eingesetzten Flugzeugs initialisiert. Dadurch kann die Sitzplatzbelegung für jeden Flug
+ * unabhängig verwaltet werden.
  *
  * @author Cedric Beckmann
  * @version 1.0
@@ -28,73 +26,86 @@ public class Flug implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    /** Die eindeutige Flugnummer des Fluges */
+    /**
+     * Die eindeutige Flugnummer des Fluges
+     */
     private String flugnummer;
 
-    /** Die Fluggesellschaft, die den Flug durchführt */
+    /**
+     * Die Fluggesellschaft, die den Flug durchführt
+     */
     private Fluggesellschaft fluggesellschaft;
 
-    /** Das für den Flug eingesetzte Flugzeug */
+    /**
+     * Das für den Flug eingesetzte Flugzeug
+     */
     private Flugzeug flugzeug;
 
-    /** Der Flughafen, von dem der Flug startet */
-    private Flughafen startFlughafen; 
+    /**
+     * Der Flughafen, von dem der Flug startet
+     */
+    private Flughafen startFlughafen;
 
-    /** Der Flughafen, an dem der Flug endet */
+    /**
+     * Der Flughafen, an dem der Flug endet
+     */
     private Flughafen zielFlughafen;
 
-    /** Der geplante Zeitpunkt des Abflugs */
+    /**
+     * Der geplante Zeitpunkt des Abflugs
+     */
     private LocalDateTime abflugzeit;
 
-    /** Der geplante Zeitpunkt der Ankunft */
+    /**
+     * Der geplante Zeitpunkt der Ankunft
+     */
     private LocalDateTime ankunftszeit;
 
-    /** Der Basispreis des Fluges */
+    /**
+     * Der Basispreis des Fluges
+     */
     private double basispreis;
 
     /**
-     * Der individuelle Sitzplan dieses Fluges.
-     * Jeder Sitzplatz besitzt einen eigenen Belegungsstatus.
+     * Der individuelle Sitzplan dieses Fluges. Jeder Sitzplatz besitzt einen eigenen Belegungsstatus.
      */
     private Sitzplatz[][] sitzplan;
 
-    
     /**
      * Erzeugt einen neuen Flug mit den angegebenen Flugdaten.
+     * <p>
+     * Beim Erstellen des Fluges wird ein eigener Sitzplan anhand der Sitzplatzvorlage des übergebenen Flugzeugs
+     * initialisiert.
+     * <p>
+     * Der Basispreis darf nicht negativ sein und die Ankunftszeit darf zeitlich nicht vor der Abflugzeit liegen.
      *
-     * Beim Erstellen des Fluges wird ein eigener Sitzplan anhand der
-     * Sitzplatzvorlage des übergebenen Flugzeugs initialisiert.
-     *
-     * Der Basispreis darf nicht negativ sein und die Ankunftszeit darf
-     * zeitlich nicht vor der Abflugzeit liegen.
-     *
-     * @param flugnummer die Flugnummer des Fluges
+     * @param flugnummer       die Flugnummer des Fluges
      * @param fluggesellschaft die Fluggesellschaft, die den Flug durchführt
-     * @param flugzeug das für den Flug eingesetzte Flugzeug
-     * @param startFlughafen der Startflughafen des Fluges
-     * @param zielFlughafen der Zielflughafen des Fluges
-     * @param abflugzeit der geplante Zeitpunkt des Abflugs
-     * @param ankunftszeit der geplante Zeitpunkt der Ankunft
-     * @param basispreis der Basispreis des Fluges
-     *
+     * @param flugzeug         das für den Flug eingesetzte Flugzeug
+     * @param startFlughafen   der Startflughafen des Fluges
+     * @param zielFlughafen    der Zielflughafen des Fluges
+     * @param abflugzeit       der geplante Zeitpunkt des Abflugs
+     * @param ankunftszeit     der geplante Zeitpunkt der Ankunft
+     * @param basispreis       der Basispreis des Fluges
      * @throws IllegalArgumentException wenn der Basispreis negativ ist
      * @throws IllegalArgumentException wenn die Ankunftszeit vor der Abflugzeit liegt
      */
-    public Flug(String flugnummer, 
-                Fluggesellschaft fluggesellschaft, 
-                Flugzeug flugzeug, 
+    public Flug(String flugnummer,
+                Fluggesellschaft fluggesellschaft,
+                Flugzeug flugzeug,
                 Flughafen startFlughafen,
-                Flughafen zielFlughafen, 
-                LocalDateTime abflugzeit, 
-                LocalDateTime ankunftszeit, 
-                double basispreis) {
+                Flughafen zielFlughafen,
+                LocalDateTime abflugzeit,
+                LocalDateTime ankunftszeit,
+                double basispreis
+    ) {
 
-                if (fluggesellschaft == null
-                || flugzeug == null
-                || startFlughafen == null
-                || zielFlughafen == null
-                || abflugzeit == null
-                || ankunftszeit == null) {
+        if (fluggesellschaft == null
+            || flugzeug == null
+            || startFlughafen == null
+            || zielFlughafen == null
+            || abflugzeit == null
+            || ankunftszeit == null) {
 
             throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
         }
@@ -109,10 +120,9 @@ public class Flug implements Serializable {
         }
 
         // Verhindert, dass ein Flug vor seinem Abflug ankommt
-        if (!ankunftszeit.isAfter(abflugzeit)) {
+        if (! ankunftszeit.isAfter(abflugzeit)) {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
         }
-
 
         // entfernt Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
@@ -131,11 +141,10 @@ public class Flug implements Serializable {
 
     /**
      * Initialisiert den Sitzplan des Fluges anhand einer Sitzplatzvorlage.
-     *
-     * Für jeden Sitzplatz der Vorlage wird ein neues {@code Sitzplatz}-Objekt
-     * erzeugt. Dadurch besitzt jeder Flug einen eigenen unabhängigen Sitzplan
-     * und Änderungen an der Sitzplatzbelegung wirken sich nicht auf andere
-     * Flüge oder auf die ursprüngliche Sitzplatzvorlage des Flugzeugs aus.
+     * <p>
+     * Für jeden Sitzplatz der Vorlage wird ein neues {@code Sitzplatz}-Objekt erzeugt. Dadurch besitzt jeder Flug einen
+     * eigenen unabhängigen Sitzplan und Änderungen an der Sitzplatzbelegung wirken sich nicht auf andere Flüge oder auf
+     * die ursprüngliche Sitzplatzvorlage des Flugzeugs aus.
      *
      * @param vorlage die Sitzplatzvorlage des eingesetzten Flugzeugs
      */
@@ -148,7 +157,7 @@ public class Flug implements Serializable {
             // Jede Reihe erhält die gleiche Anzahl an Sitzplätzen wie in der Vorlage
             sitzplan[i] = new Sitzplatz[vorlage[i].length];
 
-            for (int j = 0; j < vorlage[i].length; j++){
+            for (int j = 0; j < vorlage[i].length; j++) {
 
                 Sitzplatz original = vorlage[i][j];
 
@@ -157,7 +166,6 @@ public class Flug implements Serializable {
             }
         }
     }
-   
 
     /**
      * Ermittelt alle aktuell freien Sitzplätze des Fluges.
@@ -165,8 +173,9 @@ public class Flug implements Serializable {
      * @return eine Liste mit allen freien Sitzplätzen
      */
     public List<Sitzplatz> getFreieSitzplaetze() {
+
         List<Sitzplatz> freieSitzplaetze = new ArrayList<>();
-        
+
         // Durchläuft den vollständigen Sitzplan
         for (int i = 0; i < sitzplan.length; i++) {
             for (int j = 0; j < this.sitzplan[i].length; j++) {
@@ -177,21 +186,21 @@ public class Flug implements Serializable {
                 }
             }
         }
-        return freieSitzplaetze;        
+        return freieSitzplaetze;
     }
-       
+
     /**
      * Ermittelt alle freien Sitzplätze einer bestimmten Sitzklasse.
-     *
-     * Ein Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch
-     * der angegebenen Sitzklasse entspricht.
+     * <p>
+     * Ein Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch der angegebenen Sitzklasse entspricht.
      *
      * @param sitzklasse die Sitzklasse, nach der gefiltert werden soll
      * @return eine Liste mit allen freien Sitzplätzen der angegebenen Sitzklasse
      */
-    public List<Sitzplatz> getFreieSitzplaetzeNachKlasse(Sitzklasse sitzklasse){
+    public List<Sitzplatz> getFreieSitzplaetzeNachKlasse(Sitzklasse sitzklasse) {
+
         List<Sitzplatz> freieSitzplaetze = new ArrayList<>();
-        
+
         // Durchläuft den vollständigen Sitzplan
         for (int i = 0; i < sitzplan.length; i++) {
             for (int j = 0; j < this.sitzplan[i].length; j++) {
@@ -202,32 +211,31 @@ public class Flug implements Serializable {
                 }
             }
         }
-        return freieSitzplaetze; 
+        return freieSitzplaetze;
     }
 
     /**
      * Prüft, ob der Flug vollständig ausgebucht ist.
+     * <p>
+     * Ein Flug gilt als ausgebucht, wenn keine freien Sitzplätze mehr vorhanden sind.
      *
-     * Ein Flug gilt als ausgebucht, wenn keine freien Sitzplätze mehr
-     * vorhanden sind.
-     *
-     * @return {@code true}, wenn keine freien Sitzplätze mehr vorhanden sind,
-     *         sonst {@code false}
+     * @return {@code true}, wenn keine freien Sitzplätze mehr vorhanden sind, sonst {@code false}
      */
     public boolean istAusgebucht() {
+
         return this.getFreieSitzplaetze().isEmpty();
     }
 
     /**
      * Berechnet die prozentuale Auslastung des Fluges.
-     *
-     * Dazu wird die Anzahl aller belegten Sitzplätze durch die Gesamtzahl
-     * aller vorhandenen Sitzplätze geteilt und anschließend mit {@code 100}
-     * multipliziert.
+     * <p>
+     * Dazu wird die Anzahl aller belegten Sitzplätze durch die Gesamtzahl aller vorhandenen Sitzplätze geteilt und
+     * anschließend mit {@code 100} multipliziert.
      *
      * @return die Auslastung des Fluges in Prozent
      */
     public double berechneAuslastung() {
+
         int anzahlBelegt = 0;
         int anzahlGesamt = 0;
 
@@ -235,7 +243,7 @@ public class Flug implements Serializable {
         for (int i = 0; i < this.sitzplan.length; i++) {
             for (int j = 0; j < this.sitzplan[i].length; j++) {
                 anzahlGesamt++;
-                if (!this.sitzplan[i][j].getIstFrei()) {
+                if (! this.sitzplan[i][j].getIstFrei()) {
                     anzahlBelegt++;
                 }
             }
@@ -247,16 +255,13 @@ public class Flug implements Serializable {
 
     /**
      * Gibt den aktuellen Sitzplan des Fluges auf der Konsole aus.
-     *
-     * Für jeden Sitzplatz wird zunächst die Sitzplatznummer und anschließend
-     * der aktuelle Belegungsstatus dargestellt.
-     *
-     * Ein freier Sitzplatz wird durch {@code [ ]} und ein belegter Sitzplatz
-     * durch {@code [X]} gekennzeichnet.
-     *
-     * In der Mitte jeder Reihe wird ein Mittelgang dargestellt. Zusätzlich
-     * wird beim Wechsel zwischen verschiedenen Sitzklassen eine horizontale
-     * Trennlinie ausgegeben.
+     * <p>
+     * Für jeden Sitzplatz wird zunächst die Sitzplatznummer und anschließend der aktuelle Belegungsstatus dargestellt.
+     * <p>
+     * Ein freier Sitzplatz wird durch {@code [ ]} und ein belegter Sitzplatz durch {@code [X]} gekennzeichnet.
+     * <p>
+     * In der Mitte jeder Reihe wird ein Mittelgang dargestellt. Zusätzlich wird beim Wechsel zwischen verschiedenen
+     * Sitzklassen eine horizontale Trennlinie ausgegeben.
      */
     public void zeigeSitzplan() {
 
@@ -274,7 +279,7 @@ public class Flug implements Serializable {
         for (int i = 0; i < this.sitzplan.length; i++) {
 
             if (i > 0 && this.sitzplan[i - 1][0].getSitzklasse()
-                    != this.sitzplan[i][0].getSitzklasse()) {
+                         != this.sitzplan[i][0].getSitzklasse()) {
 
                 String text = " " + this.sitzplan[i][0].getSitzklasse() + " ";
 
@@ -289,30 +294,28 @@ public class Flug implements Serializable {
                 System.out.println();
             }
 
-
             // Gibt zunächst die Sitzplatznummern der aktuellen Reihe aus
-            for (int j = 0; j < this.sitzplan[i].length ; j++) {
-              
+            for (int j = 0; j < this.sitzplan[i].length; j++) {
+
                 // Fügt in der Mitte der Sitzreihe einen Gang ein
-                if(j == this.sitzplan[i].length / 2){
+                if (j == this.sitzplan[i].length / 2) {
                     System.out.print("|  ");
                 }
 
                 System.out.printf("%-5s", this.sitzplan[i][j].getSitzplatzNummer());
-            } 
+            }
 
             System.out.println();
 
-
             // Gibt anschließend den Belegungsstatus der Sitzplätze aus
             for (int j = 0; j < this.sitzplan[i].length; j++) {
-                
+
                 // Fügt auch in der Statusanzeige den Mittelgang ein
-                if(j == this.sitzplan[i].length/2) {
+                if (j == this.sitzplan[i].length / 2) {
                     System.out.print("|  ");
                 }
 
-                if(this.sitzplan[i][j].getIstFrei()) {
+                if (this.sitzplan[i][j].getIstFrei()) {
                     System.out.printf("%-5s", "[ ]");
                 } else {
                     System.out.printf("%-5s", "[X]");
@@ -325,8 +328,9 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Findet einen Sitzplatz in einem Flug und gibt ihn zurück
-     * War ursprünglich in der Methode "Buchungssystem", ist aber hier sinnvoller
+     * Findet einen Sitzplatz in einem Flug und gibt ihn zurück War ursprünglich in der Methode "Buchungssystem", ist
+     * aber hier sinnvoller
+     *
      * @param sitzplatznummer
      * @return
      */
@@ -336,7 +340,7 @@ public class Flug implements Serializable {
             for (int j = 0; j < sitzplan[i].length; j++) {
 
                 if (sitzplan[i][j].getSitzplatzNummer()
-                        .equals(sitzplatznummer)) {
+                                  .equals(sitzplatznummer)) {
 
                     return sitzplan[i][j];
                 }
@@ -346,40 +350,39 @@ public class Flug implements Serializable {
         return null;
     }
 
-        /**
+    /**
      * Prüft, ob ein Sitzplatz vorhanden oder belegt ist oder nicht in der gegebenen Sitzklasse existiert
-     * @param sitz : zu überprüfender Sitzplatz
-     * @param sitzklasse : Sitzklasse, die zu dem Sitzplatz gehören soll
+     *
+     * @param sitz         : zu überprüfender Sitzplatz
+     * @param sitzklasse   : Sitzklasse, die zu dem Sitzplatz gehören soll
      * @param klassenliste : Liste mit Sitzplätzen, die die angegebene Sitzklasse haben
      */
     public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
         //man muss auf null prüfen, weil die Methode "findeSitzplatz" null zurückgeben kann.
         if (sitz == null) {
             throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
-        }
-
-        else if (!sitz.getIstFrei()) {
+        } else if (! sitz.getIstFrei()) {
             throw new IllegalArgumentException("Sitzplatz bereits belegt.");
-        }
-        else if (sitz.getSitzklasse() != sitzklasse && !klassenliste.contains(sitz)) {
+        } else if (sitz.getSitzklasse() != sitzklasse && ! klassenliste.contains(sitz)) {
             throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
-        } 
+        }
     }
 
     /**
-     * Gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht
-     * hat
-     * 
-     * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen
-     *         Buchung als Strings
+     * Gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht hat
+     *
+     * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen Buchung als Strings
      */
     public ArrayList<String> zeigeGepackUebersicht() {
+
         ArrayList<String> neueListe = new ArrayList<>();
         for (int i = 0; i < sitzplan.length; i++) {
             for (int j = 0; j < sitzplan[i].length; j++) {
-                if (sitzplan[i][j].getIstFrei()) continue;
+                if (sitzplan[i][j].getIstFrei()) {
+                    continue;
+                }
                 neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
-                        + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
+                              + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
             }
 
         }
@@ -393,6 +396,7 @@ public class Flug implements Serializable {
      * @return die Flugnummer
      */
     public String getFlugnummer() {
+
         return flugnummer;
     }
 
@@ -402,64 +406,72 @@ public class Flug implements Serializable {
      * @return der Basispreis des Fluges
      */
     public double getBasispreis() {
+
         return basispreis;
     }
 
     public Flughafen getStartFlughafen() {
+
         return startFlughafen;
     }
 
     public Flughafen getZielflughafen() {
+
         return zielFlughafen;
     }
 
     public Sitzplatz[][] getSitzplan() {
+
         return sitzplan;
     }
 
     public LocalDateTime getAbflugszeit() {
+
         return abflugzeit;
     }
 
     public LocalDateTime getAnkunftszeit() {
+
         return ankunftszeit;
     }
 
     public Flugzeug getFlugzeug() {
+
         return flugzeug;
     }
 
     public Fluggesellschaft getFluggesellschaft() {
+
         return fluggesellschaft;
     }
 
-
     /**
      * Gibt eine textuelle Beschreibung des Fluges zurück.
-     *
-     * Die Beschreibung enthält die Fluggesellschaft, die vollständige
-     * Flugnummer, den Start- und Zielflughafen, die Abflug- und Ankunftszeit,
-     * das eingesetzte Flugzeug sowie die aktuelle Auslastung.
+     * <p>
+     * Die Beschreibung enthält die Fluggesellschaft, die vollständige Flugnummer, den Start- und Zielflughafen, die
+     * Abflug- und Ankunftszeit, das eingesetzte Flugzeug sowie die aktuelle Auslastung.
      *
      * @return eine textuelle Beschreibung des Fluges
      */
     @Override
     public String toString() {
-        return this.fluggesellschaft.getName()  
-            + " Flug " + this.flugnummer
-            + " von " + this.startFlughafen.getIataCode()
-            + " nach " + this.zielFlughafen.getIataCode()
-            + ", Abflug: " + this.abflugzeit
-            + ", Ankunft: " + this.ankunftszeit
-            + ", Flugzeug: " + this.flugzeug.getModell() 
-            + " (" + this.flugzeug.getCode() + ")"
-            + " ist zu " + this.berechneAuslastung() 
-            + "% ausgelastet.";
+
+        return this.fluggesellschaft.getName()
+               + " Flug " + this.flugnummer
+               + " von " + this.startFlughafen.getIataCode()
+               + " nach " + this.zielFlughafen.getIataCode()
+               + ", Abflug: " + this.abflugzeit
+               + ", Ankunft: " + this.ankunftszeit
+               + ", Flugzeug: " + this.flugzeug.getModell()
+               + " (" + this.flugzeug.getCode() + ")"
+               + " ist zu " + this.berechneAuslastung()
+               + "% ausgelastet.";
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) {
+
+        if (this == o) {
             return true;
         }
 
@@ -468,9 +480,9 @@ public class Flug implements Serializable {
         }
 
         Flug f = (Flug) o;
-        return this.flugnummer.equalsIgnoreCase(f.getFlugnummer()) 
-                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate())
-                && this.startFlughafen.equals(f.startFlughafen)
-                && this.zielFlughafen.equals(f.zielFlughafen);
+        return this.flugnummer.equalsIgnoreCase(f.getFlugnummer())
+               && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate())
+               && this.startFlughafen.equals(f.startFlughafen)
+               && this.zielFlughafen.equals(f.zielFlughafen);
     }
 }

@@ -1,6 +1,4 @@
-
 import java.io.Serializable;
-import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,9 +11,8 @@ import java.util.NoSuchElementException;
 /**
  * Zentrale Verwaltungsklasse des Flugbuchungssystems.
  * <p>
- * Das Verwaltungssystem verwaltet Fluggesellschaften, Flugzeuge, Flughäfen und
- * Flüge. Es stellt Methoden zum Hinzufügen, Entfernen, Erzeugen und Suchen
- * dieser Objekte bereit. Die gespeicherten Daten können durch die
+ * Das Verwaltungssystem verwaltet Fluggesellschaften, Flugzeuge, Flughäfen und Flüge. Es stellt Methoden zum
+ * Hinzufügen, Entfernen, Erzeugen und Suchen dieser Objekte bereit. Die gespeicherten Daten können durch die
  * Implementierung von {@link Serializable} serialisiert werden.
  * </p>
  *
@@ -57,18 +54,20 @@ public class Verwaltungssystem implements Serializable {
     }
 
     // Verwaltung Fluggesellschaften
+
     /**
      * Fügt eine Fluggesellschaft dem Verwaltungssystem hinzu.
      *
      * @param fluggesellschaft die hinzuzufügende Fluggesellschaft
-     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null}
-     * ist oder bereits registriert wurde
+     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null} ist oder bereits registriert wurde
      */
     public Fluggesellschaft fuegeFluggesellschaftHinzu(Fluggesellschaft fluggesellschaft) {
+
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaft-Objekt hat eine Nullreferenz");
         } else if (this.fluggesellschaften.contains(fluggesellschaft)) {
-            throw new IllegalArgumentException("Das übergebene Fluggesellschaften-Objekt ist schon in der Liste enthalten");
+            throw new IllegalArgumentException(
+                    "Das übergebene Fluggesellschaften-Objekt ist schon in der Liste enthalten");
         } else {
             this.fluggesellschaften.add(fluggesellschaft);
             return fluggesellschaft;
@@ -76,21 +75,21 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Entfernt eine Fluggesellschaft aus dem Verwaltungssystem. Eine
-     * Fluggesellschaft kann nur entfernt werden, wenn ihr keine registrierten
-     * Flüge mehr zugeordnet sind.
+     * Entfernt eine Fluggesellschaft aus dem Verwaltungssystem. Eine Fluggesellschaft kann nur entfernt werden, wenn
+     * ihr keine registrierten Flüge mehr zugeordnet sind.
      *
      * @param fluggesellschaft die zu entfernende Fluggesellschaft
-     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null}
-     * oder nicht registriert ist, noch Flugzeuge enthält oder noch einem Flug
-     * zugeordnet ist
+     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null} oder nicht registriert ist, noch
+     *                                  Flugzeuge enthält oder noch einem Flug zugeordnet ist
      */
     public void entferneFluggesellschaft(Fluggesellschaft fluggesellschaft) {
+
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Das übergebene Fluggesellschaft-Objekt hat eine Nullreferenz");
-        } else if (!this.fluggesellschaften.contains(fluggesellschaft)) {
-            throw new IllegalArgumentException("Das übergebene Fluggesellschaften-Objekt wurde bisher noch nicht hinzugefügt.");
-        } else if (!fluggesellschaft.getFlotte().isEmpty()) {
+        } else if (! this.fluggesellschaften.contains(fluggesellschaft)) {
+            throw new IllegalArgumentException(
+                    "Das übergebene Fluggesellschaften-Objekt wurde bisher noch nicht hinzugefügt.");
+        } else if (! fluggesellschaft.getFlotte().isEmpty()) {
             //Fluggesellschaften, die noch Flugzeuge in ihrer Flotte haben, können nicht gelöscht werden
             throw new IllegalArgumentException("Der Fluggesellschaft sind noch Flugzeuge zugewiesen.");
         } else {
@@ -101,7 +100,8 @@ public class Verwaltungssystem implements Serializable {
                 Flug f = iterator.next();
 
                 if (f.getFluggesellschaft().equals(fluggesellschaft)) {
-                    throw new IllegalArgumentException("Die Fluggesellschaft konnte nicht entfernt werden, da noch aktuelle Flüge geplant sind.");
+                    throw new IllegalArgumentException(
+                            "Die Fluggesellschaft konnte nicht entfernt werden, da noch aktuelle Flüge geplant sind.");
                 }
             }
             this.fluggesellschaften.remove(fluggesellschaft);
@@ -114,6 +114,7 @@ public class Verwaltungssystem implements Serializable {
      * @return unveränderbare Kopie der registrierten Fluggesellschaften
      */
     public List<Fluggesellschaft> getFluggesellschaften() {
+
         return List.copyOf(this.fluggesellschaften);
     }
 
@@ -122,8 +123,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param c der IATA-Code der gesuchten Fluggesellschaft
      * @return die Fluggesellschaft mit dem angegebenen Code
-     * @throws IllegalArgumentException wenn keine Fluggesellschaft mit dem
-     * angegebenen Code existiert
+     * @throws IllegalArgumentException wenn keine Fluggesellschaft mit dem angegebenen Code existiert
      */
     public Fluggesellschaft getFluggesellschaft(String c) {
 
@@ -142,32 +142,35 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Erzeugt ein neues Flugzeug und ordnet es einer registrierten
-     * Fluggesellschaft zu.
+     * Erzeugt ein neues Flugzeug und ordnet es einer registrierten Fluggesellschaft zu.
      * <p>
-     * Das Flugzeug wird sowohl in der Flotte der Fluggesellschaft als auch
-     * zentral im Verwaltungssystem gespeichert.
+     * Das Flugzeug wird sowohl in der Flotte der Fluggesellschaft als auch zentral im Verwaltungssystem gespeichert.
      * </p>
      *
      * @param fluggesellschaft die Fluggesellschaft, der das Flugzeug gehört
-     * @param code der eindeutige Code des Flugzeugs
-     * @param modell die Modellbezeichnung des Flugzeugs
-     * @param anzahlReihen die Gesamtzahl der Sitzreihen
-     * @param sitzeProReihe die Anzahl der Sitzplätze pro Reihe
-     * @param businessReihen die Anzahl der Business-Class-Reihen
+     * @param code             der eindeutige Code des Flugzeugs
+     * @param modell           die Modellbezeichnung des Flugzeugs
+     * @param anzahlReihen     die Gesamtzahl der Sitzreihen
+     * @param sitzeProReihe    die Anzahl der Sitzplätze pro Reihe
+     * @param businessReihen   die Anzahl der Business-Class-Reihen
      * @return das neu erzeugte Flugzeug
-     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null}
-     * oder nicht registriert ist oder bereits ein Flugzeug mit demselben Code
-     * existiert
+     * @throws IllegalArgumentException wenn die Fluggesellschaft {@code null} oder nicht registriert ist oder bereits
+     *                                  ein Flugzeug mit demselben Code existiert
      */
-    public Flugzeug erzeugeFlugzeug(Fluggesellschaft fluggesellschaft, String code, String modell, int anzahlReihen, int sitzeProReihe, int businessReihen) {
+    public Flugzeug erzeugeFlugzeug(Fluggesellschaft fluggesellschaft,
+                                    String code,
+                                    String modell,
+                                    int anzahlReihen,
+                                    int sitzeProReihe,
+                                    int businessReihen
+    ) {
 
         String flugzeugCode = code.strip().toUpperCase(Locale.ROOT);
 
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Die übergebene Fluggesellschaft existiert nicht.");
         }
-        if (!fluggesellschaften.contains(fluggesellschaft)) {
+        if (! fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
         }
 
@@ -187,19 +190,17 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Entfernt ein Flugzeug aus dem Verwaltungssystem und aus der Flotte der
-     * zugehörigen Fluggesellschaft.
-     *
-     * Ein Flugzeug kann nur entfernt werden, wenn es für keinen vorhandenen Flug
-     * mehr eingeplant ist.
+     * Entfernt ein Flugzeug aus dem Verwaltungssystem und aus der Flotte der zugehörigen Fluggesellschaft.
+     * <p>
+     * Ein Flugzeug kann nur entfernt werden, wenn es für keinen vorhandenen Flug mehr eingeplant ist.
      *
      * @param code der Code des zu entfernenden Flugzeugs
-     * @throws IllegalArgumentException wenn der Code {@code null} ist oder kein
-     * Flugzeug mit diesem Code existiert
-     * @throws IllegalStateException wenn das Flugzeug noch für einen Flug
-     * eingeplant ist oder keiner Fluggesellschaft zugeordnet werden kann
+     * @throws IllegalArgumentException wenn der Code {@code null} ist oder kein Flugzeug mit diesem Code existiert
+     * @throws IllegalStateException    wenn das Flugzeug noch für einen Flug eingeplant ist oder keiner
+     *                                  Fluggesellschaft zugeordnet werden kann
      */
     public void entferneFlugzeug(String code) {
+
         if (code == null) {
             throw new IllegalArgumentException("Der Flugzeug-Code darf nicht leer sein.");
         }
@@ -212,7 +213,8 @@ public class Verwaltungssystem implements Serializable {
             Flug tempFlug = iteratorFlug.next();
 
             if (tempFlug.getFlugzeug().equals(flug)) {
-                throw new IllegalStateException("Das FLugzeug kann nicht entfernt werden, da noch Flüge damit geplant sind.");
+                throw new IllegalStateException(
+                        "Das FLugzeug kann nicht entfernt werden, da noch Flüge damit geplant sind.");
             }
         }
 
@@ -237,6 +239,7 @@ public class Verwaltungssystem implements Serializable {
      * @return unveränderbare Kopie aller registrierten Flugzeuge
      */
     public List<Flugzeug> getAlleFlugzeuge() {
+
         return List.copyOf(this.flugzeuge);
     }
 
@@ -245,8 +248,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param code der Code des gesuchten Flugzeugs
      * @return das Flugzeug mit dem angegebenen Code
-     * @throws IllegalArgumentException wenn kein Flugzeug mit dem angegebenen
-     * Code existiert
+     * @throws IllegalArgumentException wenn kein Flugzeug mit dem angegebenen Code existiert
      */
     public Flugzeug getFlugzeug(String code) {
 
@@ -264,18 +266,17 @@ public class Verwaltungssystem implements Serializable {
     }
 
     // Verwaltung Flughafen
+
     /**
-     * Erzeugt einen neuen Flughafen und registriert ihn im Verwaltungssystem.
-     * Name und IATA-Code müssen innerhalb des Verwaltungssystems eindeutig
-     * sein.
+     * Erzeugt einen neuen Flughafen und registriert ihn im Verwaltungssystem. Name und IATA-Code müssen innerhalb des
+     * Verwaltungssystems eindeutig sein.
      *
-     * @param name der Name des Flughafens
+     * @param name     der Name des Flughafens
      * @param iataCode der eindeutige IATA-Code des Flughafens
-     * @param stadt die Stadt, in der sich der Flughafen befindet
-     * @param land das Land, in dem sich der Flughafen befindet
+     * @param stadt    die Stadt, in der sich der Flughafen befindet
+     * @param land     das Land, in dem sich der Flughafen befindet
      * @return der neu erzeugte Flughafen
-     * @throws IllegalArgumentException wenn bereits ein Flughafen mit demselben
-     * Namen oder IATA-Code existiert
+     * @throws IllegalArgumentException wenn bereits ein Flughafen mit demselben Namen oder IATA-Code existiert
      */
     public Flughafen erzeugeFlughafen(String name, String iataCode, String stadt, String land) {
 
@@ -299,15 +300,15 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Entfernt einen Flughafen aus dem Verwaltungssystem. Ein Flughafen kann
-     * nur entfernt werden, wenn er bei keinem registrierten Flug als Start-
-     * oder Zielflughafen verwendet wird.
+     * Entfernt einen Flughafen aus dem Verwaltungssystem. Ein Flughafen kann nur entfernt werden, wenn er bei keinem
+     * registrierten Flug als Start- oder Zielflughafen verwendet wird.
      *
      * @param flughafen der zu entfernende Flughafen
-     * @throws IllegalArgumentException wenn der Flughafen {@code null} oder
-     * nicht registriert ist oder noch einem Flug zugeordnet ist
+     * @throws IllegalArgumentException wenn der Flughafen {@code null} oder nicht registriert ist oder noch einem Flug
+     *                                  zugeordnet ist
      */
     public void entferneFlughafen(Flughafen flughafen) {
+
         if (flughafen == null) {
             throw new IllegalArgumentException("Der Flughafen darf nicht null sein.");
         }
@@ -320,7 +321,8 @@ public class Verwaltungssystem implements Serializable {
                 Flug f = iterator.next();
 
                 if (f.getStartFlughafen().equals(flughafen) || f.getZielflughafen().equals(flughafen)) {
-                    throw new IllegalArgumentException("Der Flughafen konnte nicht entfernt werden, da hier noch aktuelle Flüge geplant sind.");
+                    throw new IllegalArgumentException(
+                            "Der Flughafen konnte nicht entfernt werden, da hier noch aktuelle Flüge geplant sind.");
                 }
             }
             this.flughaefen.remove(flughafen);
@@ -335,8 +337,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param iataCode der IATA-Code des gesuchten Flughafens
      * @return der Flughafen mit dem angegebenen IATA-Code
-     * @throws IllegalArgumentException wenn kein Flughafen mit dem angegebenen
-     * IATA-Code existiert
+     * @throws IllegalArgumentException wenn kein Flughafen mit dem angegebenen IATA-Code existiert
      */
     public Flughafen getFlughafenNachCode(String iataCode) {
 
@@ -358,8 +359,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param name der Name des gesuchten Flughafens
      * @return der Flughafen mit dem angegebenen Namen
-     * @throws IllegalArgumentException wenn kein Flughafen mit dem angegebenen
-     * Namen existiert
+     * @throws IllegalArgumentException wenn kein Flughafen mit dem angegebenen Namen existiert
      */
     public Flughafen getFlughafenNachName(String name) {
 
@@ -379,8 +379,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param stadt die Stadt des gesuchten Flughafens
      * @return der erste gefundene Flughafen in der angegebenen Stadt
-     * @throws IllegalArgumentException wenn in der angegebenen Stadt kein
-     * Flughafen gefunden wurde
+     * @throws IllegalArgumentException wenn in der angegebenen Stadt kein Flughafen gefunden wurde
      */
     public Flughafen getFlughafenNachStadt(String stadt) {
 
@@ -401,6 +400,7 @@ public class Verwaltungssystem implements Serializable {
      * @return unveränderbare Kopie aller registrierten Flughäfen
      */
     public List<Flughafen> getFlughaefen() {
+
         return List.copyOf(this.flughaefen);
     }
 
@@ -409,8 +409,7 @@ public class Verwaltungssystem implements Serializable {
      *
      * @param land das Land, nach dessen Flughäfen gesucht wird
      * @return Liste aller gefundenen Flughäfen in dem angegebenen Land
-     * @throws IllegalArgumentException wenn in dem Land kein Flughafen gefunden
-     * wurde
+     * @throws IllegalArgumentException wenn in dem Land kein Flughafen gefunden wurde
      */
     public ArrayList<Flughafen> getFlughaefenInLand(String land) {
 
@@ -425,7 +424,7 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
-        if (!ret.isEmpty()) {
+        if (! ret.isEmpty()) {
             return ret;
         } else {
             throw new IllegalArgumentException("Im Land " + land + " konnte kein Flughafen gefunden werden.");
@@ -434,34 +433,39 @@ public class Verwaltungssystem implements Serializable {
 
     /**
      * Erzeugt und registriert einen oder mehrere Flüge im Verwaltungssystem.
-     *
-     * Für jeden angegebenen Tag wird ein Hinflug erzeugt. Ist {@code rueckflug}
-     * gesetzt, wird zu jedem Hinflug zusätzlich ein Rückflug erzeugt. Die
-     * Flugnummern werden automatisch anhand der Fluggesellschaft und des
+     * <p>
+     * Für jeden angegebenen Tag wird ein Hinflug erzeugt. Ist {@code rueckflug} gesetzt, wird zu jedem Hinflug
+     * zusätzlich ein Rückflug erzeugt. Die Flugnummern werden automatisch anhand der Fluggesellschaft und des
      * jeweiligen Abflugtages vergeben.
+     * <p>
+     * Vor dem Speichern wird geprüft, ob die erzeugten Flüge gültig sind und ob sich die Einsatzzeiten des verwendeten
+     * Flugzeugs mit vorhandenen oder neu erzeugten Flügen überschneiden.
      *
-     * Vor dem Speichern wird geprüft, ob die erzeugten Flüge gültig sind und ob
-     * sich die Einsatzzeiten des verwendeten Flugzeugs mit vorhandenen oder neu
-     * erzeugten Flügen überschneiden.
-     *
-     * @param fluggesellschaft die ausführende Fluggesellschaft
-     * @param flugzeug das für die Flüge eingesetzte Flugzeug
-     * @param startFlughafen der Startflughafen
-     * @param zielFlughafen der Zielflughafen
-     * @param abflugzeit Datum und Uhrzeit des ersten Abflugs
-     * @param ankunftszeit Datum und Uhrzeit der ersten Ankunft
-     * @param basispreis der Basispreis der Flüge
-     * @param rueckflug {@code true}, wenn zusätzlich Rückflüge erzeugt werden sollen
-     * @param anzahlTageWiederholungen Anzahl der aufeinanderfolgenden Tage,
-     * an denen der Flug stattfinden soll
+     * @param fluggesellschaft         die ausführende Fluggesellschaft
+     * @param flugzeug                 das für die Flüge eingesetzte Flugzeug
+     * @param startFlughafen           der Startflughafen
+     * @param zielFlughafen            der Zielflughafen
+     * @param abflugzeit               Datum und Uhrzeit des ersten Abflugs
+     * @param ankunftszeit             Datum und Uhrzeit der ersten Ankunft
+     * @param basispreis               der Basispreis der Flüge
+     * @param rueckflug                {@code true}, wenn zusätzlich Rückflüge erzeugt werden sollen
+     * @param anzahlTageWiederholungen Anzahl der aufeinanderfolgenden Tage, an denen der Flug stattfinden soll
      * @return Liste aller neu erzeugten und registrierten Flüge
-     * @throws IllegalArgumentException wenn die übergebenen Daten ungültig sind,
-     * benötigte Objekte nicht registriert sind, das Flugzeug nicht zur
-     * Fluggesellschaft gehört, weniger als ein Wiederholungstag angegeben wurde
-     * oder sich Flugzeiten des verwendeten Flugzeugs überschneiden
+     * @throws IllegalArgumentException wenn die übergebenen Daten ungültig sind, benötigte Objekte nicht registriert
+     *                                  sind, das Flugzeug nicht zur Fluggesellschaft gehört, weniger als ein
+     *                                  Wiederholungstag angegeben wurde oder sich Flugzeiten des verwendeten Flugzeugs
+     *                                  überschneiden
      */
-    public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
-            LocalDateTime ankunftszeit, double basispreis, boolean rueckflug, int anzahlTageWiederholungen) {
+    public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
+                                          Flugzeug flugzeug,
+                                          Flughafen startFlughafen,
+                                          Flughafen zielFlughafen,
+                                          LocalDateTime abflugzeit,
+                                          LocalDateTime ankunftszeit,
+                                          double basispreis,
+                                          boolean rueckflug,
+                                          int anzahlTageWiederholungen
+    ) {
 
         //validiere Flug
         validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
@@ -484,7 +488,15 @@ public class Verwaltungssystem implements Serializable {
 
             String flugnummer = erzeugeFlugnummer(fluggesellschaft, lAbflug, erzeugteFluege);
 
-            Flug hinflug = new Flug(flugnummer, fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, lAbflug, lAnkunft, basispreis);
+            Flug hinflug = new Flug(flugnummer,
+                    fluggesellschaft,
+                    flugzeug,
+                    startFlughafen,
+                    zielFlughafen,
+                    lAbflug,
+                    lAnkunft,
+                    basispreis
+            );
 
             erzeugteFluege.add(hinflug);
 
@@ -505,7 +517,15 @@ public class Verwaltungssystem implements Serializable {
                 LocalDateTime ankunftszeitRueckflug = abflugszeitRueckflug.plus(flugdauer);
 
                 String flugnummer = erzeugeFlugnummer(fluggesellschaft, abflugszeitRueckflug, erzeugteFluege);
-                Flug flugZurueck = new Flug(flugnummer, fluggesellschaft, flugzeug, hinflug.getZielflughafen(), hinflug.getStartFlughafen(), abflugszeitRueckflug, ankunftszeitRueckflug, hinflug.getBasispreis());
+                Flug flugZurueck = new Flug(flugnummer,
+                        fluggesellschaft,
+                        flugzeug,
+                        hinflug.getZielflughafen(),
+                        hinflug.getStartFlughafen(),
+                        abflugszeitRueckflug,
+                        ankunftszeitRueckflug,
+                        hinflug.getBasispreis()
+                );
 
                 rueckfluege.add(flugZurueck);
             }
@@ -529,27 +549,31 @@ public class Verwaltungssystem implements Serializable {
     /**
      * Erzeugt einen neuen Flug und registriert ihn im Verwaltungssystem.
      * <p>
-     * Die Flugnummer wird automatisch aus dem Airline-Code und einer
-     * fortlaufenden Nummer für den jeweiligen Abflugtag gebildet. Zusätzlich
-     * wird geprüft, ob das Flugzeug im angegebenen Zeitraum bereits für einen
-     * anderen Flug eingeplant ist.
+     * Die Flugnummer wird automatisch aus dem Airline-Code und einer fortlaufenden Nummer für den jeweiligen Abflugtag
+     * gebildet. Zusätzlich wird geprüft, ob das Flugzeug im angegebenen Zeitraum bereits für einen anderen Flug
+     * eingeplant ist.
      * </p>
      *
      * @param fluggesellschaft die ausführende Fluggesellschaft
-     * @param flugzeug das für den Flug eingesetzte Flugzeug
-     * @param startFlughafen der Startflughafen
-     * @param zielFlughafen der Zielflughafen
-     * @param abflugzeit Datum und Uhrzeit des Abflugs
-     * @param ankunftszeit Datum und Uhrzeit der Ankunft
-     * @param basispreis der Basispreis des Flugs
+     * @param flugzeug         das für den Flug eingesetzte Flugzeug
+     * @param startFlughafen   der Startflughafen
+     * @param zielFlughafen    der Zielflughafen
+     * @param abflugzeit       Datum und Uhrzeit des Abflugs
+     * @param ankunftszeit     Datum und Uhrzeit der Ankunft
+     * @param basispreis       der Basispreis des Flugs
      * @return der neu erzeugte und registrierte Flug
-     * @throws IllegalArgumentException wenn eine übergebene Referenz
-     * {@code null} ist, benötigte Objekte nicht registriert sind, das Flugzeug
-     * nicht zur Fluggesellschaft gehört, der Flug bereits existiert oder sich
-     * die Einsatzzeiten des Flugzeugs überschneiden
+     * @throws IllegalArgumentException wenn eine übergebene Referenz {@code null} ist, benötigte Objekte nicht
+     *                                  registriert sind, das Flugzeug nicht zur Fluggesellschaft gehört, der Flug
+     *                                  bereits existiert oder sich die Einsatzzeiten des Flugzeugs überschneiden
      */
-    public Flug fuegeFlugHinzu(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen, LocalDateTime abflugzeit,
-            LocalDateTime ankunftszeit, double basispreis) {
+    public Flug fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
+                               Flugzeug flugzeug,
+                               Flughafen startFlughafen,
+                               Flughafen zielFlughafen,
+                               LocalDateTime abflugzeit,
+                               LocalDateTime ankunftszeit,
+                               double basispreis
+    ) {
 
         // validiere Flug
         validiereFlug(fluggesellschaft, flugzeug, startFlughafen, zielFlughafen);
@@ -563,7 +587,7 @@ public class Verwaltungssystem implements Serializable {
 
             boolean gleicherFlugAmSelbenTag
                     = vorhandenerFlug.getFlugnummer().equalsIgnoreCase(flugnummer)
-                    && vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
+                      && vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
 
             if (gleicherFlugAmSelbenTag) {
                 throw new IllegalArgumentException("Der Flug " + flugnummer + " existiert an diesem Tag bereits.");
@@ -577,7 +601,7 @@ public class Verwaltungssystem implements Serializable {
                 // Überschneidung liegt nur vor, wenn der neue Flug vor dem Ende des alten beginnt und nach dem Beginn des alten endet
                 boolean zeitenUeberschneidenSich
                         = abflugzeit.isBefore(vorhandenerFlug.getAnkunftszeit())
-                        && ankunftszeit.isAfter(vorhandenerFlug.getAbflugszeit());
+                          && ankunftszeit.isAfter(vorhandenerFlug.getAbflugszeit());
 
                 if (zeitenUeberschneidenSich) {
                     throw new IllegalArgumentException("Das Flugzeug ist in diesem Zeitraum bereits eingeplant.");
@@ -585,7 +609,15 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
-        Flug flug = new Flug(flugnummer, fluggesellschaft, flugzeug, startFlughafen, zielFlughafen, abflugzeit, ankunftszeit, basispreis);
+        Flug flug = new Flug(flugnummer,
+                fluggesellschaft,
+                flugzeug,
+                startFlughafen,
+                zielFlughafen,
+                abflugzeit,
+                ankunftszeit,
+                basispreis
+        );
 
         if (this.fluege.contains(flug)) {
             throw new IllegalArgumentException("Das übergebene Flug-Objekt ist schon in der Liste enthalten");
@@ -596,42 +628,45 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Validiert den Flug in Bezug darauf, ob Fluggesellschaften und Flughäfen
-     * registriert sind und das Flugzeug zur Fluggesellschaft gehört.
+     * Validiert den Flug in Bezug darauf, ob Fluggesellschaften und Flughäfen registriert sind und das Flugzeug zur
+     * Fluggesellschaft gehört.
      *
      * @param fluggesellschaft die den Flug durchführen soll
-     * @param flugzeug mit dem der Flug durchgeführt werden soll
-     * @param startFlughafen von dem der Flug starten soll
-     * @param zielFlughafen zu dem der Flug fliegen soll
+     * @param flugzeug         mit dem der Flug durchgeführt werden soll
+     * @param startFlughafen   von dem der Flug starten soll
+     * @param zielFlughafen    zu dem der Flug fliegen soll
      */
-    public void validiereFlug(Fluggesellschaft fluggesellschaft, Flugzeug flugzeug, Flughafen startFlughafen, Flughafen zielFlughafen) {
+    public void validiereFlug(Fluggesellschaft fluggesellschaft,
+                              Flugzeug flugzeug,
+                              Flughafen startFlughafen,
+                              Flughafen zielFlughafen
+    ) {
 
-        if (!fluggesellschaften.contains(fluggesellschaft)) {
+        if (! fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Die Fluggesellschaft ist nicht im Verwaltungssystem registriert.");
         }
 
-        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
+        if (! flughaefen.contains(startFlughafen) || ! flughaefen.contains(zielFlughafen)) {
             throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
         }
 
-        if (!fluggesellschaft.besitztFlugzeug(flugzeug)) {
+        if (! fluggesellschaft.besitztFlugzeug(flugzeug)) {
             throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
         }
 
-        if (!flugzeuge.contains(flugzeug)) {
+        if (! flugzeuge.contains(flugzeug)) {
             throw new IllegalArgumentException("Das Flugzeug wird nicht vom Verwaltungssystem verwaltet");
         }
 
     }
 
     /**
-     * Prüft einen neu erzeugten Flug auf zeitliche Überschneidungen mit bereits
-     * registrierten sowie weiteren neu erzeugten Flügen.
+     * Prüft einen neu erzeugten Flug auf zeitliche Überschneidungen mit bereits registrierten sowie weiteren neu
+     * erzeugten Flügen.
      *
-     * @param neuerFlug der zu prüfende Flug
+     * @param neuerFlug  der zu prüfende Flug
      * @param neueFluege die gemeinsam neu erzeugten Flüge
-     * @throws IllegalArgumentException wenn sich die Einsatzzeiten desselben
-     * Flugzeugs überschneiden
+     * @throws IllegalArgumentException wenn sich die Einsatzzeiten desselben Flugzeugs überschneiden
      */
     private void pruefeFlug(Flug neuerFlug, List<Flug> neueFluege) {
         //prüfe zuerst gegen vorhandene Fluege
@@ -649,21 +684,21 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Prüft zwei Flüge auf eine zeitliche Überschneidung beim Einsatz desselben
-     * Flugzeugs.
+     * Prüft zwei Flüge auf eine zeitliche Überschneidung beim Einsatz desselben Flugzeugs.
      *
-     * @param neuerFlug der neu zu planende Flug
+     * @param neuerFlug       der neu zu planende Flug
      * @param vorhandenerFlug der Vergleichsflug
-     * @throws IllegalArgumentException wenn dasselbe Flugzeug in sich
-     * überschneidenden Zeiträumen eingesetzt wird
+     * @throws IllegalArgumentException wenn dasselbe Flugzeug in sich überschneidenden Zeiträumen eingesetzt wird
      */
     private void pruefeUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
+
         boolean gleichesFlugzeug = neuerFlug.getFlugzeug().equals(vorhandenerFlug.getFlugzeug());
-        if (!gleichesFlugzeug) {
+        if (! gleichesFlugzeug) {
             return;
         }
 
-        boolean zeitlicheUeberschneidung = neuerFlug.getAbflugszeit().isBefore(vorhandenerFlug.getAnkunftszeit()) && neuerFlug.getAnkunftszeit().isAfter(vorhandenerFlug.getAbflugszeit());
+        boolean zeitlicheUeberschneidung = neuerFlug.getAbflugszeit().isBefore(vorhandenerFlug.getAnkunftszeit()) &&
+                                           neuerFlug.getAnkunftszeit().isAfter(vorhandenerFlug.getAbflugszeit());
 
         if (zeitlicheUeberschneidung) {
             throw new IllegalArgumentException("Das Flugzeug ist zu diesem Zeitpunkt bereits verplant");
@@ -671,15 +706,14 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie
-     * Flugnummer.
+     * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie Flugnummer.
      * <p>
-     * Die Flugnummer besteht aus dem großgeschriebenen Airline-Code und einer
-     * dreistelligen, pro Tag und Fluggesellschaft fortlaufenden Nummer.
+     * Die Flugnummer besteht aus dem großgeschriebenen Airline-Code und einer dreistelligen, pro Tag und
+     * Fluggesellschaft fortlaufenden Nummer.
      * </p>
      *
      * @param fluggesellschaft die Fluggesellschaft des Flugs
-     * @param abflugzeit die Abflugzeit, deren Datum für die Nummerierung gilt
+     * @param abflugzeit       die Abflugzeit, deren Datum für die Nummerierung gilt
      * @return die erzeugte Flugnummer, beispielsweise {@code LH001}
      */
     private String erzeugeFlugnummer(Fluggesellschaft fluggesellschaft, LocalDateTime abflugzeit) {
@@ -715,20 +749,22 @@ public class Verwaltungssystem implements Serializable {
     }
 
     /**
-     * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie
-     * Flugnummer.
+     * Erzeugt für eine Fluggesellschaft und einen Abflugtag die nächste freie Flugnummer.
      * <p>
-     * Die Flugnummer besteht aus dem großgeschriebenen Airline-Code und einer
-     * dreistelligen, pro Tag und Fluggesellschaft fortlaufenden Nummer.
+     * Die Flugnummer besteht aus dem großgeschriebenen Airline-Code und einer dreistelligen, pro Tag und
+     * Fluggesellschaft fortlaufenden Nummer.
      * </p>
      *
      * @param fluggesellschaft die Fluggesellschaft des Flugs
-     * @param abflugzeit die Abflugzeit, deren Datum für die Nummerierung gilt
-     * @param neueFluege die erzeugten, aber noch nicht gespeicherten Flüge.
-     * Dies ist für die Erzeugung von Serienflügen nötig.
+     * @param abflugzeit       die Abflugzeit, deren Datum für die Nummerierung gilt
+     * @param neueFluege       die erzeugten, aber noch nicht gespeicherten Flüge. Dies ist für die Erzeugung von
+     *                         Serienflügen nötig.
      * @return die erzeugte Flugnummer, beispielsweise {@code LH001}
      */
-    private String erzeugeFlugnummer(Fluggesellschaft fluggesellschaft, LocalDateTime abflugzeit, List<Flug> neueFluege) {
+    private String erzeugeFlugnummer(Fluggesellschaft fluggesellschaft,
+                                     LocalDateTime abflugzeit,
+                                     List<Flug> neueFluege
+    ) {
 
         String airlineCode = fluggesellschaft.getAirlineCode().toUpperCase();
 
@@ -761,14 +797,14 @@ public class Verwaltungssystem implements Serializable {
             //prüft, ob der aktuell betrachtete Flug ab gleichen Tag wie der Flug stattfindet, für den die Nummer erzeugt werden soll
             boolean gleicherTag = neuerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
 
-            if (!gleicherTag) {
+            if (! gleicherTag) {
                 continue;
             }
 
             //prüft, ob der aktuell betrachtete Flug zur gleichen Airline gehört wie derFlug, für den die Nummer erzeugt werden soll
             boolean gleicheFluggesellschaft = neuerFlug.getFluggesellschaft().equals(fluggesellschaft);
 
-            if (!gleicheFluggesellschaft) {
+            if (! gleicheFluggesellschaft) {
                 continue;
             }
 
@@ -787,16 +823,15 @@ public class Verwaltungssystem implements Serializable {
      * Entfernt einen Flug aus dem Verwaltungssystem.
      *
      * @param flug der zu entfernende Flug
-     * @throws IllegalArgumentException wenn der Flug {@code null} oder nicht im
-     * Verwaltungssystem registriert ist
-     * @throws IllegalStateException wenn auf dem Flug noch Buchungen existieren 
+     * @throws IllegalArgumentException wenn der Flug {@code null} oder nicht im Verwaltungssystem registriert ist
+     * @throws IllegalStateException    wenn auf dem Flug noch Buchungen existieren
      */
     public void entferneFlug(Flug flug) {
 
         if (flug == null) {
             throw new IllegalArgumentException("Der Flug darf nicht null sein.");
         }
-        if (!fluege.contains(flug)) {
+        if (! fluege.contains(flug)) {
             throw new IllegalArgumentException("Der Flug ist nicht im Verwaltungssystem registriert.");
         }
         if (flug.berechneAuslastung() > 0) {
@@ -812,8 +847,7 @@ public class Verwaltungssystem implements Serializable {
      * @param ziel der gesuchte Zielflughafen
      * @return Liste aller Flüge zum angegebenen Zielflughafen
      * @throws IllegalArgumentException wenn der Zielflughafen {@code null} ist
-     * @throws NoSuchElementException wenn kein Flug zu dem Zielflughafen
-     * gefunden wurde
+     * @throws NoSuchElementException   wenn kein Flug zu dem Zielflughafen gefunden wurde
      */
     public ArrayList<Flug> sucheFluegeNachZiel(Flughafen ziel) {
         //neue Liste wird erstellt
@@ -828,7 +862,7 @@ public class Verwaltungssystem implements Serializable {
                 newList.add(fluege.get(i));
             }
         }
-        if (!newList.isEmpty()) {
+        if (! newList.isEmpty()) {
             return newList;
         } else {
             throw new NoSuchElementException("Einen Flug nach " + ziel.getStadt() + " gibt es leider nicht.");
@@ -839,14 +873,13 @@ public class Verwaltungssystem implements Serializable {
      * Sucht alle Flüge auf einer bestimmten Route.
      *
      * @param start der gesuchte Startflughafen
-     * @param ziel der gesuchte Zielflughafen
+     * @param ziel  der gesuchte Zielflughafen
      * @return Liste aller Flüge zwischen Start- und Zielflughafen
-     * @throws IllegalArgumentException wenn Start- oder Zielflughafen
-     * {@code null} ist
-     * @throws NoSuchElementException wenn auf der Route kein Flug gefunden
-     * wurde
+     * @throws IllegalArgumentException wenn Start- oder Zielflughafen {@code null} ist
+     * @throws NoSuchElementException   wenn auf der Route kein Flug gefunden wurde
      */
     public ArrayList<Flug> sucheFluegeNachRoute(Flughafen start, Flughafen ziel) {
+
         if (start == null || ziel == null) {
             throw new IllegalArgumentException("Start- und Zielflughafen darf nicht null sein.");
         }
@@ -857,26 +890,29 @@ public class Verwaltungssystem implements Serializable {
                 newList.add(fluege.get(i));
             }
         }
-        if (!newList.isEmpty()) {
+        if (! newList.isEmpty()) {
             return newList;
         } else {
-            throw new NoSuchElementException("Einen Flug von " + start.getStadt() + " nach " + ziel.getStadt() + " gibt es leider nicht.");
+            throw new NoSuchElementException("Einen Flug von " +
+                                             start.getStadt() +
+                                             " nach " +
+                                             ziel.getStadt() +
+                                             " gibt es leider nicht.");
         }
 
     }
 
     /**
-     * Sucht alle Flüge mit einer bestimmten Flugnummer. Da Flugnummern an
-     * unterschiedlichen Tagen erneut vergeben werden können, kann die
-     * Ergebnisliste mehrere Flüge enthalten.
+     * Sucht alle Flüge mit einer bestimmten Flugnummer. Da Flugnummern an unterschiedlichen Tagen erneut vergeben
+     * werden können, kann die Ergebnisliste mehrere Flüge enthalten.
      *
      * @param flugnummer die gesuchte Flugnummer
      * @return Liste aller Flüge mit der angegebenen Flugnummer
      * @throws IllegalArgumentException wenn die Flugnummer {@code null} ist
-     * @throws NoSuchElementException wenn kein Flug mit der Flugnummer gefunden
-     * wurde
+     * @throws NoSuchElementException   wenn kein Flug mit der Flugnummer gefunden wurde
      */
     public ArrayList<Flug> sucheFluegeNachNummer(String flugnummer) {
+
         if (flugnummer == null) {
             throw new IllegalArgumentException("Die Flugnummmer darf nicht null sein.");
         }
@@ -890,22 +926,22 @@ public class Verwaltungssystem implements Serializable {
                 ret.add(f);
             }
         }
-        if (!ret.isEmpty()) {
+        if (! ret.isEmpty()) {
             return ret;
         }
         throw new NoSuchElementException("Es wurden keine Flüge mit der Flugnummer " + flugnummer + " gefunden");
     }
 
     /**
-     * Sucht alle Flüge an einem bestimmten Datum. 
+     * Sucht alle Flüge an einem bestimmten Datum.
      *
-     * @param datum das Datum 
+     * @param datum das Datum
      * @return Liste aller Flüge an dem angegebenen Datum
      * @throws IllegalArgumentException wenn das Datum {@code null} ist
-     * @throws NoSuchElementException wenn kein Flug an dem Datum gefunden
-     * wurde
+     * @throws NoSuchElementException   wenn kein Flug an dem Datum gefunden wurde
      */
     public ArrayList<Flug> sucheFluegeNachDatum(LocalDate datum) {
+
         if (datum == null) {
             throw new IllegalArgumentException("Das Datum darf nicht null sein.");
         }
@@ -919,22 +955,20 @@ public class Verwaltungssystem implements Serializable {
                 gefundeneFluege.add(f);
             }
         }
-        if (!gefundeneFluege.isEmpty()) {
+        if (! gefundeneFluege.isEmpty()) {
             return gefundeneFluege;
         }
         throw new NoSuchElementException("Es wurden keine Flüge an dem Datum " + datum + " gefunden.");
     }
 
     /**
-     * Sucht einen bestimmten Flug anhand seiner Flugnummer und seines
-     * Abflugdatums.
+     * Sucht einen bestimmten Flug anhand seiner Flugnummer und seines Abflugdatums.
      *
      * @param flugnummer die gesuchte Flugnummer
-     * @param datum das Abflugdatum des gesuchten Flugs
+     * @param datum      das Abflugdatum des gesuchten Flugs
      * @return der Flug mit der angegebenen Flugnummer am angegebenen Datum
-     * @throws IllegalArgumentException wenn die Flugnummer {@code null} oder
-     * leer ist oder das Datum {@code null} ist
-     * @throws NoSuchElementException wenn kein passender Flug gefunden wurde
+     * @throws IllegalArgumentException wenn die Flugnummer {@code null} oder leer ist oder das Datum {@code null} ist
+     * @throws NoSuchElementException   wenn kein passender Flug gefunden wurde
      */
     public Flug sucheFlugNachNummer(String flugnummer, LocalDate datum) {
 
@@ -965,32 +999,35 @@ public class Verwaltungssystem implements Serializable {
      * @return unveränderbare Kopie aller registrierten Flüge
      */
     public List<Flug> getFluege() {
+
         return List.copyOf(fluege);
     }
 
     /**
-     * Erstellt für jeden registrierten Flug eine Textdarstellung aus Flugnummer
-     * und aktueller Auslastung.
+     * Erstellt für jeden registrierten Flug eine Textdarstellung aus Flugnummer und aktueller Auslastung.
      *
      * @return Liste mit einer Textzeile für jeden registrierten Flug
      */
     public List<String> zeigeAlleFluegeMitAuslastung() {
+
         ArrayList<String> neueListe = new ArrayList<String>();
         for (int i = 0; i < fluege.size(); i++) {
-            neueListe.add("\nFlug: " + fluege.get(i).getFlugnummer() + " | Auslastung: " + fluege.get(i).berechneAuslastung() + "%");
+            neueListe.add("\nFlug: " +
+                          fluege.get(i).getFlugnummer() +
+                          " | Auslastung: " +
+                          fluege.get(i).berechneAuslastung() +
+                          "%");
         }
         return neueListe;
     }
 
     /**
-     * Entfernt alle Flüge aus dem Verwaltungssystem, deren Abflugzeit bereits
-     * vergangen ist.
+     * Entfernt alle Flüge aus dem Verwaltungssystem, deren Abflugzeit bereits vergangen ist.
+     * <p>
+     * Vor dem Entfernen eines solchen Fluges werden alle zugehörigen Buchungen auf den Buchungsstatus {@code VERGANGEN}
+     * gesetzt.
      *
-     * Vor dem Entfernen eines solchen Fluges werden alle zugehörigen Buchungen
-     * auf den Buchungsstatus {@code VERGANGEN} gesetzt.
-     *
-     * @param buchungssystem das Buchungssystem mit den zu aktualisierenden
-     * Buchungen
+     * @param buchungssystem das Buchungssystem mit den zu aktualisierenden Buchungen
      */
     public void alteFluegeLoeschen(Buchungssystem buchungssystem) {
 

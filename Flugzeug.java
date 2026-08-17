@@ -2,9 +2,8 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Repräsentiert ein Flugzeug mit einem Sitzplan.
- * Das Flugzeug besitzt einen eindeutigen Code, ein Modell
- * sowie eine Vorlage aller vorhandenen Sitzplätze.
+ * Repräsentiert ein Flugzeug mit einem Sitzplan. Das Flugzeug besitzt einen eindeutigen Code, ein Modell sowie eine
+ * Vorlage aller vorhandenen Sitzplätze.
  */
 public class Flugzeug implements Serializable {
 
@@ -34,30 +33,31 @@ public class Flugzeug implements Serializable {
     private int anzahlBusiness;
 
     /**
-     * Vorlage aller Sitzplätze. Die erste Dimension beschreibt die Sitzreihen,
-     * die zweite Dimension die Sitzposition innerhalb einer Reihe.
+     * Vorlage aller Sitzplätze. Die erste Dimension beschreibt die Sitzreihen, die zweite Dimension die Sitzposition
+     * innerhalb einer Reihe.
      */
     private Sitzplatz[][] sitzplaetzeVorlage;
 
     /**
      * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.
-     *
-     * Die Sitzplätze werden automatisch nummeriert (z. B. 1A, 1B, 1C, ...). Die
-     * ersten {@code businessReihen} Reihen werden als Business-Class angelegt,
-     * alle übrigen Reihen als Economy.
+     * <p>
+     * Die Sitzplätze werden automatisch nummeriert (z. B. 1A, 1B, 1C, ...). Die ersten {@code businessReihen} Reihen
+     * werden als Business-Class angelegt, alle übrigen Reihen als Economy.
      *
      * @param code           eindeutiger Code des Flugzeugs
      * @param modell         Modellbezeichnung
      * @param anzahlReihen   Anzahl der Sitzreihen
      * @param sitzeProReihe  Anzahl der Sitzplätze pro Reihe
      * @param businessReihen Anzahl der Business-Reihen
-     * @throws IllegalArgumentException , wenn die Anzahl der Reihen, Businessreihen und Sitze pro Reihe logisch keinen Sinn ergibt
+     * @throws IllegalArgumentException , wenn die Anzahl der Reihen, Businessreihen und Sitze pro Reihe logisch keinen
+     *                                  Sinn ergibt
      */
     public Flugzeug(String code,
-            String modell,
-            int anzahlReihen,
-            int sitzeProReihe,
-            int businessReihen) {
+                    String modell,
+                    int anzahlReihen,
+                    int sitzeProReihe,
+                    int businessReihen
+    ) {
 
         // Validiert die übergebenen Attribute 
 
@@ -76,7 +76,8 @@ public class Flugzeug implements Serializable {
 
         //Es ist erlaubt, dass ein Flugzeug keine Bisuness-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
         if (businessReihen < 0 || businessReihen > anzahlReihen) {
-            throw new IllegalArgumentException("Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
+            throw new IllegalArgumentException(
+                    "Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
         }
 
         if (anzahlReihen > 100) {
@@ -86,11 +87,11 @@ public class Flugzeug implements Serializable {
         if (sitzeProReihe > 26) {
             throw new IllegalArgumentException("Die Anzahl der Sitzplätze pro Reihe darf nicht größer als 26 sein.");
         }
-        
+
         if (sitzeProReihe < 1) {
             throw new IllegalArgumentException("Die Anzahl der Sitze pro Reihe muss mindestens 1 betragen.");
         }
-      
+
         // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
 
@@ -130,6 +131,7 @@ public class Flugzeug implements Serializable {
      * @return Gesamtanzahl der Sitzplätze
      */
     public int getGesamtSitzanzahl() {
+
         return this.anzahlBusiness + this.anzahlEconomy;
     }
 
@@ -139,6 +141,7 @@ public class Flugzeug implements Serializable {
      * @return Code des Flugzeugs
      */
     public String getCode() {
+
         return this.code;
     }
 
@@ -148,17 +151,18 @@ public class Flugzeug implements Serializable {
      * @return Modellbezeichnung
      */
     public String getModell() {
+
         return this.modell;
     }
 
     /**
-     * Gibt die Kopie Sitzplatzvorlage des Flugzeugs zurück.
-     * Geht dafür die Zeilen der Vorlage durch und fügt diese mit "clone" in die
-     * Kopie ein.
-     * 
+     * Gibt die Kopie Sitzplatzvorlage des Flugzeugs zurück. Geht dafür die Zeilen der Vorlage durch und fügt diese mit
+     * "clone" in die Kopie ein.
+     *
      * @return Kopie des zweidimensionalen Arrays mit allen Sitzplätzen
      */
     public Sitzplatz[][] getSitzplaetzeVorlage() {
+
         Sitzplatz[][] kopieVorlage = new Sitzplatz[sitzplaetzeVorlage.length][];
 
         for (int i = 0; i < sitzplaetzeVorlage.length; i++) {
@@ -173,6 +177,7 @@ public class Flugzeug implements Serializable {
      * @return anzahl Sitzplätze in der Economy Klasse
      */
     public int getAnzahlEconomy() {
+
         return anzahlEconomy;
     }
 
@@ -182,12 +187,12 @@ public class Flugzeug implements Serializable {
      * @return anzahl Sitzplätze in der Business Klasse
      */
     public int getAnzahlBusiness() {
+
         return anzahlBusiness;
     }
 
     /**
-     * Gibt eine Beschreibung des Flugzeugs einschließlich der
-     * Sitzplatz-Anordnung zurück.
+     * Gibt eine Beschreibung des Flugzeugs einschließlich der Sitzplatz-Anordnung zurück.
      *
      * @return Beschreibung des Flugzeugs und des Sitzplans
      */
@@ -195,19 +200,20 @@ public class Flugzeug implements Serializable {
     public String toString() {
 
         String output = "Flugzeug " + this.code
-                + " (" + this.modell + ")"
-                + " besitzt " + getGesamtSitzanzahl()
-                + " Sitzplätze ("
-                + this.anzahlBusiness + " Business, "
-                + this.anzahlEconomy + " Economy)."
-                + "\n\nSitzplan:\n";
+                        + " (" + this.modell + ")"
+                        + " besitzt " + getGesamtSitzanzahl()
+                        + " Sitzplätze ("
+                        + this.anzahlBusiness + " Business, "
+                        + this.anzahlEconomy + " Economy)."
+                        + "\n\nSitzplan:\n";
 
         for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
 
             for (int platz = 0; platz < this.sitzplaetzeVorlage[reihe].length; platz++) {
 
                 output += String.format("%-4s",
-                        this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer());
+                        this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer()
+                );
 
                 // Nach der Hälfte der Sitze einen Gang darstellen
                 if (platz == this.sitzplaetzeVorlage[reihe].length / 2 - 1) {
@@ -223,6 +229,7 @@ public class Flugzeug implements Serializable {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) {
             return true;
         }

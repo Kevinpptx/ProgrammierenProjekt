@@ -1,13 +1,11 @@
-
 import java.util.Scanner;
 
 /**
- * Die Klasse {@code Manager} steuert den Programmablauf des Avigator-Systems.
- * Sie zeigt das Hauptmenü an und leitet den Benutzer abhängig von seiner
- * Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
- *
- * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben über
- * die Konsole eingelesen und überprüft werden können.
+ * Die Klasse {@code Manager} steuert den Programmablauf des Avigator-Systems. Sie zeigt das Hauptmenü an und leitet den
+ * Benutzer abhängig von seiner Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
+ * <p>
+ * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben über die Konsole eingelesen und überprüft
+ * werden können.
  *
  * @author Lars Pfeiffer
  * @version 1.0
@@ -40,10 +38,9 @@ public class Manager {
     private static final Scanner SCANNER = new Scanner(System.in);
 
     /**
-     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den
-     * DatenHandler.
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den DatenHandler.
      *
-     * @param datenHandler Handler zum Speichern der Anwendungsdaten
+     * @param datenHandler    Handler zum Speichern der Anwendungsdaten
      * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
      */
     public Manager(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
@@ -64,13 +61,11 @@ public class Manager {
 
     /**
      * Startet das Avigator-System und zeigt das Hauptmenü an.
-     *
-     * Der Benutzer kann sich als Administrator oder Kunde anmelden. Außerdem
-     * kann das Programm beendet werden. Beim Beenden werden die aktuellen
-     * Anwendungsdaten gespeichert.
-     *
-     * Das Menü wird so lange angezeigt, bis der Benutzer das Programm über die
-     * entsprechende Auswahl beendet.
+     * <p>
+     * Der Benutzer kann sich als Administrator oder Kunde anmelden. Außerdem kann das Programm beendet werden. Beim
+     * Beenden werden die aktuellen Anwendungsdaten gespeichert.
+     * <p>
+     * Das Menü wird so lange angezeigt, bis der Benutzer das Programm über die entsprechende Auswahl beendet.
      */
     public void start() {
 
@@ -80,9 +75,9 @@ public class Manager {
 
             UIHelper.druckeEingabeaufforderung("Als welche Art von Benutzer möchten Sie das System nutzen?");
 
-            UIHelper.druckeMenuepunkt(1,"Admin");
-            UIHelper.druckeMenuepunkt(2,"Kunde");
-            UIHelper.druckeMenuepunkt(0 ,"Programm beenden");
+            UIHelper.druckeMenuepunkt(1, "Admin");
+            UIHelper.druckeMenuepunkt(2, "Kunde");
+            UIHelper.druckeMenuepunkt(0, "Programm beenden");
 
             UIHelper.druckeTrennlinie();
 
@@ -107,10 +102,9 @@ public class Manager {
 
     /**
      * Liest eine Ganzzahl über die Konsole ein.
-     *
-     * Die Eingabe wird als Text eingelesen und anschließend in einen
-     * {@code int}-Wert umgewandelt. Bei einer ungültigen Eingabe wird eine
-     * Fehlermeldung ausgegeben und die Eingabe erneut abgefragt.
+     * <p>
+     * Die Eingabe wird als Text eingelesen und anschließend in einen {@code int}-Wert umgewandelt. Bei einer ungültigen
+     * Eingabe wird eine Fehlermeldung ausgegeben und die Eingabe erneut abgefragt.
      *
      * @return die eingegebene Ganzzahl
      */
@@ -130,7 +124,7 @@ public class Manager {
 
     /**
      * Liest eine Zeichenkette über die Konsole ein.
-     *
+     * <p>
      * Leerzeichen am Anfang und Ende der Eingabe werden entfernt.
      *
      * @return die eingegebene Zeichenkette
@@ -143,11 +137,10 @@ public class Manager {
 
     /**
      * Liest eine Kommazahl über die Konsole ein.
-     *
-     * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als
-     * Dezimaltrennzeichen. Ein Komma wird vor der Umwandlung durch einen Punkt
-     * ersetzt. Bei einer ungültigen Eingabe wird eine Fehlermeldung ausgegeben
-     * und die Eingabe erneut abgefragt.
+     * <p>
+     * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als Dezimaltrennzeichen. Ein Komma wird vor der
+     * Umwandlung durch einen Punkt ersetzt. Bei einer ungültigen Eingabe wird eine Fehlermeldung ausgegeben und die
+     * Eingabe erneut abgefragt.
      *
      * @return die eingegebene Kommazahl
      */

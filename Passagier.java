@@ -10,16 +10,24 @@ public class Passagier implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    /** Die ID des Passagiers. */
+    /**
+     * Die ID des Passagiers.
+     */
     private String passagierId;
-    /** Der Name des Passagiers. */
+
+    /**
+     * Der Name des Passagiers.
+     */
     private String name;
-    /** Die E-Mail-Adresse des Passagiers. */
+
+    /**
+     * Die E-Mail-Adresse des Passagiers.
+     */
     private String email;
 
     /**
      * Konstruktor für die Klasse Passagier.
-     * 
+     *
      * @param passagierId
      * @param name
      * @param email
@@ -48,14 +56,14 @@ public class Passagier implements Serializable {
     }
 
     /**
-     * Validiert die übergebene Email-Adresse in Bezug darauf, ob sie
-     * dem Format einer Mail-Adresse entspricht (mithilfe eines regulären
-     * Ausdrucks).
-     * 
+     * Validiert die übergebene Email-Adresse in Bezug darauf, ob sie dem Format einer Mail-Adresse entspricht (mithilfe
+     * eines regulären Ausdrucks).
+     *
      * @param email
      */
     private void validiereEmail(String email) {
-        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+
+        if (! email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Bitte geben Sie eine gültige E-Mail-Adresse ein!");
         }
     }
@@ -66,6 +74,7 @@ public class Passagier implements Serializable {
      * @return die Passagier-ID
      */
     public String getPassagierId() {
+
         return passagierId;
     }
 
@@ -75,6 +84,7 @@ public class Passagier implements Serializable {
      * @return den Namen des Passagiers
      */
     public String getName() {
+
         return name;
     }
 
@@ -84,16 +94,18 @@ public class Passagier implements Serializable {
      * @return die E-Mail-Adresse des Passagiers
      */
     public String getEmail() {
+
         return email;
     }
 
     /**
-     * Setzt die E-Mail-Adresse des Passagiers.
-     * Validiert sie genau wie im Konstruktor.
+     * Setzt die E-Mail-Adresse des Passagiers. Validiert sie genau wie im Konstruktor.
+     *
      * @param email
      */
     // Setter-Methoden
     public void setEmail(String email) {
+
         try {
             validiereEmail(email);
         } catch (Exception e) {
@@ -104,11 +116,12 @@ public class Passagier implements Serializable {
 
     /**
      * Gibt eine String-Darstellung des Passagiers zurück.
-     * 
+     *
      * @return eine String-Darstellung des Passagiers
      */
     @Override
     public String toString() {
+
         return "Passagier ID: " + passagierId + ", Name: " + name + ", Email: " + email;
     }
 

@@ -9,9 +9,8 @@
  * <p>
  * VERGANGEN: eine Buchung in der Vergangenheit (anhand der Abflugzeit des Fluges)
  * <p>
- * WICHTIG: ALLE Methoden behandeln AKTIV und UMGEBUCHT als gültige Buchungen
- * und STORNIERT und VERGANGEN als ungültig. Man kann aber Buchungen nur einmal umbuchen, also
- * nur dann, wenn der Status AKTIV ist
+ * WICHTIG: ALLE Methoden behandeln AKTIV und UMGEBUCHT als gültige Buchungen und STORNIERT und VERGANGEN als ungültig.
+ * Man kann aber Buchungen nur einmal umbuchen, also nur dann, wenn der Status AKTIV ist
  */
 public enum Buchungsstatus {
     AKTIV,

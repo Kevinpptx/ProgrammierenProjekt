@@ -11,6 +11,7 @@ public class UIHelper {
      * @param text der auszugebende Überschriftentext
      */
     public static void druckeUeberschrift(String text) {
+
         druckeTrennlinie();
         System.out.println();
 
@@ -24,6 +25,7 @@ public class UIHelper {
      * Gibt eine Trennlinie über die festgelegte Breite der Konsolenoberfläche aus.
      */
     public static void druckeTrennlinie() {
+
         System.out.println("-".repeat(BREITE));
     }
 
@@ -34,6 +36,7 @@ public class UIHelper {
      * @return der mit führenden Leerzeichen zentrierte Text
      */
     public static String zentriereText(String text) {
+
         int leerzeichen = Math.max(0, (BREITE - text.length()) / 2);
         return " ".repeat(leerzeichen) + text;
     }
@@ -44,6 +47,7 @@ public class UIHelper {
      * @param text der auszugebende Fehlertext
      */
     public static void druckeFehler(String text) {
+
         System.out.println("Fehler: " + text);
     }
 
@@ -53,6 +57,7 @@ public class UIHelper {
      * @param text der auszugebende Hinweistext
      */
     public static void druckeHinweis(String text) {
+
         System.out.println("Hinweis: " + text);
     }
 
@@ -62,6 +67,7 @@ public class UIHelper {
      * @param text der auszugebende Erfolgstext
      */
     public static void druckeErfolg(String text) {
+
         System.out.println();
         System.out.println(text);
     }
@@ -70,9 +76,10 @@ public class UIHelper {
      * Gibt einen nummerierten Menüpunkt aus.
      *
      * @param nummer die Nummer des Menüpunkts
-     * @param text der Text des Menüpunkts
+     * @param text   der Text des Menüpunkts
      */
     public static void druckeMenuepunkt(int nummer, String text) {
+
         System.out.println(nummer + " - " + text);
     }
 
@@ -82,6 +89,7 @@ public class UIHelper {
      * @param text der Text der Eingabeaufforderung
      */
     public static void druckeEingabeaufforderung(String text) {
+
         System.out.println(text);
     }
 }
