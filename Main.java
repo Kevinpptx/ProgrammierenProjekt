@@ -1,8 +1,9 @@
 public class Main {
 
+    @SuppressWarnings({"UnnecessaryModifier", "unused"})
     public static void main(String[] args) {
 
-        printAvigatorLogo();
+        druckeAvigatorLogo();
 
         DatenHandler datenHandler = new DatenHandler();
 
@@ -13,7 +14,7 @@ public class Main {
         manager.start();
     }
 
-    public static void printAvigatorLogo() {
+    private static void druckeAvigatorLogo() {
 
         System.out.println(
                 "                                            =---=======================================--=++");
