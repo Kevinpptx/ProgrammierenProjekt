@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,17 +10,18 @@ public class GepaeckInformation implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
-     */
-    private int anzahlKoffer;
 
     /**
      * Die Der Preis eines Koffers. Wert 40 ist ein fiktiver Standardwert.
      */
     double gebuehrProKoffer = 40.0;
+
+    /**
+     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
+     */
+    private int anzahlKoffer;
 
     /**
      * Konstruktor für die Klasse GepäckInformation.
@@ -28,11 +30,7 @@ public class GepaeckInformation implements Serializable {
      */
     public GepaeckInformation(int anzahlKoffer) {
 
-        try {
-            validiereGepaeckinfo(anzahlKoffer);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        }
+        validiereGepaeckinfo(anzahlKoffer);
 
         this.anzahlKoffer = anzahlKoffer;
     }
@@ -62,11 +60,8 @@ public class GepaeckInformation implements Serializable {
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
 
-        try {
-            validiereGepaeckinfo(anzahlKoffer);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        }
+        validiereGepaeckinfo(anzahlKoffer);
+
         this.anzahlKoffer = anzahlKoffer;
     }
 
