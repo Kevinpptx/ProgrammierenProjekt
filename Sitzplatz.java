@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -10,17 +11,18 @@ public class Sitzplatz implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * Eindeutige Nummer des Sitzplatzes.
      */
-    private String sitzplatzNummer;
+    private final String sitzplatzNummer;
 
     /**
      * Sitzklasse des Sitzplatzes.
      */
-    private Sitzklasse sitzklasse;
+    private final Sitzklasse sitzklasse;
 
     /**
      * Buchung, die dem Sitz zugewiesen ist. Bei Erstellung hat dieses Attribut eine null-Referenz.
@@ -54,8 +56,8 @@ public class Sitzplatz implements Serializable {
         // entfernt Leerzeichen in der Sitzplatznummer, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.sitzplatzNummer = sitzplatzNummer.trim().toUpperCase(Locale.ROOT);
-
         this.sitzklasse = sitzklasse;
+
         freigeben();
     }
 
