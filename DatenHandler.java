@@ -40,16 +40,16 @@ public class DatenHandler {
     public void speichere(Anwendungsdaten anwendungsdaten) {
 
         if (anwendungsdaten == null) {
-            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
+            throw new IllegalArgumentException("Die Anwendungsdaten duerfen nicht null sein.");
         }
 
         try {
             // Erstellt den Ordner "data", falls er noch nicht existiert
             Files.createDirectories(DATEI_PFAD.getParent());
 
-            try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(DATEI_PFAD))) {
+            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(DATEI_PFAD))) {
 
-                oos.writeObject(anwendungsdaten);
+                objectOutputStream.writeObject(anwendungsdaten);
 
                 System.out.println("Die Anwendungsdaten wurden erfolgreich gespeichert.");
             }
@@ -78,6 +78,7 @@ public class DatenHandler {
             return new Anwendungsdaten();
 
         } else {
+
             try {
 
                 return leseAusDatei();
@@ -105,14 +106,14 @@ public class DatenHandler {
      */
     private Anwendungsdaten leseAusDatei() throws IOException, ClassNotFoundException {
 
-        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(DATEI_PFAD))) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(DATEI_PFAD))) {
 
-            Object objekt = ois.readObject();
+            Object objekt = objectInputStream.readObject();
 
             if ((objekt instanceof Anwendungsdaten)) {
                 return (Anwendungsdaten) objekt;
             } else {
-                throw new ClassCastException("Die gespeicherte Datei enthält keine Anwendungsdaten");
+                throw new ClassCastException("Die gespeicherte Datei enthaelt keine Anwendungsdaten");
             }
         }
     }
