@@ -35,7 +35,7 @@ public class Manager {
     /**
      * Zentraler Scanner zum Einlesen von Konsoleneingaben.
      */
-    private static final Scanner SCANNER = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     /**
      * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den DatenHandler.
@@ -82,6 +82,7 @@ public class Manager {
             UIHelper.druckeTrennlinie();
 
             int auswahl = intscanner();
+
             switch (auswahl) {
                 case 1:
                     uiMitarbeiter.login();
@@ -111,7 +112,8 @@ public class Manager {
     public static int intscanner() {
 
         while (true) {
-            String auswahl = SCANNER.nextLine().trim();
+
+            String auswahl = scanner.nextLine().trim();
 
             try {
                 return Integer.parseInt(auswahl);
@@ -131,34 +133,31 @@ public class Manager {
      */
     public static String stringscanner() {
 
-        return SCANNER.nextLine().trim();
-
+        return scanner.nextLine().trim();
     }
 
     /**
-     * Liest eine Kommazahl über die Konsole ein.
+     * Liest eine Dezimalzahl über die Konsole ein.
      * <p>
      * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als Dezimaltrennzeichen. Ein Komma wird vor der
      * Umwandlung durch einen Punkt ersetzt. Bei einer ungültigen Eingabe wird eine Fehlermeldung ausgegeben und die
      * Eingabe erneut abgefragt.
      *
-     * @return die eingegebene Kommazahl
+     * @return die eingegebene Dezimalzahl
      */
     public static double doublescanner() {
 
         while (true) {
 
-            String zahl = SCANNER.nextLine().trim().replace(",", ".");
+            String dezimalzahl = scanner.nextLine().trim().replace(",", ".");
 
             try {
 
-                return Double.parseDouble(zahl);
+                return Double.parseDouble(dezimalzahl);
 
             } catch (NumberFormatException e) {
                 UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
             }
-
         }
     }
-
 }
