@@ -35,9 +35,10 @@ public class UIHelper {
      * @param text der zu zentrierende Text
      * @return der mit führenden Leerzeichen zentrierte Text
      */
-    public static String zentriereText(String text) {
+    private static String zentriereText(String text) {
 
         int leerzeichen = Math.max(0, (BREITE - text.length()) / 2);
+
         return " ".repeat(leerzeichen) + text;
     }
 
