@@ -118,6 +118,15 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
+     * Gibt den Namen der Fluggesellschaft zurück.
+     *
+     * @return der Name der Fluggesellschaft
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
      * Prüft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
      *
      * @param flugzeug : Das zu überprüfende Flugzeug
