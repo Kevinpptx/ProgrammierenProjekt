@@ -405,8 +405,8 @@ public class Flug implements Serializable {
 
         return this.fluggesellschaft.getName()
                + " Flug " + this.flugnummer
-               + " von " + this.startFlughafen.getIataCode()
-               + " nach " + this.zielFlughafen.getIataCode()
+               + " von " + this.startFlughafen.iataCode()
+               + " nach " + this.zielFlughafen.iataCode()
                + ", Abflug: " + this.abflugzeit
                + ", Ankunft: " + this.ankunftszeit
                + ", Flugzeug: " + this.flugzeug.getModell()

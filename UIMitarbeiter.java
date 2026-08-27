@@ -518,9 +518,9 @@ public class UIMitarbeiter {
 
             datenHandler.speichere(anwendungsdaten);
             UIHelper.druckeErfolg("Der Flughafen " +
-                                  flughafen.getIataCode() +
+                                  flughafen.iataCode() +
                                   " " +
-                                  flughafen.getName() +
+                                  flughafen.name() +
                                   " wurde erfolgreich hinzugefügt.");
 
         } catch (Exception e) {
@@ -549,10 +549,10 @@ public class UIMitarbeiter {
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
             System.out.printf("%-4s | %-35s | %-15s | %s%n",
-                    flughafen.getIataCode(),
-                    flughafen.getName(),
-                    flughafen.getStadt(),
-                    flughafen.getLand()
+                    flughafen.iataCode(),
+                    flughafen.name(),
+                    flughafen.stadt(),
+                    flughafen.land()
             );
         }
 
@@ -693,10 +693,10 @@ public class UIMitarbeiter {
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
-                    flughafen.getIataCode(),
-                    flughafen.getName(),
-                    flughafen.getStadt(),
-                    flughafen.getLand()
+                    flughafen.iataCode(),
+                    flughafen.name(),
+                    flughafen.stadt(),
+                    flughafen.land()
             );
         }
 
@@ -737,9 +737,9 @@ public class UIMitarbeiter {
         }
 
         UIHelper.druckeErfolg("Der Flug geht von " +
-                              ausgewaehlterStartflughafen.getName() +
+                              ausgewaehlterStartflughafen.name() +
                               " nach " +
-                              ausgewaehlterZielflughafen.getName() +
+                              ausgewaehlterZielflughafen.name() +
                               ".");
 
         UIHelper.druckeTrennlinie();
@@ -904,9 +904,9 @@ public class UIMitarbeiter {
                             String.format("%3d: ", nummer)
                             + flug.getFlugnummer()
                             + " | "
-                            + flug.getStartFlughafen().getIataCode()
+                            + flug.getStartFlughafen().iataCode()
                             + " -> "
-                            + flug.getZielflughafen().getIataCode()
+                            + flug.getZielflughafen().iataCode()
                             + " | Abflug: "
                             + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
                     );
@@ -994,9 +994,9 @@ public class UIMitarbeiter {
                                 String.format("%3d: ", nummer)
                                 + flug.getFlugnummer()
                                 + " | "
-                                + flug.getStartFlughafen().getIataCode()
+                                + flug.getStartFlughafen().iataCode()
                                 + " -> "
-                                + flug.getZielflughafen().getIataCode()
+                                + flug.getZielflughafen().iataCode()
                                 + " | Abflug: "
                                 + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
                                 + " | Auslastung: "
@@ -1053,9 +1053,9 @@ public class UIMitarbeiter {
             System.out.println("Flug: " + flug.getFlugnummer());
             System.out.println("Fluggesellschaft: " + flug.getFluggesellschaft().getName());
             System.out.println("Route: " +
-                               flug.getStartFlughafen().getIataCode() +
+                               flug.getStartFlughafen().iataCode() +
                                " -> " +
-                               flug.getZielflughafen().getIataCode());
+                               flug.getZielflughafen().iataCode());
             System.out.println("Abflug: " + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
             System.out.println("Ankunft: " + flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER));
             System.out.println("Flugzeug: " +
@@ -1155,7 +1155,7 @@ public class UIMitarbeiter {
                     buchung.getBuchungsnummer(),
                     passagier,
                     flug.getFlugnummer(),
-                    flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                    flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
                     flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
                     buchung.getSitzplatz().getSitzplatzNummer(),
                     buchung.getSitzplatz().getSitzklasse(),

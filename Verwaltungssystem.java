@@ -286,9 +286,9 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getIataCode().equals(code)) {
+            if (f.iataCode().equals(code)) {
                 throw new IllegalArgumentException("Ein Flughafen mit dem IATACode " + code + " existiert bereits.");
-            } else if (f.getName().equalsIgnoreCase(name)) {
+            } else if (f.name().equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException("Ein Flughafen mit dem Namen " + name + " existiert bereits.");
             }
         }
@@ -347,7 +347,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getIataCode().equals(code)) {
+            if (f.iataCode().equals(code)) {
                 return f;
             }
         }
@@ -367,7 +367,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getName().equalsIgnoreCase(name)) {
+            if (f.name().equalsIgnoreCase(name)) {
                 return f;
             }
         }
@@ -387,7 +387,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getStadt().equalsIgnoreCase(stadt)) {
+            if (f.stadt().equalsIgnoreCase(stadt)) {
                 return f;
             }
         }
@@ -419,7 +419,7 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
             Flughafen f = iterator.next();
-            if (f.getLand().equalsIgnoreCase(land)) {
+            if (f.land().equalsIgnoreCase(land)) {
                 ret.add(f);
             }
         }
@@ -865,7 +865,7 @@ public class Verwaltungssystem implements Serializable {
         if (! newList.isEmpty()) {
             return newList;
         } else {
-            throw new NoSuchElementException("Einen Flug nach " + ziel.getStadt() + " gibt es leider nicht.");
+            throw new NoSuchElementException("Einen Flug nach " + ziel.stadt() + " gibt es leider nicht.");
         }
     }
 
@@ -894,9 +894,9 @@ public class Verwaltungssystem implements Serializable {
             return newList;
         } else {
             throw new NoSuchElementException("Einen Flug von " +
-                                             start.getStadt() +
+                                             start.stadt() +
                                              " nach " +
-                                             ziel.getStadt() +
+                                             ziel.stadt() +
                                              " gibt es leider nicht.");
         }
 

@@ -345,8 +345,8 @@ public class UIKunde {
             System.out.printf("%-13s%s%n", "Airline:", flug.getFluggesellschaft().getName());
             System.out.printf("%-13s%s -> %s%n",
                     "Route:",
-                    flug.getStartFlughafen().getIataCode(),
-                    flug.getZielflughafen().getIataCode()
+                    flug.getStartFlughafen().iataCode(),
+                    flug.getZielflughafen().iataCode()
             );
 
             System.out.printf("%-13s%s%n", "Abflug:", flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
@@ -409,10 +409,10 @@ public class UIKunde {
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
-                    flughafen.getIataCode(),
-                    flughafen.getName(),
-                    flughafen.getStadt(),
-                    flughafen.getLand()
+                    flughafen.iataCode(),
+                    flughafen.name(),
+                    flughafen.stadt(),
+                    flughafen.land()
             );
         }
 
@@ -450,7 +450,7 @@ public class UIKunde {
                     i + 1,
                     flug.getFlugnummer(),
                     flug.getFluggesellschaft().getName(),
-                    flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                    flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
                     flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
                     flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER)
             );
@@ -631,8 +631,8 @@ public class UIKunde {
 
             System.out.printf("%-27s%s -> %s%n",
                     "Neue Route:",
-                    neuerFlug.getStartFlughafen().getIataCode(),
-                    neuerFlug.getZielflughafen().getIataCode()
+                    neuerFlug.getStartFlughafen().iataCode(),
+                    neuerFlug.getZielflughafen().iataCode()
             );
 
             System.out.printf("%-27s%s%n", "Neuer Sitzplatz:", sitzplatz);
@@ -734,8 +734,8 @@ public class UIKunde {
             );
 
             System.out.printf("%-22s%s -> %s%n", "Route:",
-                    buchung.getFlug().getStartFlughafen().getIataCode(),
-                    buchung.getFlug().getZielflughafen().getIataCode()
+                    buchung.getFlug().getStartFlughafen().iataCode(),
+                    buchung.getFlug().getZielflughafen().iataCode()
             );
 
             System.out.printf("%-22s%.2f Euro%n", "Buchungspreis:", buchungspreis);
@@ -806,7 +806,7 @@ public class UIKunde {
                         "%-8s | %-8s | %-11s | %-17s | %-6s | %-10s | %-6d | %-12s | %-10s%n",
                         buchung.getBuchungsnummer(),
                         flug.getFlugnummer(),
-                        flug.getStartFlughafen().getIataCode() + " -> " + flug.getZielflughafen().getIataCode(),
+                        flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
                         flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
                         buchung.getSitzplatz().getSitzplatzNummer(),
                         buchung.getSitzplatz().getSitzklasse(),

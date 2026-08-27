@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -7,35 +8,20 @@ import java.util.Locale;
  * <p>
  * Die Klasse dient als Grundlage für weitere Klassen, beispielsweise zur Modellierung von Flügen.
  *
+ * @param name     Name des Flughafens.
+ * @param iataCode Dreistelliger IATA-Code des Flughafens.
+ * @param stadt    Stadt, in der sich der Flughafen befindet.
+ * @param land     Land, in dem sich der Flughafen befindet.
  * @author Kevin Braun
  * @version 1.0
  */
-public class Flughafen implements Serializable {
+public record Flughafen(String name, String iataCode, String stadt, String land) implements Serializable {
 
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Name des Flughafens.
-     */
-    private final String name;
-
-    /**
-     * Dreistelliger IATA-Code des Flughafens.
-     */
-    private final String iataCode;
-
-    /**
-     * Stadt, in der sich der Flughafen befindet.
-     */
-    private final String stadt;
-
-    /**
-     * Land, in dem sich der Flughafen befindet.
-     */
-    private final String land;
 
     /**
      * Erstellt einen neuen Flughafen mit den angegebenen Eigenschaften.
@@ -60,6 +46,7 @@ public class Flughafen implements Serializable {
         }
 
         this.name = name;
+
         // entfernt Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.iataCode = iataCode.trim().toUpperCase(Locale.ROOT);
@@ -72,7 +59,8 @@ public class Flughafen implements Serializable {
      *
      * @return Name des Flughafens
      */
-    public String getName() {
+    @Override
+    public String name() {
 
         return this.name;
     }
@@ -82,7 +70,8 @@ public class Flughafen implements Serializable {
      *
      * @return IATA-Code des Flughafens
      */
-    public String getIataCode() {
+    @Override
+    public String iataCode() {
 
         return this.iataCode;
     }
@@ -92,7 +81,8 @@ public class Flughafen implements Serializable {
      *
      * @return Stadt des Flughafens
      */
-    public String getStadt() {
+    @Override
+    public String stadt() {
 
         return this.stadt;
     }
@@ -102,7 +92,8 @@ public class Flughafen implements Serializable {
      *
      * @return Land des Flughafens
      */
-    public String getLand() {
+    @Override
+    public String land() {
 
         return this.land;
     }
@@ -116,8 +107,8 @@ public class Flughafen implements Serializable {
     public String toString() {
 
         return "Der Flughafen " + this.name + " mit IATA-Code "
-               + this.iataCode + " befindet sich in " + this.stadt
-               + ", " + this.land;
+                + this.iataCode + " befindet sich in " + this.stadt
+                + ", " + this.land;
     }
 
     @Override
@@ -131,7 +122,8 @@ public class Flughafen implements Serializable {
             return false;
         }
 
-        Flughafen f = (Flughafen) o;
-        return this.iataCode.equalsIgnoreCase(f.getIataCode());
+        Flughafen flughafen = (Flughafen) o;
+
+        return this.iataCode.equalsIgnoreCase(flughafen.iataCode());
     }
 }
