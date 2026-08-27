@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -10,6 +11,7 @@ public class Flugzeug implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -74,7 +76,7 @@ public class Flugzeug implements Serializable {
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        //Es ist erlaubt, dass ein Flugzeug keine Bisuness-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
+        //Es ist erlaubt, dass ein Flugzeug keine Business-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
         if (businessReihen < 0 || businessReihen > anzahlReihen) {
             throw new IllegalArgumentException(
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
@@ -111,11 +113,15 @@ public class Flugzeug implements Serializable {
                 Sitzklasse sitzklasse;
 
                 if (reihe < businessReihen) {
+
                     sitzklasse = Sitzklasse.BUSINESS;
                     this.anzahlBusiness++;
+
                 } else {
+
                     sitzklasse = Sitzklasse.ECONOMY;
                     this.anzahlEconomy++;
+
                 }
 
                 String sitzplatzNummer = (reihe + 1) + "" + sitzbuchstabe;
@@ -168,6 +174,7 @@ public class Flugzeug implements Serializable {
         for (int i = 0; i < sitzplaetzeVorlage.length; i++) {
             kopieVorlage[i] = sitzplaetzeVorlage[i].clone();
         }
+
         return kopieVorlage;
     }
 
@@ -199,32 +206,32 @@ public class Flugzeug implements Serializable {
     @Override
     public String toString() {
 
-        String output = "Flugzeug " + this.code
-                        + " (" + this.modell + ")"
-                        + " besitzt " + getGesamtSitzanzahl()
-                        + " Sitzplätze ("
-                        + this.anzahlBusiness + " Business, "
-                        + this.anzahlEconomy + " Economy)."
-                        + "\n\nSitzplan:\n";
+        StringBuilder output = new StringBuilder("Flugzeug " + this.code
+                + " (" + this.modell + ")"
+                + " besitzt " + getGesamtSitzanzahl()
+                + " Sitzplätze ("
+                + this.anzahlBusiness + " Business, "
+                + this.anzahlEconomy + " Economy)."
+                + "\n\nSitzplan:\n");
 
-        for (int reihe = 0; reihe < this.sitzplaetzeVorlage.length; reihe++) {
+        for (Sitzplatz[] sitzplaetze : this.sitzplaetzeVorlage) {
 
-            for (int platz = 0; platz < this.sitzplaetzeVorlage[reihe].length; platz++) {
+            for (int platz = 0; platz < sitzplaetze.length; platz++) {
 
-                output += String.format("%-4s",
-                        this.sitzplaetzeVorlage[reihe][platz].getSitzplatzNummer()
-                );
+                output.append(String.format("%-4s",
+                        sitzplaetze[platz].getSitzplatzNummer()
+                ));
 
                 // Nach der Hälfte der Sitze einen Gang darstellen
-                if (platz == this.sitzplaetzeVorlage[reihe].length / 2 - 1) {
-                    output += " | ";
+                if (platz == sitzplaetze.length / 2 - 1) {
+                    output.append(" | ");
                 }
             }
 
-            output += "\n";
+            output.append("\n");
         }
 
-        return output;
+        return output.toString();
     }
 
     @Override
@@ -238,7 +245,8 @@ public class Flugzeug implements Serializable {
             return false;
         }
 
-        Flugzeug f = (Flugzeug) o;
-        return this.getCode().equalsIgnoreCase(f.getCode());
+        Flugzeug flugzeug = (Flugzeug) o;
+
+        return this.getCode().equalsIgnoreCase(flugzeug.getCode());
     }
 }
