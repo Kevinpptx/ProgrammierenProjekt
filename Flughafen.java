@@ -20,22 +20,22 @@ public class Flughafen implements Serializable {
     /**
      * Name des Flughafens.
      */
-    private String name;
+    private final String name;
 
     /**
      * Dreistelliger IATA-Code des Flughafens.
      */
-    private String iataCode;
+    private final String iataCode;
 
     /**
      * Stadt, in der sich der Flughafen befindet.
      */
-    private String stadt;
+    private final String stadt;
 
     /**
      * Land, in dem sich der Flughafen befindet.
      */
-    private String land;
+    private final String land;
 
     /**
      * Erstellt einen neuen Flughafen mit den angegebenen Eigenschaften.

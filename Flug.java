@@ -29,42 +29,42 @@ public class Flug implements Serializable {
     /**
      * Die eindeutige Flugnummer des Fluges
      */
-    private String flugnummer;
+    private final String flugnummer;
 
     /**
      * Die Fluggesellschaft, die den Flug durchführt
      */
-    private Fluggesellschaft fluggesellschaft;
+    private final Fluggesellschaft fluggesellschaft;
 
     /**
      * Das für den Flug eingesetzte Flugzeug
      */
-    private Flugzeug flugzeug;
+    private final Flugzeug flugzeug;
 
     /**
      * Der Flughafen, von dem der Flug startet
      */
-    private Flughafen startFlughafen;
+    private final Flughafen startFlughafen;
 
     /**
      * Der Flughafen, an dem der Flug endet
      */
-    private Flughafen zielFlughafen;
+    private final Flughafen zielFlughafen;
 
     /**
      * Der geplante Zeitpunkt des Abflugs
      */
-    private LocalDateTime abflugzeit;
+    private final LocalDateTime abflugzeit;
 
     /**
      * Der geplante Zeitpunkt der Ankunft
      */
-    private LocalDateTime ankunftszeit;
+    private final LocalDateTime ankunftszeit;
 
     /**
      * Der Basispreis des Fluges
      */
-    private double basispreis;
+    private final double basispreis;
 
     /**
      * Der individuelle Sitzplan dieses Fluges. Jeder Sitzplatz besitzt einen eigenen Belegungsstatus.

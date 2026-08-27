@@ -13,12 +13,12 @@ public class Passagier implements Serializable {
     /**
      * Die ID des Passagiers.
      */
-    private String passagierId;
+    private final String passagierId;
 
     /**
      * Der Name des Passagiers.
      */
-    private String name;
+    private final String name;
 
     /**
      * Die E-Mail-Adresse des Passagiers.

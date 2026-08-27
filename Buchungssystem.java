@@ -21,12 +21,12 @@ public class Buchungssystem implements Serializable {
     /**
      * Liste der Buchungen, die schon vorgenommen wurden
      */
-    private ArrayList<Buchung> buchungen;
+    private final ArrayList<Buchung> buchungen;
 
     /**
      * Liste der schon registrierten Passagiere
      */
-    private ArrayList<Passagier> passagiere;
+    private final ArrayList<Passagier> passagiere;
 
     /**
      * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen Grundlage für die Buchungsnummer
@@ -66,7 +66,7 @@ public class Buchungssystem implements Serializable {
         if (name != null && email != null) {
             anzahlPassagiere++;
             try {
-                String vorlaeufigePassagierId = "p" + Integer.toString(anzahlPassagiere);
+                String vorlaeufigePassagierId = "p" + anzahlPassagiere;
                 Passagier p = new Passagier(vorlaeufigePassagierId, name, email);
                 passagiere.add(p);
                 return p;

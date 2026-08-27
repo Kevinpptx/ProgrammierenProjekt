@@ -327,7 +327,7 @@ public class Verwaltungssystem implements Serializable {
             }
             this.flughaefen.remove(flughafen);
         } else {
-            throw new IllegalArgumentException("Der Flughafen " + flughafen.toString() + " ist nicht aktiv.");
+            throw new IllegalArgumentException("Der Flughafen " + flughafen + " ist nicht aktiv.");
         }
 
     }

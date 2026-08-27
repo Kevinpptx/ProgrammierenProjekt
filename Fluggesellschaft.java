@@ -20,17 +20,17 @@ public class Fluggesellschaft implements Serializable {
     /**
      * Name der Airline
      */
-    private String name;
+    private final String name;
 
     /**
      * Airlinecode, der aus zwei Großbuchstaben besteht.
      */
-    private String airlineCode;
+    private final String airlineCode;
 
     /**
      * Flotte der Airline, hier eine {@code ArrayList} aus {@code Flugzeug} - Objekten.
      */
-    private ArrayList<Flugzeug> flotte = new ArrayList<>();
+    private final ArrayList<Flugzeug> flotte = new ArrayList<>();
 
     /**
      * Erzeugt eine neue Fluggesellschaft mit einem Namen und einem Airline-Code.
@@ -90,9 +90,7 @@ public class Fluggesellschaft implements Serializable {
     public void entferneFlugzeug(Flugzeug f) {
 
         if (! this.flotte.isEmpty()) {
-            if (this.flotte.contains(f)) {
-                this.flotte.remove(f);
-            }
+            this.flotte.remove(f);
         }
     }
 

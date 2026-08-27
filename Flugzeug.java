@@ -15,12 +15,12 @@ public class Flugzeug implements Serializable {
     /**
      * Eindeutiger Code des Flugzeugs.
      */
-    private String code;
+    private final String code;
 
     /**
      * Modellbezeichnung des Flugzeugs.
      */
-    private String modell;
+    private final String modell;
 
     /**
      * Anzahl der Economy-Sitzplätze.
@@ -36,7 +36,7 @@ public class Flugzeug implements Serializable {
      * Vorlage aller Sitzplätze. Die erste Dimension beschreibt die Sitzreihen, die zweite Dimension die Sitzposition
      * innerhalb einer Reihe.
      */
-    private Sitzplatz[][] sitzplaetzeVorlage;
+    private final Sitzplatz[][] sitzplaetzeVorlage;
 
     /**
      * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.

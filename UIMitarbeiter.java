@@ -422,7 +422,6 @@ public class UIMitarbeiter {
             UIHelper.druckeErfolg("Das Flugzeug " + flugzeug.getCode() + " wurde erfolgreich hinzugefügt.");
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
-            return;
         }
     }
 
@@ -472,7 +471,6 @@ public class UIMitarbeiter {
 
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
-            return;
         }
     }
 
@@ -527,7 +525,6 @@ public class UIMitarbeiter {
 
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
-            return;
         }
 
     }
