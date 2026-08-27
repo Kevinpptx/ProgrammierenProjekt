@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Fluggesellschaft implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,8 +51,9 @@ public class Fluggesellschaft implements Serializable {
         if (name.isBlank() || airlineCode.isBlank()) {
             throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");
         }
-        if (airlineCode.length() != 2 || ! Character.isLetter(airlineCode.charAt(0))
-            || ! Character.isLetter(airlineCode.charAt(1))) {
+
+        if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
+            || !Character.isLetter(airlineCode.charAt(1))) {
             throw new IllegalArgumentException("Airline-Code muss aus zwei Buchstaben bestehen!");
         }
 
@@ -65,17 +68,17 @@ public class Fluggesellschaft implements Serializable {
      * Fügt ein Flugzeug zur Flotte der Fluggesellschaft hinzu. Befindet sich das Flugzeug bereits in der Flotte,
      * erfolgt keine Änderung.
      *
-     * @param f das hinzuzufügende Flugzeug
+     * @param flugzeug das hinzuzufügende Flugzeug
      * @throws IllegalArgumentException wenn das übergebene Flugzeug eine null-Referenz enthält.
      */
-    public void fuegeFlugzeugHinzu(Flugzeug f) {
+    public void fuegeFlugzeugHinzu(Flugzeug flugzeug) {
 
-        if (f == null) {
+        if (flugzeug == null) {
             throw new IllegalArgumentException("Das hinzuzufügende Flugzeug enthält eine null-Referenz.");
         }
 
-        if (! this.flotte.contains(f)) {
-            this.flotte.add(f);
+        if (! this.flotte.contains(flugzeug)) {
+            this.flotte.add(flugzeug);
         } else {
             throw new IllegalArgumentException("Das Flugzeug existiert schon in der Flotte.");
         }
@@ -85,12 +88,12 @@ public class Fluggesellschaft implements Serializable {
      * Entfernt ein Flugzeug aus der Flotte der Fluggesellschaft. Befindet sich das Flugzeug nicht in der Flotte,
      * erfolgt keine Änderung.
      *
-     * @param f das zu entfernende Flugzeug
+     * @param flugzeug das zu entfernende Flugzeug
      */
-    public void entferneFlugzeug(Flugzeug f) {
+    public void entferneFlugzeug(Flugzeug flugzeug) {
 
-        if (! this.flotte.isEmpty()) {
-            this.flotte.remove(f);
+        if (!this.flotte.isEmpty()) {
+            this.flotte.remove(flugzeug);
         }
     }
 
@@ -102,16 +105,6 @@ public class Fluggesellschaft implements Serializable {
     public List<Flugzeug> getFlotte() {
 
         return List.copyOf(flotte);
-    }
-
-    /**
-     * Gibt den Namen der Fluggesellschaft zurück.
-     *
-     * @return der Name der Fluggesellschaft
-     */
-    public String getName() {
-
-        return this.name;
     }
 
     /**
@@ -130,7 +123,7 @@ public class Fluggesellschaft implements Serializable {
      * @param flugzeug : Das zu überprüfende Flugzeug
      * @return {@code true}, wenn das Flugzeug in der Flotte der Airline ist
      */
-    public boolean besitztFlugzeug(Flugzeug flugzeug) {
+    public boolean beinhaltetFlugzeug(Flugzeug flugzeug) {
 
         return flotte.contains(flugzeug);
     }
@@ -144,10 +137,8 @@ public class Fluggesellschaft implements Serializable {
     @Override
     public String toString() {
 
-        String s;
-        s = "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: "
-            + this.flotte.toString();
-        return s;
+        return "Die Airline " + this.name + " betreibt unter Airline Code: " + this.airlineCode + " die Flugzeuge: "
+                + this.flotte;
     }
 
     @Override

@@ -223,7 +223,7 @@ public class Verwaltungssystem implements Serializable {
         while (iteratorFlugGes.hasNext()) {
             Fluggesellschaft flugGes = iteratorFlugGes.next();
 
-            if (flugGes.besitztFlugzeug(flug)) {
+            if (flugGes.beinhaltetFlugzeug(flug)) {
                 flugGes.entferneFlugzeug(flug);
                 this.flugzeuge.remove(flug);
                 return;
@@ -650,7 +650,7 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Start- und Zielflughafen müssen im Verwaltungssystem registriert sein.");
         }
 
-        if (! fluggesellschaft.besitztFlugzeug(flugzeug)) {
+        if (! fluggesellschaft.beinhaltetFlugzeug(flugzeug)) {
             throw new IllegalArgumentException("Das Flugzeug gehört nicht zur angegbenen Fluggesellschaft");
         }
 
