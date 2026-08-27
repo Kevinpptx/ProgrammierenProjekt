@@ -131,11 +131,11 @@ public class UIKunde {
                     UIHelper.druckeUeberschrift("Passagierauswahl");
 
                     for (Passagier passagier : bs.getPassagiere()) {
-                        System.out.println(passagier.getPassagierId() +
+                        System.out.println(passagier.passagierId() +
                                            " - " +
-                                           passagier.getName() +
+                                           passagier.name() +
                                            " - " +
-                                           passagier.getEmail());
+                                           passagier.email());
                     }
 
                     UIHelper.druckeTrennlinie();
@@ -153,7 +153,7 @@ public class UIKunde {
                         Passagier ausgewaehlterPassagier = null;
 
                         for (Passagier passagier : bs.getPassagiere()) {
-                            if (passagier.getPassagierId().equalsIgnoreCase(id)) {
+                            if (passagier.passagierId().equalsIgnoreCase(id)) {
                                 ausgewaehlterPassagier = passagier;
                                 break;
                             }
@@ -166,7 +166,7 @@ public class UIKunde {
                             continue;
                         }
 
-                        UIHelper.druckeErfolg("Angemeldet als " + ausgewaehlterPassagier.getName() + ".");
+                        UIHelper.druckeErfolg("Angemeldet als " + ausgewaehlterPassagier.name() + ".");
 
                         hauptmanagerk(ausgewaehlterPassagier);
                         return;
@@ -196,7 +196,7 @@ public class UIKunde {
 
         while (true) {
 
-            UIHelper.druckeUeberschrift("Willkommen " + passagier.getName() + " im Kundenbereich");
+            UIHelper.druckeUeberschrift("Willkommen " + passagier.name() + " im Kundenbereich");
 
             UIHelper.druckeEingabeaufforderung("Was möchten Sie tun?");
             UIHelper.druckeMenuepunkt(1, "Flüge suchen und buchen");

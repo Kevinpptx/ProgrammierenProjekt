@@ -1095,8 +1095,8 @@ public class UIMitarbeiter {
                         for (Buchung buchung : buchungen) {
                             System.out.println(
                                     String.format("%3d: ", nummer)
-                                    + "Passagier: " + buchung.getPassagier().getPassagierId() + ", "
-                                    + buchung.getPassagier().getName() + " | Sitzplatz: "
+                                    + "Passagier: " + buchung.getPassagier().passagierId() + ", "
+                                    + buchung.getPassagier().name() + " | Sitzplatz: "
                                     + buchung.getSitzplatz().getSitzplatzNummer() + " | Koffer: "
                                     + buchung.getGepaeckinformation().getAnzahlKoffer()
                             );
@@ -1147,8 +1147,8 @@ public class UIMitarbeiter {
 
             Flug flug = buchung.getFlug();
 
-            String passagier = buchung.getPassagier().getPassagierId()
-                               + " " + buchung.getPassagier().getName();
+            String passagier = buchung.getPassagier().passagierId()
+                               + " " + buchung.getPassagier().name();
 
             System.out.printf(
                     "%-8s | %-11.11s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6d | %-12s | %-9s%n",

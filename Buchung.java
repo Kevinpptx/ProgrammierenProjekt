@@ -331,7 +331,7 @@ public class Buchung implements Serializable {
     public String toString() {
 
         return "\n \nDie Buchung mit der Nummer " + this.buchungsnummer +
-               " von Passagier " + this.passagier.getName() +
+               " von Passagier " + this.passagier.name() +
                " betreffend Flug " + this.flug.getFlugnummer() +
                " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
                " in Sitzklasse " + this.sitzplatz.getSitzklasse() +
