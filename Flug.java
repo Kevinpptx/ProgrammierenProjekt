@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Flug implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -120,7 +122,7 @@ public class Flug implements Serializable {
         }
 
         // Verhindert, dass ein Flug vor seinem Abflug ankommt
-        if (! ankunftszeit.isAfter(abflugzeit)) {
+        if (!ankunftszeit.isAfter(abflugzeit)) {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
         }
 
@@ -149,6 +151,7 @@ public class Flug implements Serializable {
      * @param vorlage die Sitzplatzvorlage des eingesetzten Flugzeugs
      */
     private void initialisiereSitzplan(Sitzplatz[][] vorlage) {
+
         // Erstellt zunächst die äußere Arraystruktur entsprechend der Vorlage
         sitzplan = new Sitzplatz[vorlage.length][];
 
@@ -168,28 +171,6 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Ermittelt alle aktuell freien Sitzplätze des Fluges.
-     *
-     * @return eine Liste mit allen freien Sitzplätzen
-     */
-    public List<Sitzplatz> getFreieSitzplaetze() {
-
-        List<Sitzplatz> freieSitzplaetze = new ArrayList<>();
-
-        // Durchläuft den vollständigen Sitzplan
-        for (int i = 0; i < sitzplan.length; i++) {
-            for (int j = 0; j < this.sitzplan[i].length; j++) {
-
-                // Nur freie Sitzplätze werden der Ergebnisliste hinzugefügt
-                if (this.sitzplan[i][j].getIstFrei()) {
-                    freieSitzplaetze.add(sitzplan[i][j]);
-                }
-            }
-        }
-        return freieSitzplaetze;
-    }
-
-    /**
      * Ermittelt alle freien Sitzplätze einer bestimmten Sitzklasse.
      * <p>
      * Ein Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch der angegebenen Sitzklasse entspricht.
@@ -202,28 +183,18 @@ public class Flug implements Serializable {
         List<Sitzplatz> freieSitzplaetze = new ArrayList<>();
 
         // Durchläuft den vollständigen Sitzplan
-        for (int i = 0; i < sitzplan.length; i++) {
-            for (int j = 0; j < this.sitzplan[i].length; j++) {
+        for (Sitzplatz[] sitzplaetze : sitzplan) {
+
+            for (Sitzplatz sitzplatz : sitzplaetze) {
 
                 // Prüft gleichzeitig den Belegungsstatus und die Sitzklasse
-                if (this.sitzplan[i][j].getIstFrei() && this.sitzplan[i][j].getSitzklasse() == sitzklasse) {
-                    freieSitzplaetze.add(sitzplan[i][j]);
+                if (sitzplatz.getIstFrei() && sitzplatz.getSitzklasse() == sitzklasse) {
+                    freieSitzplaetze.add(sitzplatz);
                 }
             }
         }
+
         return freieSitzplaetze;
-    }
-
-    /**
-     * Prüft, ob der Flug vollständig ausgebucht ist.
-     * <p>
-     * Ein Flug gilt als ausgebucht, wenn keine freien Sitzplätze mehr vorhanden sind.
-     *
-     * @return {@code true}, wenn keine freien Sitzplätze mehr vorhanden sind, sonst {@code false}
-     */
-    public boolean istAusgebucht() {
-
-        return this.getFreieSitzplaetze().isEmpty();
     }
 
     /**
@@ -240,10 +211,13 @@ public class Flug implements Serializable {
         int anzahlGesamt = 0;
 
         // Durchläuft alle Sitzplätze und zählt Gesamtanzahl und belegte Plätze
-        for (int i = 0; i < this.sitzplan.length; i++) {
-            for (int j = 0; j < this.sitzplan[i].length; j++) {
+        for (Sitzplatz[] sitzplaetze : this.sitzplan) {
+
+            for (Sitzplatz sitzplatz : sitzplaetze) {
+
                 anzahlGesamt++;
-                if (! this.sitzplan[i][j].getIstFrei()) {
+
+                if (!sitzplatz.getIstFrei()) {
                     anzahlBelegt++;
                 }
             }
@@ -268,13 +242,7 @@ public class Flug implements Serializable {
         String ersteKlasse = " " + this.sitzplan[0][0].getSitzklasse() + " ";
 
         int breite = this.sitzplan[0].length * 5 + 1;
-        int anzahlStriche = Math.max(0, breite - ersteKlasse.length());
-
-        int links = anzahlStriche / 2;
-        int rechts = anzahlStriche - links;
-
-        System.out.println("-".repeat(links) + ersteKlasse + "-".repeat(rechts));
-        System.out.println();
+        berechneStrichAnzahlUndGebeStricheAus(ersteKlasse, breite);
 
         for (int i = 0; i < this.sitzplan.length; i++) {
 
@@ -284,14 +252,7 @@ public class Flug implements Serializable {
                 String text = " " + this.sitzplan[i][0].getSitzklasse() + " ";
 
                 int breiteKlasse = this.sitzplan[i].length * 5 + 1;
-                int stricheKlasse = Math.max(0, breiteKlasse - text.length());
-
-                int linksKlasse = stricheKlasse / 2;
-                int rechtsKlasse = stricheKlasse - linksKlasse;
-
-                System.out.println("-".repeat(linksKlasse) + text + "-".repeat(rechtsKlasse));
-
-                System.out.println();
+                berechneStrichAnzahlUndGebeStricheAus(text, breiteKlasse);
             }
 
             // Gibt zunächst die Sitzplatznummern der aktuellen Reihe aus
@@ -327,22 +288,34 @@ public class Flug implements Serializable {
         }
     }
 
+    private void berechneStrichAnzahlUndGebeStricheAus(String anzahlErsteKlasseSitzplaetze, int breite) {
+
+        int anzahlStriche = Math.max(0, breite - anzahlErsteKlasseSitzplaetze.length());
+
+        int links = anzahlStriche / 2;
+        int rechts = anzahlStriche - links;
+
+        System.out.println("-".repeat(links) + anzahlErsteKlasseSitzplaetze + "-".repeat(rechts));
+        System.out.println();
+    }
+
     /**
      * Findet einen Sitzplatz in einem Flug und gibt ihn zurück War ursprünglich in der Methode "Buchungssystem", ist
      * aber hier sinnvoller
      *
-     * @param sitzplatznummer
-     * @return
+     * @param sitzplatznummer blabla wird nochmal geändert javadoc
+     * @return blabla wird nochmal geändert javadoc
      */
     public Sitzplatz findeSitzplatz(String sitzplatznummer) {
 
-        for (int i = 0; i < sitzplan.length; i++) {
-            for (int j = 0; j < sitzplan[i].length; j++) {
+        for (Sitzplatz[] sitzplaetze : sitzplan) {
 
-                if (sitzplan[i][j].getSitzplatzNummer()
-                                  .equals(sitzplatznummer)) {
+            for (Sitzplatz sitzplatz : sitzplaetze) {
 
-                    return sitzplan[i][j];
+                if (sitzplatz.getSitzplatzNummer()
+                        .equals(sitzplatznummer)) {
+
+                    return sitzplatz;
                 }
             }
         }
@@ -358,6 +331,7 @@ public class Flug implements Serializable {
      * @param klassenliste : Liste mit Sitzplätzen, die die angegebene Sitzklasse haben
      */
     public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
+
         //man muss auf null prüfen, weil die Methode "findeSitzplatz" null zurückgeben kann.
         if (sitz == null) {
             throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
@@ -366,28 +340,6 @@ public class Flug implements Serializable {
         } else if (sitz.getSitzklasse() != sitzklasse && ! klassenliste.contains(sitz)) {
             throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
         }
-    }
-
-    /**
-     * Gibt eine Übersicht darüber zurück, wie viel Gepäck ein Flug schon gebucht hat
-     *
-     * @return Liste der Sitzplaetze mit der Anzahl der Koffer der jeweiligen Buchung als Strings
-     */
-    public ArrayList<String> zeigeGepackUebersicht() {
-
-        ArrayList<String> neueListe = new ArrayList<>();
-        for (int i = 0; i < sitzplan.length; i++) {
-            for (int j = 0; j < sitzplan[i].length; j++) {
-                if (sitzplan[i][j].getIstFrei()) {
-                    continue;
-                }
-                neueListe.add("\n Sitzplatz: " + sitzplan[i][j].getSitzplatzNummer() + " | Anzahl Koffer: "
-                              + sitzplan[i][j].getBuchung().getGepaeckinformation().getAnzahlKoffer());
-            }
-
-        }
-
-        return neueListe;
     }
 
     /**
@@ -418,11 +370,6 @@ public class Flug implements Serializable {
     public Flughafen getZielflughafen() {
 
         return zielFlughafen;
-    }
-
-    public Sitzplatz[][] getSitzplan() {
-
-        return sitzplan;
     }
 
     public LocalDateTime getAbflugszeit() {
@@ -480,6 +427,7 @@ public class Flug implements Serializable {
         }
 
         Flug f = (Flug) o;
+
         return this.flugnummer.equalsIgnoreCase(f.getFlugnummer())
                && this.abflugzeit.toLocalDate().equals(f.getAbflugszeit().toLocalDate())
                && this.startFlughafen.equals(f.startFlughafen)
