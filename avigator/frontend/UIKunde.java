@@ -97,10 +97,11 @@ public class UIKunde {
                     String name;
 
                     while (true) {
+
                         UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihren Namen ein:");
                         name = Manager.stringscanner();
 
-                        if (! name.isBlank()) {
+                        if (!name.isBlank()) {
                             break;
                         }
 
@@ -108,10 +109,12 @@ public class UIKunde {
                     }
 
                     while (true) {
+
                         UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihre E-Mail ein:");
                         String mail = Manager.stringscanner();
 
                         try {
+
                             Passagier passagier = bs.initialisierePassagier(name, mail);
 
                             datenHandler.speichere(anwendungsdaten);
@@ -119,6 +122,7 @@ public class UIKunde {
                             UIHelper.druckeErfolg("Sie wurden erfolgreich registriert.");
 
                             hauptmanagerk(passagier);
+
                             return;
 
                         } catch (Exception e) {
@@ -129,6 +133,7 @@ public class UIKunde {
                 case 2:
 
                     if (bs.getPassagiere().isEmpty()) {
+
                         UIHelper.druckeHinweis("Es sind noch keine Kunden vorhanden.");
                         break;
                     }
@@ -136,6 +141,7 @@ public class UIKunde {
                     UIHelper.druckeUeberschrift("Passagierauswahl");
 
                     for (Passagier passagier : bs.getPassagiere()) {
+
                         System.out.println(passagier.passagierId() +
                                            " - " +
                                            passagier.name() +
@@ -149,6 +155,7 @@ public class UIKunde {
                     UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zurückzukehren.");
 
                     while (true) {
+
                         String id = Manager.stringscanner();
 
                         if (id.equals("0")) {
@@ -158,22 +165,27 @@ public class UIKunde {
                         Passagier ausgewaehlterPassagier = null;
 
                         for (Passagier passagier : bs.getPassagiere()) {
+
                             if (passagier.passagierId().equalsIgnoreCase(id)) {
+
                                 ausgewaehlterPassagier = passagier;
                                 break;
                             }
                         }
 
                         if (ausgewaehlterPassagier == null) {
+
                             UIHelper.druckeFehler("Diese avigator.modell.Passagier-ID existiert nicht.");
                             UIHelper.druckeEingabeaufforderung(
                                     "Bitte geben Sie eine gültige avigator.modell.Passagier-ID ein oder 0 zum Zurückkehren:");
+
                             continue;
                         }
 
                         UIHelper.druckeErfolg("Angemeldet als " + ausgewaehlterPassagier.name() + ".");
 
                         hauptmanagerk(ausgewaehlterPassagier);
+
                         return;
                     }
 
@@ -204,6 +216,7 @@ public class UIKunde {
             UIHelper.druckeUeberschrift("Willkommen " + passagier.name() + " im Kundenbereich");
 
             UIHelper.druckeEingabeaufforderung("Was möchten Sie tun?");
+
             UIHelper.druckeMenuepunkt(1, "Flüge suchen und buchen");
             UIHelper.druckeMenuepunkt(2, "Buchungen verwalten");
             UIHelper.druckeMenuepunkt(0, "Abmelden");
@@ -213,12 +226,15 @@ public class UIKunde {
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
+
                 case 1:
                     fluegeSuchenUndBuchen(passagier);
                     break;
+
                 case 2:
                     buchungenVerwalten(passagier);
                     break;
+
                 case 0:
                     return;
 
@@ -315,9 +331,7 @@ public class UIKunde {
             }
 
             Flug flug = flugAuswaehlen(fluege);
-
             String sitzplatz = sitzplatzAuswaehlen(flug);
-
             Sitzklasse sitzklasse = flug.findeSitzplatz(sitzplatz).getSitzklasse();
 
             int koffer;
@@ -330,6 +344,7 @@ public class UIKunde {
                 koffer = Manager.intscanner();
 
                 if (koffer < 0) {
+
                     UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
                     continue;
                 }
@@ -372,7 +387,8 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (! bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung verbindlich durchführen?")) {
+
                 UIHelper.druckeHinweis("Die avigator.modell.Buchung wurde abgebrochen.");
                 return;
             }
@@ -413,6 +429,7 @@ public class UIKunde {
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
+
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
@@ -485,6 +502,7 @@ public class UIKunde {
             int auswahl = Manager.intscanner();
 
             if (auswahl < 1 || auswahl > fluege.size()) {
+
                 UIHelper.druckeFehler("Ungültige Flugauswahl.");
                 continue;
             }
@@ -520,11 +538,13 @@ public class UIKunde {
             Sitzplatz ausgewaehlterSitzplatz = flug.findeSitzplatz(sitzplatz);
 
             if (ausgewaehlterSitzplatz == null) {
+
                 UIHelper.druckeFehler("Dieser avigator.modell.Sitzplatz existiert nicht.");
                 continue;
             }
 
-            if (! ausgewaehlterSitzplatz.getIstFrei()) {
+            if (!ausgewaehlterSitzplatz.getIstFrei()) {
+
                 UIHelper.druckeFehler("Dieser avigator.modell.Sitzplatz ist bereits belegt.");
                 continue;
             }
@@ -556,7 +576,8 @@ public class UIKunde {
 
         vs.alteFluegeLoeschen(bs);
 
-        if (! hatBearbeitbareBuchungen(passagier)) {
+        if (hatKeineBearbeitbarenBuchungen(passagier)) {
+
             UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die umgebucht werden können.");
             return;
         }
@@ -572,20 +593,24 @@ public class UIKunde {
         Buchung buchung;
 
         try {
+
             buchung = bs.sucheBuchungNachNummer(nummer);
 
-            if (! buchung.getPassagier().equals(passagier)) {
+            if (!buchung.getPassagier().equals(passagier)) {
+
                 UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT ||
                 buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
+
                 UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
                 return;
             }
 
         } catch (Exception e) {
+
             UIHelper.druckeFehler(e.getMessage());
             return;
         }
@@ -593,9 +618,11 @@ public class UIKunde {
         druckeFlughaefen();
 
         try {
+
             ArrayList<Flug> fluege = sucheFluege();
 
             if (fluege.isEmpty()) {
+
                 UIHelper.druckeHinweis("Keine Flüge gefunden.");
                 return;
             }
@@ -605,7 +632,6 @@ public class UIKunde {
             Flug neuerFlug = flugAuswaehlen(fluege);
 
             String sitzplatz = sitzplatzAuswaehlen(neuerFlug);
-
             Sitzplatz neuerSitzplatz = neuerFlug.findeSitzplatz(sitzplatz);
             Sitzklasse sitzklasse = neuerSitzplatz.getSitzklasse();
 
@@ -641,13 +667,9 @@ public class UIKunde {
             );
 
             System.out.printf("%-27s%s%n", "Neuer avigator.modell.Sitzplatz:", sitzplatz);
-
             System.out.printf("%-27s%s%n", "avigator.modell.Sitzklasse:", sitzklasse);
-
             System.out.printf("%-27s%.2f Euro%n", "Bisheriger Buchungspreis:", bisherigerBuchungspreis);
-
             System.out.printf("%-27s%.2f Euro%n", "Neuer Buchungspreis:", neuerBuchungspreis);
-
             System.out.printf("%-27s%.2f Euro%n", "Umbuchungsgebühr:", umbuchungsgebuehr);
 
             UIHelper.druckeTrennlinie();
@@ -656,7 +678,8 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (! bestaetigungEinlesen("Möchten Sie die Umbuchung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Möchten Sie die Umbuchung verbindlich durchführen?")) {
+
                 UIHelper.druckeHinweis("Die Umbuchung wurde abgebrochen.");
                 return;
             }
@@ -698,7 +721,8 @@ public class UIKunde {
 
         vs.alteFluegeLoeschen(bs);
 
-        if (! hatBearbeitbareBuchungen(passagier)) {
+        if (hatKeineBearbeitbarenBuchungen(passagier)) {
+
             UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die storniert werden können.");
             return;
         }
@@ -711,16 +735,20 @@ public class UIKunde {
                 "Bitte geben Sie die Buchungsnummer der avigator.modell.Buchung ein, die Sie stornieren möchten:");
 
         String nummer = Manager.stringscanner();
+
         try {
+
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            if (! buchung.getPassagier().equals(passagier)) {
+            if (!buchung.getPassagier().equals(passagier)) {
+
                 UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+
                 UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht erneut storniert werden.");
                 return;
             }
@@ -753,7 +781,8 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (! bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung wirklich stornieren?")) {
+            if (!bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung wirklich stornieren?")) {
+
                 UIHelper.druckeHinweis("Die Stornierung wurde abgebrochen.");
                 return;
             }
@@ -822,7 +851,7 @@ public class UIKunde {
             }
         }
 
-        if (! buchungVorhanden) {
+        if (!buchungVorhanden) {
             UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen.");
         }
     }
@@ -845,7 +874,8 @@ public class UIKunde {
 
         vs.alteFluegeLoeschen(bs);
 
-        if (! hatBearbeitbareBuchungen(passagier)) {
+        if (hatKeineBearbeitbarenBuchungen(passagier)) {
+
             UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, bei denen das Gepäck geändert werden kann.");
             return;
         }
@@ -860,15 +890,18 @@ public class UIKunde {
         String nummer = Manager.stringscanner();
 
         try {
+
             Buchung buchung = bs.sucheBuchungNachNummer(nummer);
 
-            if (! buchung.getPassagier().equals(passagier)) {
+            if (!buchung.getPassagier().equals(passagier)) {
+
                 UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
+
                 UIHelper.druckeFehler("Das Gepäck kann bei dieser avigator.modell.Buchung nicht mehr geändert werden.");
                 return;
             }
@@ -912,11 +945,13 @@ public class UIKunde {
                 neueAnzahl = Manager.intscanner();
 
                 if (neueAnzahl < 0) {
+
                     UIHelper.druckeFehler("Die Anzahl der Koffer darf nicht negativ sein.");
                     continue;
                 }
 
                 if (neueAnzahl == aktuelleAnzahl) {
+
                     UIHelper.druckeHinweis("Die Anzahl der Koffer wurde nicht geändert.");
                     return;
                 }
@@ -954,7 +989,8 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (! bestaetigungEinlesen("Möchten Sie die Gepäckänderung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Möchten Sie die Gepäckänderung verbindlich durchführen?")) {
+
                 UIHelper.druckeHinweis("Die Gepäckänderung wurde abgebrochen.");
                 return;
             }
@@ -982,6 +1018,7 @@ public class UIKunde {
     private boolean bestaetigungEinlesen(String text) {
 
         while (true) {
+
             UIHelper.druckeEingabeaufforderung(text + " [j/n]");
 
             String eingabe = Manager.stringscanner();
@@ -999,25 +1036,26 @@ public class UIKunde {
     }
 
     /**
-     * Prüft, ob für den angegebenen avigator.modell.Passagier mindestens eine bearbeitbare avigator.modell.Buchung vorhanden ist.
+     * Prüft, ob für den angegebenen avigator.modell.Passagier keine bearbeitbare avigator.modell.Buchung vorhanden ist.
      * <p>
      * Als bearbeitbar gelten Buchungen mit dem Status {@code AKTIV} oder {@code UMGEBUCHT}.
      *
      * @param passagier der zu überprüfende avigator.modell.Passagier
-     * @return {@code true}, wenn mindestens eine bearbeitbare avigator.modell.Buchung vorhanden ist, sonst {@code false}
+     * @return {@code true}, wenn keine bearbeitbare avigator.modell.Buchung vorhanden ist, sonst {@code false}
      */
-    private boolean hatBearbeitbareBuchungen(Passagier passagier) {
+    private boolean hatKeineBearbeitbarenBuchungen(Passagier passagier) {
 
         for (Buchung buchung : bs.getBuchungen()) {
 
             if (buchung.getPassagier().equals(passagier)
-                && (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
+                    && (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
                     || buchung.getBuchungsstatus() == Buchungsstatus.UMGEBUCHT)) {
-                return true;
+
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1029,9 +1067,14 @@ public class UIKunde {
      *
      * @return Liste der Flüge, die den angegebenen Suchkriterien entsprechen
      */
+    @SuppressWarnings("DuplicatedCode")
     private ArrayList<Flug> sucheFluege() {
 
         ArrayList<Flug> fluege = new ArrayList<>();
+
+        if (vs.keineFluegeVorhanden()) {
+            return fluege;
+        }
 
         String start = "", ziel = "", flugnummer = "";
         int zaehler = 0;
@@ -1040,9 +1083,9 @@ public class UIKunde {
         boolean startUeberspringen = false, flugnummerUeberspringen = false, datumUeberspringen = false;
 
         while (ziel.length() != 3 ||
-               ! Character.isAlphabetic(ziel.charAt(0)) ||
-               ! Character.isAlphabetic(ziel.charAt(1)) ||
-               ! Character.isAlphabetic(ziel.charAt(2))) {
+               !Character.isAlphabetic(ziel.charAt(0)) ||
+               !Character.isAlphabetic(ziel.charAt(1)) ||
+               !Character.isAlphabetic(ziel.charAt(2))) {
 
             if (zaehler != 0) {
                 UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
@@ -1057,11 +1100,12 @@ public class UIKunde {
         zaehler = 0;
         String entscheidung = " ";
 
-        while (! entscheidung.equalsIgnoreCase("j") && ! entscheidung.equalsIgnoreCase("n")) {
+        while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
                 UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
             }
+
             UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
@@ -1075,11 +1119,12 @@ public class UIKunde {
 
         zaehler = 0;
 
-        if (! startUeberspringen) {
+        if (!startUeberspringen) {
+
             while (start.length() != 3 ||
-                   ! Character.isAlphabetic(start.charAt(0)) ||
-                   ! Character.isAlphabetic(start.charAt(1)) ||
-                   ! Character.isAlphabetic(start.charAt(2))) {
+                   !Character.isAlphabetic(start.charAt(0)) ||
+                   !Character.isAlphabetic(start.charAt(1)) ||
+                   !Character.isAlphabetic(start.charAt(2))) {
 
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
@@ -1095,11 +1140,12 @@ public class UIKunde {
         zaehler = 0;
         entscheidung = " ";
 
-        while (! entscheidung.equalsIgnoreCase("j") && ! entscheidung.equalsIgnoreCase("n")) {
+        while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
                 UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
             }
+
             UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
 
             entscheidung = Manager.stringscanner();
@@ -1114,20 +1160,21 @@ public class UIKunde {
         zaehler = 0;
         String datumsString = "";
 
-        if (! flugnummerUeberspringen) {
+        if (!flugnummerUeberspringen) {
 
             while (flugnummer.length() != 5 ||
-                   ! Character.isAlphabetic(flugnummer.charAt(0)) ||
-                   ! Character.isAlphabetic(flugnummer.charAt(1)) ||
-                   ! Character.isDigit((flugnummer.charAt(2))) ||
-                   ! Character.isDigit((flugnummer.charAt(3))) ||
-                   ! Character.isDigit((flugnummer.charAt(4)))) {
+                   !Character.isAlphabetic(flugnummer.charAt(0)) ||
+                   !Character.isAlphabetic(flugnummer.charAt(1)) ||
+                   !Character.isDigit((flugnummer.charAt(2))) ||
+                   !Character.isDigit((flugnummer.charAt(3))) ||
+                   !Character.isDigit((flugnummer.charAt(4)))) {
 
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: LH123");
                 }
 
                 UIHelper.druckeEingabeaufforderung("Flugnummer (optional):");
+
                 flugnummer = Manager.stringscanner().toUpperCase();
 
                 zaehler++;
@@ -1136,11 +1183,12 @@ public class UIKunde {
             zaehler = 0;
             entscheidung = " ";
 
-            while (! entscheidung.equalsIgnoreCase("j") && ! entscheidung.equalsIgnoreCase("n")) {
+            while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
                 }
+
                 UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
@@ -1154,15 +1202,18 @@ public class UIKunde {
 
             zaehler = 0;
 
-            if (! datumUeberspringen) {
+            if (!datumUeberspringen) {
 
                 String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
 
-                while (! datumsString.matches(datumRegex)) {
+                while (!datumsString.matches(datumRegex)) {
+
                     if (zaehler != 0) {
                         UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                     }
+
                     UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
+
                     datumsString = Manager.stringscanner();
                     zaehler++;
                 }
@@ -1172,14 +1223,14 @@ public class UIKunde {
             }
         } else {
 
-            zaehler = 0;
             entscheidung = " ";
 
-            while (! entscheidung.equalsIgnoreCase("j") && ! entscheidung.equalsIgnoreCase("n")) {
+            while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
                 }
+
                 UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
@@ -1194,15 +1245,18 @@ public class UIKunde {
 
         zaehler = 0;
 
-        if (! datumUeberspringen) {
+        if (!datumUeberspringen) {
 
             String datumRegex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
 
-            while (! datumsString.matches(datumRegex)) {
+            while (!datumsString.matches(datumRegex)) {
+
                 if (zaehler != 0) {
                     UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
                 }
+
                 UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
+
                 datumsString = Manager.stringscanner();
                 zaehler++;
             }
@@ -1211,7 +1265,7 @@ public class UIKunde {
             datum = LocalDate.parse(datumsString, formatter);
         }
 
-        if (! flugnummer.isBlank()) {
+        if (!flugnummer.isBlank()) {
 
             if (datumUeberspringen) {
                 fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
@@ -1219,27 +1273,29 @@ public class UIKunde {
                 fluege.add(vs.sucheFlugNachNummer(flugnummer, datum));
             }
 
-        } else if (! datumUeberspringen) {
+        } else if (!datumUeberspringen) {
 
             ArrayList<Flug> fluegeMitGleichemDatum = vs.sucheFluegeNachDatum(datum);
 
-            if (! start.isBlank() && ! ziel.isBlank()) {
+            if (!start.isBlank() && !ziel.isBlank()) {
 
                 ArrayList<Flug> fluegeMitGleicherRoute = vs.sucheFluegeNachRoute(vs.getFlughafenNachCode(start),
                         vs.getFlughafenNachCode(ziel)
                 );
 
                 for (Flug f : fluegeMitGleichemDatum) {
+
                     if (fluegeMitGleicherRoute.contains(f)) {
                         fluege.add(f);
                     }
                 }
 
-            } else if (! ziel.isBlank()) {
+            } else if (!ziel.isBlank()) {
 
                 ArrayList<Flug> fluegeMitGleichemZiel = vs.sucheFluegeNachZiel(vs.getFlughafenNachCode(ziel));
 
                 for (Flug f : fluegeMitGleichemDatum) {
+
                     if (fluegeMitGleichemZiel.contains(f)) {
                         fluege.add(f);
                     }
@@ -1247,7 +1303,8 @@ public class UIKunde {
 
             }
 
-        } else if (! start.isBlank() && ! ziel.isBlank()) {
+        } else if (!start.isBlank() && !ziel.isBlank()) {
+
             fluege.addAll(
                     vs.sucheFluegeNachRoute(
                             vs.getFlughafenNachCode(start),
@@ -1255,7 +1312,8 @@ public class UIKunde {
                     )
             );
 
-        } else if (! ziel.isBlank()) {
+        } else if (!ziel.isBlank()) {
+
             fluege.addAll(
                     vs.sucheFluegeNachZiel(
                             vs.getFlughafenNachCode(ziel)

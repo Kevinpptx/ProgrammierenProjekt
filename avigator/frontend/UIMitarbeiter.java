@@ -1,6 +1,7 @@
 package avigator.frontend;
 
 import avigator.modell.*;
+import avigator.verwaltung.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -85,22 +86,22 @@ public class UIMitarbeiter {
     public void login() {
 
         int passwort = 1234;
-        int i;
 
-        for (i = 3; i >= 0; i--) {
+        for (int i = 3; i >= 0; i--) {
 
             UIHelper.druckeEingabeaufforderung("Geben Sie bitte Ihr Passwort ein:");
 
             int eingabe = Manager.intscanner();
 
             if (passwort == eingabe) {
+
                 UIHelper.druckeErfolg("Sie haben sich erfolgreich angemeldet.");
                 hauptmanager();
+
                 return;
 
             } else if (i == 0) {
                 UIHelper.druckeFehler("Keine Versuche mehr übrig. Bitte wenden Sie sich an den Administrator.");
-                //  System.exit(0);
             } else {
                 UIHelper.druckeFehler("Falsche Eingabe. Sie haben noch " + i + " Versuche.");
             }
@@ -139,9 +140,11 @@ public class UIMitarbeiter {
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
+
                 case 1:
                     fluggesellschaftenManager();
                     break;
+
                 case 2:
                     flottenManager();
                     break;
@@ -184,6 +187,7 @@ public class UIMitarbeiter {
     public void fluggesellschaftenManager() {
 
         while (true) {
+
             UIHelper.druckeUeberschrift("Willkommen im Fluggesellschaftenmanager");
 
             UIHelper.druckeMenuepunkt(1, "avigator.modell.Fluggesellschaft hinzufügen");
@@ -193,13 +197,17 @@ public class UIMitarbeiter {
             UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
+
             switch (auswahl) {
+
                 case 1:
                     fluggesellschaftAnlegen();
                     break;
+
                 case 2:
                     fluggeselschaftentfernen();
                     break;
+
                 case 0:
                     return;
 
@@ -232,14 +240,18 @@ public class UIMitarbeiter {
             int auswahl = Manager.intscanner();
 
             switch (auswahl) {
+
                 case 1:
-                    flugzeugderFlotteHinzufügen();
+                    flugzeugDerFlotteHinzufuegen();
                     break;
+
                 case 2:
                     flugzeugeEntfernen();
                     break;
+
                 case 0:
                     return;
+
                 default:
                     UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
@@ -267,15 +279,20 @@ public class UIMitarbeiter {
             UIHelper.druckeTrennlinie();
 
             int auswahl = Manager.intscanner();
+
             switch (auswahl) {
+
                 case 1:
-                    hinzufügenFlughafen();
+                    flughafenHinzufuegen();
                     break;
+
                 case 2:
-                    entferneFlughafen();
+                    flughafenEntfernen();
                     break;
+
                 case 0:
                     return;
+
                 default:
                     UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
@@ -291,7 +308,7 @@ public class UIMitarbeiter {
      * Der Mitarbeiter gibt den Namen und den Airlinecode ein. Anschließend wird die avigator.modell.Fluggesellschaft dem
      * avigator.verwaltung.Verwaltungssystem hinzugefügt und dauerhaft gespeichert.
      */
-    //Fluggeselschaftanlegen
+
     public void fluggesellschaftAnlegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Fluggesellschaft anlegen");
@@ -303,6 +320,7 @@ public class UIMitarbeiter {
         String airlinecode = Manager.stringscanner();
 
         try {
+
             Fluggesellschaft fluggesellschaftAnlegen = new Fluggesellschaft(name, airlinecode);
             Fluggesellschaft fluggesellschaft = vs.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
             datenHandler.speichere(anwendungsdaten);
@@ -338,17 +356,22 @@ public class UIMitarbeiter {
         UIHelper.druckeUeberschrift("avigator.modell.Fluggesellschaft entfernen");
 
         System.out.println("Folgende Fluggesellschaften können entfernt werden:");
+
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
         UIHelper.druckeTrennlinie();
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Airlinecode der zu entfernenden avigator.modell.Fluggesellschaft ein:");
+
         try {
+
             String code = Manager.stringscanner();
             vs.entferneFluggesellschaft(vs.getFluggesellschaft(code));
 
             datenHandler.speichere(anwendungsdaten);
+
             UIHelper.druckeErfolg("avigator.modell.Fluggesellschaft erfolgreich entfernt.");
 
         } catch (Exception e) {
@@ -365,8 +388,8 @@ public class UIMitarbeiter {
      * <p>
      * Nach erfolgreicher Erstellung wird das avigator.modell.Flugzeug gespeichert.
      */
-    //FlugzeugderFlotteHinzufügen
-    public void flugzeugderFlotteHinzufügen() {
+
+    public void flugzeugDerFlotteHinzufuegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flugzeug der Flotte hinzufügen");
 
@@ -378,43 +401,56 @@ public class UIMitarbeiter {
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
-        // Auswahl der Fluggeselschafften
+        // Auswahl der Fluggesellschaften
         UIHelper.druckeTrennlinie();
 
         UIHelper.druckeEingabeaufforderung(
                 "Bitte wählen Sie über den Airlinecode die avigator.modell.Fluggesellschaft aus, der Sie Flugzeuge hinzufügen möchten: ");
 
         String auswahl = Manager.stringscanner();
+
         try {
+
             vs.getFluggesellschaft(auswahl);
 
         } catch (Exception e) {
+
             UIHelper.druckeFehler(e.getMessage());
             return;
         }
 
         UIHelper.druckeTrennlinie();
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie einen Code für das avigator.modell.Flugzeug ein:");
         String code = Manager.stringscanner();
+
         while (code.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen Code für das avigator.modell.Flugzeug an: ");
             code = Manager.stringscanner();
         }
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie das Modell des Flugzeuges ein: ");
         String modell = Manager.stringscanner();
+
         while (modell.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie ein Modell für das avigator.modell.Flugzeug an: ");
             modell = Manager.stringscanner();
         }
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Reihen des Flugzeuges ein: ");
         int reihen = Manager.intscanner();
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Sitze pro Reihe des Flugzeuges ein: ");
         int sitze = Manager.intscanner();
+
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Anzahl der Businessreihen des Flugzeuges ein: ");
         int business = Manager.intscanner();
 
         // avigator.modell.Flugzeug erstellen
         try {
+
             Flugzeug flugzeug = vs.erzeugeFlugzeug(vs.getFluggesellschaft(auswahl),
                     code,
                     modell,
@@ -422,8 +458,11 @@ public class UIMitarbeiter {
                     sitze,
                     business
             );
+
             datenHandler.speichere(anwendungsdaten);
+
             UIHelper.druckeErfolg("Das avigator.modell.Flugzeug " + flugzeug.getCode() + " wurde erfolgreich hinzugefügt.");
+
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
         }
@@ -442,12 +481,15 @@ public class UIMitarbeiter {
         UIHelper.druckeUeberschrift("avigator.modell.Flugzeug entfernen");
 
         try {
+
             for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
 
                 System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
 
                 if (fluggesellschaft.getFlotte().isEmpty()) {
+
                     UIHelper.druckeHinweis("Keine Flugzeuge vorhanden.");
+
                 } else {
 
                     for (Flugzeug f : fluggesellschaft.getFlotte()) {
@@ -484,43 +526,52 @@ public class UIMitarbeiter {
      * Der Mitarbeiter gibt den Namen, IATA-Code, die Stadt und das Land des Flughafens ein. Anschließend wird der
      * avigator.modell.Flughafen erzeugt und gespeichert.
      */
-    public void hinzufügenFlughafen() {
+    public void flughafenHinzufuegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flughafen hinzufügen");
 
         UIHelper.druckeEingabeaufforderung("Geben Sie den Namen des Flughafens ein:");
         String name = Manager.stringscanner();
+
         while (name.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen Namen für den avigator.modell.Flughafen ein: ");
             name = Manager.stringscanner();
         }
 
         UIHelper.druckeEingabeaufforderung("Geben Sie den IATA-Code des Flughafens ein:");
         String iatacode = Manager.stringscanner();
+
         while (iatacode.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen IATA-Code für den avigator.modell.Flughafen ein: ");
             iatacode = Manager.stringscanner();
         }
 
         UIHelper.druckeEingabeaufforderung("Geben Sie die Stadt des Flughafens ein:");
         String stadt = Manager.stringscanner();
+
         while (stadt.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie eine Stadt für den avigator.modell.Flughafen ein: ");
             stadt = Manager.stringscanner();
         }
 
         UIHelper.druckeEingabeaufforderung("Geben Sie das Land des Flughafens ein: ");
         String land = Manager.stringscanner();
+
         while (land.isEmpty()) {
+
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie ein Land für den avigator.modell.Flughafen ein: ");
             land = Manager.stringscanner();
         }
 
-        //Methode zum hinzufügen
         try {
+
             Flughafen flughafen = vs.erzeugeFlughafen(name, iatacode, stadt, land);
 
             datenHandler.speichere(anwendungsdaten);
+
             UIHelper.druckeErfolg("Der avigator.modell.Flughafen " +
                                   flughafen.iataCode() +
                                   " " +
@@ -539,7 +590,7 @@ public class UIMitarbeiter {
      * Der avigator.modell.Flughafen wird über seinen IATA-Code ausgewählt. Nach erfolgreicher Entfernung werden die avigator.verwaltung.Anwendungsdaten
      * gespeichert.
      */
-    public void entferneFlughafen() {
+    public void flughafenEntfernen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flughafen entfernen");
 
@@ -552,6 +603,7 @@ public class UIMitarbeiter {
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
+
             System.out.printf("%-4s | %-35s | %-15s | %s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
@@ -566,18 +618,19 @@ public class UIMitarbeiter {
 
         String iataCode = Manager.stringscanner();
 
-        //Methode zum entfernen
         try {
+
             Flughafen flughafen = vs.getFlughafenNachCode(iataCode);
 
             vs.entferneFlughafen(flughafen);
+
             datenHandler.speichere(anwendungsdaten);
+
             UIHelper.druckeErfolg("avigator.modell.Flughafen " + iataCode + " erfolgreich entfernt.");
+
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
-
         }
-
     }
 
     /**
@@ -594,26 +647,23 @@ public class UIMitarbeiter {
      */
     public void flugAnlegen() {
 
-        String gesellschaft;
-        String flugzeug;
-        String startflughafen;
-        String zielflughafen;
-        LocalDateTime abflug;
-        LocalDateTime ankunft;
+        String gesellschaft, flugzeug, startflughafen, zielflughafen;
+        LocalDateTime ankunft, abflug;
 
         UIHelper.druckeUeberschrift("avigator.modell.Flug anlegen");
 
         // Basispreis
         UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Basispreis des Flugs ein:");
         double basispreis = Manager.doublescanner();
-        System.out.println();
 
+        System.out.println();
         UIHelper.druckeTrennlinie();
 
         // avigator.modell.Fluggesellschaft auswählen
         UIHelper.druckeEingabeaufforderung("Welche Airline führt den avigator.modell.Flug durch? Auswahl über Airlinecode:");
 
         for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+
             System.out.println(
                     fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
@@ -627,9 +677,12 @@ public class UIMitarbeiter {
             gesellschaft = Manager.stringscanner().toUpperCase();
 
             try {
+
                 ausgewaehlteGesellschaft = vs.getFluggesellschaft(gesellschaft);
                 break;
+
             } catch (Exception e) {
+
                 UIHelper.druckeFehler(e.getMessage());
                 UIHelper.druckeEingabeaufforderung("Bitte geben Sie einen gültigen Airlinecode ein:");
             }
@@ -638,11 +691,13 @@ public class UIMitarbeiter {
         // avigator.modell.Flugzeug auswählen
 
         if (ausgewaehlteGesellschaft.getFlotte().isEmpty()) {
+
             UIHelper.druckeHinweis("Für diese avigator.modell.Fluggesellschaft sind keine Flugzeuge vorhanden.");
             return;
         }
 
         for (Flugzeug f : ausgewaehlteGesellschaft.getFlotte()) {
+
             System.out.println(
                     f.getCode()
                     + " | " + f.getModell()
@@ -663,9 +718,11 @@ public class UIMitarbeiter {
             flugzeug = Manager.stringscanner().toUpperCase();
 
             try {
+
                 ausgewaehltesFlugzeug = vs.getFlugzeug(flugzeug);
 
-                if (! ausgewaehlteGesellschaft.getFlotte().contains(ausgewaehltesFlugzeug)) {
+                if (!ausgewaehlteGesellschaft.getFlotte().contains(ausgewaehltesFlugzeug)) {
+
                     UIHelper.druckeFehler("Dieses avigator.modell.Flugzeug gehört nicht zur ausgewählten avigator.modell.Fluggesellschaft.");
                     continue;
                 }
@@ -696,6 +753,7 @@ public class UIMitarbeiter {
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : vs.getFlughaefen()) {
+
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
@@ -706,7 +764,6 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        // Startflughafen
         Flughafen ausgewaehlterStartflughafen;
 
         while (true) {
@@ -716,14 +773,15 @@ public class UIMitarbeiter {
             startflughafen = Manager.stringscanner().toUpperCase();
 
             try {
+
                 ausgewaehlterStartflughafen = vs.getFlughafenNachCode(startflughafen);
                 break;
+
             } catch (Exception e) {
                 UIHelper.druckeFehler(e.getMessage());
             }
         }
 
-        // Zielflughafen
         Flughafen ausgewaehlterZielflughafen;
 
         while (true) {
@@ -733,8 +791,10 @@ public class UIMitarbeiter {
             zielflughafen = Manager.stringscanner().toUpperCase();
 
             try {
+
                 ausgewaehlterZielflughafen = vs.getFlughafenNachCode(zielflughafen);
                 break;
+
             } catch (Exception e) {
                 UIHelper.druckeFehler(e.getMessage());
             }
@@ -750,7 +810,6 @@ public class UIMitarbeiter {
 
         // Zeiten
         abflug = datumUndUhrzeitEinlesen("des Abfluges");
-
         ankunft = datumUndUhrzeitEinlesen("der Ankunft");
 
         UIHelper.druckeTrennlinie();
@@ -758,7 +817,7 @@ public class UIMitarbeiter {
         // Rückflug / Serienflug
         boolean gueltigeAuswahl = false;
 
-        while (! gueltigeAuswahl) {
+        while (!gueltigeAuswahl) {
 
             UIHelper.druckeMenuepunkt(1, "avigator.modell.Flug mit Rückflug anlegen");
             UIHelper.druckeMenuepunkt(0, "avigator.modell.Flug ohne Rückflug anlegen");
@@ -775,6 +834,7 @@ public class UIMitarbeiter {
                     int wiederholung = Manager.intscanner();
 
                     try {
+
                         vs.fuegeFlugHinzu(
                                 ausgewaehlteGesellschaft,
                                 ausgewaehltesFlugzeug,
@@ -794,6 +854,7 @@ public class UIMitarbeiter {
                         gueltigeAuswahl = true;
 
                     } catch (Exception e) {
+
                         UIHelper.druckeFehler(e.getMessage());
                         return;
                     }
@@ -802,6 +863,7 @@ public class UIMitarbeiter {
 
                 case 0:
                     try {
+
                         vs.fuegeFlugHinzu(
                                 ausgewaehlteGesellschaft,
                                 ausgewaehltesFlugzeug,
@@ -846,11 +908,14 @@ public class UIMitarbeiter {
         LocalTime zeit = null;
 
         while (datum == null) {
+
             UIHelper.druckeEingabeaufforderung("Bitte geben Sie das Datum (dd.MM.yyyy) " + text + " ein:");
 
             try {
+
                 datum = LocalDate.parse(Manager.stringscanner(), datumsFormatter);
                 System.out.println();
+
             } catch (DateTimeException e) {
                 UIHelper.druckeFehler("Ungültiges Datum. Beispiel: 01.01.2026");
             }
@@ -858,11 +923,14 @@ public class UIMitarbeiter {
         }
 
         while (zeit == null) {
+
             UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Uhrzeit (HH:mm) " + text + " ein:");
 
             try {
+
                 zeit = LocalTime.parse(Manager.stringscanner(), zeitFormatter);
                 System.out.println();
+
             } catch (DateTimeException e) {
                 UIHelper.druckeFehler("Ungültige Uhrzeit. Beispiel: 10:30");
             }
@@ -919,7 +987,7 @@ public class UIMitarbeiter {
                 }
             }
 
-            if (! hatFluege) {
+            if (!hatFluege) {
                 UIHelper.druckeHinweis("Keine aktiven Flüge.");
             }
         }
@@ -927,6 +995,7 @@ public class UIMitarbeiter {
         System.out.println();
 
         if (auswaehlbareFluege.isEmpty()) {
+
             UIHelper.druckeHinweis("Es sind keine Flüge zum Entfernen vorhanden.");
             return;
         }
@@ -941,6 +1010,7 @@ public class UIMitarbeiter {
         }
 
         if (auswahl < 1 || auswahl > auswaehlbareFluege.size()) {
+
             UIHelper.druckeFehler("Ungültige Auswahl.");
             return;
         }
@@ -950,6 +1020,7 @@ public class UIMitarbeiter {
         if (bs.findeRelevanteBuchungen(flug).isEmpty()) {
 
             vs.entferneFlug(flug);
+
             datenHandler.speichere(anwendungsdaten);
 
             UIHelper.druckeErfolg("Der avigator.modell.Flug " +
@@ -978,6 +1049,7 @@ public class UIMitarbeiter {
             UIHelper.druckeUeberschrift("Flugübersicht");
 
             ArrayList<Flug> auswaehlbareFluege = new ArrayList<>();
+
             int nummer = 1;
 
             for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
@@ -992,6 +1064,7 @@ public class UIMitarbeiter {
                     if (flug.getFluggesellschaft().equals(fluggesellschaft)) {
 
                         hatFluege = true;
+
                         auswaehlbareFluege.add(flug);
 
                         System.out.println(
@@ -1012,7 +1085,7 @@ public class UIMitarbeiter {
                     }
                 }
 
-                if (! hatFluege) {
+                if (!hatFluege) {
                     UIHelper.druckeHinweis("Keine aktiven Flüge.");
                 }
             }
@@ -1029,6 +1102,7 @@ public class UIMitarbeiter {
             }
 
             if (auswahl < 1 || auswahl > auswaehlbareFluege.size()) {
+
                 UIHelper.druckeFehler("Ungültige Auswahl.");
                 continue;
             }
@@ -1054,6 +1128,7 @@ public class UIMitarbeiter {
         while (true) {
 
             UIHelper.druckeUeberschrift("Flugdetails - " + flug.getFlugnummer());
+
             System.out.println("avigator.modell.Flug: " + flug.getFlugnummer());
             System.out.println("avigator.modell.Fluggesellschaft: " + flug.getFluggesellschaft().getName());
             System.out.println("Route: " +
@@ -1094,9 +1169,11 @@ public class UIMitarbeiter {
                     if (buchungen.isEmpty()) {
                         UIHelper.druckeHinweis("Für diesen avigator.modell.Flug liegen keine Buchungen vor.");
                     } else {
+
                         int nummer = 1;
 
                         for (Buchung buchung : buchungen) {
+
                             System.out.println(
                                     String.format("%3d: ", nummer)
                                     + "avigator.modell.Passagier: " + buchung.getPassagier().passagierId() + ", "
@@ -1104,9 +1181,11 @@ public class UIMitarbeiter {
                                     + buchung.getSitzplatz().getSitzplatzNummer() + " | Koffer: "
                                     + buchung.getGepaeckinformation().getAnzahlKoffer()
                             );
+
                             nummer++;
                         }
                     }
+
                     break;
 
                 case 0:
@@ -1136,6 +1215,7 @@ public class UIMitarbeiter {
         vs.alteFluegeLoeschen(bs);
 
         if (bs.getBuchungen().isEmpty()) {
+
             UIHelper.druckeHinweis("Es sind keine Buchungen vorhanden.");
             return;
         }

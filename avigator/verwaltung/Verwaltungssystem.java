@@ -2,6 +2,7 @@ package avigator.verwaltung;
 
 import avigator.modell.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class Verwaltungssystem implements Serializable {
     /**
      * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -68,11 +70,15 @@ public class Verwaltungssystem implements Serializable {
     public Fluggesellschaft fuegeFluggesellschaftHinzu(Fluggesellschaft fluggesellschaft) {
 
         if (fluggesellschaft == null) {
+
             throw new IllegalArgumentException("Das übergebene avigator.modell.Fluggesellschaft-Objekt hat eine Nullreferenz");
+
         } else if (this.fluggesellschaften.contains(fluggesellschaft)) {
+
             throw new IllegalArgumentException(
                     "Das übergebene Fluggesellschaften-Objekt ist schon in der Liste enthalten");
         } else {
+
             this.fluggesellschaften.add(fluggesellschaft);
             return fluggesellschaft;
         }
@@ -89,25 +95,30 @@ public class Verwaltungssystem implements Serializable {
     public void entferneFluggesellschaft(Fluggesellschaft fluggesellschaft) {
 
         if (fluggesellschaft == null) {
+
             throw new IllegalArgumentException("Das übergebene avigator.modell.Fluggesellschaft-Objekt hat eine Nullreferenz");
-        } else if (! this.fluggesellschaften.contains(fluggesellschaft)) {
+
+        } else if (!this.fluggesellschaften.contains(fluggesellschaft)) {
+
             throw new IllegalArgumentException(
                     "Das übergebene Fluggesellschaften-Objekt wurde bisher noch nicht hinzugefügt.");
-        } else if (! fluggesellschaft.getFlotte().isEmpty()) {
+
+        } else if (!fluggesellschaft.getFlotte().isEmpty()) {
+
             //Fluggesellschaften, die noch Flugzeuge in ihrer Flotte haben, können nicht gelöscht werden
             throw new IllegalArgumentException("Der avigator.modell.Fluggesellschaft sind noch Flugzeuge zugewiesen.");
+
         } else {
 
-            Iterator<Flug> iterator = fluege.iterator();
-
-            while (iterator.hasNext()) {
-                Flug f = iterator.next();
+            for (Flug f : fluege) {
 
                 if (f.getFluggesellschaft().equals(fluggesellschaft)) {
+
                     throw new IllegalArgumentException(
                             "Die avigator.modell.Fluggesellschaft konnte nicht entfernt werden, da noch aktuelle Flüge geplant sind.");
                 }
             }
+
             this.fluggesellschaften.remove(fluggesellschaft);
         }
     }
@@ -133,16 +144,14 @@ public class Verwaltungssystem implements Serializable {
 
         String code = c.strip().toUpperCase(Locale.ROOT);
 
-        Iterator<Fluggesellschaft> iterator = this.fluggesellschaften.iterator();
+        for (Fluggesellschaft f : this.fluggesellschaften) {
 
-        while (iterator.hasNext()) {
-            Fluggesellschaft f = iterator.next();
             if (f.getAirlineCode().equals(code)) {
                 return f;
             }
         }
-        throw new IllegalArgumentException("Eine avigator.modell.Fluggesellschaft mit dem Code " + code + " existiert nicht.");
 
+        throw new IllegalArgumentException("Eine avigator.modell.Fluggesellschaft mit dem Code " + code + " existiert nicht.");
     }
 
     /**
@@ -174,23 +183,24 @@ public class Verwaltungssystem implements Serializable {
         if (fluggesellschaft == null) {
             throw new IllegalArgumentException("Die übergebene avigator.modell.Fluggesellschaft existiert nicht.");
         }
-        if (! fluggesellschaften.contains(fluggesellschaft)) {
+
+        if (!fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Die avigator.modell.Fluggesellschaft ist nicht im avigator.verwaltung.Verwaltungssystem registriert.");
         }
 
-        Iterator<Flugzeug> iterator = this.flugzeuge.iterator();
+        for (Flugzeug flugzeug : this.flugzeuge) {
 
-        while (iterator.hasNext()) {
-            if (iterator.next().getCode().equalsIgnoreCase(flugzeugCode)) {
+            if (flugzeug.getCode().equalsIgnoreCase(flugzeugCode)) {
                 throw new IllegalArgumentException("Ein avigator.modell.Flugzeug mit dem Code " + flugzeugCode + " existiert bereits.");
             }
         }
+
         Flugzeug f = new Flugzeug(flugzeugCode, modell, anzahlReihen, sitzeProReihe, businessReihen);
 
         fluggesellschaft.fuegeFlugzeugHinzu(f);
         this.flugzeuge.add(f);
-        return f;
 
+        return f;
     }
 
     /**
@@ -211,40 +221,27 @@ public class Verwaltungssystem implements Serializable {
 
         Flugzeug flug = this.getFlugzeug(code.strip().toUpperCase(Locale.ROOT));
 
-        Iterator<Flug> iteratorFlug = this.fluege.iterator();
-
-        while (iteratorFlug.hasNext()) {
-            Flug tempFlug = iteratorFlug.next();
+        for (Flug tempFlug : this.fluege) {
 
             if (tempFlug.getFlugzeug().equals(flug)) {
+
                 throw new IllegalStateException(
                         "Das FLugzeug kann nicht entfernt werden, da noch Flüge damit geplant sind.");
             }
         }
 
-        Iterator<Fluggesellschaft> iteratorFlugGes = this.fluggesellschaften.iterator();
-
-        while (iteratorFlugGes.hasNext()) {
-            Fluggesellschaft flugGes = iteratorFlugGes.next();
+        for (Fluggesellschaft flugGes : this.fluggesellschaften) {
 
             if (flugGes.beinhaltetFlugzeug(flug)) {
+
                 flugGes.entferneFlugzeug(flug);
                 this.flugzeuge.remove(flug);
+
                 return;
             }
         }
 
         throw new IllegalStateException("Das avigator.modell.Flugzeug konnte keiner avigator.modell.Fluggesellschaft zugeordnet werden");
-    }
-
-    /**
-     * Gibt alle registrierten Flugzeuge zurück.
-     *
-     * @return unveränderbare Kopie aller registrierten Flugzeuge
-     */
-    public List<Flugzeug> getAlleFlugzeuge() {
-
-        return List.copyOf(this.flugzeuge);
     }
 
     /**
@@ -261,11 +258,14 @@ public class Verwaltungssystem implements Serializable {
         String flugzeugCode = code.strip().toUpperCase(Locale.ROOT);
 
         while (iterator.hasNext()) {
+
             Flugzeug f = iterator.next();
+
             if (f.getCode().equals(flugzeugCode)) {
                 return f;
             }
         }
+
         throw new IllegalArgumentException("Ein avigator.modell.Flugzeug mit dem Code " + flugzeugCode + " existiert nicht.");
     }
 
@@ -286,10 +286,8 @@ public class Verwaltungssystem implements Serializable {
 
         String code = iataCode.strip().toUpperCase(Locale.ROOT);
 
-        Iterator<Flughafen> iterator = this.flughaefen.iterator();
+        for (Flughafen f : this.flughaefen) {
 
-        while (iterator.hasNext()) {
-            Flughafen f = iterator.next();
             if (f.iataCode().equals(code)) {
                 throw new IllegalArgumentException("Ein avigator.modell.Flughafen mit dem IATACode " + code + " existiert bereits.");
             } else if (f.name().equalsIgnoreCase(name)) {
@@ -319,17 +317,17 @@ public class Verwaltungssystem implements Serializable {
 
         if (this.flughaefen.contains(flughafen)) {
 
-            Iterator<Flug> iterator = fluege.iterator();
-
-            while (iterator.hasNext()) {
-                Flug f = iterator.next();
+            for (Flug f : fluege) {
 
                 if (f.getStartFlughafen().equals(flughafen) || f.getZielflughafen().equals(flughafen)) {
+
                     throw new IllegalArgumentException(
                             "Der avigator.modell.Flughafen konnte nicht entfernt werden, da hier noch aktuelle Flüge geplant sind.");
                 }
             }
+
             this.flughaefen.remove(flughafen);
+
         } else {
             throw new IllegalArgumentException("Der avigator.modell.Flughafen " + flughafen + " ist nicht aktiv.");
         }
@@ -347,55 +345,14 @@ public class Verwaltungssystem implements Serializable {
 
         String code = iataCode.strip().toUpperCase(Locale.ROOT);
 
-        Iterator<Flughafen> iterator = this.flughaefen.iterator();
+        for (Flughafen f : this.flughaefen) {
 
-        while (iterator.hasNext()) {
-            Flughafen f = iterator.next();
             if (f.iataCode().equals(code)) {
                 return f;
             }
         }
+
         throw new IllegalArgumentException("Der avigator.modell.Flughafen mit dem IATACode " + code + " konnte nicht gefunden werden.");
-    }
-
-    /**
-     * Sucht einen avigator.modell.Flughafen anhand seines Namens.
-     *
-     * @param name der Name des gesuchten Flughafens
-     * @return der avigator.modell.Flughafen mit dem angegebenen Namen
-     * @throws IllegalArgumentException wenn kein avigator.modell.Flughafen mit dem angegebenen Namen existiert
-     */
-    public Flughafen getFlughafenNachName(String name) {
-
-        Iterator<Flughafen> iterator = this.flughaefen.iterator();
-
-        while (iterator.hasNext()) {
-            Flughafen f = iterator.next();
-            if (f.name().equalsIgnoreCase(name)) {
-                return f;
-            }
-        }
-        throw new IllegalArgumentException("Der avigator.modell.Flughafen mit dem Namen " + name + " konnte nicht gefunden werden.");
-    }
-
-    /**
-     * Sucht den ersten registrierten avigator.modell.Flughafen in einer bestimmten Stadt.
-     *
-     * @param stadt die Stadt des gesuchten Flughafens
-     * @return der erste gefundene avigator.modell.Flughafen in der angegebenen Stadt
-     * @throws IllegalArgumentException wenn in der angegebenen Stadt kein avigator.modell.Flughafen gefunden wurde
-     */
-    public Flughafen getFlughafenNachStadt(String stadt) {
-
-        Iterator<Flughafen> iterator = this.flughaefen.iterator();
-
-        while (iterator.hasNext()) {
-            Flughafen f = iterator.next();
-            if (f.stadt().equalsIgnoreCase(stadt)) {
-                return f;
-            }
-        }
-        throw new IllegalArgumentException("Der avigator.modell.Flughafen in " + stadt + " konnte nicht gefunden werden.");
     }
 
     /**
@@ -406,33 +363,6 @@ public class Verwaltungssystem implements Serializable {
     public List<Flughafen> getFlughaefen() {
 
         return List.copyOf(this.flughaefen);
-    }
-
-    /**
-     * Sucht alle registrierten Flughäfen in einem bestimmten Land.
-     *
-     * @param land das Land, nach dessen Flughäfen gesucht wird
-     * @return Liste aller gefundenen Flughäfen in dem angegebenen Land
-     * @throws IllegalArgumentException wenn in dem Land kein avigator.modell.Flughafen gefunden wurde
-     */
-    public ArrayList<Flughafen> getFlughaefenInLand(String land) {
-
-        Iterator<Flughafen> iterator = this.flughaefen.iterator();
-
-        ArrayList<Flughafen> ret = new ArrayList<>();
-
-        while (iterator.hasNext()) {
-            Flughafen f = iterator.next();
-            if (f.land().equalsIgnoreCase(land)) {
-                ret.add(f);
-            }
-        }
-
-        if (! ret.isEmpty()) {
-            return ret;
-        } else {
-            throw new IllegalArgumentException("Im Land " + land + " konnte kein avigator.modell.Flughafen gefunden werden.");
-        }
     }
 
     /**
@@ -454,21 +384,20 @@ public class Verwaltungssystem implements Serializable {
      * @param basispreis               der Basispreis der Flüge
      * @param rueckflug                {@code true}, wenn zusätzlich Rückflüge erzeugt werden sollen
      * @param anzahlTageWiederholungen Anzahl der aufeinanderfolgenden Tage, an denen der avigator.modell.Flug stattfinden soll
-     * @return Liste aller neu erzeugten und registrierten Flüge
      * @throws IllegalArgumentException wenn die übergebenen Daten ungültig sind, benötigte Objekte nicht registriert
      *                                  sind, das avigator.modell.Flugzeug nicht zur avigator.modell.Fluggesellschaft gehört, weniger als ein
      *                                  Wiederholungstag angegeben wurde oder sich Flugzeiten des verwendeten Flugzeugs
      *                                  überschneiden
      */
-    public ArrayList<Flug> fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
-                                          Flugzeug flugzeug,
-                                          Flughafen startFlughafen,
-                                          Flughafen zielFlughafen,
-                                          LocalDateTime abflugzeit,
-                                          LocalDateTime ankunftszeit,
-                                          double basispreis,
-                                          boolean rueckflug,
-                                          int anzahlTageWiederholungen
+    public void fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
+                               Flugzeug flugzeug,
+                               Flughafen startFlughafen,
+                               Flughafen zielFlughafen,
+                               LocalDateTime abflugzeit,
+                               LocalDateTime ankunftszeit,
+                               double basispreis,
+                               boolean rueckflug,
+                               int anzahlTageWiederholungen
     ) {
 
         //validiere avigator.modell.Flug
@@ -506,15 +435,16 @@ public class Verwaltungssystem implements Serializable {
 
             lAbflug = lAbflug.plusDays(1);
             lAnkunft = lAnkunft.plusDays(1);
-
         }
 
         //wenn es einen Rückflug geben soll, dann wird für jeden avigator.modell.Flug ein Rückflug erstellt und über eine Liste in die Gesamtliste hinzugefügt
         if (rueckflug) {
+
             List<Flug> rueckfluege = new ArrayList<>();
             Duration turnAroundTime = Duration.ofHours(1);
 
             for (Flug hinflug : erzeugteFluege) {
+
                 Duration flugdauer = Duration.between(hinflug.getAbflugszeit(), hinflug.getAnkunftszeit());
 
                 LocalDateTime abflugszeitRueckflug = hinflug.getAnkunftszeit().plus(turnAroundTime);
@@ -539,15 +469,16 @@ public class Verwaltungssystem implements Serializable {
         }
 
         try {
+
             for (Flug flug : erzeugteFluege) {
                 pruefeFlug(flug, erzeugteFluege);
             }
 
             fluege.addAll(erzeugteFluege);
+
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Das Flugpaar konnte nicht erstellt werden: " + e.getMessage());
         }
-        return erzeugteFluege;
     }
 
     /**
@@ -565,12 +496,11 @@ public class Verwaltungssystem implements Serializable {
      * @param abflugzeit       Datum und Uhrzeit des Abflugs
      * @param ankunftszeit     Datum und Uhrzeit der Ankunft
      * @param basispreis       der Basispreis des Flugs
-     * @return der neu erzeugte und registrierte avigator.modell.Flug
      * @throws IllegalArgumentException wenn eine übergebene Referenz {@code null} ist, benötigte Objekte nicht
      *                                  registriert sind, das avigator.modell.Flugzeug nicht zur avigator.modell.Fluggesellschaft gehört, der avigator.modell.Flug
      *                                  bereits existiert oder sich die Einsatzzeiten des Flugzeugs überschneiden
      */
-    public Flug fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
+    public void fuegeFlugHinzu(Fluggesellschaft fluggesellschaft,
                                Flugzeug flugzeug,
                                Flughafen startFlughafen,
                                Flughafen zielFlughafen,
@@ -584,14 +514,11 @@ public class Verwaltungssystem implements Serializable {
 
         String flugnummer = this.erzeugeFlugnummer(fluggesellschaft, abflugzeit);
 
-        Iterator<Flug> iterator = fluege.iterator();
-
-        while (iterator.hasNext()) {
-            Flug vorhandenerFlug = iterator.next();
+        for (Flug vorhandenerFlug : fluege) {
 
             boolean gleicherFlugAmSelbenTag
                     = vorhandenerFlug.getFlugnummer().equalsIgnoreCase(flugnummer)
-                      && vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
+                    && vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
 
             if (gleicherFlugAmSelbenTag) {
                 throw new IllegalArgumentException("Der avigator.modell.Flug " + flugnummer + " existiert an diesem Tag bereits.");
@@ -605,7 +532,7 @@ public class Verwaltungssystem implements Serializable {
                 // Überschneidung liegt nur vor, wenn der neue avigator.modell.Flug vor dem Ende des alten beginnt und nach dem Beginn des alten endet
                 boolean zeitenUeberschneidenSich
                         = abflugzeit.isBefore(vorhandenerFlug.getAnkunftszeit())
-                          && ankunftszeit.isAfter(vorhandenerFlug.getAbflugszeit());
+                        && ankunftszeit.isAfter(vorhandenerFlug.getAbflugszeit());
 
                 if (zeitenUeberschneidenSich) {
                     throw new IllegalArgumentException("Das avigator.modell.Flugzeug ist in diesem Zeitraum bereits eingeplant.");
@@ -627,7 +554,6 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Das übergebene avigator.modell.Flug-Objekt ist schon in der Liste enthalten");
         } else {
             this.fluege.add(flug);
-            return flug;
         }
     }
 
@@ -646,19 +572,19 @@ public class Verwaltungssystem implements Serializable {
                               Flughafen zielFlughafen
     ) {
 
-        if (! fluggesellschaften.contains(fluggesellschaft)) {
+        if (!fluggesellschaften.contains(fluggesellschaft)) {
             throw new IllegalArgumentException("Die avigator.modell.Fluggesellschaft ist nicht im avigator.verwaltung.Verwaltungssystem registriert.");
         }
 
-        if (! flughaefen.contains(startFlughafen) || ! flughaefen.contains(zielFlughafen)) {
+        if (!flughaefen.contains(startFlughafen) || !flughaefen.contains(zielFlughafen)) {
             throw new IllegalArgumentException("Start- und Zielflughafen müssen im avigator.verwaltung.Verwaltungssystem registriert sein.");
         }
 
-        if (! fluggesellschaft.beinhaltetFlugzeug(flugzeug)) {
+        if (!fluggesellschaft.beinhaltetFlugzeug(flugzeug)) {
             throw new IllegalArgumentException("Das avigator.modell.Flugzeug gehört nicht zur angegbenen avigator.modell.Fluggesellschaft");
         }
 
-        if (! flugzeuge.contains(flugzeug)) {
+        if (!flugzeuge.contains(flugzeug)) {
             throw new IllegalArgumentException("Das avigator.modell.Flugzeug wird nicht vom avigator.verwaltung.Verwaltungssystem verwaltet");
         }
 
@@ -673,6 +599,7 @@ public class Verwaltungssystem implements Serializable {
      * @throws IllegalArgumentException wenn sich die Einsatzzeiten desselben Flugzeugs überschneiden
      */
     private void pruefeFlug(Flug neuerFlug, List<Flug> neueFluege) {
+
         //prüfe zuerst gegen vorhandene Fluege
         for (Flug vorhandenerFlug : fluege) {
             pruefeUeberschneidung(neuerFlug, vorhandenerFlug);
@@ -680,9 +607,11 @@ public class Verwaltungssystem implements Serializable {
 
         //prüfe danach gegen erzeugte Serienflüge
         for (Flug vorhandenerNeuerFlug : neueFluege) {
+
             if (vorhandenerNeuerFlug == neuerFlug) {
                 continue;
             }
+
             pruefeUeberschneidung(neuerFlug, vorhandenerNeuerFlug);
         }
     }
@@ -697,7 +626,8 @@ public class Verwaltungssystem implements Serializable {
     private void pruefeUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
 
         boolean gleichesFlugzeug = neuerFlug.getFlugzeug().equals(vorhandenerFlug.getFlugzeug());
-        if (! gleichesFlugzeug) {
+
+        if (!gleichesFlugzeug) {
             return;
         }
 
@@ -722,34 +652,10 @@ public class Verwaltungssystem implements Serializable {
      */
     private String erzeugeFlugnummer(Fluggesellschaft fluggesellschaft, LocalDateTime abflugzeit) {
 
-        String airlineCode = fluggesellschaft.getAirlineCode().toUpperCase();
+        String airlineCode = fluggesellschaft.getAirlineCode();
+        int hoechsteFlugnummer = berechneHoechsteFlugnummer(fluggesellschaft, abflugzeit, airlineCode);
 
-        int hoechsteNummer = 0;
-
-        Iterator<Flug> iterator = fluege.iterator();
-
-        while (iterator.hasNext()) {
-
-            Flug vorhandenerFlug = iterator.next();
-
-            boolean gleicherTag = vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
-
-            if (gleicherTag) {
-                boolean gleicheAirline = vorhandenerFlug.getFluggesellschaft().equals(fluggesellschaft);
-
-                if (gleicheAirline) {
-                    String nummernTeil = vorhandenerFlug.getFlugnummer().substring(airlineCode.length());
-
-                    int nummer = Integer.parseInt(nummernTeil);
-
-                    if (nummer > hoechsteNummer) {
-                        hoechsteNummer = nummer;
-                    }
-                }
-            }
-        }
-
-        return airlineCode.toUpperCase() + String.format("%03d", hoechsteNummer + 1);
+        return airlineCode.toUpperCase() + String.format("%03d", hoechsteFlugnummer + 1);
     }
 
     /**
@@ -770,57 +676,34 @@ public class Verwaltungssystem implements Serializable {
                                      List<Flug> neueFluege
     ) {
 
-        String airlineCode = fluggesellschaft.getAirlineCode().toUpperCase();
-
-        int hoechsteNummer = 0;
-
-        Iterator<Flug> iterator = fluege.iterator();
-
-        while (iterator.hasNext()) {
-
-            Flug vorhandenerFlug = iterator.next();
-
-            boolean gleicherTag = vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
-
-            if (gleicherTag) {
-                boolean gleicheAirline = vorhandenerFlug.getFluggesellschaft().equals(fluggesellschaft);
-
-                if (gleicheAirline) {
-                    String nummernTeil = vorhandenerFlug.getFlugnummer().substring(airlineCode.length());
-
-                    int nummer = Integer.parseInt(nummernTeil);
-
-                    if (nummer > hoechsteNummer) {
-                        hoechsteNummer = nummer;
-                    }
-                }
-            }
-        }
+        String airlineCode = fluggesellschaft.getAirlineCode();
+        int hoechsteFlugnummer = berechneHoechsteFlugnummer(fluggesellschaft, abflugzeit, airlineCode);
 
         for (Flug neuerFlug : neueFluege) {
+
             //prüft, ob der aktuell betrachtete avigator.modell.Flug ab gleichen Tag wie der avigator.modell.Flug stattfindet, für den die Nummer erzeugt werden soll
             boolean gleicherTag = neuerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
 
-            if (! gleicherTag) {
+            if (!gleicherTag) {
                 continue;
             }
 
             //prüft, ob der aktuell betrachtete avigator.modell.Flug zur gleichen Airline gehört wie derFlug, für den die Nummer erzeugt werden soll
             boolean gleicheFluggesellschaft = neuerFlug.getFluggesellschaft().equals(fluggesellschaft);
 
-            if (! gleicheFluggesellschaft) {
+            if (!gleicheFluggesellschaft) {
                 continue;
             }
 
             String nummernteilDerFlugnummer = neuerFlug.getFlugnummer().substring(airlineCode.length());
             int nummer = Integer.parseInt(nummernteilDerFlugnummer);
 
-            if (nummer > hoechsteNummer) {
-                hoechsteNummer = nummer;
+            if (nummer > hoechsteFlugnummer) {
+                hoechsteFlugnummer = nummer;
             }
         }
 
-        return airlineCode.toUpperCase() + String.format("%03d", hoechsteNummer + 1);
+        return airlineCode.toUpperCase() + String.format("%03d", hoechsteFlugnummer + 1);
     }
 
     /**
@@ -835,9 +718,11 @@ public class Verwaltungssystem implements Serializable {
         if (flug == null) {
             throw new IllegalArgumentException("Der avigator.modell.Flug darf nicht null sein.");
         }
-        if (! fluege.contains(flug)) {
+
+        if (!fluege.contains(flug)) {
             throw new IllegalArgumentException("Der avigator.modell.Flug ist nicht im avigator.verwaltung.Verwaltungssystem registriert.");
         }
+
         if (flug.berechneAuslastung() > 0) {
             throw new IllegalStateException("Der avigator.modell.Flug kann nicht entfernt werden, da noch Buchungen vorhanden sind.");
         }
@@ -854,19 +739,21 @@ public class Verwaltungssystem implements Serializable {
      * @throws NoSuchElementException   wenn kein avigator.modell.Flug zu dem Zielflughafen gefunden wurde
      */
     public ArrayList<Flug> sucheFluegeNachZiel(Flughafen ziel) {
-        //neue Liste wird erstellt
+
         if (ziel == null) {
             throw new IllegalArgumentException("Der Zielflughafen darf nicht null sein.");
         }
 
         ArrayList<Flug> newList = new ArrayList<>();
 
-        for (int i = 0; i < fluege.size(); i++) {
-            if (fluege.get(i).getZielflughafen().equals(ziel)) {
-                newList.add(fluege.get(i));
+        for (Flug flug : fluege) {
+
+            if (flug.getZielflughafen().equals(ziel)) {
+                newList.add(flug);
             }
         }
-        if (! newList.isEmpty()) {
+
+        if (!newList.isEmpty()) {
             return newList;
         } else {
             throw new NoSuchElementException("Einen avigator.modell.Flug nach " + ziel.stadt() + " gibt es leider nicht.");
@@ -887,14 +774,17 @@ public class Verwaltungssystem implements Serializable {
         if (start == null || ziel == null) {
             throw new IllegalArgumentException("Start- und Zielflughafen darf nicht null sein.");
         }
-        ArrayList<Flug> newList = new ArrayList<Flug>();
 
-        for (int i = 0; i < fluege.size(); i++) {
-            if (fluege.get(i).getZielflughafen().equals(ziel) && fluege.get(i).getStartFlughafen().equals(start)) {
-                newList.add(fluege.get(i));
+        ArrayList<Flug> newList = new ArrayList<>();
+
+        for (Flug flug : fluege) {
+
+            if (flug.getZielflughafen().equals(ziel) && flug.getStartFlughafen().equals(start)) {
+                newList.add(flug);
             }
         }
-        if (! newList.isEmpty()) {
+
+        if (!newList.isEmpty()) {
             return newList;
         } else {
             throw new NoSuchElementException("Einen avigator.modell.Flug von " +
@@ -925,14 +815,18 @@ public class Verwaltungssystem implements Serializable {
         ArrayList<Flug> ret = new ArrayList<>();
 
         while (iterator.hasNext()) {
+
             Flug f = iterator.next();
+
             if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
                 ret.add(f);
             }
         }
-        if (! ret.isEmpty()) {
+
+        if (!ret.isEmpty()) {
             return ret;
         }
+
         throw new NoSuchElementException("Es wurden keine Flüge mit der Flugnummer " + flugnummer + " gefunden");
     }
 
@@ -954,12 +848,15 @@ public class Verwaltungssystem implements Serializable {
         ArrayList<Flug> gefundeneFluege = new ArrayList<>();
 
         while (iterator.hasNext()) {
+
             Flug f = iterator.next();
+
             if (f.getAbflugszeit().toLocalDate().equals(datum)) {
                 gefundeneFluege.add(f);
             }
         }
-        if (! gefundeneFluege.isEmpty()) {
+
+        if (!gefundeneFluege.isEmpty()) {
             return gefundeneFluege;
         }
         throw new NoSuchElementException("Es wurden keine Flüge an dem Datum " + datum + " gefunden.");
@@ -984,16 +881,16 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Das Datum darf nicht null sein.");
         }
 
-        Iterator<Flug> iterator = fluege.iterator();
+        for (Flug f : fluege) {
 
-        while (iterator.hasNext()) {
-            Flug f = iterator.next();
             if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
+
                 if (f.getAbflugszeit().toLocalDate().equals(datum)) {
                     return f;
                 }
             }
         }
+
         throw new NoSuchElementException("Der avigator.modell.Flug " + flugnummer + " am " + datum + " wurde nicht gefunden.");
     }
 
@@ -1005,24 +902,6 @@ public class Verwaltungssystem implements Serializable {
     public List<Flug> getFluege() {
 
         return List.copyOf(fluege);
-    }
-
-    /**
-     * Erstellt für jeden registrierten avigator.modell.Flug eine Textdarstellung aus Flugnummer und aktueller Auslastung.
-     *
-     * @return Liste mit einer Textzeile für jeden registrierten avigator.modell.Flug
-     */
-    public List<String> zeigeAlleFluegeMitAuslastung() {
-
-        ArrayList<String> neueListe = new ArrayList<String>();
-        for (int i = 0; i < fluege.size(); i++) {
-            neueListe.add("\navigator.modell.Flug: " +
-                          fluege.get(i).getFlugnummer() +
-                          " | Auslastung: " +
-                          fluege.get(i).berechneAuslastung() +
-                          "%");
-        }
-        return neueListe;
     }
 
     /**
@@ -1053,5 +932,39 @@ public class Verwaltungssystem implements Serializable {
                 iterator.remove();
             }
         }
+    }
+
+    private int berechneHoechsteFlugnummer(Fluggesellschaft fluggesellschaft, LocalDateTime abflugzeit, String airlineCode) {
+
+        airlineCode = airlineCode.toUpperCase();
+
+        int hoechsteNummer = 0;
+
+        for (Flug vorhandenerFlug : fluege) {
+
+            boolean gleicherTag = vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
+
+            if (gleicherTag) {
+
+                boolean gleicheAirline = vorhandenerFlug.getFluggesellschaft().equals(fluggesellschaft);
+
+                if (gleicheAirline) {
+
+                    String nummernTeil = vorhandenerFlug.getFlugnummer().substring(airlineCode.length());
+
+                    int nummer = Integer.parseInt(nummernTeil);
+
+                    if (nummer > hoechsteNummer) {
+                        hoechsteNummer = nummer;
+                    }
+                }
+            }
+        }
+
+        return hoechsteNummer;
+    }
+
+    public boolean keineFluegeVorhanden() {
+        return fluege.isEmpty();
     }
 }
