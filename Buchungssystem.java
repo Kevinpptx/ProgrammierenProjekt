@@ -179,19 +179,16 @@ public class Buchungssystem implements Serializable {
      * @param sitzplatznummer   die Nummer des neuen Sitzplatzes
      * @param sitzklasse        die Sitzklasse des neuen Sitzplatzes
      * @param verwaltungssystem das Verwaltungssystem zur Validierung des Fluges
-     * @return der zusätzlich zu zahlende Umbuchungsbetrag einschließlich Umbuchungsgebühr und gegebenenfalls positiver
-     * Preisdifferenz
      */
-    @SuppressWarnings("UnusedReturnValue") // TODO: Muss geklärt werden
-    public double umbuchen(Buchung buchung,
-                           Flug flug,
-                           String sitzplatznummer,
-                           Sitzklasse sitzklasse,
-                           Verwaltungssystem verwaltungssystem
+    public void umbuchen(Buchung buchung,
+                         Flug flug,
+                         String sitzplatznummer,
+                         Sitzklasse sitzklasse,
+                         Verwaltungssystem verwaltungssystem
     ) {
 
         boolean umbuchungMoeglich;
-        double gebuehr = 0.0;
+        double gebuehr;
 
         // Umbuchung prüfen
         umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse, verwaltungssystem);
@@ -220,7 +217,6 @@ public class Buchungssystem implements Serializable {
             alterSitzplatz.freigeben();
         }
 
-        return gebuehr;
     }
 
     /**
@@ -427,14 +423,11 @@ public class Buchungssystem implements Serializable {
      *
      * @param buchung          die zu ändernde Buchung
      * @param neueAnzahlKoffer die neue Anzahl der gebuchten Koffer
-     * @return die Differenz zwischen neuem und bisherigem Buchungspreis; ein positiver Wert entspricht einem zusätzlich
-     * zu zahlenden Betrag, ein negativer Wert einer Erstattung
      * @throws IllegalArgumentException wenn keine Buchung angegeben wurde oder die Kofferanzahl negativ ist
      * @throws NoSuchElementException   wenn die Buchung nicht im System vorhanden ist
      * @throws IllegalStateException    wenn der Buchungsstatus keine Änderung erlaubt
      */
-    @SuppressWarnings("UnusedReturnValue") // TODO: Muss geklärt werden
-    public double gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
+    public void gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
 
         if (buchung == null) {
             throw new IllegalArgumentException("Es wurde keine Buchung angegeben.");
@@ -453,14 +446,8 @@ public class Buchungssystem implements Serializable {
             throw new IllegalArgumentException("Die Anzahl der Koffer darf nicht negativ sein.");
         }
 
-        double alterPreis = buchung.getGezahlterPreis();
-
         buchung.getGepaeckinformation().setAnzahlKoffer(neueAnzahlKoffer);
         buchung.aktualisiereGezahltenPreis();
-
-        double neuerPreis = buchung.getGezahlterPreis();
-
-        return neuerPreis - alterPreis;
     }
 
     /**
