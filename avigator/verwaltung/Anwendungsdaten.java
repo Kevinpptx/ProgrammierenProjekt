@@ -1,3 +1,5 @@
+package avigator.verwaltung;
+
 import java.io.Serial;
 import java.io.Serializable;
 

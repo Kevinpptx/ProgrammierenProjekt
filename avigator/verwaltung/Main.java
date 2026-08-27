@@ -1,3 +1,5 @@
+package avigator.verwaltung;
+
 public class Main {
 
     @SuppressWarnings({"UnnecessaryModifier", "unused"})

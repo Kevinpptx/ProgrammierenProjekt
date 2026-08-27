@@ -1,3 +1,5 @@
+package avigator.frontend;
+
 /**
  * Stellt Hilfsmethoden für eine einheitliche Ausgabe der Konsolenoberfläche bereit.
  */

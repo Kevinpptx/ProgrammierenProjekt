@@ -1,9 +1,11 @@
+package avigator.modell;
+
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Repräsentiert Informationen über Gepäck in einem Flugzeug. Gepäck besteht aus einer Anzahl von Koffern, die ein
- * Passagier mit sich führt.
+ * Repräsentiert Informationen über Gepäck in einem avigator.modell.Flugzeug. Gepäck besteht aus einer Anzahl von Koffern, die ein
+ * avigator.modell.Passagier mit sich führt.
  */
 public class GepaeckInformation implements Serializable {
 
@@ -19,7 +21,7 @@ public class GepaeckInformation implements Serializable {
     double gebuehrProKoffer = 40.0;
 
     /**
-     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
+     * Die Anzahl der Koffer, die ein avigator.modell.Passagier mit sich führt.
      */
     private int anzahlKoffer;
 

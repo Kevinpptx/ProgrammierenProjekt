@@ -1,3 +1,5 @@
+package avigator.verwaltung;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -5,11 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Verwaltet das Speichern und Laden der Anwendungsdaten. Die Anwendungsdaten werden mithilfe der Java-Serialisierung im
+ * Verwaltet das Speichern und Laden der avigator.verwaltung.Anwendungsdaten. Die avigator.verwaltung.Anwendungsdaten werden mithilfe der Java-Serialisierung im
  * Ordner {@code data} gespeichert.
  *
  * <p>Falls beim Programmstart keine gültige Speicherdatei vorhanden ist,
- * werden neue Anwendungsdaten erzeugt.</p>
+ * werden neue avigator.verwaltung.Anwendungsdaten erzeugt.</p>
  *
  * @author Cedric Beckmann
  * @version 1.0
@@ -17,30 +19,30 @@ import java.nio.file.Path;
 public class DatenHandler {
 
     /**
-     * Pfad zu der Datei, in der die serialisierten Anwendungsdaten gespeichert werden.
+     * Pfad zu der Datei, in der die serialisierten avigator.verwaltung.Anwendungsdaten gespeichert werden.
      */
-    private static final Path DATEI_PFAD = Path.of(System.getProperty("user.dir"), "data", "Anwendungsdaten.ser");
+    private static final Path DATEI_PFAD = Path.of(System.getProperty("user.dir"), "data", "avigator.verwaltung.Anwendungsdaten.ser");
 
     /**
-     * Erzeugt einen neuen DatenHandler.
+     * Erzeugt einen neuen avigator.verwaltung.DatenHandler.
      */
     public DatenHandler() {
 
     }
 
     /**
-     * Serialisiert die übergebenen Anwendungsdaten und speichert sie in der dafür vorgesehenen Datei.
+     * Serialisiert die übergebenen avigator.verwaltung.Anwendungsdaten und speichert sie in der dafür vorgesehenen Datei.
      *
      * <p>Falls der Ordner {@code data} noch nicht existiert,
      * wird dieser automatisch erzeugt.</p>
      *
-     * @param anwendungsdaten die zu speichernden Anwendungsdaten
-     * @throws IllegalArgumentException wenn die Anwendungsdaten {@code null} sind
+     * @param anwendungsdaten die zu speichernden avigator.verwaltung.Anwendungsdaten
+     * @throws IllegalArgumentException wenn die avigator.verwaltung.Anwendungsdaten {@code null} sind
      */
     public void speichere(Anwendungsdaten anwendungsdaten) {
 
         if (anwendungsdaten == null) {
-            throw new IllegalArgumentException("Die Anwendungsdaten duerfen nicht null sein.");
+            throw new IllegalArgumentException("Die avigator.verwaltung.Anwendungsdaten duerfen nicht null sein.");
         }
 
         try {
@@ -51,30 +53,30 @@ public class DatenHandler {
 
                 objectOutputStream.writeObject(anwendungsdaten);
 
-                System.out.println("Die Anwendungsdaten wurden erfolgreich gespeichert.");
+                System.out.println("Die avigator.verwaltung.Anwendungsdaten wurden erfolgreich gespeichert.");
             }
 
         } catch (IOException e) {
-            System.err.println("Fehler! Die Anwendungsdaten konnten nicht gespeichert werden.");
+            System.err.println("Fehler! Die avigator.verwaltung.Anwendungsdaten konnten nicht gespeichert werden.");
             e.printStackTrace();
         }
     }
 
     /**
-     * Initialisiert die Anwendungsdaten beim Programmstart.
+     * Initialisiert die avigator.verwaltung.Anwendungsdaten beim Programmstart.
      *
      * <p>Falls eine Speicherdatei vorhanden ist, werden die darin
-     * gespeicherten Anwendungsdaten geladen. Wenn keine gültige Speicherdatei vorhanden ist, werden neue
-     * Anwendungsdaten erzeugt.</p>
+     * gespeicherten avigator.verwaltung.Anwendungsdaten geladen. Wenn keine gültige Speicherdatei vorhanden ist, werden neue
+     * avigator.verwaltung.Anwendungsdaten erzeugt.</p>
      *
-     * @return die geladenen oder neu erzeugten Anwendungsdaten
+     * @return die geladenen oder neu erzeugten avigator.verwaltung.Anwendungsdaten
      */
     public Anwendungsdaten initialisiereAnwendungsdaten() {
 
         if (Files.notExists(DATEI_PFAD)) {
 
             System.out.println(
-                    "Es konnten keine gespeicherten Anwendungsdaten gefunden werden. Neue Anwendungsdaten werden erzeugt.");
+                    "Es konnten keine gespeicherten avigator.verwaltung.Anwendungsdaten gefunden werden. Neue avigator.verwaltung.Anwendungsdaten werden erzeugt.");
             return new Anwendungsdaten();
 
         } else {
@@ -86,7 +88,7 @@ public class DatenHandler {
             } catch (IOException | ClassNotFoundException | ClassCastException e) {
 
                 System.err.println(
-                        "Gespeicherte Anwendungsdaten konnten nicht geladen werden. Neue Anwendungsdaten werden erzeugt.");
+                        "Gespeicherte avigator.verwaltung.Anwendungsdaten konnten nicht geladen werden. Neue avigator.verwaltung.Anwendungsdaten werden erzeugt.");
 
                 e.printStackTrace();
 
@@ -97,9 +99,9 @@ public class DatenHandler {
     }
 
     /**
-     * Liest serialisierte Anwendungsdaten aus der Speicherdatei.
+     * Liest serialisierte avigator.verwaltung.Anwendungsdaten aus der Speicherdatei.
      *
-     * @return die aus der Datei gelesenen Anwendungsdaten
+     * @return die aus der Datei gelesenen avigator.verwaltung.Anwendungsdaten
      * @throws IOException            wenn beim Lesen der Datei ein Fehler auftritt
      * @throws ClassNotFoundException wenn die Klasse des gespeicherten Objekts nicht gefunden werden kann
      * @throws ClassCastException     wenn die Datei kein Objekt der Klasse {@link Anwendungsdaten} enthält
@@ -113,7 +115,7 @@ public class DatenHandler {
             if ((objekt instanceof Anwendungsdaten)) {
                 return (Anwendungsdaten) objekt;
             } else {
-                throw new ClassCastException("Die gespeicherte Datei enthaelt keine Anwendungsdaten");
+                throw new ClassCastException("Die gespeicherte Datei enthaelt keine avigator.verwaltung.Anwendungsdaten");
             }
         }
     }

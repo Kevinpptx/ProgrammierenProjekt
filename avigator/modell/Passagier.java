@@ -1,8 +1,10 @@
+package avigator.modell;
+
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Die Klasse Passagier speichert Informationen über einen Passagier.
+ * Die Klasse avigator.modell.Passagier speichert Informationen über einen avigator.modell.Passagier.
  *
  * @param passagierId Die ID des Passagiers.
  * @param name        Der Name des Passagiers.
@@ -17,7 +19,7 @@ public record Passagier(String passagierId, String name, String email) implement
     private static final long serialVersionUID = 1L;
 
     /**
-     * Konstruktor für die Klasse Passagier.
+     * Konstruktor für die Klasse avigator.modell.Passagier.
      *
      * @param passagierId blabla Java-Doc kommt noch
      * @param name        blabla Java-Doc kommt noch
@@ -53,9 +55,9 @@ public record Passagier(String passagierId, String name, String email) implement
     }
 
     /**
-     * Gibt die Passagier-ID zurück.
+     * Gibt die avigator.modell.Passagier-ID zurück.
      *
-     * @return die Passagier-ID
+     * @return die avigator.modell.Passagier-ID
      */
     @Override
     public String passagierId() {
@@ -93,7 +95,7 @@ public record Passagier(String passagierId, String name, String email) implement
     @Override
     public String toString() {
 
-        return "Passagier ID: " + passagierId + ", Name: " + name + ", Email: " + email;
+        return "avigator.modell.Passagier ID: " + passagierId + ", Name: " + name + ", Email: " + email;
     }
 
 }

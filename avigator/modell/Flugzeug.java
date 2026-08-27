@@ -1,9 +1,11 @@
+package avigator.modell;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Repräsentiert ein Flugzeug mit einem Sitzplan. Das Flugzeug besitzt einen eindeutigen Code, ein Modell sowie eine
+ * Repräsentiert ein avigator.modell.Flugzeug mit einem Sitzplan. Das avigator.modell.Flugzeug besitzt einen eindeutigen Code, ein Modell sowie eine
  * Vorlage aller vorhandenen Sitzplätze.
  */
 public class Flugzeug implements Serializable {
@@ -41,7 +43,7 @@ public class Flugzeug implements Serializable {
     private final Sitzplatz[][] sitzplaetzeVorlage;
 
     /**
-     * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.
+     * Erstellt ein neues avigator.modell.Flugzeug mit dem angegebenen Sitzplan.
      * <p>
      * Die Sitzplätze werden automatisch nummeriert (z. B. 1A, 1B, 1C, ...). Die ersten {@code businessReihen} Reihen
      * werden als Business-Class angelegt, alle übrigen Reihen als Economy.
@@ -76,7 +78,7 @@ public class Flugzeug implements Serializable {
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        //Es ist erlaubt, dass ein Flugzeug keine Business-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
+        //Es ist erlaubt, dass ein avigator.modell.Flugzeug keine Business-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
         if (businessReihen < 0 || businessReihen > anzahlReihen) {
             throw new IllegalArgumentException(
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
@@ -199,14 +201,14 @@ public class Flugzeug implements Serializable {
     }
 
     /**
-     * Gibt eine Beschreibung des Flugzeugs einschließlich der Sitzplatz-Anordnung zurück.
+     * Gibt eine Beschreibung des Flugzeugs einschließlich der avigator.modell.Sitzplatz-Anordnung zurück.
      *
      * @return Beschreibung des Flugzeugs und des Sitzplans
      */
     @Override
     public String toString() {
 
-        StringBuilder output = new StringBuilder("Flugzeug " + this.code
+        StringBuilder output = new StringBuilder("avigator.modell.Flugzeug " + this.code
                 + " (" + this.modell + ")"
                 + " besitzt " + getGesamtSitzanzahl()
                 + " Sitzplätze ("

@@ -1,17 +1,19 @@
+package avigator.modell;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Die Klasse {@code Flughafen} repräsentiert einen Flughafen. Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
+ * Die Klasse {@code avigator.modell.Flughafen} repräsentiert einen avigator.modell.Flughafen. Ein avigator.modell.Flughafen wird durch seinen Namen, seinen IATA-Code,
  * die Stadt sowie das Land beschrieben.
  * <p>
  * Die Klasse dient als Grundlage für weitere Klassen, beispielsweise zur Modellierung von Flügen.
  *
  * @param name     Name des Flughafens.
  * @param iataCode Dreistelliger IATA-Code des Flughafens.
- * @param stadt    Stadt, in der sich der Flughafen befindet.
- * @param land     Land, in dem sich der Flughafen befindet.
+ * @param stadt    Stadt, in der sich der avigator.modell.Flughafen befindet.
+ * @param land     Land, in dem sich der avigator.modell.Flughafen befindet.
  * @author Kevin Braun
  * @version 1.0
  */
@@ -24,7 +26,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     private static final long serialVersionUID = 1L;
 
     /**
-     * Erstellt einen neuen Flughafen mit den angegebenen Eigenschaften.
+     * Erstellt einen neuen avigator.modell.Flughafen mit den angegebenen Eigenschaften.
      *
      * @param name     Name des Flughafens
      * @param iataCode IATA-Code des Flughafens
@@ -106,7 +108,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     @Override
     public String toString() {
 
-        return "Der Flughafen " + this.name + " mit IATA-Code "
+        return "Der avigator.modell.Flughafen " + this.name + " mit IATA-Code "
                 + this.iataCode + " befindet sich in " + this.stadt
                 + ", " + this.land;
     }
