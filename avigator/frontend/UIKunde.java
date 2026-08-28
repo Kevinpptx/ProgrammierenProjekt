@@ -33,17 +33,17 @@ public class UIKunde {
     /**
      * avigator.verwaltung.Buchungssystem zur Verwaltung von Passagieren und Buchungen.
      */
-    private final Buchungssystem bs;
+    private final Buchungssystem buchungssystem;
 
     /**
      * avigator.verwaltung.Verwaltungssystem zur Verwaltung und Suche von Flügen und Flughäfen.
      */
-    private final Verwaltungssystem vs;
+    private final Verwaltungssystem verwaltungssystem;
 
     /**
      * Formatiert Datum und Uhrzeit im Format {@code dd.MM.yyyy HH:mm}.
      */
-    private static final DateTimeFormatter DATUM_ZEIT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private static final DateTimeFormatter datumZeitFormatierer = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     /**
      * Erstellt eine neue Kundenoberfläche. Das Buchungs- und avigator.verwaltung.Verwaltungssystem werden aus den übergebenen
@@ -65,8 +65,8 @@ public class UIKunde {
 
         this.datenHandler = datenHandler;
         this.anwendungsdaten = anwendungsdaten;
-        this.bs = anwendungsdaten.getBuchungssystem();
-        this.vs = anwendungsdaten.getVerwaltungssystem();
+        this.buchungssystem = anwendungsdaten.getBuchungssystem();
+        this.verwaltungssystem = anwendungsdaten.getVerwaltungssystem();
     }
 
     /**
@@ -115,13 +115,13 @@ public class UIKunde {
 
                         try {
 
-                            Passagier passagier = bs.initialisierePassagier(name, mail);
+                            Passagier passagier = buchungssystem.initialisierePassagier(name, mail);
 
                             datenHandler.speichere(anwendungsdaten);
 
                             UIHelper.druckeErfolg("Sie wurden erfolgreich registriert.");
 
-                            hauptmanagerk(passagier);
+                            hauptmanagerKunde(passagier);
 
                             return;
 
@@ -132,7 +132,7 @@ public class UIKunde {
 
                 case 2:
 
-                    if (bs.getPassagiere().isEmpty()) {
+                    if (buchungssystem.getPassagiere().isEmpty()) {
 
                         UIHelper.druckeHinweis("Es sind noch keine Kunden vorhanden.");
                         break;
@@ -140,7 +140,7 @@ public class UIKunde {
 
                     UIHelper.druckeUeberschrift("Passagierauswahl");
 
-                    for (Passagier passagier : bs.getPassagiere()) {
+                    for (Passagier passagier : buchungssystem.getPassagiere()) {
 
                         System.out.println(passagier.passagierId() +
                                            " - " +
@@ -164,7 +164,7 @@ public class UIKunde {
 
                         Passagier ausgewaehlterPassagier = null;
 
-                        for (Passagier passagier : bs.getPassagiere()) {
+                        for (Passagier passagier : buchungssystem.getPassagiere()) {
 
                             if (passagier.passagierId().equalsIgnoreCase(id)) {
 
@@ -184,7 +184,7 @@ public class UIKunde {
 
                         UIHelper.druckeErfolg("Angemeldet als " + ausgewaehlterPassagier.name() + ".");
 
-                        hauptmanagerk(ausgewaehlterPassagier);
+                        hauptmanagerKunde(ausgewaehlterPassagier);
 
                         return;
                     }
@@ -209,7 +209,7 @@ public class UIKunde {
      *
      * @param passagier der aktuell angemeldete avigator.modell.Passagier
      */
-    private void hauptmanagerk(Passagier passagier) {
+    private void hauptmanagerKunde(Passagier passagier) {
 
         while (true) {
 
@@ -315,7 +315,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Flüge suchen und buchen");
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         this.druckeFlughaefen();
 
@@ -369,7 +369,7 @@ public class UIKunde {
                     flug.getZielflughafen().iataCode()
             );
 
-            System.out.printf("%-13s%s%n", "Abflug:", flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
+            System.out.printf("%-13s%s%n", "Abflug:", flug.getAbflugszeit().format(datumZeitFormatierer));
 
             System.out.printf("%-13s%s%n", "avigator.modell.Sitzplatz:", sitzplatz);
             System.out.printf("%-13s%s%n", "avigator.modell.Sitzklasse:", sitzklasse);
@@ -393,7 +393,9 @@ public class UIKunde {
                 return;
             }
 
-            Buchung buchung = bs.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse, vs);
+            Buchung buchung = buchungssystem.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse,
+                    verwaltungssystem
+            );
 
             UIHelper.druckeUeberschrift("Buchungsbestätigung");
 
@@ -428,7 +430,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        for (Flughafen flughafen : vs.getFlughaefen()) {
+        for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
                     flughafen.iataCode(),
@@ -473,8 +475,8 @@ public class UIKunde {
                     flug.getFlugnummer(),
                     flug.getFluggesellschaft().getName(),
                     flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
-                    flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
-                    flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER)
+                    flug.getAbflugszeit().format(datumZeitFormatierer),
+                    flug.getAnkunftszeit().format(datumZeitFormatierer)
             );
         }
 
@@ -574,7 +576,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("avigator.modell.Buchung umbuchen");
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
@@ -594,7 +596,7 @@ public class UIKunde {
 
         try {
 
-            buchung = bs.sucheBuchungNachNummer(nummer);
+            buchung = buchungssystem.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
 
@@ -644,20 +646,20 @@ public class UIKunde {
             double bisherigerBuchungspreis = buchung.getGezahlterPreis();
             double neuerBuchungspreis = buchungsvorschau.getGezahlterPreis();
             double umbuchungsgebuehr = buchung.getUmbuchungsgebuehr();
-            double zusaetzlichZuZahlen = bs.berechneUmbuchungsgebuehr(buchung, neuerFlug, neuerSitzplatz);
+            double zusaetzlichZuZahlen = buchungssystem.berechneUmbuchungsgebuehr(buchung, neuerFlug, neuerSitzplatz);
 
             UIHelper.druckeUeberschrift("Umbuchungsübersicht");
 
             System.out.printf("%-27s%s | %s%n",
                     "Bisheriger avigator.modell.Flug:",
                     buchung.getFlug().getFlugnummer(),
-                    buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                    buchung.getFlug().getAbflugszeit().format(datumZeitFormatierer)
             );
 
             System.out.printf("%-27s%s | %s%n",
                     "Neuer avigator.modell.Flug:",
                     neuerFlug.getFlugnummer(),
-                    neuerFlug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                    neuerFlug.getAbflugszeit().format(datumZeitFormatierer)
             );
 
             System.out.printf("%-27s%s -> %s%n",
@@ -684,7 +686,7 @@ public class UIKunde {
                 return;
             }
 
-            bs.umbuchen(buchung, neuerFlug, sitzplatz, sitzklasse, vs);
+            buchungssystem.umbuchen(buchung, neuerFlug, sitzplatz, sitzklasse, verwaltungssystem);
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -719,7 +721,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("avigator.modell.Buchung stornieren");
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
@@ -738,7 +740,7 @@ public class UIKunde {
 
         try {
 
-            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+            Buchung buchung = buchungssystem.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
 
@@ -763,7 +765,7 @@ public class UIKunde {
 
             System.out.printf("%-22s%s | %s%n", "avigator.modell.Flug:",
                     buchung.getFlug().getFlugnummer(),
-                    buchung.getFlug().getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                    buchung.getFlug().getAbflugszeit().format(datumZeitFormatierer)
             );
 
             System.out.printf("%-22s%s -> %s%n", "Route:",
@@ -787,7 +789,7 @@ public class UIKunde {
                 return;
             }
 
-            bs.stornieren(buchung);
+            buchungssystem.stornieren(buchung);
             datenHandler.speichere(anwendungsdaten);
 
             UIHelper.druckeErfolg("Die avigator.modell.Buchung wurde erfolgreich storniert.");
@@ -810,7 +812,7 @@ public class UIKunde {
      */
     private void buchungenAnzeigen(Passagier passagier) {
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         boolean buchungVorhanden = false;
 
@@ -828,7 +830,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        for (Buchung buchung : bs.getBuchungen()) {
+        for (Buchung buchung : buchungssystem.getBuchungen()) {
 
             if (buchung.getPassagier().equals(passagier)) {
 
@@ -841,7 +843,7 @@ public class UIKunde {
                         buchung.getBuchungsnummer(),
                         flug.getFlugnummer(),
                         flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
-                        flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
+                        flug.getAbflugszeit().format(datumZeitFormatierer),
                         buchung.getSitzplatz().getSitzplatzNummer(),
                         buchung.getSitzplatz().getSitzklasse(),
                         buchung.getGepaeckinformation().getAnzahlKoffer(),
@@ -872,7 +874,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Gepäck ändern");
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
@@ -891,7 +893,7 @@ public class UIKunde {
 
         try {
 
-            Buchung buchung = bs.sucheBuchungNachNummer(nummer);
+            Buchung buchung = buchungssystem.sucheBuchungNachNummer(nummer);
 
             if (!buchung.getPassagier().equals(passagier)) {
 
@@ -929,7 +931,7 @@ public class UIKunde {
      */
     private void gepaeckAendern(Buchung buchung) {
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         try {
             int aktuelleAnzahl = buchung.getGepaeckinformation().getAnzahlKoffer();
@@ -995,7 +997,7 @@ public class UIKunde {
                 return;
             }
 
-            bs.gepaeckAendern(buchung, neueAnzahl);
+            buchungssystem.gepaeckAendern(buchung, neueAnzahl);
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -1045,7 +1047,7 @@ public class UIKunde {
      */
     private boolean hatKeineBearbeitbarenBuchungen(Passagier passagier) {
 
-        for (Buchung buchung : bs.getBuchungen()) {
+        for (Buchung buchung : buchungssystem.getBuchungen()) {
 
             if (buchung.getPassagier().equals(passagier)
                     && (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
@@ -1072,7 +1074,7 @@ public class UIKunde {
 
         ArrayList<Flug> fluege = new ArrayList<>();
 
-        if (vs.keineFluegeVorhanden()) {
+        if (verwaltungssystem.keineFluegeVorhanden()) {
             return fluege;
         }
 
@@ -1268,36 +1270,36 @@ public class UIKunde {
         if (!flugnummer.isBlank()) {
 
             if (datumUeberspringen) {
-                fluege.addAll(vs.sucheFluegeNachNummer(flugnummer));
+                fluege.addAll(verwaltungssystem.sucheFluegeNachNummer(flugnummer));
             } else {
-                fluege.add(vs.sucheFlugNachNummer(flugnummer, datum));
+                fluege.add(verwaltungssystem.sucheFlugNachNummer(flugnummer, datum));
             }
 
         } else if (!datumUeberspringen) {
 
-            ArrayList<Flug> fluegeMitGleichemDatum = vs.sucheFluegeNachDatum(datum);
+            ArrayList<Flug> fluegeMitGleichemDatum = verwaltungssystem.sucheFluegeNachDatum(datum);
 
             if (!start.isBlank() && !ziel.isBlank()) {
 
-                ArrayList<Flug> fluegeMitGleicherRoute = vs.sucheFluegeNachRoute(vs.getFlughafenNachCode(start),
-                        vs.getFlughafenNachCode(ziel)
+                ArrayList<Flug> fluegeMitGleicherRoute = verwaltungssystem.sucheFluegeNachRoute(verwaltungssystem.getFlughafenNachCode(start),
+                        verwaltungssystem.getFlughafenNachCode(ziel)
                 );
 
-                for (Flug f : fluegeMitGleichemDatum) {
+                for (Flug flug : fluegeMitGleichemDatum) {
 
-                    if (fluegeMitGleicherRoute.contains(f)) {
-                        fluege.add(f);
+                    if (fluegeMitGleicherRoute.contains(flug)) {
+                        fluege.add(flug);
                     }
                 }
 
             } else if (!ziel.isBlank()) {
 
-                ArrayList<Flug> fluegeMitGleichemZiel = vs.sucheFluegeNachZiel(vs.getFlughafenNachCode(ziel));
+                ArrayList<Flug> fluegeMitGleichemZiel = verwaltungssystem.sucheFluegeNachZiel(verwaltungssystem.getFlughafenNachCode(ziel));
 
-                for (Flug f : fluegeMitGleichemDatum) {
+                for (Flug flug : fluegeMitGleichemDatum) {
 
-                    if (fluegeMitGleichemZiel.contains(f)) {
-                        fluege.add(f);
+                    if (fluegeMitGleichemZiel.contains(flug)) {
+                        fluege.add(flug);
                     }
                 }
 
@@ -1306,17 +1308,17 @@ public class UIKunde {
         } else if (!start.isBlank() && !ziel.isBlank()) {
 
             fluege.addAll(
-                    vs.sucheFluegeNachRoute(
-                            vs.getFlughafenNachCode(start),
-                            vs.getFlughafenNachCode(ziel)
+                    verwaltungssystem.sucheFluegeNachRoute(
+                            verwaltungssystem.getFlughafenNachCode(start),
+                            verwaltungssystem.getFlughafenNachCode(ziel)
                     )
             );
 
         } else if (!ziel.isBlank()) {
 
             fluege.addAll(
-                    vs.sucheFluegeNachZiel(
-                            vs.getFlughafenNachCode(ziel)
+                    verwaltungssystem.sucheFluegeNachZiel(
+                            verwaltungssystem.getFlughafenNachCode(ziel)
                     )
             );
         }

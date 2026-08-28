@@ -37,17 +37,17 @@ public class UIMitarbeiter {
     /**
      * avigator.verwaltung.Buchungssystem zur Verwaltung und Anzeige der Buchungen.
      */
-    private final Buchungssystem bs;
+    private final Buchungssystem buchungssystem;
 
     /**
      * avigator.verwaltung.Verwaltungssystem zur Verwaltung von Fluggesellschaften, Flugzeugen, Flughäfen und Flügen.
      */
-    private final Verwaltungssystem vs;
+    private final Verwaltungssystem verwaltungssystem;
 
     /**
      * Formatiert Datum und Uhrzeit im Format {@code dd.MM.yyyy HH:mm}.
      */
-    private static final DateTimeFormatter DATUM_ZEIT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private static final DateTimeFormatter datumZeitFormatierer = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     /**
      * Erstellt eine neue Mitarbeiteroberfläche.
@@ -70,8 +70,8 @@ public class UIMitarbeiter {
 
         this.datenHandler = datenHandler;
         this.anwendungsdaten = anwendungsdaten;
-        this.bs = anwendungsdaten.getBuchungssystem();
-        this.vs = anwendungsdaten.getVerwaltungssystem();
+        this.buchungssystem = anwendungsdaten.getBuchungssystem();
+        this.verwaltungssystem = anwendungsdaten.getVerwaltungssystem();
     }
 
     /**
@@ -96,7 +96,7 @@ public class UIMitarbeiter {
             if (passwort == eingabe) {
 
                 UIHelper.druckeErfolg("Sie haben sich erfolgreich angemeldet.");
-                hauptmanager();
+                hauptmanagerMitarbeiter();
 
                 return;
 
@@ -118,7 +118,7 @@ public class UIMitarbeiter {
      * Das Menü wird so lange wiederholt, bis sich der Mitarbeiter abmeldet.
      */
     // Wenn der Mitarbeiter das Passwort eingegeben hat, kann er mehrere
-    private void hauptmanager() {
+    private void hauptmanagerMitarbeiter() {
 
         while (true) {
 
@@ -322,7 +322,7 @@ public class UIMitarbeiter {
         try {
 
             Fluggesellschaft fluggesellschaftAnlegen = new Fluggesellschaft(name, airlinecode);
-            Fluggesellschaft fluggesellschaft = vs.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
+            Fluggesellschaft fluggesellschaft = verwaltungssystem.fuegeFluggesellschaftHinzu(fluggesellschaftAnlegen);
             datenHandler.speichere(anwendungsdaten);
 
             UIHelper.druckeErfolg("Die avigator.modell.Fluggesellschaft " +
@@ -339,7 +339,7 @@ public class UIMitarbeiter {
 
         System.out.println("Alle bisherigen Fluggesellschaften: ");
 
-        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+        for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
@@ -357,7 +357,7 @@ public class UIMitarbeiter {
 
         System.out.println("Folgende Fluggesellschaften können entfernt werden:");
 
-        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+        for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
@@ -368,7 +368,7 @@ public class UIMitarbeiter {
         try {
 
             String code = Manager.stringscanner();
-            vs.entferneFluggesellschaft(vs.getFluggesellschaft(code));
+            verwaltungssystem.entferneFluggesellschaft(verwaltungssystem.getFluggesellschaft(code));
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -397,7 +397,7 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+        for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
         }
 
@@ -411,7 +411,7 @@ public class UIMitarbeiter {
 
         try {
 
-            vs.getFluggesellschaft(auswahl);
+            verwaltungssystem.getFluggesellschaft(auswahl);
 
         } catch (Exception e) {
 
@@ -451,7 +451,7 @@ public class UIMitarbeiter {
         // avigator.modell.Flugzeug erstellen
         try {
 
-            Flugzeug flugzeug = vs.erzeugeFlugzeug(vs.getFluggesellschaft(auswahl),
+            Flugzeug flugzeug = verwaltungssystem.erzeugeFlugzeug(verwaltungssystem.getFluggesellschaft(auswahl),
                     code,
                     modell,
                     reihen,
@@ -482,7 +482,7 @@ public class UIMitarbeiter {
 
         try {
 
-            for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
                 System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
 
@@ -492,12 +492,12 @@ public class UIMitarbeiter {
 
                 } else {
 
-                    for (Flugzeug f : fluggesellschaft.getFlotte()) {
+                    for (Flugzeug flugzeug : fluggesellschaft.getFlotte()) {
 
-                        System.out.println(f.getCode() + " | " + f.getModell()
-                                           + " | Business-Sitze: " + f.getAnzahlBusiness()
-                                           + " | Economy-Sitze: " + f.getAnzahlEconomy()
-                                           + " | Gesamt: " + f.getGesamtSitzanzahl()
+                        System.out.println(flugzeug.getCode() + " | " + flugzeug.getModell()
+                                           + " | Business-Sitze: " + flugzeug.getAnzahlBusiness()
+                                           + " | Economy-Sitze: " + flugzeug.getAnzahlEconomy()
+                                           + " | Gesamt: " + flugzeug.getGesamtSitzanzahl()
                         );
                     }
                 }
@@ -509,7 +509,7 @@ public class UIMitarbeiter {
             UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Flugzeugcode des zu entfernenden Flugzeugs ein:");
 
             String code = Manager.stringscanner();
-            vs.entferneFlugzeug(code);
+            verwaltungssystem.entferneFlugzeug(code);
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -540,12 +540,12 @@ public class UIMitarbeiter {
         }
 
         UIHelper.druckeEingabeaufforderung("Geben Sie den IATA-Code des Flughafens ein:");
-        String iatacode = Manager.stringscanner();
+        String iataCode = Manager.stringscanner();
 
-        while (iatacode.isEmpty()) {
+        while (iataCode.isEmpty()) {
 
             UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie einen IATA-Code für den avigator.modell.Flughafen ein: ");
-            iatacode = Manager.stringscanner();
+            iataCode = Manager.stringscanner();
         }
 
         UIHelper.druckeEingabeaufforderung("Geben Sie die Stadt des Flughafens ein:");
@@ -568,7 +568,7 @@ public class UIMitarbeiter {
 
         try {
 
-            Flughafen flughafen = vs.erzeugeFlughafen(name, iatacode, stadt, land);
+            Flughafen flughafen = verwaltungssystem.erzeugeFlughafen(name, iataCode, stadt, land);
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -602,7 +602,7 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        for (Flughafen flughafen : vs.getFlughaefen()) {
+        for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
             System.out.printf("%-4s | %-35s | %-15s | %s%n",
                     flughafen.iataCode(),
@@ -620,9 +620,9 @@ public class UIMitarbeiter {
 
         try {
 
-            Flughafen flughafen = vs.getFlughafenNachCode(iataCode);
+            Flughafen flughafen = verwaltungssystem.getFlughafenNachCode(iataCode);
 
-            vs.entferneFlughafen(flughafen);
+            verwaltungssystem.entferneFlughafen(flughafen);
 
             datenHandler.speichere(anwendungsdaten);
 
@@ -647,7 +647,7 @@ public class UIMitarbeiter {
      */
     private void flugAnlegen() {
 
-        String gesellschaft, flugzeug, startflughafen, zielflughafen;
+        String fluggesellschaft2, flugzeug, startflughafen, zielflughafen;
         LocalDateTime ankunft, abflug;
 
         UIHelper.druckeUeberschrift("avigator.modell.Flug anlegen");
@@ -662,7 +662,7 @@ public class UIMitarbeiter {
         // avigator.modell.Fluggesellschaft auswählen
         UIHelper.druckeEingabeaufforderung("Welche Airline führt den avigator.modell.Flug durch? Auswahl über Airlinecode:");
 
-        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+        for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
             System.out.println(
                     fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
@@ -670,15 +670,15 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        Fluggesellschaft ausgewaehlteGesellschaft;
+        Fluggesellschaft ausgewaehlteFluggesellschaft;
 
         while (true) {
 
-            gesellschaft = Manager.stringscanner().toUpperCase();
+            fluggesellschaft2 = Manager.stringscanner().toUpperCase();
 
             try {
 
-                ausgewaehlteGesellschaft = vs.getFluggesellschaft(gesellschaft);
+                ausgewaehlteFluggesellschaft = verwaltungssystem.getFluggesellschaft(fluggesellschaft2);
                 break;
 
             } catch (Exception e) {
@@ -690,20 +690,20 @@ public class UIMitarbeiter {
 
         // avigator.modell.Flugzeug auswählen
 
-        if (ausgewaehlteGesellschaft.getFlotte().isEmpty()) {
+        if (ausgewaehlteFluggesellschaft.getFlotte().isEmpty()) {
 
             UIHelper.druckeHinweis("Für diese avigator.modell.Fluggesellschaft sind keine Flugzeuge vorhanden.");
             return;
         }
 
-        for (Flugzeug f : ausgewaehlteGesellschaft.getFlotte()) {
+        for (Flugzeug flugzeugTemporaer : ausgewaehlteFluggesellschaft.getFlotte()) {
 
             System.out.println(
-                    f.getCode()
-                    + " | " + f.getModell()
-                    + " | Business-Sitze: " + f.getAnzahlBusiness()
-                    + " | Economy-Sitze: " + f.getAnzahlEconomy()
-                    + " | Gesamt: " + f.getGesamtSitzanzahl()
+                    flugzeugTemporaer.getCode()
+                    + " | " + flugzeugTemporaer.getModell()
+                    + " | Business-Sitze: " + flugzeugTemporaer.getAnzahlBusiness()
+                    + " | Economy-Sitze: " + flugzeugTemporaer.getAnzahlEconomy()
+                    + " | Gesamt: " + flugzeugTemporaer.getGesamtSitzanzahl()
             );
         }
 
@@ -719,9 +719,9 @@ public class UIMitarbeiter {
 
             try {
 
-                ausgewaehltesFlugzeug = vs.getFlugzeug(flugzeug);
+                ausgewaehltesFlugzeug = verwaltungssystem.getFlugzeug(flugzeug);
 
-                if (!ausgewaehlteGesellschaft.getFlotte().contains(ausgewaehltesFlugzeug)) {
+                if (!ausgewaehlteFluggesellschaft.getFlotte().contains(ausgewaehltesFlugzeug)) {
 
                     UIHelper.druckeFehler("Dieses avigator.modell.Flugzeug gehört nicht zur ausgewählten avigator.modell.Fluggesellschaft.");
                     continue;
@@ -752,7 +752,7 @@ public class UIMitarbeiter {
         System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "IATA", "avigator.modell.Flughafen", "Ort", "Land");
         UIHelper.druckeTrennlinie();
 
-        for (Flughafen flughafen : vs.getFlughaefen()) {
+        for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
             System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
                     flughafen.iataCode(),
@@ -774,7 +774,7 @@ public class UIMitarbeiter {
 
             try {
 
-                ausgewaehlterStartflughafen = vs.getFlughafenNachCode(startflughafen);
+                ausgewaehlterStartflughafen = verwaltungssystem.getFlughafenNachCode(startflughafen);
                 break;
 
             } catch (Exception e) {
@@ -792,7 +792,7 @@ public class UIMitarbeiter {
 
             try {
 
-                ausgewaehlterZielflughafen = vs.getFlughafenNachCode(zielflughafen);
+                ausgewaehlterZielflughafen = verwaltungssystem.getFlughafenNachCode(zielflughafen);
                 break;
 
             } catch (Exception e) {
@@ -835,8 +835,8 @@ public class UIMitarbeiter {
 
                     try {
 
-                        vs.fuegeFlugHinzu(
-                                ausgewaehlteGesellschaft,
+                        verwaltungssystem.fuegeFlugHinzu(
+                                ausgewaehlteFluggesellschaft,
                                 ausgewaehltesFlugzeug,
                                 ausgewaehlterStartflughafen,
                                 ausgewaehlterZielflughafen,
@@ -864,8 +864,8 @@ public class UIMitarbeiter {
                 case 0:
                     try {
 
-                        vs.fuegeFlugHinzu(
-                                ausgewaehlteGesellschaft,
+                        verwaltungssystem.fuegeFlugHinzu(
+                                ausgewaehlteFluggesellschaft,
                                 ausgewaehltesFlugzeug,
                                 ausgewaehlterStartflughafen,
                                 ausgewaehlterZielflughafen,
@@ -899,10 +899,10 @@ public class UIMitarbeiter {
      */
     private LocalDateTime datumUndUhrzeitEinlesen(String text) {
 
-        DateTimeFormatter datumsFormatter = DateTimeFormatter
+        DateTimeFormatter datumZeitFormatierer = DateTimeFormatter
                 .ofPattern("dd.MM.uuuu")
                 .withResolverStyle(ResolverStyle.STRICT);
-        DateTimeFormatter zeitFormatter = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+        DateTimeFormatter zeitFormatierer = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
 
         LocalDate datum = null;
         LocalTime zeit = null;
@@ -913,7 +913,7 @@ public class UIMitarbeiter {
 
             try {
 
-                datum = LocalDate.parse(Manager.stringscanner(), datumsFormatter);
+                datum = LocalDate.parse(Manager.stringscanner(), datumZeitFormatierer);
                 System.out.println();
 
             } catch (DateTimeException e) {
@@ -928,7 +928,7 @@ public class UIMitarbeiter {
 
             try {
 
-                zeit = LocalTime.parse(Manager.stringscanner(), zeitFormatter);
+                zeit = LocalTime.parse(Manager.stringscanner(), zeitFormatierer);
                 System.out.println();
 
             } catch (DateTimeException e) {
@@ -951,21 +951,21 @@ public class UIMitarbeiter {
      */
     private void flugEntfernen() {
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         UIHelper.druckeUeberschrift("avigator.modell.Flug entfernen");
 
         ArrayList<Flug> auswaehlbareFluege = new ArrayList<>();
         int nummer = 1;
 
-        for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+        for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
             System.out.println();
             System.out.println(fluggesellschaft.getAirlineCode() + " - " + fluggesellschaft.getName());
 
             boolean hatFluege = false;
 
-            for (Flug flug : vs.getFluege()) {
+            for (Flug flug : verwaltungssystem.getFluege()) {
 
                 if (flug.getFluggesellschaft().equals(fluggesellschaft)) {
 
@@ -980,7 +980,7 @@ public class UIMitarbeiter {
                             + " -> "
                             + flug.getZielflughafen().iataCode()
                             + " | Abflug: "
-                            + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                            + flug.getAbflugszeit().format(datumZeitFormatierer)
                     );
 
                     nummer++;
@@ -1017,16 +1017,16 @@ public class UIMitarbeiter {
 
         Flug flug = auswaehlbareFluege.get(auswahl - 1);
 
-        if (bs.findeRelevanteBuchungen(flug).isEmpty()) {
+        if (buchungssystem.findeRelevanteBuchungen(flug).isEmpty()) {
 
-            vs.entferneFlug(flug);
+            verwaltungssystem.entferneFlug(flug);
 
             datenHandler.speichere(anwendungsdaten);
 
             UIHelper.druckeErfolg("Der avigator.modell.Flug " +
                                   flug.getFlugnummer() +
                                   " am " +
-                                  flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER) +
+                                  flug.getAbflugszeit().format(datumZeitFormatierer) +
                                   " wurde erfolgreich entfernt.");
 
         } else {
@@ -1042,7 +1042,7 @@ public class UIMitarbeiter {
      */
     private void fluguebersicht() {
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         while (true) {
 
@@ -1052,14 +1052,14 @@ public class UIMitarbeiter {
 
             int nummer = 1;
 
-            for (Fluggesellschaft fluggesellschaft : vs.getFluggesellschaften()) {
+            for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
                 System.out.println();
                 System.out.println(fluggesellschaft.getName() + " (" + fluggesellschaft.getAirlineCode() + ")");
 
                 boolean hatFluege = false;
 
-                for (Flug flug : vs.getFluege()) {
+                for (Flug flug : verwaltungssystem.getFluege()) {
 
                     if (flug.getFluggesellschaft().equals(fluggesellschaft)) {
 
@@ -1075,7 +1075,7 @@ public class UIMitarbeiter {
                                 + " -> "
                                 + flug.getZielflughafen().iataCode()
                                 + " | Abflug: "
-                                + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER)
+                                + flug.getAbflugszeit().format(datumZeitFormatierer)
                                 + " | Auslastung: "
                                 + flug.berechneAuslastung()
                                 + "%"
@@ -1108,7 +1108,7 @@ public class UIMitarbeiter {
             }
 
             Flug ausgewaehlterFlug = auswaehlbareFluege.get(auswahl - 1);
-            flugdetails(ausgewaehlterFlug);
+            druckeFlugdetails(ausgewaehlterFlug);
         }
     }
 
@@ -1123,7 +1123,7 @@ public class UIMitarbeiter {
      *
      * @param flug der avigator.modell.Flug, dessen Detailinformationen angezeigt werden
      */
-    private void flugdetails(Flug flug) {
+    private void druckeFlugdetails(Flug flug) {
 
         while (true) {
 
@@ -1135,8 +1135,8 @@ public class UIMitarbeiter {
                                flug.getStartFlughafen().iataCode() +
                                " -> " +
                                flug.getZielflughafen().iataCode());
-            System.out.println("Abflug: " + flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER));
-            System.out.println("Ankunft: " + flug.getAnkunftszeit().format(DATUM_ZEIT_FORMATTER));
+            System.out.println("Abflug: " + flug.getAbflugszeit().format(datumZeitFormatierer));
+            System.out.println("Ankunft: " + flug.getAnkunftszeit().format(datumZeitFormatierer));
             System.out.println("avigator.modell.Flugzeug: " +
                                flug.getFlugzeug().getModell() +
                                " (" +
@@ -1164,7 +1164,7 @@ public class UIMitarbeiter {
                 case 2:
                     UIHelper.druckeUeberschrift("avigator.modell.Passagier- und Gepäckübersicht für avigator.modell.Flug " + flug.getFlugnummer());
 
-                    ArrayList<Buchung> buchungen = bs.findeRelevanteBuchungen(flug);
+                    ArrayList<Buchung> buchungen = buchungssystem.findeRelevanteBuchungen(flug);
 
                     if (buchungen.isEmpty()) {
                         UIHelper.druckeHinweis("Für diesen avigator.modell.Flug liegen keine Buchungen vor.");
@@ -1212,9 +1212,9 @@ public class UIMitarbeiter {
 
         UIHelper.druckeUeberschrift("Buchungsübersicht");
 
-        vs.alteFluegeLoeschen(bs);
+        verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
-        if (bs.getBuchungen().isEmpty()) {
+        if (buchungssystem.getBuchungen().isEmpty()) {
 
             UIHelper.druckeHinweis("Es sind keine Buchungen vorhanden.");
             return;
@@ -1227,7 +1227,7 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        for (Buchung buchung : bs.getBuchungen()) {
+        for (Buchung buchung : buchungssystem.getBuchungen()) {
 
             Flug flug = buchung.getFlug();
 
@@ -1240,7 +1240,7 @@ public class UIMitarbeiter {
                     passagier,
                     flug.getFlugnummer(),
                     flug.getStartFlughafen().iataCode() + " -> " + flug.getZielflughafen().iataCode(),
-                    flug.getAbflugszeit().format(DATUM_ZEIT_FORMATTER),
+                    flug.getAbflugszeit().format(datumZeitFormatierer),
                     buchung.getSitzplatz().getSitzplatzNummer(),
                     buchung.getSitzplatz().getSitzklasse(),
                     buchung.getGepaeckinformation().getAnzahlKoffer(),
@@ -1251,7 +1251,7 @@ public class UIMitarbeiter {
 
         UIHelper.druckeTrennlinie();
 
-        UIHelper.druckeHinweis("Anzahl der Buchungen: " + bs.getBuchungen().size());
+        UIHelper.druckeHinweis("Anzahl der Buchungen: " + buchungssystem.getBuchungen().size());
     }
 
 }

@@ -110,9 +110,9 @@ public class Verwaltungssystem implements Serializable {
 
         } else {
 
-            for (Flug f : fluege) {
+            for (Flug flug : fluege) {
 
-                if (f.getFluggesellschaft().equals(fluggesellschaft)) {
+                if (flug.getFluggesellschaft().equals(fluggesellschaft)) {
 
                     throw new IllegalArgumentException(
                             "Die avigator.modell.Fluggesellschaft konnte nicht entfernt werden, da noch aktuelle Flüge geplant sind.");
@@ -136,18 +136,18 @@ public class Verwaltungssystem implements Serializable {
     /**
      * Sucht eine avigator.modell.Fluggesellschaft anhand ihres Airline-Codes.
      *
-     * @param c der IATA-Code der gesuchten avigator.modell.Fluggesellschaft
+     * @param iataCode der IATA-Code der gesuchten avigator.modell.Fluggesellschaft
      * @return die avigator.modell.Fluggesellschaft mit dem angegebenen Code
      * @throws IllegalArgumentException wenn keine avigator.modell.Fluggesellschaft mit dem angegebenen Code existiert
      */
-    public Fluggesellschaft getFluggesellschaft(String c) {
+    public Fluggesellschaft getFluggesellschaft(String iataCode) {
 
-        String code = c.strip().toUpperCase(Locale.ROOT);
+        String code = iataCode.strip().toUpperCase(Locale.ROOT);
 
-        for (Fluggesellschaft f : this.fluggesellschaften) {
+        for (Fluggesellschaft fluggesellschaft : this.fluggesellschaften) {
 
-            if (f.getAirlineCode().equals(code)) {
-                return f;
+            if (fluggesellschaft.getAirlineCode().equals(code)) {
+                return fluggesellschaft;
             }
         }
 
@@ -195,12 +195,12 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
-        Flugzeug f = new Flugzeug(flugzeugCode, modell, anzahlReihen, sitzeProReihe, businessReihen);
+        Flugzeug flugzeug = new Flugzeug(flugzeugCode, modell, anzahlReihen, sitzeProReihe, businessReihen);
 
-        fluggesellschaft.fuegeFlugzeugHinzu(f);
-        this.flugzeuge.add(f);
+        fluggesellschaft.fuegeFlugzeugHinzu(flugzeug);
+        this.flugzeuge.add(flugzeug);
 
-        return f;
+        return flugzeug;
     }
 
     /**
@@ -221,20 +221,20 @@ public class Verwaltungssystem implements Serializable {
 
         Flugzeug flug = this.getFlugzeug(code.strip().toUpperCase(Locale.ROOT));
 
-        for (Flug tempFlug : this.fluege) {
+        for (Flug flugTemporaer : this.fluege) {
 
-            if (tempFlug.getFlugzeug().equals(flug)) {
+            if (flugTemporaer.getFlugzeug().equals(flug)) {
 
                 throw new IllegalStateException(
                         "Das FLugzeug kann nicht entfernt werden, da noch Flüge damit geplant sind.");
             }
         }
 
-        for (Fluggesellschaft flugGes : this.fluggesellschaften) {
+        for (Fluggesellschaft fluggesellschaft : this.fluggesellschaften) {
 
-            if (flugGes.beinhaltetFlugzeug(flug)) {
+            if (fluggesellschaft.beinhaltetFlugzeug(flug)) {
 
-                flugGes.entferneFlugzeug(flug);
+                fluggesellschaft.entferneFlugzeug(flug);
                 this.flugzeuge.remove(flug);
 
                 return;
@@ -259,10 +259,10 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
 
-            Flugzeug f = iterator.next();
+            Flugzeug flugzeug = iterator.next();
 
-            if (f.getCode().equals(flugzeugCode)) {
-                return f;
+            if (flugzeug.getCode().equals(flugzeugCode)) {
+                return flugzeug;
             }
         }
 
@@ -286,19 +286,19 @@ public class Verwaltungssystem implements Serializable {
 
         String code = iataCode.strip().toUpperCase(Locale.ROOT);
 
-        for (Flughafen f : this.flughaefen) {
+        for (Flughafen flughafen : this.flughaefen) {
 
-            if (f.iataCode().equals(code)) {
+            if (flughafen.iataCode().equals(code)) {
                 throw new IllegalArgumentException("Ein avigator.modell.Flughafen mit dem IATACode " + code + " existiert bereits.");
-            } else if (f.name().equalsIgnoreCase(name)) {
+            } else if (flughafen.name().equalsIgnoreCase(name)) {
                 throw new IllegalArgumentException("Ein avigator.modell.Flughafen mit dem Namen " + name + " existiert bereits.");
             }
         }
 
-        Flughafen f = new Flughafen(name, code, stadt, land);
-        this.flughaefen.add(f);
+        Flughafen flughafen = new Flughafen(name, code, stadt, land);
+        this.flughaefen.add(flughafen);
 
-        return f;
+        return flughafen;
     }
 
     /**
@@ -317,9 +317,9 @@ public class Verwaltungssystem implements Serializable {
 
         if (this.flughaefen.contains(flughafen)) {
 
-            for (Flug f : fluege) {
+            for (Flug flug : fluege) {
 
-                if (f.getStartFlughafen().equals(flughafen) || f.getZielflughafen().equals(flughafen)) {
+                if (flug.getStartFlughafen().equals(flughafen) || flug.getZielflughafen().equals(flughafen)) {
 
                     throw new IllegalArgumentException(
                             "Der avigator.modell.Flughafen konnte nicht entfernt werden, da hier noch aktuelle Flüge geplant sind.");
@@ -345,10 +345,10 @@ public class Verwaltungssystem implements Serializable {
 
         String code = iataCode.strip().toUpperCase(Locale.ROOT);
 
-        for (Flughafen f : this.flughaefen) {
+        for (Flughafen flughafen : this.flughaefen) {
 
-            if (f.iataCode().equals(code)) {
-                return f;
+            if (flughafen.iataCode().equals(code)) {
+                return flughafen;
             }
         }
 
@@ -409,32 +409,32 @@ public class Verwaltungssystem implements Serializable {
 
         ArrayList<Flug> erzeugteFluege = new ArrayList<>();
 
-        LocalDateTime lAbflug = abflugzeit;
-        LocalDateTime lAnkunft = ankunftszeit;
+        LocalDateTime datumZeitAbflug = abflugzeit;
+        LocalDateTime datumZeitAnkunft = ankunftszeit;
 
-        if (lAbflug == null || lAnkunft == null) {
+        if (datumZeitAbflug == null || datumZeitAnkunft == null) {
             throw new IllegalArgumentException("Die Abflugs- bzw. Ankunftszeit darf nicht null sein.");
         }
 
         //Fügt zuerst alle Flüge einer Liste hinzu, um diese danach zu validieren. Validiert die Flugnummer auch gegen diese Liste.
         for (int i = 0; i < anzahlTageWiederholungen; i++) {
 
-            String flugnummer = erzeugeFlugnummer(fluggesellschaft, lAbflug, erzeugteFluege);
+            String flugnummer = erzeugeFlugnummer(fluggesellschaft, datumZeitAbflug, erzeugteFluege);
 
             Flug hinflug = new Flug(flugnummer,
                     fluggesellschaft,
                     flugzeug,
                     startFlughafen,
                     zielFlughafen,
-                    lAbflug,
-                    lAnkunft,
+                    datumZeitAbflug,
+                    datumZeitAnkunft,
                     basispreis
             );
 
             erzeugteFluege.add(hinflug);
 
-            lAbflug = lAbflug.plusDays(1);
-            lAnkunft = lAnkunft.plusDays(1);
+            datumZeitAbflug = datumZeitAbflug.plusDays(1);
+            datumZeitAnkunft = datumZeitAnkunft.plusDays(1);
         }
 
         //wenn es einen Rückflug geben soll, dann wird für jeden avigator.modell.Flug ein Rückflug erstellt und über eine Liste in die Gesamtliste hinzugefügt
@@ -812,19 +812,19 @@ public class Verwaltungssystem implements Serializable {
         }
 
         Iterator<Flug> iterator = fluege.iterator();
-        ArrayList<Flug> ret = new ArrayList<>();
+        ArrayList<Flug> alleFluegeMitFlugnummer = new ArrayList<>();
 
         while (iterator.hasNext()) {
 
-            Flug f = iterator.next();
+            Flug flug = iterator.next();
 
-            if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
-                ret.add(f);
+            if (flug.getFlugnummer().equalsIgnoreCase(flugnummer)) {
+                alleFluegeMitFlugnummer.add(flug);
             }
         }
 
-        if (!ret.isEmpty()) {
-            return ret;
+        if (!alleFluegeMitFlugnummer.isEmpty()) {
+            return alleFluegeMitFlugnummer;
         }
 
         throw new NoSuchElementException("Es wurden keine Flüge mit der Flugnummer " + flugnummer + " gefunden");
@@ -849,10 +849,10 @@ public class Verwaltungssystem implements Serializable {
 
         while (iterator.hasNext()) {
 
-            Flug f = iterator.next();
+            Flug flug = iterator.next();
 
-            if (f.getAbflugszeit().toLocalDate().equals(datum)) {
-                gefundeneFluege.add(f);
+            if (flug.getAbflugszeit().toLocalDate().equals(datum)) {
+                gefundeneFluege.add(flug);
             }
         }
 
@@ -881,12 +881,12 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Das Datum darf nicht null sein.");
         }
 
-        for (Flug f : fluege) {
+        for (Flug flug : fluege) {
 
-            if (f.getFlugnummer().equalsIgnoreCase(flugnummer)) {
+            if (flug.getFlugnummer().equalsIgnoreCase(flugnummer)) {
 
-                if (f.getAbflugszeit().toLocalDate().equals(datum)) {
-                    return f;
+                if (flug.getAbflugszeit().toLocalDate().equals(datum)) {
+                    return flug;
                 }
             }
         }
