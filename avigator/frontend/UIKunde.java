@@ -209,7 +209,7 @@ public class UIKunde {
      *
      * @param passagier der aktuell angemeldete avigator.modell.Passagier
      */
-    public void hauptmanagerk(Passagier passagier) {
+    private void hauptmanagerk(Passagier passagier) {
 
         while (true) {
 
@@ -254,7 +254,7 @@ public class UIKunde {
      *
      * @param passagier der aktuell angemeldete avigator.modell.Passagier
      */
-    public void buchungenVerwalten(Passagier passagier) {
+    private void buchungenVerwalten(Passagier passagier) {
 
         while (true) {
 
@@ -311,7 +311,7 @@ public class UIKunde {
      *
      * @param passagier der avigator.modell.Passagier, für den der avigator.modell.Flug gebucht wird
      */
-    public void fluegeSuchenUndBuchen(Passagier passagier) {
+    private void fluegeSuchenUndBuchen(Passagier passagier) {
 
         UIHelper.druckeUeberschrift("Flüge suchen und buchen");
 
@@ -570,7 +570,7 @@ public class UIKunde {
      *
      * @param passagier der avigator.modell.Passagier, dessen avigator.modell.Buchung umgebucht werden soll
      */
-    public void umbuchen(Passagier passagier) {
+    private void umbuchen(Passagier passagier) {
 
         UIHelper.druckeUeberschrift("avigator.modell.Buchung umbuchen");
 
@@ -715,7 +715,7 @@ public class UIKunde {
      *
      * @param passagier der avigator.modell.Passagier, dessen avigator.modell.Buchung storniert werden soll
      */
-    public void stornieren(Passagier passagier) {
+    private void stornieren(Passagier passagier) {
 
         UIHelper.druckeUeberschrift("avigator.modell.Buchung stornieren");
 
@@ -808,7 +808,7 @@ public class UIKunde {
      *
      * @param passagier der avigator.modell.Passagier, dessen Buchungen angezeigt werden
      */
-    public void buchungenAnzeigen(Passagier passagier) {
+    private void buchungenAnzeigen(Passagier passagier) {
 
         vs.alteFluegeLoeschen(bs);
 
@@ -868,7 +868,7 @@ public class UIKunde {
      *
      * @param passagier der avigator.modell.Passagier, dessen Gepäckinformationen geändert werden sollen
      */
-    public void gepaeckAendern(Passagier passagier) {
+    private void gepaeckAendern(Passagier passagier) {
 
         UIHelper.druckeUeberschrift("Gepäck ändern");
 
@@ -927,7 +927,7 @@ public class UIKunde {
      *
      * @param buchung die avigator.modell.Buchung, deren Gepäckinformationen geändert werden sollen
      */
-    public void gepaeckAendern(Buchung buchung) {
+    private void gepaeckAendern(Buchung buchung) {
 
         vs.alteFluegeLoeschen(bs);
 

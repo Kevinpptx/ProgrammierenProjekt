@@ -118,7 +118,7 @@ public class UIMitarbeiter {
      * Das Menü wird so lange wiederholt, bis sich der Mitarbeiter abmeldet.
      */
     // Wenn der Mitarbeiter das Passwort eingegeben hat, kann er mehrere
-    public void hauptmanager() {
+    private void hauptmanager() {
 
         while (true) {
 
@@ -184,7 +184,7 @@ public class UIMitarbeiter {
      * Der Mitarbeiter kann eine neue avigator.modell.Fluggesellschaft anlegen, eine vorhandene avigator.modell.Fluggesellschaft entfernen oder zum
      * Hauptmenü zurückkehren.
      */
-    public void fluggesellschaftenManager() {
+    private void fluggesellschaftenManager() {
 
         while (true) {
 
@@ -225,7 +225,7 @@ public class UIMitarbeiter {
      * Der Mitarbeiter kann ein avigator.modell.Flugzeug zur Flotte einer avigator.modell.Fluggesellschaft hinzufügen, ein vorhandenes avigator.modell.Flugzeug
      * entfernen oder zum Hauptmenü zurückkehren.
      */
-    public void flottenManager() {
+    private void flottenManager() {
 
         while (true) {
 
@@ -266,7 +266,7 @@ public class UIMitarbeiter {
      * Der Mitarbeiter kann einen neuen avigator.modell.Flughafen hinzufügen, einen vorhandenen avigator.modell.Flughafen entfernen oder zum Hauptmenü
      * zurückkehren.
      */
-    public void flughafenManager() {
+    private void flughafenManager() {
 
         while (true) {
 
@@ -309,7 +309,7 @@ public class UIMitarbeiter {
      * avigator.verwaltung.Verwaltungssystem hinzugefügt und dauerhaft gespeichert.
      */
 
-    public void fluggesellschaftAnlegen() {
+    private void fluggesellschaftAnlegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Fluggesellschaft anlegen");
 
@@ -351,7 +351,7 @@ public class UIMitarbeiter {
      * Die avigator.modell.Fluggesellschaft wird über ihren Airlinecode ausgewählt. Nach erfolgreicher Entfernung werden die
      * avigator.verwaltung.Anwendungsdaten gespeichert.
      */
-    public void fluggeselschaftentfernen() {
+    private void fluggeselschaftentfernen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Fluggesellschaft entfernen");
 
@@ -389,7 +389,7 @@ public class UIMitarbeiter {
      * Nach erfolgreicher Erstellung wird das avigator.modell.Flugzeug gespeichert.
      */
 
-    public void flugzeugDerFlotteHinzufuegen() {
+    private void flugzeugDerFlotteHinzufuegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flugzeug der Flotte hinzufügen");
 
@@ -476,7 +476,7 @@ public class UIMitarbeiter {
      * <p>
      * Nach erfolgreicher Entfernung werden die avigator.verwaltung.Anwendungsdaten gespeichert.
      */
-    public void flugzeugeEntfernen() {
+    private void flugzeugeEntfernen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flugzeug entfernen");
 
@@ -526,7 +526,7 @@ public class UIMitarbeiter {
      * Der Mitarbeiter gibt den Namen, IATA-Code, die Stadt und das Land des Flughafens ein. Anschließend wird der
      * avigator.modell.Flughafen erzeugt und gespeichert.
      */
-    public void flughafenHinzufuegen() {
+    private void flughafenHinzufuegen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flughafen hinzufügen");
 
@@ -590,7 +590,7 @@ public class UIMitarbeiter {
      * Der avigator.modell.Flughafen wird über seinen IATA-Code ausgewählt. Nach erfolgreicher Entfernung werden die avigator.verwaltung.Anwendungsdaten
      * gespeichert.
      */
-    public void flughafenEntfernen() {
+    private void flughafenEntfernen() {
 
         UIHelper.druckeUeberschrift("avigator.modell.Flughafen entfernen");
 
@@ -645,7 +645,7 @@ public class UIMitarbeiter {
      * <p>
      * Erfolgreich erzeugte Flüge werden anschließend dauerhaft gespeichert.
      */
-    public void flugAnlegen() {
+    private void flugAnlegen() {
 
         String gesellschaft, flugzeug, startflughafen, zielflughafen;
         LocalDateTime ankunft, abflug;
@@ -897,7 +897,7 @@ public class UIMitarbeiter {
      * @param text Beschreibung des Zeitpunkts, z. B. "des Abfluges"
      * @return eingegebenes Datum mit Uhrzeit als LocalDateTime
      */
-    public LocalDateTime datumUndUhrzeitEinlesen(String text) {
+    private LocalDateTime datumUndUhrzeitEinlesen(String text) {
 
         DateTimeFormatter datumsFormatter = DateTimeFormatter
                 .ofPattern("dd.MM.uuuu")
@@ -949,7 +949,7 @@ public class UIMitarbeiter {
      * Ein avigator.modell.Flug kann nur entfernt werden, wenn keine relevanten Buchungen mehr für ihn vorhanden sind. Nach
      * erfolgreicher Entfernung werden die avigator.verwaltung.Anwendungsdaten gespeichert.
      */
-    public void flugEntfernen() {
+    private void flugEntfernen() {
 
         vs.alteFluegeLoeschen(bs);
 
@@ -1123,7 +1123,7 @@ public class UIMitarbeiter {
      *
      * @param flug der avigator.modell.Flug, dessen Detailinformationen angezeigt werden
      */
-    public void flugdetails(Flug flug) {
+    private void flugdetails(Flug flug) {
 
         while (true) {
 

@@ -471,7 +471,7 @@ public class Verwaltungssystem implements Serializable {
         try {
 
             for (Flug flug : erzeugteFluege) {
-                pruefeFlug(flug, erzeugteFluege);
+                pruefeFlugAufZeitlicheOderRegistrationsUeberschneidung(flug, erzeugteFluege);
             }
 
             fluege.addAll(erzeugteFluege);
@@ -566,7 +566,7 @@ public class Verwaltungssystem implements Serializable {
      * @param startFlughafen   von dem der avigator.modell.Flug starten soll
      * @param zielFlughafen    zu dem der avigator.modell.Flug fliegen soll
      */
-    public void validiereFlug(Fluggesellschaft fluggesellschaft,
+    private void validiereFlug(Fluggesellschaft fluggesellschaft,
                               Flugzeug flugzeug,
                               Flughafen startFlughafen,
                               Flughafen zielFlughafen
@@ -598,11 +598,11 @@ public class Verwaltungssystem implements Serializable {
      * @param neueFluege die gemeinsam neu erzeugten Flüge
      * @throws IllegalArgumentException wenn sich die Einsatzzeiten desselben Flugzeugs überschneiden
      */
-    private void pruefeFlug(Flug neuerFlug, List<Flug> neueFluege) {
+    private void pruefeFlugAufZeitlicheOderRegistrationsUeberschneidung(Flug neuerFlug, List<Flug> neueFluege) {
 
         //prüfe zuerst gegen vorhandene Fluege
         for (Flug vorhandenerFlug : fluege) {
-            pruefeUeberschneidung(neuerFlug, vorhandenerFlug);
+            pruefeFlugAufZeitlicheUeberschneidung(neuerFlug, vorhandenerFlug);
         }
 
         //prüfe danach gegen erzeugte Serienflüge
@@ -612,7 +612,7 @@ public class Verwaltungssystem implements Serializable {
                 continue;
             }
 
-            pruefeUeberschneidung(neuerFlug, vorhandenerNeuerFlug);
+            pruefeFlugAufZeitlicheUeberschneidung(neuerFlug, vorhandenerNeuerFlug);
         }
     }
 
@@ -623,7 +623,7 @@ public class Verwaltungssystem implements Serializable {
      * @param vorhandenerFlug der Vergleichsflug
      * @throws IllegalArgumentException wenn dasselbe avigator.modell.Flugzeug in sich überschneidenden Zeiträumen eingesetzt wird
      */
-    private void pruefeUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
+    private void pruefeFlugAufZeitlicheUeberschneidung(Flug neuerFlug, Flug vorhandenerFlug) {
 
         boolean gleichesFlugzeug = neuerFlug.getFlugzeug().equals(vorhandenerFlug.getFlugzeug());
 
