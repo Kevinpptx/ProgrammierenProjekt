@@ -5,17 +5,17 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Die Klasse {@code avigator.modell.Flughafen} repräsentiert einen avigator.modell.Flughafen. Ein avigator.modell.Flughafen wird durch seinen Namen, seinen IATA-Code,
+ * Die Klasse {@code Flughafen} repräsentiert einen Flughafen. Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
  * die Stadt sowie das Land beschrieben.
  * <p>
  * Die Klasse dient als Grundlage für weitere Klassen, beispielsweise zur Modellierung von Flügen.
  *
- * @param name     Name des Flughafens.
- * @param iataCode Dreistelliger IATA-Code des Flughafens.
- * @param stadt    Stadt, in der sich der avigator.modell.Flughafen befindet.
- * @param land     Land, in dem sich der avigator.modell.Flughafen befindet.
+ * @param name     der Name des Flughafens
+ * @param iataCode der IATA-Code des Flughafens
+ * @param stadt    die Stadt, in der sich der Flughafen befindet
+ * @param land     das Land, in dem sich der Flughafen befindet
  * @author Kevin Braun
- * @version 1.0
+ * @version 1.1
  */
 public record Flughafen(String name, String iataCode, String stadt, String land) implements Serializable {
 
@@ -26,13 +26,14 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     private static final long serialVersionUID = 1L;
 
     /**
-     * Erstellt einen neuen avigator.modell.Flughafen mit den angegebenen Eigenschaften.
+     * Erstellt einen neuen Flughafen mit den angegebenen Eigenschaften.
      *
-     * @param name     Name des Flughafens
-     * @param iataCode IATA-Code des Flughafens
-     * @param stadt    Stadt des Flughafens
-     * @param land     Land des Flughafens
-     * @throws IllegalArgumentException , wenn die Strings eine {@code null} - Referenz enthalten oder leer sind.
+     * @param name     der Name des Flughafens
+     * @param iataCode der IATA-Code des Flughafens
+     * @param stadt    die Stadt des Flughafens
+     * @param land     das Land des Flughafens
+     * @throws IllegalArgumentException wenn die Strings eine {@code null}-Referenz enthalten oder leer sind oder die
+     *                                  Eingabe für den IATA-Code nicht genau drei Zeichen umfasst
      */
     public Flughafen(String name, String iataCode, String stadt, String land) {
 
@@ -49,7 +50,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
 
         this.name = name;
 
-        // entfernt Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
+        // entfernt führende und nachfolgende Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.iataCode = iataCode.trim().toUpperCase(Locale.ROOT);
         this.stadt = stadt;
@@ -59,7 +60,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     /**
      * Gibt den Namen des Flughafens zurück.
      *
-     * @return Name des Flughafens
+     * @return der Name des Flughafens
      */
     @Override
     public String name() {
@@ -70,7 +71,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     /**
      * Gibt den IATA-Code des Flughafens zurück.
      *
-     * @return IATA-Code des Flughafens
+     * @return der IATA-Code des Flughafens
      */
     @Override
     public String iataCode() {
@@ -81,7 +82,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     /**
      * Gibt die Stadt des Flughafens zurück.
      *
-     * @return Stadt des Flughafens
+     * @return die Stadt des Flughafens
      */
     @Override
     public String stadt() {
@@ -92,7 +93,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     /**
      * Gibt das Land des Flughafens zurück.
      *
-     * @return Land des Flughafens
+     * @return das Land des Flughafens
      */
     @Override
     public String land() {
@@ -103,16 +104,22 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     /**
      * Überschreibt die toString()-Methode, um eine Beschreibung des Flughafens zu liefern.
      *
-     * @return Beschreibung des Flughafens mit Name, IATA-Code, Stadt und Land
+     * @return die Beschreibung des Flughafens mit Name, IATA-Code, Stadt und Land
      */
     @Override
     public String toString() {
 
-        return "Der avigator.modell.Flughafen " + this.name + " mit IATA-Code "
+        return "Der Flughafen " + this.name + " mit IATA-Code "
                 + this.iataCode + " befindet sich in " + this.stadt
                 + ", " + this.land;
     }
 
+    /**
+     * Vergleicht zwei Flughäfen anhand ihres IATA-Codes.
+     *
+     * @param o das zu vergleichende Objekt
+     * @return {@code true}, wenn beide Flughäfen denselben IATA-Code besitzen, sonst {@code false}
+     */
     @Override
     public boolean equals(Object o) {
 
