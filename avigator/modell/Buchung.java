@@ -4,11 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Die Klasse {@code avigator.modell.Buchung} repräsentiert eine Flugbuchung eines Passagiers. Eine avigator.modell.Buchung enthält Informationen über
- * den gebuchten avigator.modell.Flug, den avigator.modell.Sitzplatz, die Gepäckinformationen, den avigator.modell.Buchungsstatus sowie den gezahlten Preis.
+ * Die Klasse {@code Buchung} repräsentiert eine Flugbuchung eines Passagiers. Eine Buchung enthält Informationen über
+ * den gebuchten Flug, den Sitzplatz, die Gepäckinformationen, den Buchungsstatus sowie den gezahlten Preis.
  *
  * @author Kevin Braun
- * @version 1.0
+ * @version 1.1
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class Buchung implements Serializable {
@@ -35,23 +35,23 @@ public class Buchung implements Serializable {
     private final double businessPreisFaktor = 1.65;
 
     /**
-     * Die Nummer der avigator.modell.Buchung, die anhand der Zahl der schon vorhandenen Buchungen generiert wird.
+     * Die Nummer der Buchung, die anhand der Zahl der schon vorhandenen Buchungen generiert wird.
      */
     private String buchungsnummer;
 
     /**
-     * Der avigator.modell.Passagier dieser avigator.modell.Buchung. Aus Komplexitätsgründen gehen wir davon aus, dass jeder avigator.modell.Passagier seinen avigator.modell.Flug
+     * Der Passagier dieser Buchung. Aus Komplexitätsgründen gehen wir davon aus, dass jeder Passagier seinen Flug
      * selber buchen muss.
      */
     private final Passagier passagier;
 
     /**
-     * Der gebuchte avigator.modell.Flug.
+     * Der gebuchte Flug.
      */
     private Flug flug;
 
     /**
-     * Der gebuchte avigator.modell.Sitzplatz.
+     * Der gebuchte Sitzplatz.
      */
     private Sitzplatz sitzplatz;
 
@@ -61,7 +61,7 @@ public class Buchung implements Serializable {
     private final GepaeckInformation gepaeckInformation;
 
     /**
-     * Der aktuelle Status der avigator.modell.Buchung.
+     * Der aktuelle Status der Buchung.
      */
     private Buchungsstatus buchungsstatus;
 
@@ -76,15 +76,16 @@ public class Buchung implements Serializable {
     private double gezahlteUmbuchungsgebuehr = 0.0;
 
     /**
-     * Erzeugt eine neue avigator.modell.Buchung mit einem avigator.modell.Passagier, einem avigator.modell.Flug, einem avigator.modell.Sitzplatz und den zugehörigen
-     * Gepäckinformationen. Der Preis der avigator.modell.Buchung wird automatisch berechnet und der Status auf {@code AKTIV} gesetzt.
+     * Erzeugt eine neue Buchung mit einem Passagier, einem Flug, einem Sitzplatz und den zugehörigen
+     * Gepäckinformationen. Der Preis der Buchung wird automatisch berechnet und der Status auf {@code AKTIV} gesetzt.
      * <p>
-     * Die Buchungsnummer wird in der Klasse avigator.verwaltung.Buchungssystem generiert
+     * Die Buchungsnummer wird in der Klasse {@code Buchungssystem} generiert.
      *
-     * @param passagier          der zugehörige avigator.modell.Passagier
-     * @param flug               der gebuchte avigator.modell.Flug
-     * @param sitzplatz          der gebuchte avigator.modell.Sitzplatz
-     * @param gepaeckInformation die Gepäckinformationen zur avigator.modell.Buchung
+     * @param passagier          der zugehörige Passagier
+     * @param flug               der gebuchte Flug
+     * @param sitzplatz          der gebuchte Sitzplatz
+     * @param gepaeckInformation die Gepäckinformationen zur Buchung
+     * @throws IllegalArgumentException wenn einer der Parameter {@code null} ist
      */
     public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
                    GepaeckInformation gepaeckInformation
@@ -105,12 +106,13 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Prüft, ob die Parameter eine {@code null}- Referenz enthalten.
+     * Prüft, ob die Parameter eine {@code null}-Referenz enthalten.
      *
-     * @param passagier          : der avigator.modell.Passagier der avigator.modell.Buchung
-     * @param flug               : der gebuchte avigator.modell.Flug
-     * @param sitzplatz          : der gebuchte avigator.modell.Sitzplatz
-     * @param gepaeckInformation : die Gepäckinformation der avigator.modell.Buchung
+     * @param passagier          der Passagier der Buchung
+     * @param flug               der gebuchte Flug
+     * @param sitzplatz          der gebuchte Sitzplatz
+     * @param gepaeckInformation die Gepäckinformation der Buchung
+     * @throws IllegalArgumentException wenn einer der Parameter {@code null} ist
      */
     private void validiereBuchungsparameter(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
                                             GepaeckInformation gepaeckInformation
@@ -122,10 +124,11 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Berechnet den für die avigator.modell.Buchung zu zahlenden Preis. Die Berechnung berücksichtigt die avigator.modell.Sitzklasse und die
+     * Berechnet den für die Buchung zu zahlenden Preis. Die Berechnung berücksichtigt die Sitzklasse und die
      * anfallenden Gepäckgebühren.
      *
      * @return der berechnete Buchungspreis
+     * @throws UnsupportedOperationException wenn die Sitzklasse nicht unterstützt wird
      */
     private double berechneGezahltenPreis() {
 
@@ -144,7 +147,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Storniert die avigator.modell.Buchung und gibt die Storno-Gebühr zurück.
+     * Storniert die Buchung und gibt die Storno-Gebühr zurück.
      *
      * @return die Stornierungsgebühr
      */
@@ -169,7 +172,9 @@ public class Buchung implements Serializable {
      * Legt die Buchungsnummer anhand eines übergebenen Strings fest. Validiert diesen vorher auf {@code null}-
      * Referenz, ob er leer ist und ob das Format passt.
      *
-     * @param buchungsnummer : die neue Buchungsnummer
+     * @param buchungsnummer die neue Buchungsnummer
+     * @throws IllegalArgumentException wenn die Buchungsnummer {@code null} oder leer ist oder nicht dem erwarteten
+     *                                  Format entspricht
      */
     public void setBuchungsnummer(String buchungsnummer) {
 
@@ -191,9 +196,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den zugehörigen avigator.modell.Passagier zurück.
+     * Gibt den zugehörigen Passagier zurück.
      *
-     * @return der avigator.modell.Passagier der avigator.modell.Buchung
+     * @return der Passagier der Buchung
      */
     public Passagier getPassagier() {
 
@@ -201,9 +206,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den gebuchten avigator.modell.Flug zurück.
+     * Gibt den gebuchten Flug zurück.
      *
-     * @return der gebuchte avigator.modell.Flug
+     * @return der gebuchte Flug
      */
     public Flug getFlug() {
 
@@ -211,9 +216,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den avigator.modell.Flug auf den übergebenen avigator.modell.Flug {@code f}
+     * Ändert den Flug auf den übergebenen Flug {@code f}.
      *
-     * @param f : avigator.modell.Flug, der dieser avigator.modell.Buchung zugewiesen werden soll
+     * @param f der Flug, der dieser Buchung zugewiesen werden soll
      */
     public void setFlug(Flug f) {
 
@@ -221,24 +226,29 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den gebuchten avigator.modell.Sitzplatz zurück.
+     * Gibt den gebuchten Sitzplatz zurück.
      *
-     * @return der gebuchte avigator.modell.Sitzplatz
+     * @return der gebuchte Sitzplatz
      */
     public Sitzplatz getSitzplatz() {
 
         return this.sitzplatz;
     }
 
+    /**
+     * Ändert den gebuchten Sitzplatz.
+     *
+     * @param sitzplatz der neue Sitzplatz der Buchung
+     */
     public void setSitzplatz(Sitzplatz sitzplatz) {
 
         this.sitzplatz = sitzplatz;
     }
 
     /**
-     * Gibt den aktuellen avigator.modell.Buchungsstatus zurück.
+     * Gibt den aktuellen Buchungsstatus zurück.
      *
-     * @return der aktuelle avigator.modell.Buchungsstatus
+     * @return der aktuelle Buchungsstatus
      */
     public Buchungsstatus getBuchungsstatus() {
 
@@ -246,9 +256,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den avigator.modell.Buchungsstatus auf den übergebenen {@code avigator.modell.Buchungsstatus}
+     * Ändert den Buchungsstatus auf den übergebenen {@code Buchungsstatus}.
      *
-     * @param buchungsstatus : der avigator.modell.Buchungsstatus, auf den die avigator.modell.Buchung geändert werden soll
+     * @param buchungsstatus der Buchungsstatus, auf den die Buchung geändert werden soll
      */
     public void setBuchungsstatus(Buchungsstatus buchungsstatus) {
 
@@ -268,7 +278,7 @@ public class Buchung implements Serializable {
     /**
      * Gibt die Storno-Gebühr zurück.
      *
-     * @return die StornierungsGebühr
+     * @return die Stornierungsgebühr
      */
     public double getStornierungsgebuehr() {
 
@@ -286,9 +296,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt die Gepäckinfos zurück
+     * Gibt die Gepäckinformationen zurück.
      *
-     * @return die Gepäckinfos
+     * @return die Gepäckinformationen
      */
     public GepaeckInformation getGepaeckinformation() {
 
@@ -314,9 +324,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Setzt die gezahlte Umbuchungsgebühr auf den übergebenen Parameter
+     * Setzt die gezahlte Umbuchungsgebühr auf den übergebenen Wert.
      *
-     * @param gebuehr : die neue gezahlte Umbuchungsgebühr
+     * @param gebuehr die neue gezahlte Umbuchungsgebühr
      */
     public void setGezahlteUmbuchungsgebuehr(double gebuehr) {
 
@@ -324,19 +334,19 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt eine textuelle Beschreibung der avigator.modell.Buchung zurück. Die Beschreibung enthält die Buchungsnummer, den avigator.modell.Passagier,
-     * den avigator.modell.Flug, den avigator.modell.Sitzplatz, den avigator.modell.Buchungsstatus sowie die Gepäckinformationen und den gezahlten Preis.
+     * Gibt eine textuelle Beschreibung der Buchung zurück. Die Beschreibung enthält die Buchungsnummer, den Passagier,
+     * den Flug, den Sitzplatz, den Buchungsstatus sowie die Gepäckinformationen und den gezahlten Preis.
      *
-     * @return die textuelle Beschreibung der avigator.modell.Buchung
+     * @return die textuelle Beschreibung der Buchung
      */
     @Override
     public String toString() {
 
-        return "\n \nDie avigator.modell.Buchung mit der Nummer " + this.buchungsnummer +
-               " von avigator.modell.Passagier " + this.passagier.name() +
-               " betreffend avigator.modell.Flug " + this.flug.getFlugnummer() +
-               " auf avigator.modell.Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
-               " in avigator.modell.Sitzklasse " + this.sitzplatz.getSitzklasse() +
+        return "\n \nDie Buchung mit der Nummer " + this.buchungsnummer +
+               " von Passagier " + this.passagier.name() +
+               " betreffend Flug " + this.flug.getFlugnummer() +
+               " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
+               " in Sitzklasse " + this.sitzplatz.getSitzklasse() +
                " hat den Status " + this.buchungsstatus +
                " und es liegen folgende Gepäckinformationen vor: " +
                this.gepaeckInformation.toString() +
