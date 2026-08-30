@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Die Klasse {@code avigator.verwaltung.Buchungssystem} repräsentiert den kompletten Buchungsprozess. Sie dient dazu, die Klassen zu
+ * Die Klasse {@code Buchungssystem} repräsentiert den kompletten Buchungsprozess. Sie dient dazu, die Klassen zu
  * koordinieren und dafür zu sorgen, dass sie miteinander interagieren können.
  *
  * @author Marcel Marxkors
- * @version 1.1
+ * @version 1.2
  */
 
 public class Buchungssystem implements Serializable {
@@ -25,27 +25,27 @@ public class Buchungssystem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Liste der Buchungen, die schon vorgenommen wurden
+     * Liste der bereits vorgenommenen Buchungen.
      */
     private final ArrayList<Buchung> buchungen;
 
     /**
-     * Liste der schon registrierten Passagiere
+     * Liste der registrierten Passagiere.
      */
     private final ArrayList<Passagier> passagiere;
 
     /**
-     * Anzahl der insgesamt getätigten Buchungsnummern, erste Idee einer möglichen Grundlage für die Buchungsnummer
+     * Zähler zur Erzeugung fortlaufender Buchungsnummern.
      */
     private int anzahlBuchungen;
 
     /**
-     * Anzahl der insgesamt registrierten Passagiere, erste Idee einer möglichen Grundlage für die Passagiernummer
+     * Zähler zur Erzeugung fortlaufender Passagier-IDs.
      */
     private int anzahlPassagiere;
 
     /**
-     * Konstruktor der Klasse, der die temporäre Lösung der Datenspeicherung initialisiert
+     * Erstellt ein leeres Buchungssystem ohne Passagiere und Buchungen.
      */
     public Buchungssystem() {
 
@@ -56,14 +56,14 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Erstellt und registriert einen neuen avigator.modell.Passagier.
+     * Erstellt und registriert einen neuen Passagier.
      * <p>
-     * Für den avigator.modell.Passagier wird automatisch eine fortlaufende avigator.modell.Passagier-ID erzeugt. Kann der avigator.modell.Passagier aufgrund ungültiger
+     * Für den Passagier wird automatisch eine fortlaufende Passagier-ID erzeugt. Kann der Passagier aufgrund ungültiger
      * Daten nicht erstellt werden, wird der interne Zähler wieder zurückgesetzt.
      *
      * @param name  der Name des Passagiers
      * @param email die E-Mail-Adresse des Passagiers
-     * @return der neu erstellte und registrierte avigator.modell.Passagier
+     * @return der neu erstellte und registrierte Passagier
      * @throws IllegalArgumentException wenn Name oder E-Mail-Adresse ungültig oder {@code null} sind
      */
     public Passagier initialisierePassagier(String name, String email) {
@@ -81,6 +81,7 @@ public class Buchungssystem implements Serializable {
 
             } catch (IllegalArgumentException e) {
 
+                // Ungültige Passagierdaten dürfen keine Lücke in der fortlaufenden ID erzeugen
                 anzahlPassagiere--;
                 throw e;
             }
@@ -94,23 +95,24 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Erstellt und registriert eine neue avigator.modell.Buchung für einen avigator.modell.Passagier.
+     * Erstellt und registriert eine neue Buchung für einen Passagier.
      * <p>
-     * Vor der avigator.modell.Buchung wird geprüft, ob avigator.modell.Passagier und avigator.modell.Flug im jeweiligen System vorhanden sind und ob der gewünschte
-     * avigator.modell.Sitzplatz für die angegebene avigator.modell.Sitzklasse gültig und frei ist.
+     * Vor der Buchung wird geprüft, ob Passagier und Flug im jeweiligen System vorhanden sind und ob der gewünschte
+     * Sitzplatz für die angegebene Sitzklasse gültig und frei ist.
      * <p>
-     * Bei erfolgreicher avigator.modell.Buchung wird eine Buchungsnummer vergeben, der avigator.modell.Sitzplatz belegt und die avigator.modell.Buchung im
-     * avigator.verwaltung.Buchungssystem gespeichert.
+     * Bei erfolgreicher Buchung wird eine Buchungsnummer vergeben, der Sitzplatz belegt und die Buchung im
+     * Buchungssystem gespeichert.
      *
-     * @param passagier         der avigator.modell.Passagier, für den die avigator.modell.Buchung erstellt wird
-     * @param flug              der zu buchende avigator.modell.Flug
+     * @param passagier         der Passagier, für den die Buchung erstellt wird
+     * @param flug              der zu buchende Flug
      * @param sitzplatznummer   die Nummer des gewünschten Sitzplatzes
      * @param anzahlKoffer      die Anzahl der aufzugebenden Koffer
-     * @param sitzklasse        die gewünschte avigator.modell.Sitzklasse
-     * @param verwaltungssystem das avigator.verwaltung.Verwaltungssystem zur Prüfung des Fluges
-     * @return die neu erstellte avigator.modell.Buchung
-     * @throws IllegalArgumentException wenn übergebene Werte ungültig sind oder avigator.modell.Passagier, avigator.modell.Flug beziehungsweise
-     *                                  avigator.modell.Sitzplatz nicht gültig sind
+     * @param sitzklasse        die gewünschte Sitzklasse
+     * @param verwaltungssystem das Verwaltungssystem zur Prüfung des Fluges
+     * @return die neu erstellte Buchung
+     * @throws IllegalArgumentException wenn übergebene Werte ungültig sind oder Passagier, Flug beziehungsweise
+     *                                  Sitzplatz nicht gültig sind
+     * @throws NoSuchElementException   wenn der angegebene Sitzplatz nicht vorhanden ist
      */
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
                                     Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem
@@ -120,27 +122,20 @@ public class Buchungssystem implements Serializable {
             throw new IllegalArgumentException("Fehler! Mindestens einer der übergebenen Werte ist ungültig.");
         }
 
-        // Existiert der avigator.modell.Passagier im System? Wenn nicht: Fehler
         if (!passagiere.contains(passagier)) {
             throw new IllegalArgumentException(
-                    "Der übergebene avigator.modell.Passagier existiert nicht (mehr) im System. Bitte einen anderen avigator.modell.Passagier wählen oder die avigator.modell.Buchung neu vornehmen!");
+                    "Der übergebene Passagier existiert nicht (mehr) im System. Bitte einen anderen Passagier wählen oder die Buchung neu vornehmen!");
         }
 
-        // Existiert der avigator.modell.Flug im System? Wenn nicht: Fehler
         if (!verwaltungssystem.getFluege().contains(flug)) {
             throw new IllegalArgumentException(
-                    "Der übergebene avigator.modell.Flug existiert nicht (mehr) im System. Bitte einen anderen avigator.modell.Flug wählen oder die avigator.modell.Buchung neu vornehmen!");
+                    "Der übergebene Flug existiert nicht (mehr) im System. Bitte einen anderen Flug wählen oder die Buchung neu vornehmen!");
         }
 
-
-        // Objekte holen / erstellen
-        // Der avigator.modell.Sitzplatz referiert einen avigator.modell.Sitzplatz im avigator.modell.Flugzeug, daher wirkt sich die
-        // Belegung dieses Sitzplatzes auch auf den avigator.modell.Flug aus.
         Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
         GepaeckInformation gepaeckInfo = new GepaeckInformation(anzahlKoffer);
         List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
 
-        // Platz validieren und ggf. belegen
         flug.validiereSitzplatz(sitzplatz, sitzklasse, klassenliste);
 
         Buchung buchung = new Buchung(passagier, flug, sitzplatz, gepaeckInfo);
@@ -154,10 +149,11 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Sucht die bisherigen Buchungen nach einer Buchungsnummer ab
+     * Sucht die bisherigen Buchungen nach einer Buchungsnummer ab.
      *
-     * @return die avigator.modell.Buchung mit der Buchungsnummer
-     * @throws IllegalArgumentException wenn die avigator.modell.Buchung nicht oder vorhanden ist
+     * @param buchungsnummer die Nummer der gesuchten Buchung
+     * @return die Buchung mit der Buchungsnummer
+     * @throws IllegalArgumentException wenn die Buchung nicht vorhanden ist
      */
     public Buchung sucheBuchungNachNummer(String buchungsnummer) {
 
@@ -168,21 +164,24 @@ public class Buchungssystem implements Serializable {
         }
 
         throw new IllegalArgumentException(
-                "Fehler! Die avigator.modell.Buchung mit der Buchungsnummer " + buchungsnummer + " ist nicht vorhanden.");
+                "Fehler! Die Buchung mit der Buchungsnummer " + buchungsnummer + " ist nicht vorhanden.");
     }
 
     /**
-     * Bucht eine bestehende avigator.modell.Buchung auf einen anderen avigator.modell.Flug beziehungsweise avigator.modell.Sitzplatz um.
+     * Bucht eine bestehende Buchung auf einen anderen Flug beziehungsweise Sitzplatz um.
      * <p>
      * Vor der Änderung wird die Umbuchung validiert und der zusätzlich zu zahlende Umbuchungsbetrag berechnet.
-     * Anschließend werden der neue avigator.modell.Sitzplatz, avigator.modell.Flug und Buchungspreis übernommen, der avigator.modell.Buchungsstatus auf
-     * {@code UMGEBUCHT} gesetzt und der bisherige avigator.modell.Sitzplatz freigegeben.
+     * Anschließend werden der neue Sitzplatz, Flug und Buchungspreis übernommen, der Buchungsstatus auf
+     * {@code UMGEBUCHT} gesetzt und der bisherige Sitzplatz freigegeben.
      *
-     * @param buchung           die umzubuchende avigator.modell.Buchung
-     * @param flug              der neue avigator.modell.Flug
+     * @param buchung           die umzubuchende Buchung
+     * @param flug              der neue Flug
      * @param sitzplatznummer   die Nummer des neuen Sitzplatzes
-     * @param sitzklasse        die avigator.modell.Sitzklasse des neuen Sitzplatzes
-     * @param verwaltungssystem das avigator.verwaltung.Verwaltungssystem zur Validierung des Fluges
+     * @param sitzklasse        die Sitzklasse des neuen Sitzplatzes
+     * @param verwaltungssystem das Verwaltungssystem zur Validierung des Fluges
+     * @throws NoSuchElementException   wenn erforderliche Buchungs-, Flug- oder Sitzplatzdaten fehlen
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @throws IllegalStateException    wenn die Buchung storniert oder vergangen ist
      */
     public void umbuchen(Buchung buchung,
                          Flug flug,
@@ -194,30 +193,24 @@ public class Buchungssystem implements Serializable {
         boolean umbuchungMoeglich;
         double gebuehr;
 
-        // Umbuchung prüfen
         umbuchungMoeglich = validiereUmbuchung(buchung, flug, sitzplatznummer, sitzklasse, verwaltungssystem);
 
         if (umbuchungMoeglich) {
-            // alten avigator.modell.Sitzplatz merken
             Sitzplatz alterSitzplatz = buchung.getSitzplatz();
 
-            // neuen avigator.modell.Sitzplatz ermitteln
             Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
 
-            // Umbuchungsgebühr berechnen
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
 
-            // neuen avigator.modell.Sitzplatz belegen
             neuerSitzplatz.belegen(buchung);
 
-            // avigator.modell.Buchung aktualisieren
             buchung.setGezahlteUmbuchungsgebuehr(gebuehr);
             buchung.setSitzplatz(neuerSitzplatz);
             buchung.setFlug(flug);
             buchung.aktualisiereGezahltenPreis();
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
 
-            // Alter avigator.modell.Sitzplatz wird erst freigegeben, nachdem die avigator.modell.Buchung vollständig vorbereitet wurde
+            // Der alte Sitzplatz bleibt bis zur vollständigen Aktualisierung der Buchung belegt
             alterSitzplatz.freigeben();
         }
 
@@ -226,57 +219,50 @@ public class Buchungssystem implements Serializable {
     /**
      * Prüft, ob eine Umbuchung mit den angegebenen Daten durchgeführt werden kann.
      * <p>
-     * Dabei werden unter anderem die Existenz des neuen Fluges, der avigator.modell.Buchungsstatus sowie avigator.modell.Sitzplatz und avigator.modell.Sitzklasse
-     * geprüft. Abhängig davon, ob innerhalb desselben Fluges oder auf einen anderen avigator.modell.Flug umgebucht wird, erfolgt die
+     * Dabei werden unter anderem die Existenz des neuen Fluges, der Buchungsstatus sowie Sitzplatz und Sitzklasse
+     * geprüft. Abhängig davon, ob innerhalb desselben Fluges oder auf einen anderen Flug umgebucht wird, erfolgt die
      * entsprechende Sitzplatzvalidierung.
      *
-     * @param buchung             die umzubuchende avigator.modell.Buchung
-     * @param neuerFlug           der gewünschte neue avigator.modell.Flug
+     * @param buchung             die umzubuchende Buchung
+     * @param neuerFlug           der gewünschte neue Flug
      * @param neueSitzplatznummer die Nummer des gewünschten neuen Sitzplatzes
-     * @param sitzklasse          die gewünschte avigator.modell.Sitzklasse
-     * @param verwaltungssystem   das avigator.verwaltung.Verwaltungssystem zur Prüfung des neuen Fluges
+     * @param sitzklasse          die gewünschte Sitzklasse
+     * @param verwaltungssystem   das Verwaltungssystem zur Prüfung des neuen Fluges
      * @return {@code true}, wenn die Umbuchung gültig ist
      * @throws NoSuchElementException wenn benötigte Buchungs- oder Flugdaten fehlen
-     * @throws IllegalStateException  wenn die avigator.modell.Buchung storniert oder vergangen ist
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @throws IllegalStateException  wenn die Buchung storniert oder vergangen ist
      */
     private boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer,
                                       Sitzklasse sitzklasse, Verwaltungssystem verwaltungssystem
     ) {
 
-        // wenn die avigator.modell.Buchung nicht vorhanden ist
         if (buchung == null) {
-            throw new NoSuchElementException("Es ist keine avigator.modell.Buchung angegeben, von der umgebucht werden soll.");
+            throw new NoSuchElementException("Es ist keine Buchung angegeben, von der umgebucht werden soll.");
         }
 
-        // wenn neuer avigator.modell.Flug gar nicht im System existiert
         else if (!verwaltungssystem.getFluege().contains(neuerFlug)) {
             throw new NoSuchElementException(
-                    "Der avigator.modell.Flug, auf den umgebucht werden soll, ist nicht (mehr) im System registriert.");
+                    "Der Flug, auf den umgebucht werden soll, ist nicht (mehr) im System registriert.");
         }
 
-        // wenn beide Buchungsparameter leer sind
         else if (neuerFlug == null && neueSitzplatznummer == null) {
             throw new NoSuchElementException("Beide Buchungsparameter sind leer.");
         }
 
-        // wenn schon storniert oder der avigator.modell.Flug bereits in der Vergangenheit liegt
         else if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT ||
                 buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
             throw new IllegalStateException("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
         }
 
-        // wenn keine avigator.modell.Sitzklasse angegeben wurde
         else if (sitzklasse == null) {
-            throw new NoSuchElementException("Es wurde keine avigator.modell.Sitzklasse angegeben.");
+            throw new NoSuchElementException("Es wurde keine Sitzklasse angegeben.");
         }
 
-        // wenn im selben avigator.modell.Flug ein anderer avigator.modell.Sitzplatz gebucht werden muss
         else if (neuerFlug == buchung.getFlug() || neuerFlug == null) {
             return validiereUmbuchungimSelbenFlug(buchung, neueSitzplatznummer, sitzklasse);
         }
 
-        // wenn im neuen avigator.modell.Flug ein avigator.modell.Sitzplatz gebucht werden muss(Prüft, ob die
-        // Sitzplatznummer im neuen avigator.modell.Flug vorhanden ist und ob der avigator.modell.Sitzplatz belegt ist)
         else {
             return validiereUmbuchungimNeuenFlug(neuerFlug, neueSitzplatznummer, sitzklasse);
         }
@@ -284,12 +270,14 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Prüft, ob eine Umbuchung im selben avigator.modell.Flug möglich ist.
+     * Prüft, ob eine Umbuchung im selben Flug möglich ist.
      *
-     * @param buchung             : Aktuelle avigator.modell.Buchung
-     * @param neueSitzplatznummer : Sitzplatznummer, auf die umgebucht werden soll
-     * @param sitzklasse          : avigator.modell.Sitzklasse, die der neue avigator.modell.Sitzplatz haben soll
-     * @return true, wenn die Validierung erfolgreich ist
+     * @param buchung             die aktuelle Buchung
+     * @param neueSitzplatznummer die Sitzplatznummer, auf die umgebucht werden soll
+     * @param sitzklasse          die Sitzklasse, die der neue Sitzplatz haben soll
+     * @return {@code true}, wenn die Validierung erfolgreich ist
+     * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
      */
     private boolean validiereUmbuchungimSelbenFlug(Buchung buchung, String neueSitzplatznummer, Sitzklasse sitzklasse) {
 
@@ -302,12 +290,14 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Prüft, ob eine avigator.modell.Buchung im neuen avigator.modell.Flug gültig ist
+     * Prüft, ob eine Buchung im neuen Flug gültig ist.
      *
-     * @param flug                : neuer avigator.modell.Flug, auf den umgebucht werden soll
-     * @param neueSitzplatznummer : Sitzplatznummer, auf die umgebucht werden soll
-     * @param sitzklasse          : avigator.modell.Sitzklasse des neuen Sitzplatzes
-     * @return true, wenn die Validierung erfolgreich ist
+     * @param flug                der neue Flug, auf den umgebucht werden soll
+     * @param neueSitzplatznummer die Sitzplatznummer, auf die umgebucht werden soll
+     * @param sitzklasse          die Sitzklasse des neuen Sitzplatzes
+     * @return {@code true}, wenn die Validierung erfolgreich ist
+     * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
      */
     private boolean validiereUmbuchungimNeuenFlug(Flug flug, String neueSitzplatznummer, Sitzklasse sitzklasse) {
 
@@ -322,56 +312,52 @@ public class Buchungssystem implements Serializable {
      * Berechnet den bei einer Umbuchung zusätzlich zu zahlenden Betrag.
      * <p>
      * Der Betrag setzt sich aus der festen Umbuchungsgebühr und einer möglichen positiven Differenz zwischen dem
-     * bisherigen und dem neuen Buchungspreis zusammen. Ist der neue avigator.modell.Flug günstiger, wird die Preisdifferenz nicht
+     * bisherigen und dem neuen Buchungspreis zusammen. Ist der neue Flug günstiger, wird die Preisdifferenz nicht
      * erstattet.
      *
-     * @param buchung   die bisherige avigator.modell.Buchung
-     * @param flug      der neue avigator.modell.Flug
-     * @param sitzplatz der neue avigator.modell.Sitzplatz
+     * @param buchung   die bisherige Buchung
+     * @param flug      der neue Flug
+     * @param sitzplatz der neue Sitzplatz
      * @return der zusätzlich zu zahlende Umbuchungsbetrag
      */
     public double berechneUmbuchungsgebuehr(Buchung buchung, Flug flug, Sitzplatz sitzplatz) {
 
-        // Legt zuerst die Variablen für die Berechnung fest
         double preisAlterFlug = buchung.getGezahlterPreis();
         double preisNeuerFlug, ticketDifferenz, finaleGebuehr;
 
-        // berechnet den neuen Preis anhand der avigator.modell.Sitzklasse
+        // Für Business-Sitzplätze gilt derselbe Preisfaktor wie bei einer neuen Buchung
         if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
             preisNeuerFlug = flug.getBasispreis() * buchung.getBusinesspreisfaktor();
         } else {
             preisNeuerFlug = flug.getBasispreis();
         }
 
-        //ergänze Koffergebühr für den neuen avigator.modell.Flug
         preisNeuerFlug += buchung.getGepaeckinformation().berechneGepaeckgebuehr();
 
-        //berechnet die Differenz aus altem und neuen avigator.modell.Flug
         ticketDifferenz = preisNeuerFlug - preisAlterFlug;
 
-        // berechnet die finale Gebühr und schlägt die Ticketdifferenz auf, wenn diese
-        // positiv ist
+        // Eine negative Preisdifferenz wird bei der Umbuchung nicht erstattet
         finaleGebuehr = buchung.getUmbuchungsgebuehr() + Math.max(0, ticketDifferenz);
 
         return finaleGebuehr;
     }
 
     /**
-     * storniert eine vorhandene avigator.modell.Buchung; ändert den avigator.modell.Buchungsstatus und gibt den avigator.modell.Sitzplatz der avigator.modell.Buchung frei
+     * Storniert eine vorhandene Buchung, ändert den Buchungsstatus und gibt den Sitzplatz der Buchung frei.
      *
-     * @param buchung , die storniert werden soll
+     * @param buchung die Buchung, die storniert werden soll
      * @return die Storno-Gebühr
-     * @throws NoSuchElementException   wenn die zu stornierende avigator.modell.Buchung nicht in der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine avigator.modell.Buchung übergeben wurde, oder wenn die avigator.modell.Buchung schon storniert wurde,
-     *                                  oder schon vergangen ist.
+     * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in der Liste "buchungen" ist
+     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, die Buchung bereits storniert wurde oder
+     *                                  bereits vergangen ist
      */
-    @SuppressWarnings("UnusedReturnValue") // TODO: Muss geklärt werden
+    @SuppressWarnings("UnusedReturnValue")
     public double stornieren(Buchung buchung) {
 
         double betrag;
 
         if (buchung == null) {
-            throw new IllegalArgumentException("Die avigator.modell.Buchung enthält eine null-Referenz");
+            throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
         } else if (buchungen.contains(buchung)) {
 
             if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
@@ -384,23 +370,23 @@ public class Buchungssystem implements Serializable {
 
             } else {
                 throw new IllegalArgumentException(
-                        "Sie können eine bereits stornierte oder vergangene avigator.modell.Buchung nicht stornieren!");
+                        "Sie können eine bereits stornierte oder vergangene Buchung nicht stornieren!");
             }
 
         } else {
             throw new NoSuchElementException(
-                    "Die avigator.modell.Buchung ist nicht im System vorhanden und kann daher nicht storniert werden!");
+                    "Die Buchung ist nicht im System vorhanden und kann daher nicht storniert werden!");
         }
 
         return betrag;
     }
 
     /**
-     * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen avigator.modell.Flug beinhalten und noch nicht storniert
-     * wurden
+     * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen Flug beinhalten und weder storniert noch
+     * vergangen sind.
      *
-     * @param flug , der auf nicht stornierte Buchungen überprüft werden soll
-     * @return Liste an Buchungen, die die Kriterien erfüllen
+     * @param flug der Flug, der auf nicht stornierte Buchungen überprüft werden soll
+     * @return die Liste der Buchungen, die die Kriterien erfüllen
      */
     public ArrayList<Buchung> findeRelevanteBuchungen(Flug flug) {
 
@@ -420,30 +406,30 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Ändert die Anzahl der gebuchten Koffer einer bestehenden avigator.modell.Buchung.
+     * Ändert die Anzahl der gebuchten Koffer einer bestehenden Buchung.
      * <p>
      * Die Änderung ist nur für vorhandene Buchungen mit dem Status {@code AKTIV} oder {@code UMGEBUCHT} möglich. Nach
      * der Änderung der Gepäckmenge wird der Buchungspreis neu berechnet.
      *
-     * @param buchung          die zu ändernde avigator.modell.Buchung
+     * @param buchung          die zu ändernde Buchung
      * @param neueAnzahlKoffer die neue Anzahl der gebuchten Koffer
-     * @throws IllegalArgumentException wenn keine avigator.modell.Buchung angegeben wurde oder die Kofferanzahl negativ ist
-     * @throws NoSuchElementException   wenn die avigator.modell.Buchung nicht im System vorhanden ist
-     * @throws IllegalStateException    wenn der avigator.modell.Buchungsstatus keine Änderung erlaubt
+     * @throws IllegalArgumentException wenn keine Buchung angegeben wurde oder die Kofferanzahl negativ ist
+     * @throws NoSuchElementException   wenn die Buchung nicht im System vorhanden ist
+     * @throws IllegalStateException    wenn der Buchungsstatus keine Änderung erlaubt
      */
     public void gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
 
         if (buchung == null) {
-            throw new IllegalArgumentException("Es wurde keine avigator.modell.Buchung angegeben.");
+            throw new IllegalArgumentException("Es wurde keine Buchung angegeben.");
         }
 
         if (!buchungen.contains(buchung)) {
-            throw new NoSuchElementException("Die avigator.modell.Buchung ist nicht im System vorhanden.");
+            throw new NoSuchElementException("Die Buchung ist nicht im System vorhanden.");
         }
 
         if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
-            throw new IllegalStateException("Das Gepäck kann bei dieser avigator.modell.Buchung nicht mehr geändert werden.");
+            throw new IllegalStateException("Das Gepäck kann bei dieser Buchung nicht mehr geändert werden.");
         }
 
         if (neueAnzahlKoffer < 0) {
@@ -455,8 +441,9 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
+     * Gibt alle getätigten Buchungen zurück.
      *
-     * @return Liste aller getätigten Buchungen
+     * @return unveränderbare Kopie aller getätigten Buchungen
      */
     public List<Buchung> getBuchungen() {
         return List.copyOf(buchungen);
