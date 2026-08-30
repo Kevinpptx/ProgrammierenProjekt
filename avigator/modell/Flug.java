@@ -9,18 +9,18 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 
 /**
- * Die Klasse {@code avigator.modell.Flug} repräsentiert einen konkreten avigator.modell.Flug einer avigator.modell.Fluggesellschaft zwischen einem Start- und einem
+ * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer Fluggesellschaft zwischen einem Start- und einem
  * Zielflughafen.
  * <p>
- * Ein avigator.modell.Flug besitzt eine Flugnummer, eine avigator.modell.Fluggesellschaft, ein eingesetztes avigator.modell.Flugzeug, einen Start- und Zielflughafen,
+ * Ein Flug besitzt eine Flugnummer, eine Fluggesellschaft, ein eingesetztes Flugzeug, einen Start- und Zielflughafen,
  * eine Abflug- und Ankunftszeit sowie einen Basispreis.
  * <p>
- * Zusätzlich besitzt jeder avigator.modell.Flug einen eigenen Sitzplan. Dieser wird bei der Erstellung des Fluges anhand der
- * Sitzplatzvorlage des eingesetzten Flugzeugs initialisiert. Dadurch kann die Sitzplatzbelegung für jeden avigator.modell.Flug
+ * Zusätzlich besitzt jeder Flug einen eigenen Sitzplan. Dieser wird bei der Erstellung des Fluges anhand der
+ * Sitzplatzvorlage des eingesetzten Flugzeugs initialisiert. Dadurch kann die Sitzplatzbelegung für jeden Flug
  * unabhängig verwaltet werden.
  *
  * @author Cedric Beckmann
- * @version 1.0
+ * @version 1.1
  */
 public class Flug implements Serializable {
 
@@ -31,68 +31,68 @@ public class Flug implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Die eindeutige Flugnummer des Fluges
+     * Die Flugnummer des Fluges.
      */
     private final String flugnummer;
 
     /**
-     * Die avigator.modell.Fluggesellschaft, die den avigator.modell.Flug durchführt
+     * Die Fluggesellschaft, die den Flug durchführt.
      */
     private final Fluggesellschaft fluggesellschaft;
 
     /**
-     * Das für den avigator.modell.Flug eingesetzte avigator.modell.Flugzeug
+     * Das für den Flug eingesetzte Flugzeug.
      */
     private final Flugzeug flugzeug;
 
     /**
-     * Der avigator.modell.Flughafen, von dem der avigator.modell.Flug startet
+     * Der Flughafen, von dem der Flug startet.
      */
     private final Flughafen startFlughafen;
 
     /**
-     * Der avigator.modell.Flughafen, an dem der avigator.modell.Flug endet
+     * Der Flughafen, an dem der Flug endet.
      */
     private final Flughafen zielFlughafen;
 
     /**
-     * Der geplante Zeitpunkt des Abflugs
+     * Der geplante Zeitpunkt des Abflugs.
      */
     private final LocalDateTime abflugzeit;
 
     /**
-     * Der geplante Zeitpunkt der Ankunft
+     * Der geplante Zeitpunkt der Ankunft.
      */
     private final LocalDateTime ankunftszeit;
 
     /**
-     * Der Basispreis des Fluges
+     * Der Basispreis des Fluges.
      */
     private final double basispreis;
 
     /**
-     * Der individuelle Sitzplan dieses Fluges. Jeder avigator.modell.Sitzplatz besitzt einen eigenen Belegungsstatus.
+     * Der individuelle Sitzplan dieses Fluges. Jeder Sitzplatz besitzt einen eigenen Belegungsstatus.
      */
     private Sitzplatz[][] sitzplan;
 
     /**
-     * Erzeugt einen neuen avigator.modell.Flug mit den angegebenen Flugdaten.
+     * Erzeugt einen neuen Flug mit den angegebenen Flugdaten.
      * <p>
      * Beim Erstellen des Fluges wird ein eigener Sitzplan anhand der Sitzplatzvorlage des übergebenen Flugzeugs
      * initialisiert.
      * <p>
-     * Der Basispreis darf nicht negativ sein und die Ankunftszeit darf zeitlich nicht vor der Abflugzeit liegen.
+     * Der Basispreis darf nicht negativ sein und die Ankunftszeit muss nach der Abflugzeit liegen.
      *
      * @param flugnummer       die Flugnummer des Fluges
-     * @param fluggesellschaft die avigator.modell.Fluggesellschaft, die den avigator.modell.Flug durchführt
-     * @param flugzeug         das für den avigator.modell.Flug eingesetzte avigator.modell.Flugzeug
+     * @param fluggesellschaft die Fluggesellschaft, die den Flug durchführt
+     * @param flugzeug         das für den Flug eingesetzte Flugzeug
      * @param startFlughafen   der Startflughafen des Fluges
      * @param zielFlughafen    der Zielflughafen des Fluges
      * @param abflugzeit       der geplante Zeitpunkt des Abflugs
      * @param ankunftszeit     der geplante Zeitpunkt der Ankunft
      * @param basispreis       der Basispreis des Fluges
-     * @throws IllegalArgumentException wenn der Basispreis negativ ist
-     * @throws IllegalArgumentException wenn die Ankunftszeit vor der Abflugzeit liegt
+     * @throws IllegalArgumentException wenn erforderliche Flugdaten {@code null} oder die Flugnummer leer ist, der
+     *                                  Basispreis negativ ist oder die Ankunftszeit nicht nach der Abflugzeit liegt
      */
     public Flug(String flugnummer,
                 Fluggesellschaft fluggesellschaft,
@@ -118,17 +118,16 @@ public class Flug implements Serializable {
             throw new IllegalArgumentException("Die Flugnummer darf nicht leer sein.");
         }
 
-        // Prüft, ob der angegebene Basispreis gültig ist
         if (basispreis < 0) {
             throw new IllegalArgumentException("Der Basispreis darf nicht negativ sein.");
         }
 
-        // Verhindert, dass ein avigator.modell.Flug vor seinem Abflug ankommt
+        // Verhindert, dass ein Flug vor oder zu seinem Abflugzeitpunkt ankommt
         if (!ankunftszeit.isAfter(abflugzeit)) {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
         }
 
-        // entfernt Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
+        // entfernt führende und nachfolgende Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
         this.flugnummer = flugnummer.trim().toUpperCase(Locale.ROOT);
         this.fluggesellschaft = fluggesellschaft;
@@ -139,14 +138,13 @@ public class Flug implements Serializable {
         this.ankunftszeit = ankunftszeit;
         this.basispreis = basispreis;
 
-        // Erstellt einen eigenen Sitzplan für diesen konkreten avigator.modell.Flug
         this.initialisiereSitzplan(this.flugzeug.getSitzplaetzeVorlage());
     }
 
     /**
      * Initialisiert den Sitzplan des Fluges anhand einer Sitzplatzvorlage.
      * <p>
-     * Für jeden avigator.modell.Sitzplatz der Vorlage wird ein neues {@code avigator.modell.Sitzplatz}-Objekt erzeugt. Dadurch besitzt jeder avigator.modell.Flug einen
+     * Für jeden Sitzplatz der Vorlage wird ein neues {@code Sitzplatz}-Objekt erzeugt. Dadurch besitzt jeder Flug einen
      * eigenen unabhängigen Sitzplan und Änderungen an der Sitzplatzbelegung wirken sich nicht auf andere Flüge oder auf
      * die ursprüngliche Sitzplatzvorlage des Flugzeugs aus.
      *
@@ -154,12 +152,10 @@ public class Flug implements Serializable {
      */
     private void initialisiereSitzplan(Sitzplatz[][] vorlage) {
 
-        // Erstellt zunächst die äußere Arraystruktur entsprechend der Vorlage
         sitzplan = new Sitzplatz[vorlage.length][];
 
         for (int i = 0; i < vorlage.length; i++) {
 
-            // Jede Reihe erhält die gleiche Anzahl an Sitzplätzen wie in der Vorlage
             sitzplan[i] = new Sitzplatz[vorlage[i].length];
 
             for (int j = 0; j < vorlage[i].length; j++) {
@@ -173,23 +169,21 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Ermittelt alle freien Sitzplätze einer bestimmten avigator.modell.Sitzklasse.
+     * Ermittelt alle freien Sitzplätze einer bestimmten Sitzklasse.
      * <p>
-     * Ein avigator.modell.Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch der angegebenen avigator.modell.Sitzklasse entspricht.
+     * Ein Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch der angegebenen Sitzklasse entspricht.
      *
-     * @param sitzklasse die avigator.modell.Sitzklasse, nach der gefiltert werden soll
-     * @return eine Liste mit allen freien Sitzplätzen der angegebenen avigator.modell.Sitzklasse
+     * @param sitzklasse die Sitzklasse, nach der gefiltert werden soll
+     * @return eine Liste mit allen freien Sitzplätzen der angegebenen Sitzklasse
      */
     public List<Sitzplatz> getFreieSitzplaetzeNachKlasse(Sitzklasse sitzklasse) {
 
         List<Sitzplatz> freieSitzplaetze = new ArrayList<>();
 
-        // Durchläuft den vollständigen Sitzplan
         for (Sitzplatz[] sitzplaetze : sitzplan) {
 
             for (Sitzplatz sitzplatz : sitzplaetze) {
 
-                // Prüft gleichzeitig den Belegungsstatus und die avigator.modell.Sitzklasse
                 if (sitzplatz.getIstFrei() && sitzplatz.getSitzklasse() == sitzklasse) {
                     freieSitzplaetze.add(sitzplatz);
                 }
@@ -212,7 +206,6 @@ public class Flug implements Serializable {
         int anzahlBelegt = 0;
         int anzahlGesamt = 0;
 
-        // Durchläuft alle Sitzplätze und zählt Gesamtanzahl und belegte Plätze
         for (Sitzplatz[] sitzplaetze : this.sitzplan) {
 
             for (Sitzplatz sitzplatz : sitzplaetze) {
@@ -232,9 +225,9 @@ public class Flug implements Serializable {
     /**
      * Gibt den aktuellen Sitzplan des Fluges auf der Konsole aus.
      * <p>
-     * Für jeden avigator.modell.Sitzplatz wird zunächst die Sitzplatznummer und anschließend der aktuelle Belegungsstatus dargestellt.
+     * Für jeden Sitzplatz wird zunächst die Sitzplatznummer und anschließend der aktuelle Belegungsstatus dargestellt.
      * <p>
-     * Ein freier avigator.modell.Sitzplatz wird durch {@code [ ]} und ein belegter avigator.modell.Sitzplatz durch {@code [X]} gekennzeichnet.
+     * Ein freier Sitzplatz wird durch {@code [ ]} und ein belegter Sitzplatz durch {@code [X]} gekennzeichnet.
      * <p>
      * In der Mitte jeder Reihe wird ein Mittelgang dargestellt. Zusätzlich wird beim Wechsel zwischen verschiedenen
      * Sitzklassen eine horizontale Trennlinie ausgegeben.
@@ -290,6 +283,12 @@ public class Flug implements Serializable {
         }
     }
 
+    /**
+     * Gibt einen Text innerhalb einer Trennlinie zentriert aus.
+     *
+     * @param anzahlErsteKlasseSitzplaetze der innerhalb der Trennlinie auszugebende Text
+     * @param breite                       die Gesamtbreite der Trennlinie
+     */
     private void berechneStrichAnzahlUndGebeStricheAus(String anzahlErsteKlasseSitzplaetze, int breite) {
 
         int anzahlStriche = Math.max(0, breite - anzahlErsteKlasseSitzplaetze.length());
@@ -302,11 +301,10 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Findet einen avigator.modell.Sitzplatz in einem avigator.modell.Flug und gibt ihn zurück War ursprünglich in der Methode "avigator.verwaltung.Buchungssystem", ist
-     * aber hier sinnvoller
+     * Sucht einen Sitzplatz anhand seiner Sitzplatznummer im Sitzplan des Fluges.
      *
-     * @param sitzplatznummer blabla wird nochmal geändert javadoc
-     * @return blabla wird nochmal geändert javadoc
+     * @param sitzplatznummer die Nummer des gesuchten Sitzplatzes
+     * @return der gefundene Sitzplatz oder {@code null}, wenn kein Sitzplatz mit dieser Nummer existiert
      */
     public Sitzplatz findeSitzplatz(String sitzplatznummer) {
 
@@ -326,21 +324,25 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Prüft, ob ein avigator.modell.Sitzplatz vorhanden oder belegt ist oder nicht in der gegebenen avigator.modell.Sitzklasse existiert
+     * Prüft, ob ein Sitzplatz vorhanden und frei ist sowie der gewünschten Sitzklasse angehört oder in der
+     * übergebenen Klassenliste enthalten ist.
      *
-     * @param sitz         : zu überprüfender avigator.modell.Sitzplatz
-     * @param sitzklasse   : avigator.modell.Sitzklasse, die zu dem avigator.modell.Sitzplatz gehören soll
-     * @param klassenliste : Liste mit Sitzplätzen, die die angegebene avigator.modell.Sitzklasse haben
+     * @param sitz         der zu überprüfende Sitzplatz
+     * @param sitzklasse   die gewünschte Sitzklasse
+     * @param klassenliste die freien Sitzplätze der gewünschten Sitzklasse
+     * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
+     * @throws IllegalArgumentException wenn der Sitzplatz bereits belegt ist oder sowohl einer anderen Sitzklasse
+     *                                  angehört als auch nicht in der Klassenliste enthalten ist
      */
     public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
 
-        //man muss auf null prüfen, weil die Methode "findeSitzplatz" null zurückgeben kann.
+        // Eine null-Referenz kennzeichnet einen nicht im Sitzplan vorhandenen Sitzplatz
         if (sitz == null) {
-            throw new NoSuchElementException("avigator.modell.Sitzplatz nicht vorhanden.");
+            throw new NoSuchElementException("Sitzplatz nicht vorhanden.");
         } else if (! sitz.getIstFrei()) {
-            throw new IllegalArgumentException("avigator.modell.Sitzplatz bereits belegt.");
+            throw new IllegalArgumentException("Sitzplatz bereits belegt.");
         } else if (sitz.getSitzklasse() != sitzklasse && ! klassenliste.contains(sitz)) {
-            throw new IllegalArgumentException("Der avigator.modell.Sitzplatz ist nicht in der richtigen avigator.modell.Sitzklasse");
+            throw new IllegalArgumentException("Der Sitzplatz ist nicht in der richtigen Sitzklasse");
         }
     }
 
@@ -364,31 +366,61 @@ public class Flug implements Serializable {
         return basispreis;
     }
 
+    /**
+     * Gibt den Startflughafen des Fluges zurück.
+     *
+     * @return der Startflughafen
+     */
     public Flughafen getStartFlughafen() {
 
         return startFlughafen;
     }
 
+    /**
+     * Gibt den Zielflughafen des Fluges zurück.
+     *
+     * @return der Zielflughafen
+     */
     public Flughafen getZielflughafen() {
 
         return zielFlughafen;
     }
 
+    /**
+     * Gibt die Abflugzeit des Fluges zurück.
+     *
+     * @return die Abflugzeit
+     */
     public LocalDateTime getAbflugszeit() {
 
         return abflugzeit;
     }
 
+    /**
+     * Gibt die Ankunftszeit des Fluges zurück.
+     *
+     * @return die Ankunftszeit
+     */
     public LocalDateTime getAnkunftszeit() {
 
         return ankunftszeit;
     }
 
+    /**
+     * Gibt das für den Flug eingesetzte Flugzeug zurück.
+     *
+     * @return das eingesetzte Flugzeug
+     */
     public Flugzeug getFlugzeug() {
 
         return flugzeug;
     }
 
+    /**
+     * Gibt die den Flug durchführende Fluggesellschaft zurück.
+     *
+     * @return die durchführende Fluggesellschaft
+     */
     public Fluggesellschaft getFluggesellschaft() {
 
         return fluggesellschaft;
@@ -397,8 +429,8 @@ public class Flug implements Serializable {
     /**
      * Gibt eine textuelle Beschreibung des Fluges zurück.
      * <p>
-     * Die Beschreibung enthält die avigator.modell.Fluggesellschaft, die vollständige Flugnummer, den Start- und Zielflughafen, die
-     * Abflug- und Ankunftszeit, das eingesetzte avigator.modell.Flugzeug sowie die aktuelle Auslastung.
+     * Die Beschreibung enthält die Fluggesellschaft, die vollständige Flugnummer, den Start- und Zielflughafen, die
+     * Abflug- und Ankunftszeit, das eingesetzte Flugzeug sowie die aktuelle Auslastung.
      *
      * @return eine textuelle Beschreibung des Fluges
      */
@@ -406,17 +438,23 @@ public class Flug implements Serializable {
     public String toString() {
 
         return this.fluggesellschaft.getName()
-               + " avigator.modell.Flug " + this.flugnummer
+               + " Flug " + this.flugnummer
                + " von " + this.startFlughafen.iataCode()
                + " nach " + this.zielFlughafen.iataCode()
                + ", Abflug: " + this.abflugzeit
                + ", Ankunft: " + this.ankunftszeit
-               + ", avigator.modell.Flugzeug: " + this.flugzeug.getModell()
+               + ", Flugzeug: " + this.flugzeug.getModell()
                + " (" + this.flugzeug.getCode() + ")"
                + " ist zu " + this.berechneAuslastung()
                + "% ausgelastet.";
     }
 
+    /**
+     * Vergleicht zwei Flüge anhand ihrer Flugnummer, ihres Abflugdatums und ihrer Route.
+     *
+     * @param o das zu vergleichende Objekt
+     * @return {@code true}, wenn beide Flüge dieselben Identifikationsmerkmale besitzen, sonst {@code false}
+     */
     @Override
     public boolean equals(Object o) {
 
