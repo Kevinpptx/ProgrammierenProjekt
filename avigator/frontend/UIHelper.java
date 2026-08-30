@@ -4,6 +4,7 @@ package avigator.frontend;
  * Stellt Hilfsmethoden für eine einheitliche Ausgabe der Konsolenoberfläche bereit.
  *
  * @author Cedric Beckmann
+ * @version 1.0
  */
 public class UIHelper {
 
