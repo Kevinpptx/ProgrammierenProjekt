@@ -4,8 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Repräsentiert Informationen über Gepäck in einem avigator.modell.Flugzeug. Gepäck besteht aus einer Anzahl von Koffern, die ein
- * avigator.modell.Passagier mit sich führt.
+ * Repräsentiert die Gepäckinformationen einer Buchung. Die Gebühr wird anhand der gebuchten Kofferanzahl berechnet.
  */
 public class GepaeckInformation implements Serializable {
 
@@ -16,19 +15,20 @@ public class GepaeckInformation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Die Der Preis eines Koffers. Wert 40 ist ein fiktiver Standardwert.
+     * Die pauschale Gebühr pro Koffer.
      */
     double gebuehrProKoffer = 40.0;
 
     /**
-     * Die Anzahl der Koffer, die ein avigator.modell.Passagier mit sich führt.
+     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
      */
     private int anzahlKoffer;
 
     /**
-     * Konstruktor für die Klasse GepäckInformation.
+     * Erstellt Gepäckinformationen mit der angegebenen Kofferanzahl.
      *
      * @param anzahlKoffer die Anzahl der Koffer
+     * @throws IllegalArgumentException wenn die Kofferanzahl negativ ist
      */
     public GepaeckInformation(int anzahlKoffer) {
 
@@ -37,6 +37,12 @@ public class GepaeckInformation implements Serializable {
         this.anzahlKoffer = anzahlKoffer;
     }
 
+    /**
+     * Prüft, ob die angegebene Kofferanzahl gültig ist.
+     *
+     * @param anzahlKoffer die zu validierende Kofferanzahl
+     * @throws IllegalArgumentException wenn die Kofferanzahl negativ ist
+     */
     private void validiereGepaeckinfo(int anzahlKoffer) {
 
         if (anzahlKoffer < 0) {
@@ -59,6 +65,7 @@ public class GepaeckInformation implements Serializable {
      * Setzt die Anzahl der Koffer.
      *
      * @param anzahlKoffer die neue Anzahl der Koffer
+     * @throws IllegalArgumentException wenn die Kofferanzahl negativ ist
      */
     public void setAnzahlKoffer(int anzahlKoffer) {
 
