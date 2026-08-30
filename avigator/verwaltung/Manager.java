@@ -7,24 +7,24 @@ import avigator.frontend.UIMitarbeiter;
 import java.util.Scanner;
 
 /**
- * Die Klasse {@code avigator.verwaltung.Manager} steuert den Programmablauf des Avigator-Systems. Sie zeigt das Hauptmenü an und leitet den
+ * Die Klasse {@code Manager} steuert den Programmablauf des Avigator-Systems. Sie zeigt das Hauptmenü an und leitet den
  * Benutzer abhängig von seiner Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
  * <p>
  * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben über die Konsole eingelesen und überprüft
  * werden können.
  *
  * @author Lars Pfeiffer
- * @version 1.0
+ * @version 1.1
  */
 public class Manager {
 
     /**
-     * avigator.verwaltung.DatenHandler zum Speichern der avigator.verwaltung.Anwendungsdaten.
+     * DatenHandler zum Speichern der Anwendungsdaten.
      */
     private final DatenHandler datenHandler;
 
     /**
-     * Enthält die aktuell verwendeten avigator.verwaltung.Anwendungsdaten.
+     * Enthält die aktuell verwendeten Anwendungsdaten.
      */
     private final Anwendungsdaten anwendungsdaten;
 
@@ -44,19 +44,20 @@ public class Manager {
     private static final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Erzeugt einen avigator.verwaltung.Manager mit Zugriff auf die avigator.verwaltung.Anwendungsdaten und den avigator.verwaltung.DatenHandler.
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den DatenHandler.
      *
-     * @param datenHandler    Handler zum Speichern der avigator.verwaltung.Anwendungsdaten
-     * @param anwendungsdaten geladene oder neu erzeugte avigator.verwaltung.Anwendungsdaten
+     * @param datenHandler    der Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     * @throws IllegalArgumentException wenn der DatenHandler oder die Anwendungsdaten {@code null} sind
      */
     public Manager(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
         if (datenHandler == null) {
-            throw new IllegalArgumentException("Der avigator.verwaltung.DatenHandler darf nicht null sein.");
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
         }
 
         if (anwendungsdaten == null) {
-            throw new IllegalArgumentException("Die avigator.verwaltung.Anwendungsdaten dürfen nicht null sein.");
+            throw new IllegalArgumentException("Die Anwendungsdaten dürfen nicht null sein.");
         }
 
         this.datenHandler = datenHandler;
@@ -69,7 +70,7 @@ public class Manager {
      * Startet das Avigator-System und zeigt das Hauptmenü an.
      * <p>
      * Der Benutzer kann sich als Administrator oder Kunde anmelden. Außerdem kann das Programm beendet werden. Beim
-     * Beenden werden die aktuellen avigator.verwaltung.Anwendungsdaten gespeichert.
+     * Beenden werden die aktuellen Anwendungsdaten gespeichert.
      * <p>
      * Das Menü wird so lange angezeigt, bis der Benutzer das Programm über die entsprechende Auswahl beendet.
      */
