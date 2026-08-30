@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Repräsentiert ein avigator.modell.Flugzeug mit einem Sitzplan. Das avigator.modell.Flugzeug besitzt einen eindeutigen Code, ein Modell sowie eine
- * Vorlage aller vorhandenen Sitzplätze.
+ * Die Klasse {@code Flugzeug} repräsentiert ein Flugzeug mit einem Sitzplan. Das Flugzeug besitzt einen eindeutigen
+ * Code, ein Modell sowie eine Vorlage aller vorhandenen Sitzplätze.
  */
 public class Flugzeug implements Serializable {
 
@@ -43,18 +43,18 @@ public class Flugzeug implements Serializable {
     private final Sitzplatz[][] sitzplaetzeVorlage;
 
     /**
-     * Erstellt ein neues avigator.modell.Flugzeug mit dem angegebenen Sitzplan.
+     * Erstellt ein neues Flugzeug mit dem angegebenen Sitzplan.
      * <p>
      * Die Sitzplätze werden automatisch nummeriert (z. B. 1A, 1B, 1C, ...). Die ersten {@code businessReihen} Reihen
      * werden als Business-Class angelegt, alle übrigen Reihen als Economy.
      *
      * @param code           eindeutiger Code des Flugzeugs
-     * @param modell         Modellbezeichnung
-     * @param anzahlReihen   Anzahl der Sitzreihen
-     * @param sitzeProReihe  Anzahl der Sitzplätze pro Reihe
-     * @param businessReihen Anzahl der Business-Reihen
-     * @throws IllegalArgumentException , wenn die Anzahl der Reihen, Businessreihen und Sitze pro Reihe logisch keinen
-     *                                  Sinn ergibt
+     * @param modell         die Modellbezeichnung
+     * @param anzahlReihen   die Anzahl der Sitzreihen
+     * @param sitzeProReihe  die Anzahl der Sitzplätze pro Reihe
+     * @param businessReihen die Anzahl der Business-Reihen
+     * @throws IllegalArgumentException wenn Code oder Modell {@code null} oder leer sind oder die Anzahl der Reihen,
+     *                                  Business-Reihen und Sitze pro Reihe außerhalb der zulässigen Grenzen liegt
      */
     public Flugzeug(String code,
                     String modell,
@@ -62,8 +62,6 @@ public class Flugzeug implements Serializable {
                     int sitzeProReihe,
                     int businessReihen
     ) {
-
-        // Validiert die übergebenen Attribute 
 
         if (code == null || code.isBlank()) {
             throw new IllegalArgumentException("Bitte geben Sie einen Code an.");
@@ -78,7 +76,7 @@ public class Flugzeug implements Serializable {
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Sitzreihen von mindestens 1 ein!");
         }
 
-        //Es ist erlaubt, dass ein avigator.modell.Flugzeug keine Business-Reihen hat (siehe Flugzeuge von "Billig-Airlines")
+        // Ein Flugzeug darf wie bei einer Low-Cost-Airline auch ohne Business-Reihen angelegt werden
         if (businessReihen < 0 || businessReihen > anzahlReihen) {
             throw new IllegalArgumentException(
                     "Bitte geben Sie eine positive, ganzzahlige Anzahl an Business-Reihen von mindestens 0 ein. Die Anzahl der Business-Reihen darf zudem nicht größer als die Anzahl der verfügbaren Reihen sein.");
@@ -96,7 +94,7 @@ public class Flugzeug implements Serializable {
             throw new IllegalArgumentException("Die Anzahl der Sitze pro Reihe muss mindestens 1 betragen.");
         }
 
-        // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // entfernt führende und nachfolgende Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
         // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
 
         this.code = code.trim().toUpperCase(Locale.ROOT);
@@ -136,7 +134,7 @@ public class Flugzeug implements Serializable {
     /**
      * Gibt die Gesamtanzahl aller Sitzplätze zurück.
      *
-     * @return Gesamtanzahl der Sitzplätze
+     * @return die Gesamtanzahl der Sitzplätze
      */
     public int getGesamtSitzanzahl() {
 
@@ -146,7 +144,7 @@ public class Flugzeug implements Serializable {
     /**
      * Gibt den Code des Flugzeugs zurück.
      *
-     * @return Code des Flugzeugs
+     * @return der Code des Flugzeugs
      */
     public String getCode() {
 
@@ -156,7 +154,7 @@ public class Flugzeug implements Serializable {
     /**
      * Gibt die Modellbezeichnung des Flugzeugs zurück.
      *
-     * @return Modellbezeichnung
+     * @return die Modellbezeichnung
      */
     public String getModell() {
 
@@ -167,7 +165,7 @@ public class Flugzeug implements Serializable {
      * Gibt die Kopie Sitzplatzvorlage des Flugzeugs zurück. Geht dafür die Zeilen der Vorlage durch und fügt diese mit
      * "clone" in die Kopie ein.
      *
-     * @return Kopie des zweidimensionalen Arrays mit allen Sitzplätzen
+     * @return die Kopie des zweidimensionalen Arrays mit allen Sitzplätzen
      */
     public Sitzplatz[][] getSitzplaetzeVorlage() {
 
@@ -201,14 +199,14 @@ public class Flugzeug implements Serializable {
     }
 
     /**
-     * Gibt eine Beschreibung des Flugzeugs einschließlich der avigator.modell.Sitzplatz-Anordnung zurück.
+     * Gibt eine Beschreibung des Flugzeugs einschließlich der Sitzplatz-Anordnung zurück.
      *
-     * @return Beschreibung des Flugzeugs und des Sitzplans
+     * @return die Beschreibung des Flugzeugs und des Sitzplans
      */
     @Override
     public String toString() {
 
-        StringBuilder output = new StringBuilder("avigator.modell.Flugzeug " + this.code
+        StringBuilder output = new StringBuilder("Flugzeug " + this.code
                 + " (" + this.modell + ")"
                 + " besitzt " + getGesamtSitzanzahl()
                 + " Sitzplätze ("
@@ -236,6 +234,12 @@ public class Flugzeug implements Serializable {
         return output.toString();
     }
 
+    /**
+     * Vergleicht zwei Flugzeuge anhand ihres Codes.
+     *
+     * @param o das zu vergleichende Objekt
+     * @return {@code true}, wenn beide Flugzeuge denselben Code besitzen, sonst {@code false}
+     */
     @Override
     public boolean equals(Object o) {
 
