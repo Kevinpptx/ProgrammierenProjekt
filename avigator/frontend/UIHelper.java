@@ -2,10 +2,22 @@ package avigator.frontend;
 
 /**
  * Stellt Hilfsmethoden für eine einheitliche Ausgabe der Konsolenoberfläche bereit.
+ *
+ * @author Cedric Beckmann
  */
 public class UIHelper {
 
+    /**
+     * Einheitliche Breite der Konsolenausgabe.
+     */
     private static final int BREITE = 130;
+
+    /**
+     * Erzeugt eine neue Instanz der Hilfsklasse.
+     */
+    public UIHelper() {
+
+    }
 
     /**
      * Gibt eine zentrierte Überschrift zwischen zwei Trennlinien aus.
