@@ -4,11 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Die Klasse avigator.modell.Passagier speichert Informationen über einen avigator.modell.Passagier.
+ * Die Klasse {@code Passagier} speichert die Identifikations- und Kontaktdaten eines Passagiers.
  *
- * @param passagierId Die ID des Passagiers.
- * @param name        Der Name des Passagiers.
- * @param email       Die E-Mail-Adresse des Passagiers.
+ * @param passagierId die ID des Passagiers
+ * @param name        der Name des Passagiers
+ * @param email       die E-Mail-Adresse des Passagiers
  */
 public record Passagier(String passagierId, String name, String email) implements Serializable {
 
@@ -19,13 +19,14 @@ public record Passagier(String passagierId, String name, String email) implement
     private static final long serialVersionUID = 1L;
 
     /**
-     * Konstruktor für die Klasse avigator.modell.Passagier.
+     * Erstellt einen Passagier mit einer ID, einem Namen und einer E-Mail-Adresse.
      *
-     * @param passagierId blabla Java-Doc kommt noch
-     * @param name        blabla Java-Doc kommt noch
-     * @param email       blabla Java-Doc kommt noch
+     * @param passagierId die ID des Passagiers
+     * @param name        der Name des Passagiers
+     * @param email       die E-Mail-Adresse des Passagiers
+     * @throws IllegalArgumentException wenn Name oder E-Mail-Adresse {@code null} oder leer sind oder die
+     *                                  E-Mail-Adresse kein gültiges Format besitzt
      */
-    // Konstruktor
     public Passagier {
 
         if (name == null || email == null) {
@@ -42,10 +43,10 @@ public record Passagier(String passagierId, String name, String email) implement
     }
 
     /**
-     * Validiert die übergebene E-Mail-Adresse in Bezug darauf, ob sie dem Format einer Mail-Adresse entspricht (mithilfe
-     * eines regulären Ausdrucks).
+     * Validiert mithilfe eines regulären Ausdrucks, ob die übergebene E-Mail-Adresse dem erwarteten Format entspricht.
      *
-     * @param email blabla Java-Doc kommt noch
+     * @param email die zu validierende E-Mail-Adresse
+     * @throws IllegalArgumentException wenn die E-Mail-Adresse kein gültiges Format besitzt
      */
     private void validiereEmail(String email) {
 
@@ -55,9 +56,9 @@ public record Passagier(String passagierId, String name, String email) implement
     }
 
     /**
-     * Gibt die avigator.modell.Passagier-ID zurück.
+     * Gibt die Passagier-ID zurück.
      *
-     * @return die avigator.modell.Passagier-ID
+     * @return die Passagier-ID
      */
     @Override
     public String passagierId() {
@@ -95,7 +96,7 @@ public record Passagier(String passagierId, String name, String email) implement
     @Override
     public String toString() {
 
-        return "avigator.modell.Passagier ID: " + passagierId + ", Name: " + name + ", Email: " + email;
+        return "Passagier ID: " + passagierId + ", Name: " + name + ", Email: " + email;
     }
 
 }
