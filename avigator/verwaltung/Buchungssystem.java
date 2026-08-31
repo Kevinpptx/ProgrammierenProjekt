@@ -132,6 +132,7 @@ public class Buchungssystem implements Serializable {
                     "Der übergebene Flug existiert nicht (mehr) im System. Bitte einen anderen Flug wählen oder die Buchung neu vornehmen!");
         }
 
+        // Bereitet Sitzplatz und Gepäckdaten vor und prüft den Sitz, bevor die Buchung angelegt wird.
         Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
         GepaeckInformation gepaeckInfo = new GepaeckInformation(anzahlKoffer);
         List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
@@ -140,6 +141,7 @@ public class Buchungssystem implements Serializable {
 
         Buchung buchung = new Buchung(passagier, flug, sitzplatz, gepaeckInfo);
 
+        // Vergibt anschließend die fortlaufende Nummer und verknüpft Buchung und Sitzplatz miteinander.
         buchung.setBuchungsnummer("bu" + anzahlBuchungen);
         anzahlBuchungen++;
         sitzplatz.belegen(buchung);
@@ -200,6 +202,7 @@ public class Buchungssystem implements Serializable {
 
             Sitzplatz neuerSitzplatz = flug.findeSitzplatz(sitzplatznummer);
 
+            // Berechnet den Mehrbetrag noch mit den bisherigen Buchungsdaten, bevor Flug und Sitz ersetzt werden.
             gebuehr = berechneUmbuchungsgebuehr(buchung, flug, neuerSitzplatz);
 
             neuerSitzplatz.belegen(buchung);
@@ -259,6 +262,7 @@ public class Buchungssystem implements Serializable {
             throw new NoSuchElementException("Es wurde keine Sitzklasse angegeben.");
         }
 
+        // Im selben Flug wird gegen dessen Sitzplan geprüft, andernfalls gegen den Sitzplan des neuen Flugs.
         else if (neuerFlug == buchung.getFlug() || neuerFlug == null) {
             return validiereUmbuchungimSelbenFlug(buchung, neueSitzplatznummer, sitzklasse);
         }
@@ -365,6 +369,7 @@ public class Buchungssystem implements Serializable {
 
                 betrag = buchung.stornierenMitGebuehr();
 
+                // Statusänderung und Sitzfreigabe machen den Platz wieder für andere Buchungen verfügbar.
                 buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
                 buchung.getSitzplatz().freigeben();
 
@@ -436,6 +441,7 @@ public class Buchungssystem implements Serializable {
             throw new IllegalArgumentException("Die Anzahl der Koffer darf nicht negativ sein.");
         }
 
+        // Übernimmt die neue Gepäckmenge und hält den gespeicherten Buchungspreis damit synchron.
         buchung.getGepaeckinformation().setAnzahlKoffer(neueAnzahlKoffer);
         buchung.aktualisiereGezahltenPreis();
     }

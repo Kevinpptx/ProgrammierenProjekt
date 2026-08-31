@@ -86,6 +86,7 @@ public class UIMitarbeiter {
 
         int passwort = 1234;
 
+        // Zählt die verbleibenden Versuche herunter und öffnet den Mitarbeiterbereich nur bei korrektem Passwort.
         for (int i = 3; i >= 0; i--) {
 
             UIHelper.druckeEingabeaufforderung("Geben Sie bitte Ihr Passwort ein:");
@@ -669,6 +670,7 @@ public class UIMitarbeiter {
 
         Fluggesellschaft ausgewaehlteFluggesellschaft;
 
+        // Lässt die weitere Flugplanung erst mit einer registrierten Fluggesellschaft zu.
         while (true) {
 
             fluggesellschaft2 = Manager.stringscanner().toUpperCase();
@@ -708,6 +710,7 @@ public class UIMitarbeiter {
 
         Flugzeug ausgewaehltesFlugzeug;
 
+        // Beschränkt die Auswahl auf Flugzeuge, die tatsächlich zur gewählten Fluggesellschaft gehören.
         while (true) {
 
             UIHelper.druckeEingabeaufforderung("Bitte geben Sie den Flugzeugcode ein:");
@@ -763,6 +766,7 @@ public class UIMitarbeiter {
 
         Flughafen ausgewaehlterStartflughafen;
 
+        // Fragt beide Flughäfen so lange ab, bis registrierte Objekte für die Flugerstellung vorliegen.
         while (true) {
 
             UIHelper.druckeEingabeaufforderung("Wählen Sie den Startflughafen aus. Auswahl über IATA-Code:");
@@ -814,6 +818,7 @@ public class UIMitarbeiter {
         // Rückflug / Serienflug
         boolean gueltigeAuswahl = false;
 
+        // Übergibt die vollständig erfassten Flugdaten je nach Auswahl als Einzel- oder wiederkehrendes Flugpaar.
         while (!gueltigeAuswahl) {
 
             UIHelper.druckeMenuepunkt(1, "Flug mit Rückflug anlegen");
@@ -904,6 +909,7 @@ public class UIMitarbeiter {
         LocalDate datum = null;
         LocalTime zeit = null;
 
+        // Die strikte Auswertung weist auch formal passende, aber kalendarisch ungültige Datumswerte ab.
         while (datum == null) {
 
             UIHelper.druckeEingabeaufforderung("Bitte geben Sie das Datum (dd.MM.yyyy) " + text + " ein:");
@@ -955,6 +961,7 @@ public class UIMitarbeiter {
         ArrayList<Flug> auswaehlbareFluege = new ArrayList<>();
         int nummer = 1;
 
+        // Baut beim Anzeigen dieselbe nummerierte Liste auf, aus der später der zu entfernende Flug gewählt wird.
         for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
             System.out.println();
@@ -1014,6 +1021,7 @@ public class UIMitarbeiter {
 
         Flug flug = auswaehlbareFluege.get(auswahl - 1);
 
+        // Entfernt den Flug nur, wenn keine aktive oder umgebuchte Buchung mehr auf ihn verweist.
         if (buchungssystem.findeRelevanteBuchungen(flug).isEmpty()) {
 
             verwaltungssystem.entferneFlug(flug);
@@ -1049,6 +1057,7 @@ public class UIMitarbeiter {
 
             int nummer = 1;
 
+            // Sammelt die gruppiert angezeigten Flüge zugleich in der Reihenfolge ihrer Auswahlnummern.
             for (Fluggesellschaft fluggesellschaft : verwaltungssystem.getFluggesellschaften()) {
 
                 System.out.println();
@@ -1161,6 +1170,7 @@ public class UIMitarbeiter {
                 case 2:
                     UIHelper.druckeUeberschrift("Passagier- und Gepäckübersicht für Flug " + flug.getFlugnummer());
 
+                    // Berücksichtigt nur Buchungen, die für diesen Flug weiterhin gültig sind.
                     ArrayList<Buchung> buchungen = buchungssystem.findeRelevanteBuchungen(flug);
 
                     if (buchungen.isEmpty()) {

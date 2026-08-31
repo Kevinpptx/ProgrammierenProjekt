@@ -48,6 +48,7 @@ public class DatenHandler {
         }
 
         try {
+            // Legt den Speicherordner bei Bedarf an, bevor der gesamte Anwendungszustand serialisiert wird.
             Files.createDirectories(DATEI_PFAD.getParent());
 
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(DATEI_PFAD))) {
@@ -74,6 +75,7 @@ public class DatenHandler {
      */
     public Anwendungsdaten initialisiereAnwendungsdaten() {
 
+        // Ohne vorhandene Speicherdatei startet die Anwendung mit einem vollständig neuen Datenbestand.
         if (Files.notExists(DATEI_PFAD)) {
 
             System.out.println(
@@ -88,6 +90,7 @@ public class DatenHandler {
 
             } catch (IOException | ClassNotFoundException | ClassCastException e) {
 
+                // Auch beschädigte oder inkompatible Daten dürfen den Programmstart nicht verhindern.
                 System.err.println(
                         "Gespeicherte Anwendungsdaten konnten nicht geladen werden. Neue Anwendungsdaten werden erzeugt.");
 

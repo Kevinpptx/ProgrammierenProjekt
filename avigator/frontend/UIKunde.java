@@ -96,6 +96,7 @@ public class UIKunde {
                 case 1:
                     String name;
 
+                    // Erfasst zunächst einen gültigen Namen, bevor das Kundenkonto mit der E-Mail angelegt wird.
                     while (true) {
 
                         UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihren Namen ein:");
@@ -115,6 +116,7 @@ public class UIKunde {
 
                         try {
 
+                            // Speichert den neuen Passagier vor dem Wechsel in dessen persönlichen Kundenbereich.
                             Passagier passagier = buchungssystem.initialisierePassagier(name, mail);
 
                             datenHandler.speichere(anwendungsdaten);
@@ -154,6 +156,7 @@ public class UIKunde {
                     UIHelper.druckeEingabeaufforderung("Bitte wählen Sie einen Passagier über die ID.");
                     UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zurückzukehren.");
 
+                    // Wiederholt die Suche, bis eine vorhandene Passagier-ID gewählt oder der Vorgang abgebrochen wird.
                     while (true) {
 
                         String id = Manager.stringscanner();
@@ -315,6 +318,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Flüge suchen und buchen");
 
+        // Aktualisiert vergangene Flüge und Buchungen, bevor daraus eine buchbare Auswahl entsteht.
         verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         this.druckeFlughaefen();
@@ -393,6 +397,7 @@ public class UIKunde {
                 return;
             }
 
+            // Erst nach der Bestätigung wird der Sitz belegt und die Buchung im Buchungssystem registriert.
             Buchung buchung = buchungssystem.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse,
                     verwaltungssystem
             );
@@ -637,6 +642,7 @@ public class UIKunde {
             Sitzplatz neuerSitzplatz = neuerFlug.findeSitzplatz(sitzplatz);
             Sitzklasse sitzklasse = neuerSitzplatz.getSitzklasse();
 
+            // Ermittelt den neuen Preis mit einer Vorschau, ohne die bestehende Buchung bereits zu verändern.
             Buchung buchungsvorschau = new Buchung(passagier,
                     neuerFlug,
                     neuerSitzplatz,
@@ -757,6 +763,7 @@ public class UIKunde {
 
             double buchungspreis = buchung.getGezahlterPreis();
             double stornierungsgebuehr = buchung.getStornierungsgebuehr();
+            // Die feste Stornierungsgebühr kann höchstens den gesamten Buchungspreis aufzehren.
             double erstattungsbetrag = Math.max(0, buchungspreis - stornierungsgebuehr);
 
             UIHelper.druckeUeberschrift("Stornierungsübersicht");
@@ -830,6 +837,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
+        // Beschränkt die Übersicht auf Buchungen des aktuell angemeldeten Passagiers.
         for (Buchung buchung : buchungssystem.getBuchungen()) {
 
             if (buchung.getPassagier().equals(passagier)) {
@@ -961,6 +969,7 @@ public class UIKunde {
                 break;
             }
 
+            // Berechnet die Preisänderung zunächst mit separaten Gepäckdaten für die Vorschau.
             Buchung buchungsvorschau = new Buchung(buchung.getPassagier(),
                     buchung.getFlug(),
                     buchung.getSitzplatz(),
@@ -1084,6 +1093,7 @@ public class UIKunde {
 
         boolean startUeberspringen = false, flugnummerUeberspringen = false, datumUeberspringen = false;
 
+        // Der Zielflughafen bleibt das verpflichtende Mindestkriterium jeder Suche.
         while (ziel.length() != 3 ||
                !Character.isAlphabetic(ziel.charAt(0)) ||
                !Character.isAlphabetic(ziel.charAt(1)) ||
@@ -1164,6 +1174,7 @@ public class UIKunde {
 
         if (!flugnummerUeberspringen) {
 
+            // Eine Flugnummer kann wahlweise allein oder zusammen mit einem Datum gesucht werden.
             while (flugnummer.length() != 5 ||
                    !Character.isAlphabetic(flugnummer.charAt(0)) ||
                    !Character.isAlphabetic(flugnummer.charAt(1)) ||
@@ -1267,6 +1278,7 @@ public class UIKunde {
             datum = LocalDate.parse(datumsString, formatter);
         }
 
+        // Wählt anhand der angegebenen Kriterien die passende Verwaltungssuche oder kombiniert deren Ergebnisse.
         if (!flugnummer.isBlank()) {
 
             if (datumUeberspringen) {
@@ -1285,6 +1297,7 @@ public class UIKunde {
                         verwaltungssystem.getFlughafenNachCode(ziel)
                 );
 
+                // Übernimmt nur Flüge, die sowohl am gewünschten Datum als auch auf der Route liegen.
                 for (Flug flug : fluegeMitGleichemDatum) {
 
                     if (fluegeMitGleicherRoute.contains(flug)) {
@@ -1296,6 +1309,7 @@ public class UIKunde {
 
                 ArrayList<Flug> fluegeMitGleichemZiel = verwaltungssystem.sucheFluegeNachZiel(verwaltungssystem.getFlughafenNachCode(ziel));
 
+                // Schneidet die Datumsergebnisse mit den Flügen zum gewünschten Ziel.
                 for (Flug flug : fluegeMitGleichemDatum) {
 
                     if (fluegeMitGleichemZiel.contains(flug)) {

@@ -195,6 +195,7 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
+        // Registriert das Flugzeug sowohl zentral als auch in der Flotte seiner Fluggesellschaft.
         Flugzeug flugzeug = new Flugzeug(flugzeugCode, modell, anzahlReihen, sitzeProReihe, businessReihen);
 
         fluggesellschaft.fuegeFlugzeugHinzu(flugzeug);
@@ -221,6 +222,7 @@ public class Verwaltungssystem implements Serializable {
 
         Flugzeug flug = this.getFlugzeug(code.strip().toUpperCase(Locale.ROOT));
 
+        // Entfernt nur Flugzeuge, die aktuell keinem geplanten Flug zugeordnet sind.
         for (Flug flugTemporaer : this.fluege) {
 
             if (flugTemporaer.getFlugzeug().equals(flug)) {
@@ -230,6 +232,7 @@ public class Verwaltungssystem implements Serializable {
             }
         }
 
+        // Hält beim Entfernen die zentrale Flugzeugliste und die zugehörige Flotte synchron.
         for (Fluggesellschaft fluggesellschaft : this.fluggesellschaften) {
 
             if (fluggesellschaft.beinhaltetFlugzeug(flug)) {
@@ -318,6 +321,7 @@ public class Verwaltungssystem implements Serializable {
 
         if (this.flughaefen.contains(flughafen)) {
 
+            // Verhindert verwaiste Start- oder Zielreferenzen in bereits geplanten Flügen.
             for (Flug flug : fluege) {
 
                 if (flug.getStartFlughafen().equals(flughafen) || flug.getZielflughafen().equals(flughafen)) {
@@ -470,6 +474,7 @@ public class Verwaltungssystem implements Serializable {
 
         try {
 
+            // Speichert die Serie erst, nachdem jeder Flug gegen alle relevanten Flugzeiten geprüft wurde.
             for (Flug flug : erzeugteFluege) {
                 pruefeFlugAufZeitlicheOderRegistrationsUeberschneidung(flug, erzeugteFluege);
             }
@@ -515,6 +520,7 @@ public class Verwaltungssystem implements Serializable {
 
         String flugnummer = this.erzeugeFlugnummer(fluggesellschaft, abflugzeit);
 
+        // Prüft vor der Erstellung sowohl die tägliche Flugnummer als auch die Einsatzzeit des Flugzeugs.
         for (Flug vorhandenerFlug : fluege) {
 
             boolean gleicherFlugAmSelbenTag
@@ -681,6 +687,7 @@ public class Verwaltungssystem implements Serializable {
         String airlineCode = fluggesellschaft.getAirlineCode();
         int hoechsteFlugnummer = berechneHoechsteFlugnummer(fluggesellschaft, abflugzeit, airlineCode);
 
+        // Berücksichtigt auch Flüge der aktuellen Serie, die noch nicht zentral gespeichert wurden.
         for (Flug neuerFlug : neueFluege) {
 
             boolean gleicherTag = neuerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());
@@ -723,6 +730,7 @@ public class Verwaltungssystem implements Serializable {
             throw new IllegalArgumentException("Der Flug ist nicht im Verwaltungssystem registriert.");
         }
 
+        // Belegte Sitze kennzeichnen noch bestehende Buchungen und verhindern das Entfernen.
         if (flug.berechneAuslastung() > 0) {
             throw new IllegalStateException("Der Flug kann nicht entfernt werden, da noch Buchungen vorhanden sind.");
         }
@@ -922,6 +930,7 @@ public class Verwaltungssystem implements Serializable {
 
             if (flug.getAbflugszeit().isBefore(LocalDateTime.now())) {
 
+                // Markiert zugehörige Buchungen vor dem Entfernen des Flugs als vergangen.
                 for (Buchung buchung : buchungssystem.getBuchungen()) {
 
                     if (buchung.getFlug() == flug) {
@@ -948,6 +957,7 @@ public class Verwaltungssystem implements Serializable {
 
         int hoechsteNummer = 0;
 
+        // Für die nächste Nummer zählen nur Flüge derselben Airline am gleichen Abflugtag.
         for (Flug vorhandenerFlug : fluege) {
 
             boolean gleicherTag = vorhandenerFlug.getAbflugszeit().toLocalDate().equals(abflugzeit.toLocalDate());

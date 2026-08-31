@@ -104,6 +104,7 @@ public class Flugzeug implements Serializable {
 
         char sitzbuchstabe;
 
+        // Erstellt den vollständigen Sitzplan und zählt die Plätze dabei direkt je Sitzklasse.
         for (int reihe = 0; reihe < anzahlReihen; reihe++) {
 
             for (int platz = 0; platz < sitzeProReihe; platz++) {
