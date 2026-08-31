@@ -1,2 +1,1 @@
-packageSearchIndex = [{"l": "All Packages", "u": "allpackages-index.html"}];
-updateSearchResults();
+packageSearchIndex = [{"l":"Alle Packages","u":"allpackages-index.html"},{"l":"avigator.frontend"},{"l":"avigator.modell"},{"l":"avigator.verwaltung"}];updateSearchResults();

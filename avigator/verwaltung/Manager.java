@@ -7,34 +7,34 @@ import avigator.frontend.UIMitarbeiter;
 import java.util.Scanner;
 
 /**
- * Die Klasse {@code avigator.verwaltung.Manager} steuert den Programmablauf des Avigator-Systems. Sie zeigt das Hauptmenü an und leitet den
- * Benutzer abhängig von seiner Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
+ * Die Klasse {@code Manager} steuert den Programmablauf des Avigator-Systems. Sie zeigt das Hauptmenue an und leitet den
+ * Benutzer abhaengig von seiner Auswahl zum Mitarbeiter- oder Kundenbereich weiter.
  * <p>
- * Außerdem stellt die Klasse Methoden zur Verfügung, mit denen Eingaben über die Konsole eingelesen und überprüft
- * werden können.
+ * Außerdem stellt die Klasse Methoden zur Verfuegung, mit denen Eingaben ueber die Konsole eingelesen und ueberprueft
+ * werden koennen.
  *
  * @author Lars Pfeiffer
- * @version 1.0
+ * @version 1.1
  */
 public class Manager {
 
     /**
-     * avigator.verwaltung.DatenHandler zum Speichern der avigator.verwaltung.Anwendungsdaten.
+     * DatenHandler zum Speichern der Anwendungsdaten.
      */
     private final DatenHandler datenHandler;
 
     /**
-     * Enthält die aktuell verwendeten avigator.verwaltung.Anwendungsdaten.
+     * Enthaelt die aktuell verwendeten Anwendungsdaten.
      */
     private final Anwendungsdaten anwendungsdaten;
 
     /**
-     * Benutzeroberfläche für Kunden.
+     * Benutzeroberflaeche fuer Kunden.
      */
     private final UIKunde uiKunde;
 
     /**
-     * Benutzeroberfläche für Mitarbeiter.
+     * Benutzeroberflaeche fuer Mitarbeiter.
      */
     private final UIMitarbeiter uiMitarbeiter;
 
@@ -44,19 +44,20 @@ public class Manager {
     private static final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Erzeugt einen avigator.verwaltung.Manager mit Zugriff auf die avigator.verwaltung.Anwendungsdaten und den avigator.verwaltung.DatenHandler.
+     * Erzeugt einen Manager mit Zugriff auf die Anwendungsdaten und den DatenHandler.
      *
-     * @param datenHandler    Handler zum Speichern der avigator.verwaltung.Anwendungsdaten
-     * @param anwendungsdaten geladene oder neu erzeugte avigator.verwaltung.Anwendungsdaten
+     * @param datenHandler    der Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     * @throws IllegalArgumentException wenn der DatenHandler oder die Anwendungsdaten {@code null} sind
      */
     public Manager(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
         if (datenHandler == null) {
-            throw new IllegalArgumentException("Der avigator.verwaltung.DatenHandler darf nicht null sein.");
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
         }
 
         if (anwendungsdaten == null) {
-            throw new IllegalArgumentException("Die avigator.verwaltung.Anwendungsdaten dürfen nicht null sein.");
+            throw new IllegalArgumentException("Die Anwendungsdaten duerfen nicht null sein.");
         }
 
         this.datenHandler = datenHandler;
@@ -66,12 +67,12 @@ public class Manager {
     }
 
     /**
-     * Startet das Avigator-System und zeigt das Hauptmenü an.
+     * Startet das Avigator-System und zeigt das Hauptmenue an.
      * <p>
      * Der Benutzer kann sich als Administrator oder Kunde anmelden. Außerdem kann das Programm beendet werden. Beim
-     * Beenden werden die aktuellen avigator.verwaltung.Anwendungsdaten gespeichert.
+     * Beenden werden die aktuellen Anwendungsdaten gespeichert.
      * <p>
-     * Das Menü wird so lange angezeigt, bis der Benutzer das Programm über die entsprechende Auswahl beendet.
+     * Das Menue wird so lange angezeigt, bis der Benutzer das Programm ueber die entsprechende Auswahl beendet.
      */
     public void start() {
 
@@ -79,7 +80,7 @@ public class Manager {
 
             UIHelper.druckeUeberschrift("Herzlich Willkommen beim Avigator!");
 
-            UIHelper.druckeEingabeaufforderung("Als welche Art von Benutzer möchten Sie das System nutzen?");
+            UIHelper.druckeEingabeaufforderung("Als welche Art von Benutzer moechten Sie das System nutzen?");
 
             UIHelper.druckeMenuepunkt(1, "Admin");
             UIHelper.druckeMenuepunkt(2, "Kunde");
@@ -101,16 +102,16 @@ public class Manager {
                     return;
 
                 default:
-                    UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine der angezeigten Zahlen ein.");
+                    UIHelper.druckeFehler("Ungueltige Eingabe! Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
         }
     }
 
     /**
-     * Liest eine Ganzzahl über die Konsole ein.
+     * Liest eine Ganzzahl ueber die Konsole ein.
      * <p>
-     * Die Eingabe wird als Text eingelesen und anschließend in einen {@code int}-Wert umgewandelt. Bei einer ungültigen
+     * Die Eingabe wird als Text eingelesen und anschließend in einen {@code int}-Wert umgewandelt. Bei einer ungueltigen
      * Eingabe wird eine Fehlermeldung ausgegeben und die Eingabe erneut abgefragt.
      *
      * @return die eingegebene Ganzzahl
@@ -124,14 +125,14 @@ public class Manager {
             try {
                 return Integer.parseInt(auswahl);
             } catch (NumberFormatException e) {
-                UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Ganzzahl ein.");
+                UIHelper.druckeFehler("Ungueltige Eingabe! Bitte geben Sie eine Ganzzahl ein.");
             }
 
         }
     }
 
     /**
-     * Liest eine Zeichenkette über die Konsole ein.
+     * Liest eine Zeichenkette ueber die Konsole ein.
      * <p>
      * Leerzeichen am Anfang und Ende der Eingabe werden entfernt.
      *
@@ -143,10 +144,10 @@ public class Manager {
     }
 
     /**
-     * Liest eine Dezimalzahl über die Konsole ein.
+     * Liest eine Dezimalzahl ueber die Konsole ein.
      * <p>
      * Die Methode akzeptiert sowohl einen Punkt als auch ein Komma als Dezimaltrennzeichen. Ein Komma wird vor der
-     * Umwandlung durch einen Punkt ersetzt. Bei einer ungültigen Eingabe wird eine Fehlermeldung ausgegeben und die
+     * Umwandlung durch einen Punkt ersetzt. Bei einer ungueltigen Eingabe wird eine Fehlermeldung ausgegeben und die
      * Eingabe erneut abgefragt.
      *
      * @return die eingegebene Dezimalzahl
@@ -162,7 +163,7 @@ public class Manager {
                 return Double.parseDouble(dezimalzahl);
 
             } catch (NumberFormatException e) {
-                UIHelper.druckeFehler("Ungültige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
+                UIHelper.druckeFehler("Ungueltige Eingabe! Bitte geben Sie eine Dezimalzahl ein.");
             }
         }
     }

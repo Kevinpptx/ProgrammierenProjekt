@@ -7,51 +7,51 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Die Klasse {@code avigator.modell.Fluggesellschaft} repräsentiert eine avigator.modell.Fluggesellschaft mit einem Namen, einem Airline-Code und einer
+ * Die Klasse {@code Fluggesellschaft} repraesentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code und einer
  * Flotte von Flugzeugen.
  *
  * @author Cedric Beckmann
- * @version 1.0
+ * @version 1.1
  */
 public class Fluggesellschaft implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * Name der Airline
+     * Name der Airline.
      */
     private final String name;
 
     /**
-     * Airlinecode, der aus zwei Großbuchstaben besteht.
+     * Airlinecode, dessen Eingabe aus zwei Buchstaben bestehen muss.
      */
     private final String airlineCode;
 
     /**
-     * Flotte der Airline, hier eine {@code ArrayList} aus {@code avigator.modell.Flugzeug} - Objekten.
+     * Flotte der Airline, hier eine {@code ArrayList} aus {@code Flugzeug}-Objekten.
      */
     private final ArrayList<Flugzeug> flotte = new ArrayList<>();
 
     /**
-     * Erzeugt eine neue avigator.modell.Fluggesellschaft mit einem Namen und einem Airline-Code.
+     * Erzeugt eine neue Fluggesellschaft mit einem Namen und einem Airline-Code.
      *
-     * @param name        der Name der avigator.modell.Fluggesellschaft
-     * @param airlineCode der eindeutige Airline-Code der avigator.modell.Fluggesellschaft
-     * @throws IllegalArgumentException , wenn die Parameter eine {@code null}- Referenz haben, leer sind oder der
-     *                                  Airline-Code nicht das passende Format hat.
+     * @param name        der Name der Fluggesellschaft
+     * @param airlineCode der eindeutige Airline-Code der Fluggesellschaft
+     * @throws IllegalArgumentException wenn die Parameter eine {@code null}-Referenz haben, leer sind oder der
+     *                                  Airline-Code nicht das passende Format hat
      */
     public Fluggesellschaft(String name, String airlineCode) {
 
         if (name == null || airlineCode == null) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfen keine null-Referenz enthalten.");
         }
 
         if (name.isBlank() || airlineCode.isBlank()) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfennicht leer sein.");
         }
 
         if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
@@ -61,36 +61,35 @@ public class Fluggesellschaft implements Serializable {
 
         this.name = name;
 
-        // entfernt Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
-        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        // entfernt fuehrende und nachfolgende Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhaengig von der Spracheinstellung des Computers
         this.airlineCode = airlineCode.trim().toUpperCase(Locale.ROOT);
     }
 
     /**
-     * Fügt ein avigator.modell.Flugzeug zur Flotte der avigator.modell.Fluggesellschaft hinzu. Befindet sich das avigator.modell.Flugzeug bereits in der Flotte,
-     * erfolgt keine Änderung.
+     * Fuegt ein Flugzeug zur Flotte der Fluggesellschaft hinzu.
      *
-     * @param flugzeug das hinzuzufügende avigator.modell.Flugzeug
-     * @throws IllegalArgumentException wenn das übergebene avigator.modell.Flugzeug eine null-Referenz enthält.
+     * @param flugzeug das hinzuzufuegende Flugzeug
+     * @throws IllegalArgumentException wenn das uebergebene Flugzeug {@code null} ist oder bereits zur Flotte gehoert
      */
     public void fuegeFlugzeugHinzu(Flugzeug flugzeug) {
 
         if (flugzeug == null) {
-            throw new IllegalArgumentException("Das hinzuzufügende avigator.modell.Flugzeug enthält eine null-Referenz.");
+            throw new IllegalArgumentException("Das hinzuzufuegende Flugzeug enthaelt eine null-Referenz.");
         }
 
         if (! this.flotte.contains(flugzeug)) {
             this.flotte.add(flugzeug);
         } else {
-            throw new IllegalArgumentException("Das avigator.modell.Flugzeug existiert schon in der Flotte.");
+            throw new IllegalArgumentException("Das Flugzeug existiert schon in der Flotte.");
         }
     }
 
     /**
-     * Entfernt ein avigator.modell.Flugzeug aus der Flotte der avigator.modell.Fluggesellschaft. Befindet sich das avigator.modell.Flugzeug nicht in der Flotte,
-     * erfolgt keine Änderung.
+     * Entfernt ein Flugzeug aus der Flotte der Fluggesellschaft. Befindet sich das Flugzeug nicht in der Flotte,
+     * erfolgt keine aenderung.
      *
-     * @param flugzeug das zu entfernende avigator.modell.Flugzeug
+     * @param flugzeug das zu entfernende Flugzeug
      */
     public void entferneFlugzeug(Flugzeug flugzeug) {
 
@@ -100,9 +99,9 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt die Flotte der avigator.modell.Fluggesellschaft zurück.
+     * Gibt die Flotte der Fluggesellschaft zurueck.
      *
-     * @return eine Liste aller Flugzeuge der avigator.modell.Fluggesellschaft
+     * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
     public List<Flugzeug> getFlotte() {
 
@@ -110,9 +109,9 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt den Airline-Code der avigator.modell.Fluggesellschaft zurück.
+     * Gibt den Airline-Code der Fluggesellschaft zurueck.
      *
-     * @return der Airline-Code der avigator.modell.Fluggesellschaft
+     * @return der Airline-Code der Fluggesellschaft
      */
     public String getAirlineCode() {
 
@@ -120,19 +119,19 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt den Namen der avigator.modell.Fluggesellschaft zurück.
+     * Gibt den Namen der Fluggesellschaft zurueck.
      *
-     * @return der Name der avigator.modell.Fluggesellschaft
+     * @return der Name der Fluggesellschaft
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * Prüft, ob die Flotte der Airline ein gewisses avigator.modell.Flugzeug beinhaltet.
+     * Prueft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
      *
-     * @param flugzeug : Das zu überprüfende avigator.modell.Flugzeug
-     * @return {@code true}, wenn das avigator.modell.Flugzeug in der Flotte der Airline ist
+     * @param flugzeug das zu ueberpruefende Flugzeug
+     * @return {@code true}, wenn das Flugzeug in der Flotte der Airline ist
      */
     public boolean beinhaltetFlugzeug(Flugzeug flugzeug) {
 
@@ -140,10 +139,10 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt eine textuelle Beschreibung der avigator.modell.Fluggesellschaft zurück. Die Beschreibung enthält den Namen, den
-     * Airline-Code und die Flugzeuge der avigator.modell.Fluggesellschaft.
+     * Gibt eine textuelle Beschreibung der Fluggesellschaft zurueck. Die Beschreibung enthaelt den Namen, den
+     * Airline-Code und die Flugzeuge der Fluggesellschaft.
      *
-     * @return die textuelle Beschreibung der avigator.modell.Fluggesellschaft
+     * @return die textuelle Beschreibung der Fluggesellschaft
      */
     @Override
     public String toString() {
@@ -152,6 +151,12 @@ public class Fluggesellschaft implements Serializable {
                 + this.flotte;
     }
 
+    /**
+     * Vergleicht zwei Fluggesellschaften anhand ihres Airline-Codes.
+     *
+     * @param o das zu vergleichende Objekt
+     * @return {@code true}, wenn beide Fluggesellschaften denselben Airline-Code besitzen, sonst {@code false}
+     */
     @Override
     public boolean equals(Object o) {
 

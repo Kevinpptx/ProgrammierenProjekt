@@ -8,35 +8,35 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * Die Klasse {@code avigator.frontend.UIKunde} stellt die Konsolenoberfläche für Kunden bereit.
+ * Die Klasse {@code UIKunde} stellt die Konsolenoberflaeche fuer Kunden bereit.
  * <p>
- * Kunden können sich neu registrieren oder ein bereits vorhandenes Kundenkonto auswählen. Nach der Anmeldung können sie
- * Flüge suchen und buchen, bestehende Buchungen umbuchen oder stornieren und ihre Buchungen anzeigen lassen.
+ * Kunden koennen sich neu registrieren oder ein bereits vorhandenes Kundenkonto auswaehlen. Nach der Anmeldung koennen sie
+ * Fluege suchen und buchen, bestehende Buchungen umbuchen oder stornieren und ihre Buchungen anzeigen lassen.
  * <p>
- * Änderungen an den Daten werden mithilfe des {@link DatenHandler} gespeichert.
+ * aenderungen an den Daten werden mithilfe des {@link DatenHandler} gespeichert.
  *
  * @author Lars Pfeiffer, Cedric Beckmann
- * @version 1.1
+ * @version 1.2
  */
 public class UIKunde {
 
     /**
-     * avigator.verwaltung.DatenHandler zum dauerhaften Speichern der avigator.verwaltung.Anwendungsdaten.
+     * DatenHandler zum dauerhaften Speichern der Anwendungsdaten.
      */
     private final DatenHandler datenHandler;
 
     /**
-     * Enthält die aktuell verwendeten avigator.verwaltung.Anwendungsdaten.
+     * Enthaelt die aktuell verwendeten Anwendungsdaten.
      */
     private final Anwendungsdaten anwendungsdaten;
 
     /**
-     * avigator.verwaltung.Buchungssystem zur Verwaltung von Passagieren und Buchungen.
+     * Buchungssystem zur Verwaltung von Passagieren und Buchungen.
      */
     private final Buchungssystem buchungssystem;
 
     /**
-     * avigator.verwaltung.Verwaltungssystem zur Verwaltung und Suche von Flügen und Flughäfen.
+     * Verwaltungssystem zur Verwaltung und Suche von Fluegen und Flughaefen.
      */
     private final Verwaltungssystem verwaltungssystem;
 
@@ -46,21 +46,21 @@ public class UIKunde {
     private static final DateTimeFormatter datumZeitFormatierer = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     /**
-     * Erstellt eine neue Kundenoberfläche. Das Buchungs- und avigator.verwaltung.Verwaltungssystem werden aus den übergebenen
-     * avigator.verwaltung.Anwendungsdaten übernommen.
+     * Erstellt eine neue Kundenoberflaeche. Das Buchungs- und Verwaltungssystem werden aus den uebergebenen
+     * Anwendungsdaten uebernommen.
      *
-     * @param datenHandler    Handler zum Speichern der avigator.verwaltung.Anwendungsdaten
-     * @param anwendungsdaten geladene oder neu erzeugte avigator.verwaltung.Anwendungsdaten
-     * @throws IllegalArgumentException wenn der avigator.verwaltung.DatenHandler oder dieAnwendungsdaten {@code null} sind
+     * @param datenHandler    der Handler zum Speichern der Anwendungsdaten
+     * @param anwendungsdaten geladene oder neu erzeugte Anwendungsdaten
+     * @throws IllegalArgumentException wenn der DatenHandler oder die Anwendungsdaten {@code null} sind
      */
     public UIKunde(DatenHandler datenHandler, Anwendungsdaten anwendungsdaten) {
 
         if (datenHandler == null) {
-            throw new IllegalArgumentException("Der avigator.verwaltung.DatenHandler darf nicht null sein.");
+            throw new IllegalArgumentException("Der DatenHandler darf nicht null sein.");
         }
 
         if (anwendungsdaten == null) {
-            throw new IllegalArgumentException("Die avigator.verwaltung.Anwendungsdaten dürfen nicht null sein.");
+            throw new IllegalArgumentException("Die Anwendungsdaten duerfen nicht null sein.");
         }
 
         this.datenHandler = datenHandler;
@@ -70,12 +70,12 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt das Anmeldemenü für Kunden an.
+     * Zeigt das Anmeldemenue fuer Kunden an.
      * <p>
-     * Der Benutzer kann einen neuen Kunden anlegen, einen bestehenden avigator.modell.Passagier über dessen ID auswählen oder zum
-     * vorherigen Menü zurückkehren.
+     * Der Benutzer kann einen neuen Kunden anlegen, einen bestehenden Passagier ueber dessen ID auswaehlen oder zum
+     * vorherigen Menue zurueckkehren.
      * <p>
-     * Nach einer erfolgreichen Anmeldung wird das Kundenhauptmenü geöffnet.
+     * Nach einer erfolgreichen Anmeldung wird das Kundenhauptmenue geoeffnet.
      */
     public void kunde() {
 
@@ -85,7 +85,7 @@ public class UIKunde {
 
             UIHelper.druckeMenuepunkt(1, "Als neuer Kunde registrieren");
             UIHelper.druckeMenuepunkt(2, "Als bestehender Kunde anmelden");
-            UIHelper.druckeMenuepunkt(0, "Zurück");
+            UIHelper.druckeMenuepunkt(0, "Zurueck");
 
             UIHelper.druckeTrennlinie();
 
@@ -96,6 +96,7 @@ public class UIKunde {
                 case 1:
                     String name;
 
+                    // Erfasst zunaechst einen gueltigen Namen, bevor das Kundenkonto mit der E-Mail angelegt wird.
                     while (true) {
 
                         UIHelper.druckeEingabeaufforderung("Bitte geben Sie Ihren Namen ein:");
@@ -115,6 +116,7 @@ public class UIKunde {
 
                         try {
 
+                            // Speichert den neuen Passagier vor dem Wechsel in dessen persoenlichen Kundenbereich.
                             Passagier passagier = buchungssystem.initialisierePassagier(name, mail);
 
                             datenHandler.speichere(anwendungsdaten);
@@ -151,9 +153,10 @@ public class UIKunde {
 
                     UIHelper.druckeTrennlinie();
 
-                    UIHelper.druckeEingabeaufforderung("Bitte wählen Sie einen avigator.modell.Passagier über die ID.");
-                    UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zurückzukehren.");
+                    UIHelper.druckeEingabeaufforderung("Bitte waehlen Sie einen Passagier ueber die ID.");
+                    UIHelper.druckeEingabeaufforderung("Geben Sie 0 ein, um zurueckzukehren.");
 
+                    // Wiederholt die Suche, bis eine vorhandene Passagier-ID gewaehlt oder der Vorgang abgebrochen wird.
                     while (true) {
 
                         String id = Manager.stringscanner();
@@ -175,9 +178,9 @@ public class UIKunde {
 
                         if (ausgewaehlterPassagier == null) {
 
-                            UIHelper.druckeFehler("Diese avigator.modell.Passagier-ID existiert nicht.");
+                            UIHelper.druckeFehler("Diese Passagier-ID existiert nicht.");
                             UIHelper.druckeEingabeaufforderung(
-                                    "Bitte geben Sie eine gültige avigator.modell.Passagier-ID ein oder 0 zum Zurückkehren:");
+                                    "Bitte geben Sie eine gueltige Passagier-ID ein oder 0 zum Zurueckkehren:");
 
                             continue;
                         }
@@ -193,7 +196,7 @@ public class UIKunde {
                     return;
 
                 default:
-                    UIHelper.druckeFehler("Ungültige Eingabe.");
+                    UIHelper.druckeFehler("Ungueltige Eingabe.");
                     break;
 
             }
@@ -202,12 +205,12 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt das Kundenhauptmenü für einen angemeldeten avigator.modell.Passagier an.
+     * Zeigt das Kundenhauptmenue fuer einen angemeldeten Passagier an.
      * <p>
-     * Von diesem Menü aus kann der Kunde Flüge suchen und buchen, bestehende Buchungen umbuchen oder stornieren sowie
-     * seine aktuellen Buchungen anzeigen lassen und die Anzahl der Gepäckstücke anpassen.
+     * Von diesem Menue aus kann der Kunde Fluege suchen und buchen, bestehende Buchungen umbuchen oder stornieren sowie
+     * seine aktuellen Buchungen anzeigen lassen und die Anzahl der Gepaeckstuecke anpassen.
      *
-     * @param passagier der aktuell angemeldete avigator.modell.Passagier
+     * @param passagier der aktuell angemeldete Passagier
      */
     private void hauptmanagerKunde(Passagier passagier) {
 
@@ -215,9 +218,9 @@ public class UIKunde {
 
             UIHelper.druckeUeberschrift("Willkommen " + passagier.name() + " im Kundenbereich");
 
-            UIHelper.druckeEingabeaufforderung("Was möchten Sie tun?");
+            UIHelper.druckeEingabeaufforderung("Was moechten Sie tun?");
 
-            UIHelper.druckeMenuepunkt(1, "Flüge suchen und buchen");
+            UIHelper.druckeMenuepunkt(1, "Fluege suchen und buchen");
             UIHelper.druckeMenuepunkt(2, "Buchungen verwalten");
             UIHelper.druckeMenuepunkt(0, "Abmelden");
 
@@ -239,7 +242,7 @@ public class UIKunde {
                     return;
 
                 default:
-                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
+                    UIHelper.druckeFehler("Ungueltige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
 
             }
@@ -247,12 +250,12 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt das Verwaltungsmenü für die Buchungen eines Passagiers an.
+     * Zeigt das Verwaltungsmenue fuer die Buchungen eines Passagiers an.
      * <p>
-     * Über das Menü können Buchungen angezeigt, umgebucht oder storniert sowie Gepäckinformationen geändert werden. Das
-     * Menü wird so lange angezeigt, bis der Benutzer zum Kundenhauptmenü zurückkehrt.
+     * ueber das Menue koennen Buchungen angezeigt, umgebucht oder storniert sowie Gepaeckinformationen geaendert werden. Das
+     * Menue wird so lange angezeigt, bis der Benutzer zum Kundenhauptmenue zurueckkehrt.
      *
-     * @param passagier der aktuell angemeldete avigator.modell.Passagier
+     * @param passagier der aktuell angemeldete Passagier
      */
     private void buchungenVerwalten(Passagier passagier) {
 
@@ -261,10 +264,10 @@ public class UIKunde {
             UIHelper.druckeUeberschrift("Buchungen verwalten");
 
             UIHelper.druckeMenuepunkt(1, "Buchungen anzeigen");
-            UIHelper.druckeMenuepunkt(2, "avigator.modell.Buchung umbuchen");
-            UIHelper.druckeMenuepunkt(3, "avigator.modell.Buchung stornieren");
-            UIHelper.druckeMenuepunkt(4, "Gepäck ändern");
-            UIHelper.druckeMenuepunkt(0, "Zurück");
+            UIHelper.druckeMenuepunkt(2, "Buchung umbuchen");
+            UIHelper.druckeMenuepunkt(3, "Buchung stornieren");
+            UIHelper.druckeMenuepunkt(4, "Gepaeck aendern");
+            UIHelper.druckeMenuepunkt(0, "Zurueck");
 
             UIHelper.druckeTrennlinie();
 
@@ -293,28 +296,29 @@ public class UIKunde {
                     return;
 
                 default:
-                    UIHelper.druckeFehler("Ungültige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
+                    UIHelper.druckeFehler("Ungueltige Auswahl. Bitte geben Sie eine der angezeigten Zahlen ein.");
                     break;
             }
         }
     }
 
     /**
-     * Ermöglicht einem avigator.modell.Passagier die Suche und avigator.modell.Buchung eines Fluges.
+     * Ermoeglicht einem Passagier die Suche und Buchung eines Fluges.
      * <p>
-     * Vor der Suche werden vergangene Flüge entfernt und betroffene Buchungen entsprechend aktualisiert. Anschließend
-     * kann die Flugsuche anhand verschiedener Kriterien eingeschränkt werden.
+     * Vor der Suche werden vergangene Fluege entfernt und betroffene Buchungen entsprechend aktualisiert. Anschließend
+     * kann die Flugsuche anhand verschiedener Kriterien eingeschraenkt werden.
      * <p>
-     * Nach Auswahl eines Fluges, eines freien Sitzplatzes und der gewünschten Gepäckmenge wird eine Buchungsvorschau
-     * mit Ticketpreis, Gepäckkosten und Gesamtpreis angezeigt. Die avigator.modell.Buchung wird erst nach einer ausdrücklichen
-     * Bestätigung des Benutzers durchgeführt und anschließend gespeichert.
+     * Nach Auswahl eines Fluges, eines freien Sitzplatzes und der gewuenschten Gepaeckmenge wird eine Buchungsvorschau
+     * mit Ticketpreis, Gepaeckkosten und Gesamtpreis angezeigt. Die Buchung wird erst nach einer ausdruecklichen
+     * Bestaetigung des Benutzers durchgefuehrt und anschließend gespeichert.
      *
-     * @param passagier der avigator.modell.Passagier, für den der avigator.modell.Flug gebucht wird
+     * @param passagier der Passagier, fuer den der Flug gebucht wird
      */
     private void fluegeSuchenUndBuchen(Passagier passagier) {
 
-        UIHelper.druckeUeberschrift("Flüge suchen und buchen");
+        UIHelper.druckeUeberschrift("Fluege suchen und buchen");
 
+        // Aktualisiert vergangene Fluege und Buchungen, bevor daraus eine buchbare Auswahl entsteht.
         verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         this.druckeFlughaefen();
@@ -324,7 +328,7 @@ public class UIKunde {
             ArrayList<Flug> fluege = sucheFluege();
 
             if (fluege.isEmpty()) {
-                UIHelper.druckeHinweis("Keine Flüge gefunden.");
+                UIHelper.druckeHinweis("Keine Fluege gefunden.");
                 return;
             } else {
                 this.druckeFluege(fluege);
@@ -339,7 +343,7 @@ public class UIKunde {
             while (true) {
 
                 UIHelper.druckeEingabeaufforderung(
-                        "Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben möchten:");
+                        "Bitte geben Sie die Anzahl der Koffer ein, die Sie aufgeben moechten:");
 
                 koffer = Manager.intscanner();
 
@@ -352,16 +356,16 @@ public class UIKunde {
                 break;
             }
 
-            // Buchungsvorschau, damit der Kunde den ausgewählten avigator.modell.Flug akzeptieren kann
+            // Buchungsvorschau, damit der Kunde den ausgewaehlten Flug akzeptieren kann
             Buchung buchungsvorschau = new Buchung(passagier,
                     flug,
                     flug.findeSitzplatz(sitzplatz),
                     new GepaeckInformation(koffer)
             );
 
-            UIHelper.druckeUeberschrift("Buchungsübersicht");
+            UIHelper.druckeUeberschrift("Buchungsuebersicht");
 
-            System.out.printf("%-13s%s%n", "avigator.modell.Flug:", flug.getFlugnummer());
+            System.out.printf("%-13s%s%n", "Flug:", flug.getFlugnummer());
             System.out.printf("%-13s%s%n", "Airline:", flug.getFluggesellschaft().getName());
             System.out.printf("%-13s%s -> %s%n",
                     "Route:",
@@ -371,15 +375,15 @@ public class UIKunde {
 
             System.out.printf("%-13s%s%n", "Abflug:", flug.getAbflugszeit().format(datumZeitFormatierer));
 
-            System.out.printf("%-13s%s%n", "avigator.modell.Sitzplatz:", sitzplatz);
-            System.out.printf("%-13s%s%n", "avigator.modell.Sitzklasse:", sitzklasse);
+            System.out.printf("%-13s%s%n", "Sitzplatz:", sitzplatz);
+            System.out.printf("%-13s%s%n", "Sitzklasse:", sitzklasse);
             System.out.printf("%-13s%d%n", "Koffer:", koffer);
 
             double gepaeckpreis = buchungsvorschau.getGepaeckinformation().berechneGepaeckgebuehr();
             double ticketpreis = buchungsvorschau.getGezahlterPreis() - gepaeckpreis;
 
             System.out.printf("%-13s%.2f Euro%n", "Ticketpreis:", ticketpreis);
-            System.out.printf("%-13s%.2f Euro%n", "Gepäck:", gepaeckpreis);
+            System.out.printf("%-13s%.2f Euro%n", "Gepaeck:", gepaeckpreis);
 
             UIHelper.druckeTrennlinie();
 
@@ -387,22 +391,23 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (!bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Moechten Sie die Buchung verbindlich durchfuehren?")) {
 
-                UIHelper.druckeHinweis("Die avigator.modell.Buchung wurde abgebrochen.");
+                UIHelper.druckeHinweis("Die Buchung wurde abgebrochen.");
                 return;
             }
 
+            // Erst nach der Bestaetigung wird der Sitz belegt und die Buchung im Buchungssystem registriert.
             Buchung buchung = buchungssystem.buchungVornehmen(passagier, flug, sitzplatz, koffer, sitzklasse,
                     verwaltungssystem
             );
 
-            UIHelper.druckeUeberschrift("Buchungsbestätigung");
+            UIHelper.druckeUeberschrift("Buchungsbestaetigung");
 
             System.out.println("Buchungsnummer: " + buchung.getBuchungsnummer());
-            System.out.println("avigator.modell.Flug:           " + buchung.getFlug().getFlugnummer());
-            System.out.println("avigator.modell.Sitzplatz:      " + buchung.getSitzplatz().getSitzplatzNummer());
-            System.out.println("avigator.modell.Sitzklasse:     " + buchung.getSitzplatz().getSitzklasse());
+            System.out.println("Flug:           " + buchung.getFlug().getFlugnummer());
+            System.out.println("Sitzplatz:      " + buchung.getSitzplatz().getSitzplatzNummer());
+            System.out.println("Sitzklasse:     " + buchung.getSitzplatz().getSitzklasse());
             System.out.println("Koffer:         "
                                + buchung.getGepaeckinformation().getAnzahlKoffer());
 
@@ -410,7 +415,7 @@ public class UIKunde {
 
             datenHandler.speichere(anwendungsdaten);
 
-            UIHelper.druckeErfolg("Die avigator.modell.Buchung wurde erfolgreich durchgeführt.");
+            UIHelper.druckeErfolg("Die Buchung wurde erfolgreich durchgefuehrt.");
 
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
@@ -418,15 +423,15 @@ public class UIKunde {
     }
 
     /**
-     * Gibt alle im avigator.verwaltung.Verwaltungssystem registrierten Flughäfen in einer tabellarischen Übersicht aus.
+     * Gibt alle im Verwaltungssystem registrierten Flughaefen in einer tabellarischen uebersicht aus.
      */
     private void druckeFlughaefen() {
 
-        UIHelper.druckeEingabeaufforderung("Verfügbare Flughäfen:");
+        UIHelper.druckeEingabeaufforderung("Verfuegbare Flughaefen:");
 
         UIHelper.druckeTrennlinie();
 
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "Code", "avigator.modell.Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
 
         UIHelper.druckeTrennlinie();
 
@@ -444,19 +449,19 @@ public class UIKunde {
     }
 
     /**
-     * Gibt die übergebenen Flüge nummeriert in einer tabellarischen Übersicht aus.
+     * Gibt die uebergebenen Fluege nummeriert in einer tabellarischen uebersicht aus.
      * <p>
-     * Angezeigt werden Flugnummer, avigator.modell.Fluggesellschaft, Route sowie Abflug- und Ankunftszeit.
+     * Angezeigt werden Flugnummer, Fluggesellschaft, Route sowie Abflug- und Ankunftszeit.
      *
-     * @param fluege die anzuzeigenden Flüge
+     * @param fluege die anzuzeigenden Fluege
      */
     private void druckeFluege(ArrayList<Flug> fluege) {
 
-        UIHelper.druckeUeberschrift("Gefundene Flüge");
+        UIHelper.druckeUeberschrift("Gefundene Fluege");
 
         System.out.printf("%-4s | %-8s | %-15s | %-11s | %-17s | %-17s%n",
                 "Nr.",
-                "avigator.modell.Flug",
+                "Flug",
                 "Airline",
                 "Route",
                 "Abflug",
@@ -486,10 +491,10 @@ public class UIKunde {
     /**
      * Liest die Auswahl eines Fluges aus einer zuvor nummerierten Flugliste ein.
      * <p>
-     * Ungültige Nummern werden abgewiesen und erneut abgefragt.
+     * Ungueltige Nummern werden abgewiesen und erneut abgefragt.
      *
-     * @param fluege die zur Auswahl stehenden Flüge
-     * @return der vom Benutzer ausgewählte avigator.modell.Flug
+     * @param fluege die zur Auswahl stehenden Fluege
+     * @return der vom Benutzer ausgewaehlte Flug
      */
     private Flug flugAuswaehlen(ArrayList<Flug> fluege) {
 
@@ -498,14 +503,14 @@ public class UIKunde {
         while (flug == null) {
 
             UIHelper.druckeEingabeaufforderung(
-                    "Bitte geben Sie die Nummer Ihres gewünschten Fluges ein:"
+                    "Bitte geben Sie die Nummer Ihres gewuenschten Fluges ein:"
             );
 
             int auswahl = Manager.intscanner();
 
             if (auswahl < 1 || auswahl > fluege.size()) {
 
-                UIHelper.druckeFehler("Ungültige Flugauswahl.");
+                UIHelper.druckeFehler("Ungueltige Flugauswahl.");
                 continue;
             }
 
@@ -516,12 +521,12 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt den Sitzplan eines Fluges an und liest die gewünschte Sitzplatznummer ein.
+     * Zeigt den Sitzplan eines Fluges an und liest die gewuenschte Sitzplatznummer ein.
      * <p>
-     * Nicht vorhandene oder bereits belegte Sitzplätze werden abgewiesen und erneut abgefragt.
+     * Nicht vorhandene oder bereits belegte Sitzplaetze werden abgewiesen und erneut abgefragt.
      *
-     * @param flug der avigator.modell.Flug, für den ein avigator.modell.Sitzplatz ausgewählt werden soll
-     * @return die Nummer des ausgewählten freien Sitzplatzes
+     * @param flug der Flug, fuer den ein Sitzplatz ausgewaehlt werden soll
+     * @return die Nummer des ausgewaehlten freien Sitzplatzes
      */
     private String sitzplatzAuswaehlen(Flug flug) {
 
@@ -532,7 +537,7 @@ public class UIKunde {
         while (true) {
 
             UIHelper.druckeEingabeaufforderung(
-                    "Bitte geben Sie die gewünschte Sitzplatznummer ein:"
+                    "Bitte geben Sie die gewuenschte Sitzplatznummer ein:"
             );
 
             String sitzplatz = Manager.stringscanner().toUpperCase();
@@ -541,13 +546,13 @@ public class UIKunde {
 
             if (ausgewaehlterSitzplatz == null) {
 
-                UIHelper.druckeFehler("Dieser avigator.modell.Sitzplatz existiert nicht.");
+                UIHelper.druckeFehler("Dieser Sitzplatz existiert nicht.");
                 continue;
             }
 
             if (!ausgewaehlterSitzplatz.getIstFrei()) {
 
-                UIHelper.druckeFehler("Dieser avigator.modell.Sitzplatz ist bereits belegt.");
+                UIHelper.druckeFehler("Dieser Sitzplatz ist bereits belegt.");
                 continue;
             }
 
@@ -556,31 +561,31 @@ public class UIKunde {
     }
 
     /**
-     * Ermöglicht das Umbuchen einer bestehenden avigator.modell.Buchung des angegebenen Passagiers.
+     * Ermoeglicht das Umbuchen einer bestehenden Buchung des angegebenen Passagiers.
      * <p>
-     * Zunächst werden vergangene Flüge und die zugehörigen avigator.modell.Buchungsstatus aktualisiert. Eine Umbuchung ist nur möglich,
-     * wenn mindestens eine bearbeitbare avigator.modell.Buchung vorhanden ist.
+     * Zunaechst werden vergangene Fluege und die zugehoerigen Buchungsstatus aktualisiert. Eine Umbuchung ist nur moeglich,
+     * wenn mindestens eine bearbeitbare Buchung vorhanden ist.
      * <p>
-     * Nach Auswahl der avigator.modell.Buchung wird geprüft, ob diese dem angemeldeten avigator.modell.Passagier gehört und noch umgebucht werden darf.
-     * Anschließend wählt der Benutzer einen neuen avigator.modell.Flug und einen freien avigator.modell.Sitzplatz aus.
+     * Nach Auswahl der Buchung wird geprueft, ob diese dem angemeldeten Passagier gehoert und noch umgebucht werden darf.
+     * Anschließend waehlt der Benutzer einen neuen Flug und einen freien Sitzplatz aus.
      * <p>
-     * Vor der Durchführung werden der bisherige und der neue Buchungspreis, die Umbuchungsgebühr sowie der zusätzlich
-     * zu zahlende Betrag angezeigt. Die Umbuchung wird erst nach einer ausdrücklichen Bestätigung durchgeführt und
+     * Vor der Durchfuehrung werden der bisherige und der neue Buchungspreis, die Umbuchungsgebuehr sowie der zusaetzlich
+     * zu zahlende Betrag angezeigt. Die Umbuchung wird erst nach einer ausdruecklichen Bestaetigung durchgefuehrt und
      * anschließend gespeichert.
      * <p>
-     * Nach erfolgreicher Umbuchung kann optional auch die Anzahl der gebuchten Koffer geändert werden.
+     * Nach erfolgreicher Umbuchung kann optional auch die Anzahl der gebuchten Koffer geaendert werden.
      *
-     * @param passagier der avigator.modell.Passagier, dessen avigator.modell.Buchung umgebucht werden soll
+     * @param passagier der Passagier, dessen Buchung umgebucht werden soll
      */
     private void umbuchen(Passagier passagier) {
 
-        UIHelper.druckeUeberschrift("avigator.modell.Buchung umbuchen");
+        UIHelper.druckeUeberschrift("Buchung umbuchen");
 
         verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
-            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die umgebucht werden können.");
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die umgebucht werden koennen.");
             return;
         }
 
@@ -588,7 +593,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Buchungsnummer der umzubuchenden avigator.modell.Buchung ein:");
+        UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Buchungsnummer der umzubuchenden Buchung ein:");
 
         String nummer = Manager.stringscanner();
 
@@ -600,14 +605,14 @@ public class UIKunde {
 
             if (!buchung.getPassagier().equals(passagier)) {
 
-                UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
+                UIHelper.druckeFehler("Diese Buchung gehoert nicht zu diesem Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT ||
                 buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
 
-                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
+                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen koennen nicht umgebucht werden.");
                 return;
             }
 
@@ -625,7 +630,7 @@ public class UIKunde {
 
             if (fluege.isEmpty()) {
 
-                UIHelper.druckeHinweis("Keine Flüge gefunden.");
+                UIHelper.druckeHinweis("Keine Fluege gefunden.");
                 return;
             }
 
@@ -637,6 +642,7 @@ public class UIKunde {
             Sitzplatz neuerSitzplatz = neuerFlug.findeSitzplatz(sitzplatz);
             Sitzklasse sitzklasse = neuerSitzplatz.getSitzklasse();
 
+            // Ermittelt den neuen Preis mit einer Vorschau, ohne die bestehende Buchung bereits zu veraendern.
             Buchung buchungsvorschau = new Buchung(passagier,
                     neuerFlug,
                     neuerSitzplatz,
@@ -648,16 +654,16 @@ public class UIKunde {
             double umbuchungsgebuehr = buchung.getUmbuchungsgebuehr();
             double zusaetzlichZuZahlen = buchungssystem.berechneUmbuchungsgebuehr(buchung, neuerFlug, neuerSitzplatz);
 
-            UIHelper.druckeUeberschrift("Umbuchungsübersicht");
+            UIHelper.druckeUeberschrift("Umbuchungsuebersicht");
 
             System.out.printf("%-27s%s | %s%n",
-                    "Bisheriger avigator.modell.Flug:",
+                    "Bisheriger Flug:",
                     buchung.getFlug().getFlugnummer(),
                     buchung.getFlug().getAbflugszeit().format(datumZeitFormatierer)
             );
 
             System.out.printf("%-27s%s | %s%n",
-                    "Neuer avigator.modell.Flug:",
+                    "Neuer Flug:",
                     neuerFlug.getFlugnummer(),
                     neuerFlug.getAbflugszeit().format(datumZeitFormatierer)
             );
@@ -668,19 +674,19 @@ public class UIKunde {
                     neuerFlug.getZielflughafen().iataCode()
             );
 
-            System.out.printf("%-27s%s%n", "Neuer avigator.modell.Sitzplatz:", sitzplatz);
-            System.out.printf("%-27s%s%n", "avigator.modell.Sitzklasse:", sitzklasse);
+            System.out.printf("%-27s%s%n", "Neuer Sitzplatz:", sitzplatz);
+            System.out.printf("%-27s%s%n", "Sitzklasse:", sitzklasse);
             System.out.printf("%-27s%.2f Euro%n", "Bisheriger Buchungspreis:", bisherigerBuchungspreis);
             System.out.printf("%-27s%.2f Euro%n", "Neuer Buchungspreis:", neuerBuchungspreis);
-            System.out.printf("%-27s%.2f Euro%n", "Umbuchungsgebühr:", umbuchungsgebuehr);
+            System.out.printf("%-27s%.2f Euro%n", "Umbuchungsgebuehr:", umbuchungsgebuehr);
 
             UIHelper.druckeTrennlinie();
 
-            System.out.printf("%-27s%.2f Euro%n", "Zusätzlich zu zahlen:", zusaetzlichZuZahlen);
+            System.out.printf("%-27s%.2f Euro%n", "Zusaetzlich zu zahlen:", zusaetzlichZuZahlen);
 
             UIHelper.druckeTrennlinie();
 
-            if (!bestaetigungEinlesen("Möchten Sie die Umbuchung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Moechten Sie die Umbuchung verbindlich durchfuehren?")) {
 
                 UIHelper.druckeHinweis("Die Umbuchung wurde abgebrochen.");
                 return;
@@ -690,11 +696,11 @@ public class UIKunde {
 
             datenHandler.speichere(anwendungsdaten);
 
-            UIHelper.druckeErfolg("Die Umbuchung wurde erfolgreich durchgeführt.");
+            UIHelper.druckeErfolg("Die Umbuchung wurde erfolgreich durchgefuehrt.");
 
             UIHelper.druckeTrennlinie();
 
-            if (bestaetigungEinlesen("Möchten Sie die Anzahl Ihrer Koffer ebenfalls ändern?")) {
+            if (bestaetigungEinlesen("Moechten Sie die Anzahl Ihrer Koffer ebenfalls aendern?")) {
                 gepaeckAendern(buchung);
             }
 
@@ -704,28 +710,28 @@ public class UIKunde {
     }
 
     /**
-     * Ermöglicht die Stornierung einer bestehenden avigator.modell.Buchung des angegebenen Passagiers.
+     * Ermoeglicht die Stornierung einer bestehenden Buchung des angegebenen Passagiers.
      * <p>
-     * Zunächst werden vergangene Flüge und die zugehörigen avigator.modell.Buchungsstatus aktualisiert. Eine Stornierung ist nur
-     * möglich, wenn mindestens eine bearbeitbare avigator.modell.Buchung vorhanden ist.
+     * Zunaechst werden vergangene Fluege und die zugehoerigen Buchungsstatus aktualisiert. Eine Stornierung ist nur
+     * moeglich, wenn mindestens eine bearbeitbare Buchung vorhanden ist.
      * <p>
-     * Nach Auswahl der avigator.modell.Buchung wird geprüft, ob diese dem angemeldeten avigator.modell.Passagier gehört und noch storniert werden darf.
-     * Vor der Durchführung werden der aktuelle Buchungspreis, die Stornierungsgebühr und der daraus resultierende
+     * Nach Auswahl der Buchung wird geprueft, ob diese dem angemeldeten Passagier gehoert und noch storniert werden darf.
+     * Vor der Durchfuehrung werden der aktuelle Buchungspreis, die Stornierungsgebuehr und der daraus resultierende
      * Erstattungsbetrag angezeigt.
      * <p>
-     * Die Stornierung wird erst nach einer ausdrücklichen Bestätigung durchgeführt und anschließend gespeichert.
+     * Die Stornierung wird erst nach einer ausdruecklichen Bestaetigung durchgefuehrt und anschließend gespeichert.
      *
-     * @param passagier der avigator.modell.Passagier, dessen avigator.modell.Buchung storniert werden soll
+     * @param passagier der Passagier, dessen Buchung storniert werden soll
      */
     private void stornieren(Passagier passagier) {
 
-        UIHelper.druckeUeberschrift("avigator.modell.Buchung stornieren");
+        UIHelper.druckeUeberschrift("Buchung stornieren");
 
         verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
-            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die storniert werden können.");
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, die storniert werden koennen.");
             return;
         }
 
@@ -734,7 +740,7 @@ public class UIKunde {
         UIHelper.druckeTrennlinie();
 
         UIHelper.druckeEingabeaufforderung(
-                "Bitte geben Sie die Buchungsnummer der avigator.modell.Buchung ein, die Sie stornieren möchten:");
+                "Bitte geben Sie die Buchungsnummer der Buchung ein, die Sie stornieren moechten:");
 
         String nummer = Manager.stringscanner();
 
@@ -744,26 +750,27 @@ public class UIKunde {
 
             if (!buchung.getPassagier().equals(passagier)) {
 
-                UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
+                UIHelper.druckeFehler("Diese Buchung gehoert nicht zu diesem Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
 
-                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen können nicht erneut storniert werden.");
+                UIHelper.druckeFehler("Stornierte oder vergangene Buchungen koennen nicht erneut storniert werden.");
                 return;
             }
 
             double buchungspreis = buchung.getGezahlterPreis();
             double stornierungsgebuehr = buchung.getStornierungsgebuehr();
+            // Die feste Stornierungsgebuehr kann hoechstens den gesamten Buchungspreis aufzehren.
             double erstattungsbetrag = Math.max(0, buchungspreis - stornierungsgebuehr);
 
-            UIHelper.druckeUeberschrift("Stornierungsübersicht");
+            UIHelper.druckeUeberschrift("Stornierungsuebersicht");
 
             System.out.printf("%-22s%s%n", "Buchungsnummer:", buchung.getBuchungsnummer());
 
-            System.out.printf("%-22s%s | %s%n", "avigator.modell.Flug:",
+            System.out.printf("%-22s%s | %s%n", "Flug:",
                     buchung.getFlug().getFlugnummer(),
                     buchung.getFlug().getAbflugszeit().format(datumZeitFormatierer)
             );
@@ -775,7 +782,7 @@ public class UIKunde {
 
             System.out.printf("%-22s%.2f Euro%n", "Buchungspreis:", buchungspreis);
 
-            System.out.printf("%-22s%.2f Euro%n", "Stornierungsgebühr:", stornierungsgebuehr);
+            System.out.printf("%-22s%.2f Euro%n", "Stornierungsgebuehr:", stornierungsgebuehr);
 
             UIHelper.druckeTrennlinie();
 
@@ -783,7 +790,7 @@ public class UIKunde {
 
             UIHelper.druckeTrennlinie();
 
-            if (!bestaetigungEinlesen("Möchten Sie die avigator.modell.Buchung wirklich stornieren?")) {
+            if (!bestaetigungEinlesen("Moechten Sie die Buchung wirklich stornieren?")) {
 
                 UIHelper.druckeHinweis("Die Stornierung wurde abgebrochen.");
                 return;
@@ -792,7 +799,7 @@ public class UIKunde {
             buchungssystem.stornieren(buchung);
             datenHandler.speichere(anwendungsdaten);
 
-            UIHelper.druckeErfolg("Die avigator.modell.Buchung wurde erfolgreich storniert.");
+            UIHelper.druckeErfolg("Die Buchung wurde erfolgreich storniert.");
 
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
@@ -801,14 +808,14 @@ public class UIKunde {
     }
 
     /**
-     * Zeigt alle Buchungen des angegebenen Passagiers in einer tabellarischen Übersicht an.
+     * Zeigt alle Buchungen des angegebenen Passagiers in einer tabellarischen uebersicht an.
      * <p>
-     * Vor der Anzeige werden vergangene Flüge entfernt und die zugehörigen avigator.modell.Buchungsstatus aktualisiert. Angezeigt
-     * werden unter anderem avigator.modell.Flug, Route, Abflugzeit, avigator.modell.Sitzplatz, avigator.modell.Sitzklasse, Gepäck, Buchungspreis und avigator.modell.Buchungsstatus.
+     * Vor der Anzeige werden vergangene Fluege entfernt und die zugehoerigen Buchungsstatus aktualisiert. Angezeigt
+     * werden unter anderem Flug, Route, Abflugzeit, Sitzplatz, Sitzklasse, Gepaeck, Buchungspreis und Buchungsstatus.
      * <p>
-     * Sind für den avigator.modell.Passagier keine Buchungen vorhanden, wird ein entsprechender Hinweis ausgegeben.
+     * Sind fuer den Passagier keine Buchungen vorhanden, wird ein entsprechender Hinweis ausgegeben.
      *
-     * @param passagier der avigator.modell.Passagier, dessen Buchungen angezeigt werden
+     * @param passagier der Passagier, dessen Buchungen angezeigt werden
      */
     private void buchungenAnzeigen(Passagier passagier) {
 
@@ -817,8 +824,8 @@ public class UIKunde {
         boolean buchungVorhanden = false;
 
         System.out.printf("%-8s | %-8s | %-11s | %-17s | %-6s | %-10s | %-6s | %-12s | %-10s%n",
-                "avigator.modell.Buchung",
-                "avigator.modell.Flug",
+                "Buchung",
+                "Flug",
                 "Route",
                 "Abflug",
                 "Sitz",
@@ -830,6 +837,7 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
+        // Beschraenkt die uebersicht auf Buchungen des aktuell angemeldeten Passagiers.
         for (Buchung buchung : buchungssystem.getBuchungen()) {
 
             if (buchung.getPassagier().equals(passagier)) {
@@ -859,26 +867,26 @@ public class UIKunde {
     }
 
     /**
-     * Ermöglicht die Auswahl einer avigator.modell.Buchung, deren Gepäckmenge geändert werden soll.
+     * Ermoeglicht die Auswahl einer Buchung, deren Gepaeckmenge geaendert werden soll.
      * <p>
-     * Zunächst werden vergangene Flüge und die zugehörigen avigator.modell.Buchungsstatus aktualisiert. Sind keine bearbeitbaren
+     * Zunaechst werden vergangene Fluege und die zugehoerigen Buchungsstatus aktualisiert. Sind keine bearbeitbaren
      * Buchungen vorhanden, wird der Vorgang beendet.
      * <p>
-     * Anschließend wählt der avigator.modell.Passagier eine avigator.modell.Buchung über deren Buchungsnummer aus. Es wird geprüft, ob die avigator.modell.Buchung dem
-     * angemeldeten avigator.modell.Passagier gehört und ob ihr Status eine Gepäckänderung erlaubt. Die eigentliche Änderung wird
-     * anschließend an {@link #gepaeckAendern(Buchung)} übergeben.
+     * Anschließend waehlt der Passagier eine Buchung ueber deren Buchungsnummer aus. Es wird geprueft, ob die Buchung dem
+     * angemeldeten Passagier gehoert und ob ihr Status eine Gepaeckaenderung erlaubt. Die eigentliche aenderung wird
+     * anschließend an {@link #gepaeckAendern(Buchung)} uebergeben.
      *
-     * @param passagier der avigator.modell.Passagier, dessen Gepäckinformationen geändert werden sollen
+     * @param passagier der Passagier, dessen Gepaeckinformationen geaendert werden sollen
      */
     private void gepaeckAendern(Passagier passagier) {
 
-        UIHelper.druckeUeberschrift("Gepäck ändern");
+        UIHelper.druckeUeberschrift("Gepaeck aendern");
 
         verwaltungssystem.alteFluegeLoeschen(buchungssystem);
 
         if (hatKeineBearbeitbarenBuchungen(passagier)) {
 
-            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, bei denen das Gepäck geändert werden kann.");
+            UIHelper.druckeHinweis("Sie haben derzeit keine Buchungen, bei denen das Gepaeck geaendert werden kann.");
             return;
         }
 
@@ -887,7 +895,7 @@ public class UIKunde {
         UIHelper.druckeTrennlinie();
 
         UIHelper.druckeEingabeaufforderung(
-                "Bitte geben Sie die Buchungsnummer der avigator.modell.Buchung ein, bei der Sie das Gepäck anpassen wollen:");
+                "Bitte geben Sie die Buchungsnummer der Buchung ein, bei der Sie das Gepaeck anpassen wollen:");
 
         String nummer = Manager.stringscanner();
 
@@ -897,14 +905,14 @@ public class UIKunde {
 
             if (!buchung.getPassagier().equals(passagier)) {
 
-                UIHelper.druckeFehler("Diese avigator.modell.Buchung gehört nicht zu diesem avigator.modell.Passagier.");
+                UIHelper.druckeFehler("Diese Buchung gehoert nicht zu diesem Passagier.");
                 return;
             }
 
             if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
 
-                UIHelper.druckeFehler("Das Gepäck kann bei dieser avigator.modell.Buchung nicht mehr geändert werden.");
+                UIHelper.druckeFehler("Das Gepaeck kann bei dieser Buchung nicht mehr geaendert werden.");
                 return;
             }
 
@@ -916,18 +924,18 @@ public class UIKunde {
     }
 
     /**
-     * Ändert die Anzahl der Gepäckstücke einer bestehenden avigator.modell.Buchung.
+     * aendert die Anzahl der Gepaeckstuecke einer bestehenden Buchung.
      * <p>
-     * Zunächst werden die aktuell gebuchte und die gewünschte neue Anzahl der Koffer ermittelt. Negative Werte werden
-     * abgewiesen und bei unveränderter Kofferanzahl wird der Vorgang beendet.
+     * Zunaechst werden die aktuell gebuchte und die gewuenschte neue Anzahl der Koffer ermittelt. Negative Werte werden
+     * abgewiesen und bei unveraenderter Kofferanzahl wird der Vorgang beendet.
      * <p>
-     * Vor der tatsächlichen Änderung wird anhand einer Buchungsvorschau der neue Buchungspreis ermittelt. Anschließend
-     * werden der bisherige und der neue Buchungspreis sowie der zusätzlich zu zahlende Betrag beziehungsweise der
+     * Vor der tatsaechlichen aenderung wird anhand einer Buchungsvorschau der neue Buchungspreis ermittelt. Anschließend
+     * werden der bisherige und der neue Buchungspreis sowie der zusaetzlich zu zahlende Betrag beziehungsweise der
      * Erstattungsbetrag angezeigt.
      * <p>
-     * Die Gepäckänderung wird erst nach einer ausdrücklichen Bestätigung durchgeführt und anschließend gespeichert.
+     * Die Gepaeckaenderung wird erst nach einer ausdruecklichen Bestaetigung durchgefuehrt und anschließend gespeichert.
      *
-     * @param buchung die avigator.modell.Buchung, deren Gepäckinformationen geändert werden sollen
+     * @param buchung die Buchung, deren Gepaeckinformationen geaendert werden sollen
      */
     private void gepaeckAendern(Buchung buchung) {
 
@@ -954,13 +962,14 @@ public class UIKunde {
 
                 if (neueAnzahl == aktuelleAnzahl) {
 
-                    UIHelper.druckeHinweis("Die Anzahl der Koffer wurde nicht geändert.");
+                    UIHelper.druckeHinweis("Die Anzahl der Koffer wurde nicht geaendert.");
                     return;
                 }
 
                 break;
             }
 
+            // Berechnet die Preisaenderung zunaechst mit separaten Gepaeckdaten fuer die Vorschau.
             Buchung buchungsvorschau = new Buchung(buchung.getPassagier(),
                     buchung.getFlug(),
                     buchung.getSitzplatz(),
@@ -971,7 +980,7 @@ public class UIKunde {
             double neuerPreis = buchungsvorschau.getGezahlterPreis();
             double differenz = neuerPreis - bisherigerPreis;
 
-            UIHelper.druckeUeberschrift("Gepäckänderung");
+            UIHelper.druckeUeberschrift("Gepaeckaenderung");
 
             System.out.printf("%-27s%d%n", "Bisherige Koffer:", aktuelleAnzahl);
 
@@ -984,16 +993,16 @@ public class UIKunde {
             UIHelper.druckeTrennlinie();
 
             if (differenz > 0) {
-                System.out.printf("%-27s%.2f Euro%n", "Zusätzlich zu zahlen:", differenz);
+                System.out.printf("%-27s%.2f Euro%n", "Zusaetzlich zu zahlen:", differenz);
             } else {
                 System.out.printf("%-27s%.2f Euro%n", "Erstattungsbetrag:", Math.abs(differenz));
             }
 
             UIHelper.druckeTrennlinie();
 
-            if (!bestaetigungEinlesen("Möchten Sie die Gepäckänderung verbindlich durchführen?")) {
+            if (!bestaetigungEinlesen("Moechten Sie die Gepaeckaenderung verbindlich durchfuehren?")) {
 
-                UIHelper.druckeHinweis("Die Gepäckänderung wurde abgebrochen.");
+                UIHelper.druckeHinweis("Die Gepaeckaenderung wurde abgebrochen.");
                 return;
             }
 
@@ -1001,7 +1010,7 @@ public class UIKunde {
 
             datenHandler.speichere(anwendungsdaten);
 
-            UIHelper.druckeErfolg("Das Gepäck wurde erfolgreich geändert.");
+            UIHelper.druckeErfolg("Das Gepaeck wurde erfolgreich geaendert.");
 
         } catch (Exception e) {
             UIHelper.druckeFehler(e.getMessage());
@@ -1009,13 +1018,13 @@ public class UIKunde {
     }
 
     /**
-     * Liest eine Ja-Nein-Bestätigung des Benutzers ein.
+     * Liest eine Ja-Nein-Bestaetigung des Benutzers ein.
      * <p>
-     * Akzeptiert werden die Eingaben {@code j} und {@code n} unabhängig von Groß- und Kleinschreibung. Ungültige
+     * Akzeptiert werden die Eingaben {@code j} und {@code n} unabhaengig von Groß- und Kleinschreibung. Ungueltige
      * Eingaben werden erneut abgefragt.
      *
-     * @param text der Text der Bestätigungsfrage
-     * @return {@code true} bei einer Bestätigung mit {@code j}, sonst {@code false}
+     * @param text der Text der Bestaetigungsfrage
+     * @return {@code true} bei einer Bestaetigung mit {@code j}, sonst {@code false}
      */
     private boolean bestaetigungEinlesen(String text) {
 
@@ -1033,17 +1042,17 @@ public class UIKunde {
                 return false;
             }
 
-            UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+            UIHelper.druckeFehler("Ungueltige Eingabe. Bitte geben Sie j oder n ein.");
         }
     }
 
     /**
-     * Prüft, ob für den angegebenen avigator.modell.Passagier keine bearbeitbare avigator.modell.Buchung vorhanden ist.
+     * Prueft, ob fuer den angegebenen Passagier keine bearbeitbare Buchung vorhanden ist.
      * <p>
      * Als bearbeitbar gelten Buchungen mit dem Status {@code AKTIV} oder {@code UMGEBUCHT}.
      *
-     * @param passagier der zu überprüfende avigator.modell.Passagier
-     * @return {@code true}, wenn keine bearbeitbare avigator.modell.Buchung vorhanden ist, sonst {@code false}
+     * @param passagier der zu ueberpruefende Passagier
+     * @return {@code true}, wenn keine bearbeitbare Buchung vorhanden ist, sonst {@code false}
      */
     private boolean hatKeineBearbeitbarenBuchungen(Passagier passagier) {
 
@@ -1061,13 +1070,13 @@ public class UIKunde {
     }
 
     /**
-     * Liest die Suchkriterien für eine Flugsuche ein und ermittelt die dazu passenden Flüge.
+     * Liest die Suchkriterien fuer eine Flugsuche ein und ermittelt die dazu passenden Fluege.
      * <p>
-     * Der Zielflughafen ist verpflichtend. Zusätzlich können ein Startflughafen, eine Flugnummer und ein Datum als
-     * weitere Suchkriterien angegeben werden. Die eingegebenen Kriterien werden miteinander kombiniert und über die
-     * Suchmethoden des Verwaltungssystems ausgewertet.
+     * Der Zielflughafen ist verpflichtend. Zusaetzlich koennen ein Startflughafen, eine Flugnummer und ein Datum als
+     * weitere Suchkriterien angegeben werden. Bei einer angegebenen Flugnummer wird nach dieser und gegebenenfalls dem
+     * Datum gesucht. Ohne Flugnummer werden Ziel, optionaler Start und optionales Datum miteinander kombiniert.
      *
-     * @return Liste der Flüge, die den angegebenen Suchkriterien entsprechen
+     * @return die Liste der Fluege, die den angegebenen Suchkriterien entsprechen
      */
     @SuppressWarnings("DuplicatedCode")
     private ArrayList<Flug> sucheFluege() {
@@ -1084,13 +1093,14 @@ public class UIKunde {
 
         boolean startUeberspringen = false, flugnummerUeberspringen = false, datumUeberspringen = false;
 
+        // Der Zielflughafen bleibt das verpflichtende Mindestkriterium jeder Suche.
         while (ziel.length() != 3 ||
                !Character.isAlphabetic(ziel.charAt(0)) ||
                !Character.isAlphabetic(ziel.charAt(1)) ||
                !Character.isAlphabetic(ziel.charAt(2))) {
 
             if (zaehler != 0) {
-                UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
+                UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: FRA");
             }
 
             UIHelper.druckeEingabeaufforderung("IATA-Code des Zielflughafens (verpflichtend):");
@@ -1105,10 +1115,10 @@ public class UIKunde {
         while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
-                UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+                UIHelper.druckeFehler("Ungueltige Eingabe. Bitte geben Sie j oder n ein.");
             }
 
-            UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche einen Startflughafen hinzufügen? [j/n]");
+            UIHelper.druckeEingabeaufforderung("Moechten Sie Ihrer Suche einen Startflughafen hinzufuegen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
@@ -1129,7 +1139,7 @@ public class UIKunde {
                    !Character.isAlphabetic(start.charAt(2))) {
 
                 if (zaehler != 0) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: FRA");
+                    UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: FRA");
                 }
 
                 UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens (optional):");
@@ -1145,10 +1155,10 @@ public class UIKunde {
         while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
             if (zaehler != 0) {
-                UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+                UIHelper.druckeFehler("Ungueltige Eingabe. Bitte geben Sie j oder n ein.");
             }
 
-            UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche eine Flugnummer hinzufügen? [j/n]");
+            UIHelper.druckeEingabeaufforderung("Moechten Sie Ihrer Suche eine Flugnummer hinzufuegen? [j/n]");
 
             entscheidung = Manager.stringscanner();
 
@@ -1164,6 +1174,7 @@ public class UIKunde {
 
         if (!flugnummerUeberspringen) {
 
+            // Eine Flugnummer kann wahlweise allein oder zusammen mit einem Datum gesucht werden.
             while (flugnummer.length() != 5 ||
                    !Character.isAlphabetic(flugnummer.charAt(0)) ||
                    !Character.isAlphabetic(flugnummer.charAt(1)) ||
@@ -1172,7 +1183,7 @@ public class UIKunde {
                    !Character.isDigit((flugnummer.charAt(4)))) {
 
                 if (zaehler != 0) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: LH123");
+                    UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: LH123");
                 }
 
                 UIHelper.druckeEingabeaufforderung("Flugnummer (optional):");
@@ -1188,10 +1199,10 @@ public class UIKunde {
             while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+                    UIHelper.druckeFehler("Ungueltige Eingabe. Bitte geben Sie j oder n ein.");
                 }
 
-                UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Flugnummer ein Datum hinzufügen? [j/n]");
+                UIHelper.druckeEingabeaufforderung("Moechten Sie Ihrer Flugnummer ein Datum hinzufuegen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
@@ -1211,7 +1222,7 @@ public class UIKunde {
                 while (!datumsString.matches(datumRegex)) {
 
                     if (zaehler != 0) {
-                        UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
+                        UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: 01.01.2026");
                     }
 
                     UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
@@ -1230,10 +1241,10 @@ public class UIKunde {
             while (!entscheidung.equalsIgnoreCase("j") && !entscheidung.equalsIgnoreCase("n")) {
 
                 if (zaehler != 0) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Bitte geben Sie j oder n ein.");
+                    UIHelper.druckeFehler("Ungueltige Eingabe. Bitte geben Sie j oder n ein.");
                 }
 
-                UIHelper.druckeEingabeaufforderung("Möchten Sie Ihrer Suche ein Datum hinzufügen? [j/n]");
+                UIHelper.druckeEingabeaufforderung("Moechten Sie Ihrer Suche ein Datum hinzufuegen? [j/n]");
 
                 entscheidung = Manager.stringscanner();
 
@@ -1254,7 +1265,7 @@ public class UIKunde {
             while (!datumsString.matches(datumRegex)) {
 
                 if (zaehler != 0) {
-                    UIHelper.druckeFehler("Ungültige Eingabe. Beispiel: 01.01.2026");
+                    UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: 01.01.2026");
                 }
 
                 UIHelper.druckeEingabeaufforderung("Bitte geben Sie ein Datum (dd.MM.yyyy) ein:");
@@ -1267,6 +1278,7 @@ public class UIKunde {
             datum = LocalDate.parse(datumsString, formatter);
         }
 
+        // Waehlt anhand der angegebenen Kriterien die passende Verwaltungssuche oder kombiniert deren Ergebnisse.
         if (!flugnummer.isBlank()) {
 
             if (datumUeberspringen) {
@@ -1285,6 +1297,7 @@ public class UIKunde {
                         verwaltungssystem.getFlughafenNachCode(ziel)
                 );
 
+                // uebernimmt nur Fluege, die sowohl am gewuenschten Datum als auch auf der Route liegen.
                 for (Flug flug : fluegeMitGleichemDatum) {
 
                     if (fluegeMitGleicherRoute.contains(flug)) {
@@ -1296,6 +1309,7 @@ public class UIKunde {
 
                 ArrayList<Flug> fluegeMitGleichemZiel = verwaltungssystem.sucheFluegeNachZiel(verwaltungssystem.getFlughafenNachCode(ziel));
 
+                // Schneidet die Datumsergebnisse mit den Fluegen zum gewuenschten Ziel.
                 for (Flug flug : fluegeMitGleichemDatum) {
 
                     if (fluegeMitGleichemZiel.contains(flug)) {

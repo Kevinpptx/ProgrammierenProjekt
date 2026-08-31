@@ -1,16 +1,29 @@
 package avigator.frontend;
 
 /**
- * Stellt Hilfsmethoden für eine einheitliche Ausgabe der Konsolenoberfläche bereit.
+ * Stellt Hilfsmethoden fuer eine einheitliche Ausgabe der Konsolenoberflaeche bereit.
+ *
+ * @author Cedric Beckmann
+ * @version 1.0
  */
 public class UIHelper {
 
+    /**
+     * Einheitliche Breite der Konsolenausgabe.
+     */
     private static final int BREITE = 130;
 
     /**
-     * Gibt eine zentrierte Überschrift zwischen zwei Trennlinien aus.
+     * Erzeugt eine neue Instanz der Hilfsklasse.
+     */
+    public UIHelper() {
+
+    }
+
+    /**
+     * Gibt eine zentrierte ueberschrift zwischen zwei Trennlinien aus.
      *
-     * @param text der auszugebende Überschriftentext
+     * @param text der auszugebende ueberschriftentext
      */
     public static void druckeUeberschrift(String text) {
 
@@ -24,7 +37,7 @@ public class UIHelper {
     }
 
     /**
-     * Gibt eine Trennlinie über die festgelegte Breite der Konsolenoberfläche aus.
+     * Gibt eine Trennlinie ueber die festgelegte Breite der Konsolenoberflaeche aus.
      */
     public static void druckeTrennlinie() {
 
@@ -32,10 +45,10 @@ public class UIHelper {
     }
 
     /**
-     * Zentriert einen Text innerhalb der festgelegten Breite der Konsolenoberfläche.
+     * Zentriert einen Text innerhalb der festgelegten Breite der Konsolenoberflaeche.
      *
      * @param text der zu zentrierende Text
-     * @return der mit führenden Leerzeichen zentrierte Text
+     * @return der mit fuehrenden Leerzeichen zentrierte Text
      */
     private static String zentriereText(String text) {
 
@@ -45,7 +58,7 @@ public class UIHelper {
     }
 
     /**
-     * Gibt eine Fehlermeldung mit dem Präfix "Fehler:" aus.
+     * Gibt eine Fehlermeldung mit dem Praefix "Fehler:" aus.
      *
      * @param text der auszugebende Fehlertext
      */
@@ -55,7 +68,7 @@ public class UIHelper {
     }
 
     /**
-     * Gibt einen Hinweis mit dem Präfix "Hinweis:" aus.
+     * Gibt einen Hinweis mit dem Praefix "Hinweis:" aus.
      *
      * @param text der auszugebende Hinweistext
      */
@@ -76,10 +89,10 @@ public class UIHelper {
     }
 
     /**
-     * Gibt einen nummerierten Menüpunkt aus.
+     * Gibt einen nummerierten Menuepunkt aus.
      *
-     * @param nummer die Nummer des Menüpunkts
-     * @param text   der Text des Menüpunkts
+     * @param nummer die Nummer des Menuepunkts
+     * @param text   der Text des Menuepunkts
      */
     public static void druckeMenuepunkt(int nummer, String text) {
 
