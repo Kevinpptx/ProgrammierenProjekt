@@ -5,13 +5,13 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Repräsentiert einen Sitzplatz in einem Flugzeug. Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse, eine
+ * Repraesentiert einen Sitzplatz in einem Flugzeug. Ein Sitzplatz besitzt eine Sitzplatznummer, eine Sitzklasse, eine
  * Buchung (wenn er schon verbucht ist) sowie einen Belegungsstatus.
  */
 public class Sitzplatz implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class Sitzplatz implements Serializable {
 
     /**
      * Erstellt einen neuen Sitzplatz mit der angegebenen Sitzplatznummer und Sitzklasse. Der Sitzplatz ist nach der
-     * Erstellung zunächst frei. Die Referenz für die Buchung ist {@code null}.
+     * Erstellung zunaechst frei. Die Referenz fuer die Buchung ist {@code null}.
      *
      * @param sitzplatzNummer die Nummer des Sitzplatzes
      * @param sitzklasse      die Sitzklasse des Sitzplatzes
@@ -55,8 +55,8 @@ public class Sitzplatz implements Serializable {
             throw new IllegalArgumentException("Die Sitzplatznummer darf nicht leer sein");
         }
 
-        // entfernt führende und nachfolgende Leerzeichen in der Sitzplatznummer, wandelt Klein- in Großbuchstaben um
-        // und behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        // entfernt fuehrende und nachfolgende Leerzeichen in der Sitzplatznummer, wandelt Klein- in Großbuchstaben um
+        // und behandelt Eingaben unabhaengig von der Spracheinstellung des Computers
         this.sitzplatzNummer = sitzplatzNummer.trim().toUpperCase(Locale.ROOT);
         this.sitzklasse = sitzklasse;
 
@@ -64,7 +64,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Gibt zurück, ob der Sitzplatz frei ist.
+     * Gibt zurueck, ob der Sitzplatz frei ist.
      *
      * @return {@code true}, wenn der Sitzplatz frei ist, {@code false}, wenn er belegt ist
      */
@@ -74,7 +74,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Gibt die Sitzplatznummer zurück.
+     * Gibt die Sitzplatznummer zurueck.
      *
      * @return die Sitzplatznummer
      */
@@ -84,7 +84,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Gibt die Sitzklasse des Sitzplatzes zurück.
+     * Gibt die Sitzklasse des Sitzplatzes zurueck.
      *
      * @return die Sitzklasse
      */
@@ -97,7 +97,7 @@ public class Sitzplatz implements Serializable {
      * Markiert den Sitzplatz als belegt und weist ihm eine Buchung zu.
      *
      * @param buchung die Buchung, die dem Sitzplatz zugewiesen wird
-     * @throws IllegalArgumentException wenn die Buchung eine {@code null}-Referenz enthält oder der Sitzplatz
+     * @throws IllegalArgumentException wenn die Buchung eine {@code null}-Referenz enthaelt oder der Sitzplatz
      *                                  schon belegt ist
      */
     public void belegen(Buchung buchung) {
@@ -113,7 +113,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Markiert den Sitzplatz als frei und löscht die Referenz auf die Buchung.
+     * Markiert den Sitzplatz als frei und loescht die Referenz auf die Buchung.
      */
     public void freigeben() {
 
@@ -122,7 +122,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Gibt die Buchungsreferenz des Sitzplatzes zurück.
+     * Gibt die Buchungsreferenz des Sitzplatzes zurueck.
      *
      * @return die zugewiesene Buchung oder {@code null}, wenn der Sitzplatz frei ist
      */
@@ -132,7 +132,7 @@ public class Sitzplatz implements Serializable {
     }
 
     /**
-     * Gibt eine Beschreibung des Sitzplatzes zurück.
+     * Gibt eine Beschreibung des Sitzplatzes zurueck.
      *
      * @return die Beschreibung mit Sitzplatznummer, Sitzklasse und aktuellem Belegungsstatus
      */

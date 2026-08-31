@@ -11,7 +11,7 @@ import java.nio.file.Path;
  * Ordner {@code data} gespeichert.
  *
  * <p>
- * Falls beim Programmstart keine gültige Speicherdatei vorhanden ist, werden neue Anwendungsdaten erzeugt.
+ * Falls beim Programmstart keine gueltige Speicherdatei vorhanden ist, werden neue Anwendungsdaten erzeugt.
  *
  * @author Cedric Beckmann
  * @version 1.1
@@ -33,7 +33,7 @@ public class DatenHandler {
     }
 
     /**
-     * Serialisiert die übergebenen Anwendungsdaten und speichert sie in der dafür vorgesehenen Datei.
+     * Serialisiert die uebergebenen Anwendungsdaten und speichert sie in der dafuer vorgesehenen Datei.
      *
      * <p>
      * Falls der Ordner {@code data} noch nicht existiert, wird dieser automatisch erzeugt.
@@ -69,13 +69,13 @@ public class DatenHandler {
      *
      * <p>
      * Falls eine Speicherdatei vorhanden ist, werden die darin gespeicherten Anwendungsdaten geladen. Wenn keine
-     * gültige Speicherdatei vorhanden ist, werden neue Anwendungsdaten erzeugt.
+     * gueltige Speicherdatei vorhanden ist, werden neue Anwendungsdaten erzeugt.
      *
      * @return die geladenen oder neu erzeugten Anwendungsdaten
      */
     public Anwendungsdaten initialisiereAnwendungsdaten() {
 
-        // Ohne vorhandene Speicherdatei startet die Anwendung mit einem vollständig neuen Datenbestand.
+        // Ohne vorhandene Speicherdatei startet die Anwendung mit einem vollstaendig neuen Datenbestand.
         if (Files.notExists(DATEI_PFAD)) {
 
             System.out.println(
@@ -90,7 +90,7 @@ public class DatenHandler {
 
             } catch (IOException | ClassNotFoundException | ClassCastException e) {
 
-                // Auch beschädigte oder inkompatible Daten dürfen den Programmstart nicht verhindern.
+                // Auch beschaedigte oder inkompatible Daten duerfen den Programmstart nicht verhindern.
                 System.err.println(
                         "Gespeicherte Anwendungsdaten konnten nicht geladen werden. Neue Anwendungsdaten werden erzeugt.");
 
@@ -108,7 +108,7 @@ public class DatenHandler {
      * @return die aus der Datei gelesenen Anwendungsdaten
      * @throws IOException            wenn beim Lesen der Datei ein Fehler auftritt
      * @throws ClassNotFoundException wenn die Klasse des gespeicherten Objekts nicht gefunden werden kann
-     * @throws ClassCastException     wenn die Datei kein Objekt der Klasse {@link Anwendungsdaten} enthält
+     * @throws ClassCastException     wenn die Datei kein Objekt der Klasse {@link Anwendungsdaten} enthaelt
      */
     private Anwendungsdaten leseAusDatei() throws IOException, ClassNotFoundException {
 

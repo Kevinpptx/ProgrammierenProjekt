@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Die Klasse {@code Buchungssystem} repräsentiert den kompletten Buchungsprozess. Sie dient dazu, die Klassen zu
- * koordinieren und dafür zu sorgen, dass sie miteinander interagieren können.
+ * Die Klasse {@code Buchungssystem} repraesentiert den kompletten Buchungsprozess. Sie dient dazu, die Klassen zu
+ * koordinieren und dafuer zu sorgen, dass sie miteinander interagieren koennen.
  *
  * @author Marcel Marxkors
  * @version 1.2
@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 public class Buchungssystem implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -35,12 +35,12 @@ public class Buchungssystem implements Serializable {
     private final ArrayList<Passagier> passagiere;
 
     /**
-     * Zähler zur Erzeugung fortlaufender Buchungsnummern.
+     * Zaehler zur Erzeugung fortlaufender Buchungsnummern.
      */
     private int anzahlBuchungen;
 
     /**
-     * Zähler zur Erzeugung fortlaufender Passagier-IDs.
+     * Zaehler zur Erzeugung fortlaufender Passagier-IDs.
      */
     private int anzahlPassagiere;
 
@@ -58,13 +58,13 @@ public class Buchungssystem implements Serializable {
     /**
      * Erstellt und registriert einen neuen Passagier.
      * <p>
-     * Für den Passagier wird automatisch eine fortlaufende Passagier-ID erzeugt. Kann der Passagier aufgrund ungültiger
-     * Daten nicht erstellt werden, wird der interne Zähler wieder zurückgesetzt.
+     * Fuer den Passagier wird automatisch eine fortlaufende Passagier-ID erzeugt. Kann der Passagier aufgrund ungueltiger
+     * Daten nicht erstellt werden, wird der interne Zaehler wieder zurueckgesetzt.
      *
      * @param name  der Name des Passagiers
      * @param email die E-Mail-Adresse des Passagiers
      * @return der neu erstellte und registrierte Passagier
-     * @throws IllegalArgumentException wenn Name oder E-Mail-Adresse ungültig oder {@code null} sind
+     * @throws IllegalArgumentException wenn Name oder E-Mail-Adresse ungueltig oder {@code null} sind
      */
     public Passagier initialisierePassagier(String name, String email) {
 
@@ -81,7 +81,7 @@ public class Buchungssystem implements Serializable {
 
             } catch (IllegalArgumentException e) {
 
-                // Ungültige Passagierdaten dürfen keine Lücke in der fortlaufenden ID erzeugen
+                // Ungueltige Passagierdaten duerfen keine Luecke in der fortlaufenden ID erzeugen
                 anzahlPassagiere--;
                 throw e;
             }
@@ -95,23 +95,23 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Erstellt und registriert eine neue Buchung für einen Passagier.
+     * Erstellt und registriert eine neue Buchung fuer einen Passagier.
      * <p>
-     * Vor der Buchung wird geprüft, ob Passagier und Flug im jeweiligen System vorhanden sind und ob der gewünschte
-     * Sitzplatz für die angegebene Sitzklasse gültig und frei ist.
+     * Vor der Buchung wird geprueft, ob Passagier und Flug im jeweiligen System vorhanden sind und ob der gewuenschte
+     * Sitzplatz fuer die angegebene Sitzklasse gueltig und frei ist.
      * <p>
      * Bei erfolgreicher Buchung wird eine Buchungsnummer vergeben, der Sitzplatz belegt und die Buchung im
      * Buchungssystem gespeichert.
      *
-     * @param passagier         der Passagier, für den die Buchung erstellt wird
+     * @param passagier         der Passagier, fuer den die Buchung erstellt wird
      * @param flug              der zu buchende Flug
-     * @param sitzplatznummer   die Nummer des gewünschten Sitzplatzes
+     * @param sitzplatznummer   die Nummer des gewuenschten Sitzplatzes
      * @param anzahlKoffer      die Anzahl der aufzugebenden Koffer
-     * @param sitzklasse        die gewünschte Sitzklasse
-     * @param verwaltungssystem das Verwaltungssystem zur Prüfung des Fluges
+     * @param sitzklasse        die gewuenschte Sitzklasse
+     * @param verwaltungssystem das Verwaltungssystem zur Pruefung des Fluges
      * @return die neu erstellte Buchung
-     * @throws IllegalArgumentException wenn übergebene Werte ungültig sind oder Passagier, Flug beziehungsweise
-     *                                  Sitzplatz nicht gültig sind
+     * @throws IllegalArgumentException wenn uebergebene Werte ungueltig sind oder Passagier, Flug beziehungsweise
+     *                                  Sitzplatz nicht gueltig sind
      * @throws NoSuchElementException   wenn der angegebene Sitzplatz nicht vorhanden ist
      */
     public Buchung buchungVornehmen(Passagier passagier, Flug flug, String sitzplatznummer, int anzahlKoffer,
@@ -119,20 +119,20 @@ public class Buchungssystem implements Serializable {
     ) {
 
         if ((passagier == null || flug == null || sitzplatznummer == null || sitzklasse == null)) {
-            throw new IllegalArgumentException("Fehler! Mindestens einer der übergebenen Werte ist ungültig.");
+            throw new IllegalArgumentException("Fehler! Mindestens einer der uebergebenen Werte ist ungueltig.");
         }
 
         if (!passagiere.contains(passagier)) {
             throw new IllegalArgumentException(
-                    "Der übergebene Passagier existiert nicht (mehr) im System. Bitte einen anderen Passagier wählen oder die Buchung neu vornehmen!");
+                    "Der uebergebene Passagier existiert nicht (mehr) im System. Bitte einen anderen Passagier waehlen oder die Buchung neu vornehmen!");
         }
 
         if (!verwaltungssystem.getFluege().contains(flug)) {
             throw new IllegalArgumentException(
-                    "Der übergebene Flug existiert nicht (mehr) im System. Bitte einen anderen Flug wählen oder die Buchung neu vornehmen!");
+                    "Der uebergebene Flug existiert nicht (mehr) im System. Bitte einen anderen Flug waehlen oder die Buchung neu vornehmen!");
         }
 
-        // Bereitet Sitzplatz und Gepäckdaten vor und prüft den Sitz, bevor die Buchung angelegt wird.
+        // Bereitet Sitzplatz und Gepaeckdaten vor und prueft den Sitz, bevor die Buchung angelegt wird.
         Sitzplatz sitzplatz = flug.findeSitzplatz(sitzplatznummer);
         GepaeckInformation gepaeckInfo = new GepaeckInformation(anzahlKoffer);
         List<Sitzplatz> klassenliste = flug.getFreieSitzplaetzeNachKlasse(sitzklasse);
@@ -141,7 +141,7 @@ public class Buchungssystem implements Serializable {
 
         Buchung buchung = new Buchung(passagier, flug, sitzplatz, gepaeckInfo);
 
-        // Vergibt anschließend die fortlaufende Nummer und verknüpft Buchung und Sitzplatz miteinander.
+        // Vergibt anschließend die fortlaufende Nummer und verknuepft Buchung und Sitzplatz miteinander.
         buchung.setBuchungsnummer("bu" + anzahlBuchungen);
         anzahlBuchungen++;
         sitzplatz.belegen(buchung);
@@ -172,8 +172,8 @@ public class Buchungssystem implements Serializable {
     /**
      * Bucht eine bestehende Buchung auf einen anderen Flug beziehungsweise Sitzplatz um.
      * <p>
-     * Vor der Änderung wird die Umbuchung validiert und der zusätzlich zu zahlende Umbuchungsbetrag berechnet.
-     * Anschließend werden der neue Sitzplatz, Flug und Buchungspreis übernommen, der Buchungsstatus auf
+     * Vor der aenderung wird die Umbuchung validiert und der zusaetzlich zu zahlende Umbuchungsbetrag berechnet.
+     * Anschließend werden der neue Sitzplatz, Flug und Buchungspreis uebernommen, der Buchungsstatus auf
      * {@code UMGEBUCHT} gesetzt und der bisherige Sitzplatz freigegeben.
      *
      * @param buchung           die umzubuchende Buchung
@@ -182,7 +182,7 @@ public class Buchungssystem implements Serializable {
      * @param sitzklasse        die Sitzklasse des neuen Sitzplatzes
      * @param verwaltungssystem das Verwaltungssystem zur Validierung des Fluges
      * @throws NoSuchElementException   wenn erforderliche Buchungs-, Flug- oder Sitzplatzdaten fehlen
-     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewuenschten Sitzklasse gehoert
      * @throws IllegalStateException    wenn die Buchung storniert oder vergangen ist
      */
     public void umbuchen(Buchung buchung,
@@ -213,27 +213,27 @@ public class Buchungssystem implements Serializable {
             buchung.aktualisiereGezahltenPreis();
             buchung.setBuchungsstatus(Buchungsstatus.UMGEBUCHT);
 
-            // Der alte Sitzplatz bleibt bis zur vollständigen Aktualisierung der Buchung belegt
+            // Der alte Sitzplatz bleibt bis zur vollstaendigen Aktualisierung der Buchung belegt
             alterSitzplatz.freigeben();
         }
 
     }
 
     /**
-     * Prüft, ob eine Umbuchung mit den angegebenen Daten durchgeführt werden kann.
+     * Prueft, ob eine Umbuchung mit den angegebenen Daten durchgefuehrt werden kann.
      * <p>
      * Dabei werden unter anderem die Existenz des neuen Fluges, der Buchungsstatus sowie Sitzplatz und Sitzklasse
-     * geprüft. Abhängig davon, ob innerhalb desselben Fluges oder auf einen anderen Flug umgebucht wird, erfolgt die
+     * geprueft. Abhaengig davon, ob innerhalb desselben Fluges oder auf einen anderen Flug umgebucht wird, erfolgt die
      * entsprechende Sitzplatzvalidierung.
      *
      * @param buchung             die umzubuchende Buchung
-     * @param neuerFlug           der gewünschte neue Flug
-     * @param neueSitzplatznummer die Nummer des gewünschten neuen Sitzplatzes
-     * @param sitzklasse          die gewünschte Sitzklasse
-     * @param verwaltungssystem   das Verwaltungssystem zur Prüfung des neuen Fluges
-     * @return {@code true}, wenn die Umbuchung gültig ist
-     * @throws NoSuchElementException wenn benötigte Buchungs- oder Flugdaten fehlen
-     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @param neuerFlug           der gewuenschte neue Flug
+     * @param neueSitzplatznummer die Nummer des gewuenschten neuen Sitzplatzes
+     * @param sitzklasse          die gewuenschte Sitzklasse
+     * @param verwaltungssystem   das Verwaltungssystem zur Pruefung des neuen Fluges
+     * @return {@code true}, wenn die Umbuchung gueltig ist
+     * @throws NoSuchElementException wenn benoetigte Buchungs- oder Flugdaten fehlen
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewuenschten Sitzklasse gehoert
      * @throws IllegalStateException  wenn die Buchung storniert oder vergangen ist
      */
     private boolean validiereUmbuchung(Buchung buchung, Flug neuerFlug, String neueSitzplatznummer,
@@ -255,14 +255,14 @@ public class Buchungssystem implements Serializable {
 
         else if (buchung.getBuchungsstatus() == Buchungsstatus.STORNIERT ||
                 buchung.getBuchungsstatus() == Buchungsstatus.VERGANGEN) {
-            throw new IllegalStateException("Stornierte oder vergangene Buchungen können nicht umgebucht werden.");
+            throw new IllegalStateException("Stornierte oder vergangene Buchungen koennen nicht umgebucht werden.");
         }
 
         else if (sitzklasse == null) {
             throw new NoSuchElementException("Es wurde keine Sitzklasse angegeben.");
         }
 
-        // Im selben Flug wird gegen dessen Sitzplan geprüft, andernfalls gegen den Sitzplan des neuen Flugs.
+        // Im selben Flug wird gegen dessen Sitzplan geprueft, andernfalls gegen den Sitzplan des neuen Flugs.
         else if (neuerFlug == buchung.getFlug() || neuerFlug == null) {
             return validiereUmbuchungimSelbenFlug(buchung, neueSitzplatznummer, sitzklasse);
         }
@@ -274,14 +274,14 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Prüft, ob eine Umbuchung im selben Flug möglich ist.
+     * Prueft, ob eine Umbuchung im selben Flug moeglich ist.
      *
      * @param buchung             die aktuelle Buchung
      * @param neueSitzplatznummer die Sitzplatznummer, auf die umgebucht werden soll
      * @param sitzklasse          die Sitzklasse, die der neue Sitzplatz haben soll
      * @return {@code true}, wenn die Validierung erfolgreich ist
      * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
-     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewuenschten Sitzklasse gehoert
      */
     private boolean validiereUmbuchungimSelbenFlug(Buchung buchung, String neueSitzplatznummer, Sitzklasse sitzklasse) {
 
@@ -294,14 +294,14 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Prüft, ob eine Buchung im neuen Flug gültig ist.
+     * Prueft, ob eine Buchung im neuen Flug gueltig ist.
      *
      * @param flug                der neue Flug, auf den umgebucht werden soll
      * @param neueSitzplatznummer die Sitzplatznummer, auf die umgebucht werden soll
      * @param sitzklasse          die Sitzklasse des neuen Sitzplatzes
      * @return {@code true}, wenn die Validierung erfolgreich ist
      * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
-     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewünschten Sitzklasse gehört
+     * @throws IllegalArgumentException wenn der Sitzplatz belegt ist oder nicht zur gewuenschten Sitzklasse gehoert
      */
     private boolean validiereUmbuchungimNeuenFlug(Flug flug, String neueSitzplatznummer, Sitzklasse sitzklasse) {
 
@@ -313,23 +313,23 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Berechnet den bei einer Umbuchung zusätzlich zu zahlenden Betrag.
+     * Berechnet den bei einer Umbuchung zusaetzlich zu zahlenden Betrag.
      * <p>
-     * Der Betrag setzt sich aus der festen Umbuchungsgebühr und einer möglichen positiven Differenz zwischen dem
-     * bisherigen und dem neuen Buchungspreis zusammen. Ist der neue Flug günstiger, wird die Preisdifferenz nicht
+     * Der Betrag setzt sich aus der festen Umbuchungsgebuehr und einer moeglichen positiven Differenz zwischen dem
+     * bisherigen und dem neuen Buchungspreis zusammen. Ist der neue Flug guenstiger, wird die Preisdifferenz nicht
      * erstattet.
      *
      * @param buchung   die bisherige Buchung
      * @param flug      der neue Flug
      * @param sitzplatz der neue Sitzplatz
-     * @return der zusätzlich zu zahlende Umbuchungsbetrag
+     * @return der zusaetzlich zu zahlende Umbuchungsbetrag
      */
     public double berechneUmbuchungsgebuehr(Buchung buchung, Flug flug, Sitzplatz sitzplatz) {
 
         double preisAlterFlug = buchung.getGezahlterPreis();
         double preisNeuerFlug, ticketDifferenz, finaleGebuehr;
 
-        // Für Business-Sitzplätze gilt derselbe Preisfaktor wie bei einer neuen Buchung
+        // Fuer Business-Sitzplaetze gilt derselbe Preisfaktor wie bei einer neuen Buchung
         if (sitzplatz.getSitzklasse() == Sitzklasse.BUSINESS) {
             preisNeuerFlug = flug.getBasispreis() * buchung.getBusinesspreisfaktor();
         } else {
@@ -347,12 +347,12 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Storniert eine vorhandene Buchung, ändert den Buchungsstatus und gibt den Sitzplatz der Buchung frei.
+     * Storniert eine vorhandene Buchung, aendert den Buchungsstatus und gibt den Sitzplatz der Buchung frei.
      *
      * @param buchung die Buchung, die storniert werden soll
-     * @return die Storno-Gebühr
+     * @return die Storno-Gebuehr
      * @throws NoSuchElementException   wenn die zu stornierende Buchung nicht in der Liste "buchungen" ist
-     * @throws IllegalArgumentException wenn keine Buchung übergeben wurde, die Buchung bereits storniert wurde oder
+     * @throws IllegalArgumentException wenn keine Buchung uebergeben wurde, die Buchung bereits storniert wurde oder
      *                                  bereits vergangen ist
      */
     @SuppressWarnings("UnusedReturnValue")
@@ -361,7 +361,7 @@ public class Buchungssystem implements Serializable {
         double betrag;
 
         if (buchung == null) {
-            throw new IllegalArgumentException("Die Buchung enthält eine null-Referenz");
+            throw new IllegalArgumentException("Die Buchung enthaelt eine null-Referenz");
         } else if (buchungen.contains(buchung)) {
 
             if (buchung.getBuchungsstatus() == Buchungsstatus.AKTIV
@@ -369,13 +369,13 @@ public class Buchungssystem implements Serializable {
 
                 betrag = buchung.stornierenMitGebuehr();
 
-                // Statusänderung und Sitzfreigabe machen den Platz wieder für andere Buchungen verfügbar.
+                // Statusaenderung und Sitzfreigabe machen den Platz wieder fuer andere Buchungen verfuegbar.
                 buchung.setBuchungsstatus(Buchungsstatus.STORNIERT);
                 buchung.getSitzplatz().freigeben();
 
             } else {
                 throw new IllegalArgumentException(
-                        "Sie können eine bereits stornierte oder vergangene Buchung nicht stornieren!");
+                        "Sie koennen eine bereits stornierte oder vergangene Buchung nicht stornieren!");
             }
 
         } else {
@@ -390,8 +390,8 @@ public class Buchungssystem implements Serializable {
      * Durchsucht die vorhandenen Buchungen nach solchen, die den angegebenen Flug beinhalten und weder storniert noch
      * vergangen sind.
      *
-     * @param flug der Flug, der auf nicht stornierte Buchungen überprüft werden soll
-     * @return die Liste der Buchungen, die die Kriterien erfüllen
+     * @param flug der Flug, der auf nicht stornierte Buchungen ueberprueft werden soll
+     * @return die Liste der Buchungen, die die Kriterien erfuellen
      */
     public ArrayList<Buchung> findeRelevanteBuchungen(Flug flug) {
 
@@ -411,16 +411,16 @@ public class Buchungssystem implements Serializable {
     }
 
     /**
-     * Ändert die Anzahl der gebuchten Koffer einer bestehenden Buchung.
+     * aendert die Anzahl der gebuchten Koffer einer bestehenden Buchung.
      * <p>
-     * Die Änderung ist nur für vorhandene Buchungen mit dem Status {@code AKTIV} oder {@code UMGEBUCHT} möglich. Nach
-     * der Änderung der Gepäckmenge wird der Buchungspreis neu berechnet.
+     * Die aenderung ist nur fuer vorhandene Buchungen mit dem Status {@code AKTIV} oder {@code UMGEBUCHT} moeglich. Nach
+     * der aenderung der Gepaeckmenge wird der Buchungspreis neu berechnet.
      *
-     * @param buchung          die zu ändernde Buchung
+     * @param buchung          die zu aendernde Buchung
      * @param neueAnzahlKoffer die neue Anzahl der gebuchten Koffer
      * @throws IllegalArgumentException wenn keine Buchung angegeben wurde oder die Kofferanzahl negativ ist
      * @throws NoSuchElementException   wenn die Buchung nicht im System vorhanden ist
-     * @throws IllegalStateException    wenn der Buchungsstatus keine Änderung erlaubt
+     * @throws IllegalStateException    wenn der Buchungsstatus keine aenderung erlaubt
      */
     public void gepaeckAendern(Buchung buchung, int neueAnzahlKoffer) {
 
@@ -434,31 +434,31 @@ public class Buchungssystem implements Serializable {
 
         if (buchung.getBuchungsstatus() != Buchungsstatus.AKTIV &&
                 buchung.getBuchungsstatus() != Buchungsstatus.UMGEBUCHT) {
-            throw new IllegalStateException("Das Gepäck kann bei dieser Buchung nicht mehr geändert werden.");
+            throw new IllegalStateException("Das Gepaeck kann bei dieser Buchung nicht mehr geaendert werden.");
         }
 
         if (neueAnzahlKoffer < 0) {
             throw new IllegalArgumentException("Die Anzahl der Koffer darf nicht negativ sein.");
         }
 
-        // Übernimmt die neue Gepäckmenge und hält den gespeicherten Buchungspreis damit synchron.
+        // uebernimmt die neue Gepaeckmenge und haelt den gespeicherten Buchungspreis damit synchron.
         buchung.getGepaeckinformation().setAnzahlKoffer(neueAnzahlKoffer);
         buchung.aktualisiereGezahltenPreis();
     }
 
     /**
-     * Gibt alle getätigten Buchungen zurück.
+     * Gibt alle getaetigten Buchungen zurueck.
      *
-     * @return unveränderbare Kopie aller getätigten Buchungen
+     * @return unveraenderbare Kopie aller getaetigten Buchungen
      */
     public List<Buchung> getBuchungen() {
         return List.copyOf(buchungen);
     }
 
     /**
-     * Gibt alle registrierten Passagiere zurück.
+     * Gibt alle registrierten Passagiere zurueck.
      *
-     * @return unveränderbare Kopie der registrierten Passagiere
+     * @return unveraenderbare Kopie der registrierten Passagiere
      */
     public List<Passagier> getPassagiere() {
         return List.copyOf(passagiere);

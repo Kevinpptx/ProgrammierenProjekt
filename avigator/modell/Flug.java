@@ -9,15 +9,15 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 
 /**
- * Die Klasse {@code Flug} repräsentiert einen konkreten Flug einer Fluggesellschaft zwischen einem Start- und einem
+ * Die Klasse {@code Flug} repraesentiert einen konkreten Flug einer Fluggesellschaft zwischen einem Start- und einem
  * Zielflughafen.
  * <p>
  * Ein Flug besitzt eine Flugnummer, eine Fluggesellschaft, ein eingesetztes Flugzeug, einen Start- und Zielflughafen,
  * eine Abflug- und Ankunftszeit sowie einen Basispreis.
  * <p>
- * Zusätzlich besitzt jeder Flug einen eigenen Sitzplan. Dieser wird bei der Erstellung des Fluges anhand der
- * Sitzplatzvorlage des eingesetzten Flugzeugs initialisiert. Dadurch kann die Sitzplatzbelegung für jeden Flug
- * unabhängig verwaltet werden.
+ * Zusaetzlich besitzt jeder Flug einen eigenen Sitzplan. Dieser wird bei der Erstellung des Fluges anhand der
+ * Sitzplatzvorlage des eingesetzten Flugzeugs initialisiert. Dadurch kann die Sitzplatzbelegung fuer jeden Flug
+ * unabhaengig verwaltet werden.
  *
  * @author Cedric Beckmann
  * @version 1.1
@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 public class Flug implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -36,12 +36,12 @@ public class Flug implements Serializable {
     private final String flugnummer;
 
     /**
-     * Die Fluggesellschaft, die den Flug durchführt.
+     * Die Fluggesellschaft, die den Flug durchfuehrt.
      */
     private final Fluggesellschaft fluggesellschaft;
 
     /**
-     * Das für den Flug eingesetzte Flugzeug.
+     * Das fuer den Flug eingesetzte Flugzeug.
      */
     private final Flugzeug flugzeug;
 
@@ -78,14 +78,14 @@ public class Flug implements Serializable {
     /**
      * Erzeugt einen neuen Flug mit den angegebenen Flugdaten.
      * <p>
-     * Beim Erstellen des Fluges wird ein eigener Sitzplan anhand der Sitzplatzvorlage des übergebenen Flugzeugs
+     * Beim Erstellen des Fluges wird ein eigener Sitzplan anhand der Sitzplatzvorlage des uebergebenen Flugzeugs
      * initialisiert.
      * <p>
      * Der Basispreis darf nicht negativ sein und die Ankunftszeit muss nach der Abflugzeit liegen.
      *
      * @param flugnummer       die Flugnummer des Fluges
-     * @param fluggesellschaft die Fluggesellschaft, die den Flug durchführt
-     * @param flugzeug         das für den Flug eingesetzte Flugzeug
+     * @param fluggesellschaft die Fluggesellschaft, die den Flug durchfuehrt
+     * @param flugzeug         das fuer den Flug eingesetzte Flugzeug
      * @param startFlughafen   der Startflughafen des Fluges
      * @param zielFlughafen    der Zielflughafen des Fluges
      * @param abflugzeit       der geplante Zeitpunkt des Abflugs
@@ -111,7 +111,7 @@ public class Flug implements Serializable {
             || abflugzeit == null
             || ankunftszeit == null) {
 
-            throw new IllegalArgumentException("Die übergebenen Flugdaten dürfen nicht null sein.");
+            throw new IllegalArgumentException("Die uebergebenen Flugdaten duerfen nicht null sein.");
         }
 
         if (flugnummer == null || flugnummer.isBlank()) {
@@ -127,8 +127,8 @@ public class Flug implements Serializable {
             throw new IllegalArgumentException("Die Ankunftszeit darf nicht vor der Abflugzeit liegen.");
         }
 
-        // entfernt führende und nachfolgende Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
-        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        // entfernt fuehrende und nachfolgende Leerzeichen in der Flugnummer, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhaengig von der Spracheinstellung des Computers
         this.flugnummer = flugnummer.trim().toUpperCase(Locale.ROOT);
         this.fluggesellschaft = fluggesellschaft;
         this.flugzeug = flugzeug;
@@ -144,9 +144,9 @@ public class Flug implements Serializable {
     /**
      * Initialisiert den Sitzplan des Fluges anhand einer Sitzplatzvorlage.
      * <p>
-     * Für jeden Sitzplatz der Vorlage wird ein neues {@code Sitzplatz}-Objekt erzeugt. Dadurch besitzt jeder Flug einen
-     * eigenen unabhängigen Sitzplan und Änderungen an der Sitzplatzbelegung wirken sich nicht auf andere Flüge oder auf
-     * die ursprüngliche Sitzplatzvorlage des Flugzeugs aus.
+     * Fuer jeden Sitzplatz der Vorlage wird ein neues {@code Sitzplatz}-Objekt erzeugt. Dadurch besitzt jeder Flug einen
+     * eigenen unabhaengigen Sitzplan und aenderungen an der Sitzplatzbelegung wirken sich nicht auf andere Fluege oder auf
+     * die urspruengliche Sitzplatzvorlage des Flugzeugs aus.
      *
      * @param vorlage die Sitzplatzvorlage des eingesetzten Flugzeugs
      */
@@ -162,19 +162,19 @@ public class Flug implements Serializable {
 
                 Sitzplatz original = vorlage[i][j];
 
-                // Erstellt eine unabhängige Kopie des jeweiligen Sitzplatzes
+                // Erstellt eine unabhaengige Kopie des jeweiligen Sitzplatzes
                 sitzplan[i][j] = new Sitzplatz(original.getSitzplatzNummer(), original.getSitzklasse());
             }
         }
     }
 
     /**
-     * Ermittelt alle freien Sitzplätze einer bestimmten Sitzklasse.
+     * Ermittelt alle freien Sitzplaetze einer bestimmten Sitzklasse.
      * <p>
-     * Ein Sitzplatz wird nur zurückgegeben, wenn er sowohl frei ist als auch der angegebenen Sitzklasse entspricht.
+     * Ein Sitzplatz wird nur zurueckgegeben, wenn er sowohl frei ist als auch der angegebenen Sitzklasse entspricht.
      *
      * @param sitzklasse die Sitzklasse, nach der gefiltert werden soll
-     * @return eine Liste mit allen freien Sitzplätzen der angegebenen Sitzklasse
+     * @return eine Liste mit allen freien Sitzplaetzen der angegebenen Sitzklasse
      */
     public List<Sitzplatz> getFreieSitzplaetzeNachKlasse(Sitzklasse sitzklasse) {
 
@@ -196,7 +196,7 @@ public class Flug implements Serializable {
     /**
      * Berechnet die prozentuale Auslastung des Fluges.
      * <p>
-     * Dazu wird die Anzahl aller belegten Sitzplätze durch die Gesamtzahl aller vorhandenen Sitzplätze geteilt und
+     * Dazu wird die Anzahl aller belegten Sitzplaetze durch die Gesamtzahl aller vorhandenen Sitzplaetze geteilt und
      * anschließend mit {@code 100} multipliziert.
      *
      * @return die Auslastung des Fluges in Prozent
@@ -218,18 +218,18 @@ public class Flug implements Serializable {
             }
         }
 
-        // Rückgabe rundet auf 2 Nachkommastellen und gibt Wert in Prozent aus
+        // Rueckgabe rundet auf 2 Nachkommastellen und gibt Wert in Prozent aus
         return Math.round(((double) anzahlBelegt / anzahlGesamt * 100.0) * 100.0) / 100.0;
     }
 
     /**
      * Gibt den aktuellen Sitzplan des Fluges auf der Konsole aus.
      * <p>
-     * Für jeden Sitzplatz wird zunächst die Sitzplatznummer und anschließend der aktuelle Belegungsstatus dargestellt.
+     * Fuer jeden Sitzplatz wird zunaechst die Sitzplatznummer und anschließend der aktuelle Belegungsstatus dargestellt.
      * <p>
      * Ein freier Sitzplatz wird durch {@code [ ]} und ein belegter Sitzplatz durch {@code [X]} gekennzeichnet.
      * <p>
-     * In der Mitte jeder Reihe wird ein Mittelgang dargestellt. Zusätzlich wird beim Wechsel zwischen verschiedenen
+     * In der Mitte jeder Reihe wird ein Mittelgang dargestellt. Zusaetzlich wird beim Wechsel zwischen verschiedenen
      * Sitzklassen eine horizontale Trennlinie ausgegeben.
      */
     public void zeigeSitzplan() {
@@ -250,10 +250,10 @@ public class Flug implements Serializable {
                 berechneStrichAnzahlUndGebeStricheAus(text, breiteKlasse);
             }
 
-            // Gibt zunächst die Sitzplatznummern der aktuellen Reihe aus
+            // Gibt zunaechst die Sitzplatznummern der aktuellen Reihe aus
             for (int j = 0; j < this.sitzplan[i].length; j++) {
 
-                // Fügt in der Mitte der Sitzreihe einen Gang ein
+                // Fuegt in der Mitte der Sitzreihe einen Gang ein
                 if (j == this.sitzplan[i].length / 2) {
                     System.out.print("|  ");
                 }
@@ -263,10 +263,10 @@ public class Flug implements Serializable {
 
             System.out.println();
 
-            // Gibt anschließend den Belegungsstatus der Sitzplätze aus
+            // Gibt anschließend den Belegungsstatus der Sitzplaetze aus
             for (int j = 0; j < this.sitzplan[i].length; j++) {
 
-                // Fügt auch in der Statusanzeige den Mittelgang ein
+                // Fuegt auch in der Statusanzeige den Mittelgang ein
                 if (j == this.sitzplan[i].length / 2) {
                     System.out.print("|  ");
                 }
@@ -324,15 +324,15 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Prüft, ob ein Sitzplatz vorhanden und frei ist sowie der gewünschten Sitzklasse angehört oder in der
-     * übergebenen Klassenliste enthalten ist.
+     * Prueft, ob ein Sitzplatz vorhanden und frei ist sowie der gewuenschten Sitzklasse angehoert oder in der
+     * uebergebenen Klassenliste enthalten ist.
      *
-     * @param sitz         der zu überprüfende Sitzplatz
-     * @param sitzklasse   die gewünschte Sitzklasse
-     * @param klassenliste die freien Sitzplätze der gewünschten Sitzklasse
+     * @param sitz         der zu ueberpruefende Sitzplatz
+     * @param sitzklasse   die gewuenschte Sitzklasse
+     * @param klassenliste die freien Sitzplaetze der gewuenschten Sitzklasse
      * @throws NoSuchElementException   wenn der Sitzplatz nicht vorhanden ist
      * @throws IllegalArgumentException wenn der Sitzplatz bereits belegt ist oder sowohl einer anderen Sitzklasse
-     *                                  angehört als auch nicht in der Klassenliste enthalten ist
+     *                                  angehoert als auch nicht in der Klassenliste enthalten ist
      */
     public void validiereSitzplatz(Sitzplatz sitz, Sitzklasse sitzklasse, List<Sitzplatz> klassenliste) {
 
@@ -347,7 +347,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt die Flugnummer des Fluges zurück.
+     * Gibt die Flugnummer des Fluges zurueck.
      *
      * @return die Flugnummer
      */
@@ -357,7 +357,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt den Basispreis des Fluges zurück.
+     * Gibt den Basispreis des Fluges zurueck.
      *
      * @return der Basispreis des Fluges
      */
@@ -367,7 +367,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt den Startflughafen des Fluges zurück.
+     * Gibt den Startflughafen des Fluges zurueck.
      *
      * @return der Startflughafen
      */
@@ -377,7 +377,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt den Zielflughafen des Fluges zurück.
+     * Gibt den Zielflughafen des Fluges zurueck.
      *
      * @return der Zielflughafen
      */
@@ -387,7 +387,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt die Abflugzeit des Fluges zurück.
+     * Gibt die Abflugzeit des Fluges zurueck.
      *
      * @return die Abflugzeit
      */
@@ -397,7 +397,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt die Ankunftszeit des Fluges zurück.
+     * Gibt die Ankunftszeit des Fluges zurueck.
      *
      * @return die Ankunftszeit
      */
@@ -407,7 +407,7 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt das für den Flug eingesetzte Flugzeug zurück.
+     * Gibt das fuer den Flug eingesetzte Flugzeug zurueck.
      *
      * @return das eingesetzte Flugzeug
      */
@@ -417,9 +417,9 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt die den Flug durchführende Fluggesellschaft zurück.
+     * Gibt die den Flug durchfuehrende Fluggesellschaft zurueck.
      *
-     * @return die durchführende Fluggesellschaft
+     * @return die durchfuehrende Fluggesellschaft
      */
     public Fluggesellschaft getFluggesellschaft() {
 
@@ -427,9 +427,9 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Gibt eine textuelle Beschreibung des Fluges zurück.
+     * Gibt eine textuelle Beschreibung des Fluges zurueck.
      * <p>
-     * Die Beschreibung enthält die Fluggesellschaft, die vollständige Flugnummer, den Start- und Zielflughafen, die
+     * Die Beschreibung enthaelt die Fluggesellschaft, die vollstaendige Flugnummer, den Start- und Zielflughafen, die
      * Abflug- und Ankunftszeit, das eingesetzte Flugzeug sowie die aktuelle Auslastung.
      *
      * @return eine textuelle Beschreibung des Fluges
@@ -450,10 +450,10 @@ public class Flug implements Serializable {
     }
 
     /**
-     * Vergleicht zwei Flüge anhand ihrer Flugnummer, ihres Abflugdatums und ihrer Route.
+     * Vergleicht zwei Fluege anhand ihrer Flugnummer, ihres Abflugdatums und ihrer Route.
      *
      * @param o das zu vergleichende Objekt
-     * @return {@code true}, wenn beide Flüge dieselben Identifikationsmerkmale besitzen, sonst {@code false}
+     * @return {@code true}, wenn beide Fluege dieselben Identifikationsmerkmale besitzen, sonst {@code false}
      */
     @Override
     public boolean equals(Object o) {

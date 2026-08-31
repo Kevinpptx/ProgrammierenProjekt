@@ -4,25 +4,25 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Bündelt die dauerhaft zu speichernden Verwaltungs- und Buchungsdaten der Anwendung.
+ * Buendelt die dauerhaft zu speichernden Verwaltungs- und Buchungsdaten der Anwendung.
  *
  * @author Cedric Beckmann
  */
 public class Anwendungsdaten implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * Verwaltungssystem für Fluggesellschaften, Flugzeuge, Flughäfen und Flüge.
+     * Verwaltungssystem fuer Fluggesellschaften, Flugzeuge, Flughaefen und Fluege.
      */
     private final Verwaltungssystem verwaltungssystem;
 
     /**
-     * Buchungssystem für Passagiere und Buchungen.
+     * Buchungssystem fuer Passagiere und Buchungen.
      */
     private final Buchungssystem buchungssystem;
 
@@ -36,7 +36,7 @@ public class Anwendungsdaten implements Serializable {
     }
 
     /**
-     * Gibt das Verwaltungssystem zurück.
+     * Gibt das Verwaltungssystem zurueck.
      *
      * @return das Verwaltungssystem der Anwendung
      */
@@ -46,7 +46,7 @@ public class Anwendungsdaten implements Serializable {
     }
 
     /**
-     * Gibt das Buchungssystem zurück.
+     * Gibt das Buchungssystem zurueck.
      *
      * @return das Buchungssystem der Anwendung
      */

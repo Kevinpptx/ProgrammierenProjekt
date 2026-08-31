@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Die Klasse {@code Fluggesellschaft} repräsentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code und einer
+ * Die Klasse {@code Fluggesellschaft} repraesentiert eine Fluggesellschaft mit einem Namen, einem Airline-Code und einer
  * Flotte von Flugzeugen.
  *
  * @author Cedric Beckmann
@@ -16,7 +16,7 @@ import java.util.Locale;
 public class Fluggesellschaft implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -47,11 +47,11 @@ public class Fluggesellschaft implements Serializable {
     public Fluggesellschaft(String name, String airlineCode) {
 
         if (name == null || airlineCode == null) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfen keine null-Referenz enthalten.");
         }
 
         if (name.isBlank() || airlineCode.isBlank()) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfennicht leer sein.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfennicht leer sein.");
         }
 
         if (airlineCode.length() != 2 || !Character.isLetter(airlineCode.charAt(0))
@@ -61,21 +61,21 @@ public class Fluggesellschaft implements Serializable {
 
         this.name = name;
 
-        // entfernt führende und nachfolgende Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
-        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        // entfernt fuehrende und nachfolgende Leerzeichen im Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhaengig von der Spracheinstellung des Computers
         this.airlineCode = airlineCode.trim().toUpperCase(Locale.ROOT);
     }
 
     /**
-     * Fügt ein Flugzeug zur Flotte der Fluggesellschaft hinzu.
+     * Fuegt ein Flugzeug zur Flotte der Fluggesellschaft hinzu.
      *
-     * @param flugzeug das hinzuzufügende Flugzeug
-     * @throws IllegalArgumentException wenn das übergebene Flugzeug {@code null} ist oder bereits zur Flotte gehört
+     * @param flugzeug das hinzuzufuegende Flugzeug
+     * @throws IllegalArgumentException wenn das uebergebene Flugzeug {@code null} ist oder bereits zur Flotte gehoert
      */
     public void fuegeFlugzeugHinzu(Flugzeug flugzeug) {
 
         if (flugzeug == null) {
-            throw new IllegalArgumentException("Das hinzuzufügende Flugzeug enthält eine null-Referenz.");
+            throw new IllegalArgumentException("Das hinzuzufuegende Flugzeug enthaelt eine null-Referenz.");
         }
 
         if (! this.flotte.contains(flugzeug)) {
@@ -87,7 +87,7 @@ public class Fluggesellschaft implements Serializable {
 
     /**
      * Entfernt ein Flugzeug aus der Flotte der Fluggesellschaft. Befindet sich das Flugzeug nicht in der Flotte,
-     * erfolgt keine Änderung.
+     * erfolgt keine aenderung.
      *
      * @param flugzeug das zu entfernende Flugzeug
      */
@@ -99,7 +99,7 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt die Flotte der Fluggesellschaft zurück.
+     * Gibt die Flotte der Fluggesellschaft zurueck.
      *
      * @return eine Liste aller Flugzeuge der Fluggesellschaft
      */
@@ -109,7 +109,7 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt den Airline-Code der Fluggesellschaft zurück.
+     * Gibt den Airline-Code der Fluggesellschaft zurueck.
      *
      * @return der Airline-Code der Fluggesellschaft
      */
@@ -119,7 +119,7 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt den Namen der Fluggesellschaft zurück.
+     * Gibt den Namen der Fluggesellschaft zurueck.
      *
      * @return der Name der Fluggesellschaft
      */
@@ -128,9 +128,9 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Prüft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
+     * Prueft, ob die Flotte der Airline ein gewisses Flugzeug beinhaltet.
      *
-     * @param flugzeug das zu überprüfende Flugzeug
+     * @param flugzeug das zu ueberpruefende Flugzeug
      * @return {@code true}, wenn das Flugzeug in der Flotte der Airline ist
      */
     public boolean beinhaltetFlugzeug(Flugzeug flugzeug) {
@@ -139,7 +139,7 @@ public class Fluggesellschaft implements Serializable {
     }
 
     /**
-     * Gibt eine textuelle Beschreibung der Fluggesellschaft zurück. Die Beschreibung enthält den Namen, den
+     * Gibt eine textuelle Beschreibung der Fluggesellschaft zurueck. Die Beschreibung enthaelt den Namen, den
      * Airline-Code und die Flugzeuge der Fluggesellschaft.
      *
      * @return die textuelle Beschreibung der Fluggesellschaft

@@ -4,28 +4,28 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Repräsentiert die Gepäckinformationen einer Buchung. Die Gebühr wird anhand der gebuchten Kofferanzahl berechnet.
+ * Repraesentiert die Gepaeckinformationen einer Buchung. Die Gebuehr wird anhand der gebuchten Kofferanzahl berechnet.
  */
 public class GepaeckInformation implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * Die pauschale Gebühr pro Koffer.
+     * Die pauschale Gebuehr pro Koffer.
      */
     double gebuehrProKoffer = 40.0;
 
     /**
-     * Die Anzahl der Koffer, die ein Passagier mit sich führt.
+     * Die Anzahl der Koffer, die ein Passagier mit sich fuehrt.
      */
     private int anzahlKoffer;
 
     /**
-     * Erstellt Gepäckinformationen mit der angegebenen Kofferanzahl.
+     * Erstellt Gepaeckinformationen mit der angegebenen Kofferanzahl.
      *
      * @param anzahlKoffer die Anzahl der Koffer
      * @throws IllegalArgumentException wenn die Kofferanzahl negativ ist
@@ -38,7 +38,7 @@ public class GepaeckInformation implements Serializable {
     }
 
     /**
-     * Prüft, ob die angegebene Kofferanzahl gültig ist.
+     * Prueft, ob die angegebene Kofferanzahl gueltig ist.
      *
      * @param anzahlKoffer die zu validierende Kofferanzahl
      * @throws IllegalArgumentException wenn die Kofferanzahl negativ ist
@@ -52,7 +52,7 @@ public class GepaeckInformation implements Serializable {
     }
 
     /**
-     * Gibt die Anzahl der Koffer zurück.
+     * Gibt die Anzahl der Koffer zurueck.
      *
      * @return die Anzahl der Koffer
      */
@@ -75,9 +75,9 @@ public class GepaeckInformation implements Serializable {
     }
 
     /**
-     * Berechnet die Gepäckgebühr basierend auf der Anzahl der Koffer.
+     * Berechnet die Gepaeckgebuehr basierend auf der Anzahl der Koffer.
      *
-     * @return die berechnete Gepäckgebühr
+     * @return die berechnete Gepaeckgebuehr
      */
     public double berechneGepaeckgebuehr() {
 
@@ -85,15 +85,15 @@ public class GepaeckInformation implements Serializable {
     }
 
     /**
-     * Gibt eine String-Darstellung der GepäckInformation zurück.
+     * Gibt eine String-Darstellung der GepaeckInformation zurueck.
      *
-     * @return eine String-Darstellung der GepäckInformation
+     * @return eine String-Darstellung der GepaeckInformation
      */
     @Override
     public String toString() {
 
-        return "Die gebuchte Kofferanzahl beträgt " + this.anzahlKoffer +
-               " und es wurde eine Gebühr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
+        return "Die gebuchte Kofferanzahl betraegt " + this.anzahlKoffer +
+               " und es wurde eine Gebuehr von " + String.format("%.2f", this.berechneGepaeckgebuehr()) +
                " Euro entrichtet.";
     }
 

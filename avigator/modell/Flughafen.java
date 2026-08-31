@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Die Klasse {@code Flughafen} repräsentiert einen Flughafen. Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
+ * Die Klasse {@code Flughafen} repraesentiert einen Flughafen. Ein Flughafen wird durch seinen Namen, seinen IATA-Code,
  * die Stadt sowie das Land beschrieben.
  * <p>
- * Die Klasse dient als Grundlage für weitere Klassen, beispielsweise zur Modellierung von Flügen.
+ * Die Klasse dient als Grundlage fuer weitere Klassen, beispielsweise zur Modellierung von Fluegen.
  *
  * @param name     der Name des Flughafens
  * @param iataCode der IATA-Code des Flughafens
@@ -20,7 +20,7 @@ import java.util.Locale;
 public record Flughafen(String name, String iataCode, String stadt, String land) implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -33,16 +33,16 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
      * @param stadt    die Stadt des Flughafens
      * @param land     das Land des Flughafens
      * @throws IllegalArgumentException wenn die Strings eine {@code null}-Referenz enthalten oder leer sind oder die
-     *                                  Eingabe für den IATA-Code nicht genau drei Zeichen umfasst
+     *                                  Eingabe fuer den IATA-Code nicht genau drei Zeichen umfasst
      */
     public Flughafen(String name, String iataCode, String stadt, String land) {
 
         if (name == null || iataCode == null || stadt == null || land == null) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfen keine null-Referenz enthalten.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfen keine null-Referenz enthalten.");
         }
 
         if (name.isBlank() || iataCode.isBlank() || stadt.isBlank() || land.isBlank()) {
-            throw new IllegalArgumentException("Die angegebenen Parameter dürfen nicht leer sein.");
+            throw new IllegalArgumentException("Die angegebenen Parameter duerfen nicht leer sein.");
         }
         if (iataCode.length() != 3) {
             throw new IllegalArgumentException("Der IATA-Code muss dreistellig im Format XYZ eingegeben werden.");
@@ -50,15 +50,15 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
 
         this.name = name;
 
-        // entfernt führende und nachfolgende Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
-        // behandelt Eingaben unabhängig von der Spracheinstellung des Computers
+        // entfernt fuehrende und nachfolgende Leerzeichen im IATA-Code, wandelt Klein- in Großbuchstaben um und
+        // behandelt Eingaben unabhaengig von der Spracheinstellung des Computers
         this.iataCode = iataCode.trim().toUpperCase(Locale.ROOT);
         this.stadt = stadt;
         this.land = land;
     }
 
     /**
-     * Gibt den Namen des Flughafens zurück.
+     * Gibt den Namen des Flughafens zurueck.
      *
      * @return der Name des Flughafens
      */
@@ -69,7 +69,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     }
 
     /**
-     * Gibt den IATA-Code des Flughafens zurück.
+     * Gibt den IATA-Code des Flughafens zurueck.
      *
      * @return der IATA-Code des Flughafens
      */
@@ -80,7 +80,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     }
 
     /**
-     * Gibt die Stadt des Flughafens zurück.
+     * Gibt die Stadt des Flughafens zurueck.
      *
      * @return die Stadt des Flughafens
      */
@@ -91,7 +91,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     }
 
     /**
-     * Gibt das Land des Flughafens zurück.
+     * Gibt das Land des Flughafens zurueck.
      *
      * @return das Land des Flughafens
      */
@@ -102,7 +102,7 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     }
 
     /**
-     * Überschreibt die toString()-Methode, um eine Beschreibung des Flughafens zu liefern.
+     * ueberschreibt die toString()-Methode, um eine Beschreibung des Flughafens zu liefern.
      *
      * @return die Beschreibung des Flughafens mit Name, IATA-Code, Stadt und Land
      */
@@ -115,10 +115,10 @@ public record Flughafen(String name, String iataCode, String stadt, String land)
     }
 
     /**
-     * Vergleicht zwei Flughäfen anhand ihres IATA-Codes.
+     * Vergleicht zwei Flughaefen anhand ihres IATA-Codes.
      *
      * @param o das zu vergleichende Objekt
-     * @return {@code true}, wenn beide Flughäfen denselben IATA-Code besitzen, sonst {@code false}
+     * @return {@code true}, wenn beide Flughaefen denselben IATA-Code besitzen, sonst {@code false}
      */
     @Override
     public boolean equals(Object o) {

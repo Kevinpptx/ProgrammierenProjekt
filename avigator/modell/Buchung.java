@@ -4,8 +4,8 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Die Klasse {@code Buchung} repräsentiert eine Flugbuchung eines Passagiers. Eine Buchung enthält Informationen über
- * den gebuchten Flug, den Sitzplatz, die Gepäckinformationen, den Buchungsstatus sowie den gezahlten Preis.
+ * Die Klasse {@code Buchung} repraesentiert eine Flugbuchung eines Passagiers. Eine Buchung enthaelt Informationen ueber
+ * den gebuchten Flug, den Sitzplatz, die Gepaeckinformationen, den Buchungsstatus sowie den gezahlten Preis.
  *
  * @author Kevin Braun
  * @version 1.1
@@ -14,23 +14,23 @@ import java.io.Serializable;
 public class Buchung implements Serializable {
 
     /**
-     * Versionsnummer zur Prüfung der Kompatibilität bei der Serialisierung.
+     * Versionsnummer zur Pruefung der Kompatibilitaet bei der Serialisierung.
      */
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * Festgelegte pauschale Umbuchungsgebühr.
+     * Festgelegte pauschale Umbuchungsgebuehr.
      */
     private final double umbuchungsGebuehr = 100.00;
 
     /**
-     * Festgelegte pauschale Storno-Gebühr.
+     * Festgelegte pauschale Storno-Gebuehr.
      */
     private final double stornierungsGebuehr = 200.00;
 
     /**
-     * Festgelegter pauschaler Preisfaktor, der auf Business-Flüge anfällt.
+     * Festgelegter pauschaler Preisfaktor, der auf Business-Fluege anfaellt.
      */
     private final double businessPreisFaktor = 1.65;
 
@@ -40,7 +40,7 @@ public class Buchung implements Serializable {
     private String buchungsnummer;
 
     /**
-     * Der Passagier dieser Buchung. Aus Komplexitätsgründen gehen wir davon aus, dass jeder Passagier seinen Flug
+     * Der Passagier dieser Buchung. Aus Komplexitaetsgruenden gehen wir davon aus, dass jeder Passagier seinen Flug
      * selber buchen muss.
      */
     private final Passagier passagier;
@@ -56,7 +56,7 @@ public class Buchung implements Serializable {
     private Sitzplatz sitzplatz;
 
     /**
-     * Die Gepäckinformationen des Passagiers.
+     * Die Gepaeckinformationen des Passagiers.
      */
     private final GepaeckInformation gepaeckInformation;
 
@@ -71,20 +71,20 @@ public class Buchung implements Serializable {
     private double gezahlterPreis;
 
     /**
-     * Die Umbuchungsgebühr, die aktuell zu zahlen ist.
+     * Die Umbuchungsgebuehr, die aktuell zu zahlen ist.
      */
     private double gezahlteUmbuchungsgebuehr = 0.0;
 
     /**
-     * Erzeugt eine neue Buchung mit einem Passagier, einem Flug, einem Sitzplatz und den zugehörigen
-     * Gepäckinformationen. Der Preis der Buchung wird automatisch berechnet und der Status auf {@code AKTIV} gesetzt.
+     * Erzeugt eine neue Buchung mit einem Passagier, einem Flug, einem Sitzplatz und den zugehoerigen
+     * Gepaeckinformationen. Der Preis der Buchung wird automatisch berechnet und der Status auf {@code AKTIV} gesetzt.
      * <p>
      * Die Buchungsnummer wird in der Klasse {@code Buchungssystem} generiert.
      *
-     * @param passagier          der zugehörige Passagier
+     * @param passagier          der zugehoerige Passagier
      * @param flug               der gebuchte Flug
      * @param sitzplatz          der gebuchte Sitzplatz
-     * @param gepaeckInformation die Gepäckinformationen zur Buchung
+     * @param gepaeckInformation die Gepaeckinformationen zur Buchung
      * @throws IllegalArgumentException wenn einer der Parameter {@code null} ist
      */
     public Buchung(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
@@ -106,12 +106,12 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Prüft, ob die Parameter eine {@code null}-Referenz enthalten.
+     * Prueft, ob die Parameter eine {@code null}-Referenz enthalten.
      *
      * @param passagier          der Passagier der Buchung
      * @param flug               der gebuchte Flug
      * @param sitzplatz          der gebuchte Sitzplatz
-     * @param gepaeckInformation die Gepäckinformation der Buchung
+     * @param gepaeckInformation die Gepaeckinformation der Buchung
      * @throws IllegalArgumentException wenn einer der Parameter {@code null} ist
      */
     private void validiereBuchungsparameter(Passagier passagier, Flug flug, Sitzplatz sitzplatz,
@@ -124,11 +124,11 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Berechnet den für die Buchung zu zahlenden Preis. Die Berechnung berücksichtigt die Sitzklasse und die
-     * anfallenden Gepäckgebühren.
+     * Berechnet den fuer die Buchung zu zahlenden Preis. Die Berechnung beruecksichtigt die Sitzklasse und die
+     * anfallenden Gepaeckgebuehren.
      *
      * @return der berechnete Buchungspreis
-     * @throws UnsupportedOperationException wenn die Sitzklasse nicht unterstützt wird
+     * @throws UnsupportedOperationException wenn die Sitzklasse nicht unterstuetzt wird
      */
     private double berechneGezahltenPreis() {
 
@@ -147,9 +147,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Storniert die Buchung und gibt die Storno-Gebühr zurück.
+     * Storniert die Buchung und gibt die Storno-Gebuehr zurueck.
      *
-     * @return die Stornierungsgebühr
+     * @return die Stornierungsgebuehr
      */
     public double stornierenMitGebuehr() {
 
@@ -159,7 +159,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt die Buchungsnummer zurück.
+     * Gibt die Buchungsnummer zurueck.
      *
      * @return die Buchungsnummer
      */
@@ -169,7 +169,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Legt die Buchungsnummer anhand eines übergebenen Strings fest. Validiert diesen vorher auf {@code null}-
+     * Legt die Buchungsnummer anhand eines uebergebenen Strings fest. Validiert diesen vorher auf {@code null}-
      * Referenz, ob er leer ist und ob das Format passt.
      *
      * @param buchungsnummer die neue Buchungsnummer
@@ -179,24 +179,24 @@ public class Buchung implements Serializable {
     public void setBuchungsnummer(String buchungsnummer) {
 
         if (buchungsnummer == null) {
-            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern enthält eine null-Referenz.");
+            throw new IllegalArgumentException("Der Parameter fuer die Buchungsnummern enthaelt eine null-Referenz.");
         }
 
         if (buchungsnummer.isBlank()) {
-            throw new IllegalArgumentException("Der Parameter für die Buchungsnummern ist leer.");
+            throw new IllegalArgumentException("Der Parameter fuer die Buchungsnummern ist leer.");
         }
 
-        // prüft, ob der übergebene String mit "bu" anfängt und auf mindestens eine
+        // prueft, ob der uebergebene String mit "bu" anfaengt und auf mindestens eine
         // Ziffer endet
         if (buchungsnummer.startsWith("bu") && buchungsnummer.matches(".*\\d+$")) {
             this.buchungsnummer = buchungsnummer;
         } else {
-            throw new IllegalArgumentException("Der übergebene String hat nicht das passende Format");
+            throw new IllegalArgumentException("Der uebergebene String hat nicht das passende Format");
         }
     }
 
     /**
-     * Gibt den zugehörigen Passagier zurück.
+     * Gibt den zugehoerigen Passagier zurueck.
      *
      * @return der Passagier der Buchung
      */
@@ -206,7 +206,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den gebuchten Flug zurück.
+     * Gibt den gebuchten Flug zurueck.
      *
      * @return der gebuchte Flug
      */
@@ -216,7 +216,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Flug auf den übergebenen Flug {@code f}.
+     * aendert den Flug auf den uebergebenen Flug {@code f}.
      *
      * @param f der Flug, der dieser Buchung zugewiesen werden soll
      */
@@ -226,7 +226,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den gebuchten Sitzplatz zurück.
+     * Gibt den gebuchten Sitzplatz zurueck.
      *
      * @return der gebuchte Sitzplatz
      */
@@ -236,7 +236,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den gebuchten Sitzplatz.
+     * aendert den gebuchten Sitzplatz.
      *
      * @param sitzplatz der neue Sitzplatz der Buchung
      */
@@ -246,7 +246,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den aktuellen Buchungsstatus zurück.
+     * Gibt den aktuellen Buchungsstatus zurueck.
      *
      * @return der aktuelle Buchungsstatus
      */
@@ -256,9 +256,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Ändert den Buchungsstatus auf den übergebenen {@code Buchungsstatus}.
+     * aendert den Buchungsstatus auf den uebergebenen {@code Buchungsstatus}.
      *
-     * @param buchungsstatus der Buchungsstatus, auf den die Buchung geändert werden soll
+     * @param buchungsstatus der Buchungsstatus, auf den die Buchung geaendert werden soll
      */
     public void setBuchungsstatus(Buchungsstatus buchungsstatus) {
 
@@ -266,9 +266,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt die Umbuchungsgebühr zurück.
+     * Gibt die Umbuchungsgebuehr zurueck.
      *
-     * @return die Umbuchungsgebühr
+     * @return die Umbuchungsgebuehr
      */
     public double getUmbuchungsgebuehr() {
 
@@ -276,9 +276,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt die Storno-Gebühr zurück.
+     * Gibt die Storno-Gebuehr zurueck.
      *
-     * @return die Stornierungsgebühr
+     * @return die Stornierungsgebuehr
      */
     public double getStornierungsgebuehr() {
 
@@ -286,9 +286,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den Preisfaktor für Business-Flüge zurück.
+     * Gibt den Preisfaktor fuer Business-Fluege zurueck.
      *
-     * @return den Preisfaktor für Business-Flüge
+     * @return den Preisfaktor fuer Business-Fluege
      */
     public double getBusinesspreisfaktor() {
 
@@ -296,9 +296,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt die Gepäckinformationen zurück.
+     * Gibt die Gepaeckinformationen zurueck.
      *
-     * @return die Gepäckinformationen
+     * @return die Gepaeckinformationen
      */
     public GepaeckInformation getGepaeckinformation() {
 
@@ -306,7 +306,7 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt den gezahlten Preis zurück.
+     * Gibt den gezahlten Preis zurueck.
      *
      * @return der gezahlte Preis
      */
@@ -324,9 +324,9 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Setzt die gezahlte Umbuchungsgebühr auf den übergebenen Wert.
+     * Setzt die gezahlte Umbuchungsgebuehr auf den uebergebenen Wert.
      *
-     * @param gebuehr die neue gezahlte Umbuchungsgebühr
+     * @param gebuehr die neue gezahlte Umbuchungsgebuehr
      */
     public void setGezahlteUmbuchungsgebuehr(double gebuehr) {
 
@@ -334,8 +334,8 @@ public class Buchung implements Serializable {
     }
 
     /**
-     * Gibt eine textuelle Beschreibung der Buchung zurück. Die Beschreibung enthält die Buchungsnummer, den Passagier,
-     * den Flug, den Sitzplatz, den Buchungsstatus sowie die Gepäckinformationen und den gezahlten Preis.
+     * Gibt eine textuelle Beschreibung der Buchung zurueck. Die Beschreibung enthaelt die Buchungsnummer, den Passagier,
+     * den Flug, den Sitzplatz, den Buchungsstatus sowie die Gepaeckinformationen und den gezahlten Preis.
      *
      * @return die textuelle Beschreibung der Buchung
      */
@@ -348,10 +348,10 @@ public class Buchung implements Serializable {
                " auf Sitzplatz " + this.sitzplatz.getSitzplatzNummer() +
                " in Sitzklasse " + this.sitzplatz.getSitzklasse() +
                " hat den Status " + this.buchungsstatus +
-               " und es liegen folgende Gepäckinformationen vor: " +
+               " und es liegen folgende Gepaeckinformationen vor: " +
                this.gepaeckInformation.toString() +
                "\n---------------------------------------------\n" +
-               "Damit beträgt die Buchungssumme: " +
+               "Damit betraegt die Buchungssumme: " +
                String.format("%.2f", this.gezahlterPreis) + " Euro" +
                "\nGezahlter Umbuchungsbetrag: "
                + String.format("%.2f", this.gezahlteUmbuchungsgebuehr) + " Euro";

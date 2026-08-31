@@ -4,27 +4,27 @@ package avigator.modell;
  * Gibt den Status einer Buchung an.
  * <p>
  * Aktive Buchungen haben den Status {@code AKTIV} oder {@code UMGEBUCHT}.
- * Nicht mehr gültige Buchungen haben den Status {@code STORNIERT} oder {@code VERGANGEN}.
+ * Nicht mehr gueltige Buchungen haben den Status {@code STORNIERT} oder {@code VERGANGEN}.
  */
 public enum Buchungsstatus {
 
     /**
-     * Kennzeichnet eine ursprüngliche, aktive Buchung.
+     * Kennzeichnet eine urspruengliche, aktive Buchung.
      */
     AKTIV,
 
     /**
-     * Kennzeichnet eine stornierte und damit nicht mehr gültige Buchung.
+     * Kennzeichnet eine stornierte und damit nicht mehr gueltige Buchung.
      */
     STORNIERT,
 
     /**
-     * Kennzeichnet eine weiterhin aktive, bereits geänderte Buchung.
+     * Kennzeichnet eine weiterhin aktive, bereits geaenderte Buchung.
      */
     UMGEBUCHT,
 
     /**
-     * Kennzeichnet eine nicht mehr gültige Buchung, deren Flug bereits abgeflogen ist.
+     * Kennzeichnet eine nicht mehr gueltige Buchung, deren Flug bereits abgeflogen ist.
      */
     VERGANGEN
 }
