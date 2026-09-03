@@ -3,7 +3,6 @@ package avigator.verwaltung;
 import avigator.frontend.UIHelper;
 import avigator.frontend.UIKunde;
 import avigator.frontend.UIMitarbeiter;
-
 import java.util.Scanner;
 
 /**
