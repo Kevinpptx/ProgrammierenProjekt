@@ -2,12 +2,12 @@ package avigator.frontend;
 
 import avigator.modell.*;
 import avigator.verwaltung.*;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 
@@ -632,14 +632,18 @@ public class UIMitarbeiter {
     }
 
     /**
-     * Legt einen neuen Flug oder mehrere wiederkehrende Flugpaare im Verwaltungssystem an.
+     * Legt einen neuen Flug oder mehrere wiederkehrende Flugpaare im
+     * Verwaltungssystem an.
      * <p>
-     * Zunaechst werden Basispreis, Fluggesellschaft und ein zugehoeriges Flugzeug ausgewaehlt. Anschließend werden Start-
-     * und Zielflughafen sowie Abflug- und Ankunftszeit erfasst. Ungueltige Codes fuer Fluggesellschaften, Flugzeuge oder
-     * Flughaefen werden erneut abgefragt.
+     * Zunaechst werden Basispreis, Fluggesellschaft und ein zugehoeriges
+     * Flugzeug ausgewaehlt. Anschließend werden Start- und Zielflughafen sowie
+     * Abflugszeit und Flugdauer erfasst. Die Ankunftszeit wird aus Abflugzeit
+     * und Flugdauer berechnet. Ungueltige Codes fuer Fluggesellschaften,
+     * Flugzeuge oder Flughaefen werden erneut abgefragt.
      * <p>
-     * Danach kann entweder ein einzelner Flug oder ein Flug mit Rueckflug angelegt werden. Bei einem Flug mit Rueckflug
-     * wird zusaetzlich angegeben, an wie vielen aufeinanderfolgenden Tagen das Flugpaar stattfinden soll.
+     * Danach kann entweder ein einzelner Flug oder ein Flug mit Rueckflug
+     * angelegt werden. Bei einem Flug mit Rueckflug wird zusaetzlich angegeben,
+     * an wie vielen aufeinanderfolgenden Tagen das Flugpaar stattfinden soll.
      * <p>
      * Erfolgreich erzeugte Fluege werden anschließend dauerhaft gespeichert.
      */
@@ -811,7 +815,22 @@ public class UIMitarbeiter {
 
         // Zeiten
         abflug = datumUndUhrzeitEinlesen("des Abfluges");
-        ankunft = datumUndUhrzeitEinlesen("der Ankunft");
+        LocalTime flugdauer;
+
+        while (true) {
+            try {
+                UIHelper.druckeEingabeaufforderung("Bitte geben Sie die Flugdauer im Format H:mm ein (z.B. 2:10 oder 02:10):" );
+
+                flugdauer = LocalTime.parse(Manager.stringscanner(), DateTimeFormatter.ofPattern("H:mm"));
+
+                break;
+
+            } catch (DateTimeParseException e) {
+                UIHelper.druckeFehler("Ungültige Flugdauer. Bitte verwenden Sie das Format H:mm, z. B. 2:09.");
+            }
+        }
+
+        ankunft = abflug.plusHours(flugdauer.getHour()).plusMinutes(flugdauer.getMinute());
 
         UIHelper.druckeTrennlinie();
 
