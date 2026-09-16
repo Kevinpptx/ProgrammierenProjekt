@@ -458,7 +458,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Gefundene Fluege");
 
-        System.out.printf("%-4s | %-8s | %-15s | %-11s | %-17s | %-17s%n",
+        System.out.printf("%-4s | %-8s | %-25s | %-11s | %-17s | %-17s%n",
                 "Nr.",
                 "Flug",
                 "Airline",
@@ -474,7 +474,7 @@ public class UIKunde {
             Flug flug = fluege.get(i);
 
             System.out.printf(
-                    "%-4d | %-8s | %-15s | %-11s | %-17s | %-17s%n",
+                    "%-4d | %-8s | %-25s | %-11s | %-17s | %-17s%n",
                     i + 1,
                     flug.getFlugnummer(),
                     flug.getFluggesellschaft().getName(),
@@ -1141,7 +1141,7 @@ public class UIKunde {
                     UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: FRA");
                 }
 
-                UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens (optional):");
+                UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens:");
                 start = Manager.stringscanner().toUpperCase();
 
                 zaehler++;
@@ -1185,7 +1185,7 @@ public class UIKunde {
                     UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: LH123");
                 }
 
-                UIHelper.druckeEingabeaufforderung("Flugnummer (optional):");
+                UIHelper.druckeEingabeaufforderung("Flugnummer:");
 
                 flugnummer = Manager.stringscanner().toUpperCase();
 
