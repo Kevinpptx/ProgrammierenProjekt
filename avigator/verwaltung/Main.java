@@ -35,6 +35,9 @@ public class Main {
 
     /**
      * Gibt das Avigator-Logo auf der Konsole aus.
+     * Das Avigator-Logo wurde zunächst als Bild erstellt
+     * und anschließend mithilfe eines Online-ASCII-Art-Converters (https://www.txtart.com/image-to-ascii-art)
+     * in eine textbasierte ASCII-Darstellung umgewandelt.
      */
     private static void druckeAvigatorLogo() {
 
