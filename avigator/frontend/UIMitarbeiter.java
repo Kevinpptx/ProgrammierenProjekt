@@ -753,12 +753,12 @@ public class UIMitarbeiter {
         UIHelper.druckeEingabeaufforderung("Folgende Flughaefen stehen zur Verfuegung: ");
 
         UIHelper.druckeTrennlinie();
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-50s | %-25s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
-            System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
+            System.out.printf("%-6s | %-50s | %-25s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
                     flughafen.stadt(),
@@ -1247,7 +1247,7 @@ public class UIMitarbeiter {
         }
 
         System.out.printf(
-                "%-8s | %-11s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6s | %-12s | %-9s%n",
+                "%-8s | %-20s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6s | %-12s | %-9s%n",
                 "Buchung", "Passagier", "Flug", "Route", "Abflug", "Sitz", "Klasse", "Koffer", "Preis", "Status"
         );
 
@@ -1261,7 +1261,7 @@ public class UIMitarbeiter {
                                + " " + buchung.getPassagier().name();
 
             System.out.printf(
-                    "%-8s | %-11.11s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6d | %-12s | %-9s%n",
+                    "%-8s | %-20.20s | %-7s | %-11s | %-16s | %-5s | %-8s | %-6d | %-12s | %-9s%n",
                     buchung.getBuchungsnummer(),
                     passagier,
                     flug.getFlugnummer(),

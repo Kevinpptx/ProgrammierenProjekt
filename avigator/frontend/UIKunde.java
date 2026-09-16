@@ -2,7 +2,6 @@ package avigator.frontend;
 
 import avigator.modell.*;
 import avigator.verwaltung.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -431,13 +430,13 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-50s | %-25s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
 
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
-            System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
+            System.out.printf("%-6s | %-50s | %-25s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
                     flughafen.stadt(),
@@ -459,7 +458,7 @@ public class UIKunde {
 
         UIHelper.druckeUeberschrift("Gefundene Fluege");
 
-        System.out.printf("%-4s | %-8s | %-15s | %-11s | %-17s | %-17s%n",
+        System.out.printf("%-4s | %-8s | %-25s | %-11s | %-17s | %-17s%n",
                 "Nr.",
                 "Flug",
                 "Airline",
@@ -475,7 +474,7 @@ public class UIKunde {
             Flug flug = fluege.get(i);
 
             System.out.printf(
-                    "%-4d | %-8s | %-15s | %-11s | %-17s | %-17s%n",
+                    "%-4d | %-8s | %-25s | %-11s | %-17s | %-17s%n",
                     i + 1,
                     flug.getFlugnummer(),
                     flug.getFluggesellschaft().getName(),
@@ -1142,7 +1141,7 @@ public class UIKunde {
                     UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: FRA");
                 }
 
-                UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens (optional):");
+                UIHelper.druckeEingabeaufforderung("IATA-Code des Startflughafens:");
                 start = Manager.stringscanner().toUpperCase();
 
                 zaehler++;
@@ -1186,7 +1185,7 @@ public class UIKunde {
                     UIHelper.druckeFehler("Ungueltige Eingabe. Beispiel: LH123");
                 }
 
-                UIHelper.druckeEingabeaufforderung("Flugnummer (optional):");
+                UIHelper.druckeEingabeaufforderung("Flugnummer:");
 
                 flugnummer = Manager.stringscanner().toUpperCase();
 
