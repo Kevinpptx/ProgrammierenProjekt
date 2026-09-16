@@ -2,7 +2,6 @@ package avigator.frontend;
 
 import avigator.modell.*;
 import avigator.verwaltung.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -431,13 +430,13 @@ public class UIKunde {
 
         UIHelper.druckeTrennlinie();
 
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-50s | %-25s | %-15s%n", "Code", "Flughafen", "Ort", "Land");
 
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
-            System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
+            System.out.printf("%-6s | %-50s | %-25s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
                     flughafen.stadt(),

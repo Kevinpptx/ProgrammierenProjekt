@@ -753,12 +753,12 @@ public class UIMitarbeiter {
         UIHelper.druckeEingabeaufforderung("Folgende Flughaefen stehen zur Verfuegung: ");
 
         UIHelper.druckeTrennlinie();
-        System.out.printf("%-6s | %-35s | %-15s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
+        System.out.printf("%-6s | %-50s | %-25s | %-15s%n", "IATA", "Flughafen", "Ort", "Land");
         UIHelper.druckeTrennlinie();
 
         for (Flughafen flughafen : verwaltungssystem.getFlughaefen()) {
 
-            System.out.printf("%-6s | %-35s | %-15s | %-15s%n",
+            System.out.printf("%-6s | %-50s | %-25s | %-15s%n",
                     flughafen.iataCode(),
                     flughafen.name(),
                     flughafen.stadt(),
